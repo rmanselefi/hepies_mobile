@@ -14,6 +14,7 @@ class User {
   String interests;
   String workplace;
   String speciality;
+  String license;
 
   User(
       {this.userId,
@@ -29,25 +30,28 @@ class User {
       this.interests,
       this.profile,
       this.speciality,
-      this.workplace,this.grandfathername});
+      this.workplace,
+      this.grandfathername,
+      this.license});
 
   factory User.fromJson(Map<String, dynamic> responseData) {
     return User(
-        userId: responseData['id'],
-        name: responseData['profession'][0]['name'],
-        professionid: responseData['profession'][0]['id'],
-        email: responseData['profession'][0]['email'],
-        phone: responseData['profession'][0]['phone'],
-        profession: responseData['profession'][0]['proffesion'],
-        token: responseData['token'],
-        username: responseData['username'],
-        points: responseData['profession'][0]['points'],
-        profile: responseData['profession'][0]['profile'],
-        workplace: responseData['profession'][0]['workplace'],
-        speciality: responseData['profession'][0]['speciality'],
-        interests: responseData['profession'][0]['interests'],
-        fathername: responseData['profession'][0]['fathername'],
-        grandfathername: responseData['profession'][0]['grandfathername']
+      userId: responseData['id'],
+      name: responseData['profession'][0]['name'],
+      professionid: responseData['profession'][0]['id'],
+      email: responseData['profession'][0]['email'],
+      phone: responseData['profession'][0]['phone'],
+      profession: responseData['profession'][0]['proffesion'],
+      token: responseData['token'],
+      username: responseData['username'],
+      points: responseData['profession'][0]['points'],
+      profile: responseData['profession'][0]['profile'],
+      workplace: responseData['profession'][0]['workplace'],
+      speciality: responseData['profession'][0]['speciality'],
+      interests: responseData['profession'][0]['interests'],
+      fathername: responseData['profession'][0]['fathername'],
+      grandfathername: responseData['profession'][0]['grandfathername'],
+      license: responseData['profession'][0]['license'],
     );
   }
 }

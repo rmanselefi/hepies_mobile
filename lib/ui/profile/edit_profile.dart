@@ -25,6 +25,8 @@ class _EditProfileState extends State<EditProfile>
   final FocusNode myFocusNode = FocusNode();
 
   XFile file;
+
+
   void _setImage(XFile image) {
     file = image;
     print("_formData_formData_formData${file}");
@@ -41,9 +43,13 @@ class _EditProfileState extends State<EditProfile>
   String interest = '';
   int userId = 0;
   int professionid = 0;
+  String profession = '';
   String username = '';
   String grandfathername = '';
-
+  String points = '';
+  String license = '';
+  String _profession='Medical Doctor';
+  List<dynamic> _interests = [];
   @override
   void initState() {
     // TODO: implement initState
@@ -63,15 +69,18 @@ class _EditProfileState extends State<EditProfile>
     profile = user.profile;
     interest = user.interests;
     userId = user.userId;
-    professionid = user.professionid;
+    profession = user.profession;
     username = user.username;
     grandfathername = user.grandfathername;
+    points = user.points;
+    license = user.license;
+    professionid = user.professionid;
   }
 
   @override
   Widget build(BuildContext context) {
     // var _interests = interest != '' || interest!=null ? interest.split(',') : [];
-    var _interests;
+
     return Scaffold(
       body: ListView(
         children: [
@@ -124,7 +133,10 @@ class _EditProfileState extends State<EditProfile>
                                     })
                               ],
                             )),
-                        ImageInputProfile(_setImage, profile)
+                        // Container(
+                        //   height: 100.0,
+                        //     child: ImageInputProfile(_setImage, profile)
+                        // )
                       ],
                     ),
                   ),
@@ -316,6 +328,55 @@ class _EditProfileState extends State<EditProfile>
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
                                       new Text(
+                                        'Profession',
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              )),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  left: 25.0, right: 25.0, top: 25.0),
+                              child: new Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: <Widget>[
+                                    new Flexible(
+                                      child: new DropdownButtonFormField(
+                                        value: _profession,
+                                        items: [
+                                          "Medical Doctor",
+                                          "Pharmacist",
+                                          "Nurse",
+                                          "Health Officer"
+                                        ]
+                                            .map((label) => DropdownMenuItem(
+                                                  child: Text(label.toString()),
+                                                  value: label,
+                                                ))
+                                            .toList(),
+                                        hint: Text('Choose Profession'),
+                                        onChanged: (value) {
+                                          // setState(() {
+                                          //   _profession = value;
+                                          // });
+                                        },
+                                      ),
+                                    ),
+                                  ])),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  left: 25.0, right: 25.0, top: 25.0),
+                              child: new Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: <Widget>[
+                                  new Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      new Text(
                                         'Interests',
                                         style: TextStyle(
                                             fontSize: 16.0,
@@ -386,7 +447,6 @@ class _EditProfileState extends State<EditProfile>
                                       print("object ${value.join(",")}");
                                       setState(() {
                                         _interests = value;
-                                        interest = value.join(",");
                                       });
                                     },
                                   )),
@@ -488,6 +548,7 @@ class _EditProfileState extends State<EditProfile>
                 textColor: Colors.white,
                 color: Colors.green,
                 onPressed: () async {
+                  var interests = _interests.join(",");
                   User user = new User(
                       userId: userId,
                       username: username,
@@ -499,7 +560,10 @@ class _EditProfileState extends State<EditProfile>
                       speciality: _specialityController.text,
                       email: _emailController.text,
                       phone: _phoneController.text,
-                      interests: interest);
+                      points: points,
+                      profession: _profession,
+                      interests: interests,
+                      license: license);
                   var res =
                       await Provider.of<UserProvider>(context, listen: false)
                           .updateProfile(user, File(file.path));
