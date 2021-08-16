@@ -795,6 +795,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                               "ints": physical.ints,
                               "cns": physical.cns,
                               "general_apearnce": physical.general_apearance
+
                             },
                             "ix": {
                               "microbiology": ix.microbiology,
@@ -832,6 +833,58 @@ class _PrescribeFormState extends State<PrescribeForm> {
                             finaPrescription[pesIndex]["drug"] =
                                 prescription.drug;
                             finaPrescription[pesIndex]["type"] = widget.type;
+
+                            finaPrescription[pesIndex]['patient']['name'] =
+                                patient.name;
+                            finaPrescription[pesIndex]["patient"]['age'] =
+                                ageController.text;
+                            finaPrescription[pesIndex]["patient"]
+                                ['fathername'] = fnameController.text;
+                            finaPrescription[pesIndex]['patient']
+                                ['grandfathername'] = 'kebede';
+                            finaPrescription[pesIndex]['patient']['phone'] =
+                                phoneController.text;
+                            finaPrescription[pesIndex]['patient']['sex'] =
+                                _chosenValue;
+                            finaPrescription[pesIndex]["patient"]['weight'] =
+                                weightController.text;
+                            finaPrescription[pesIndex]["patient"]['dx']
+                                ['diagnosis'] = diagnosis.diagnosis_list;
+                            finaPrescription[pesIndex]["patient"]['hx']['cc'] =
+                                history.cc;
+                            finaPrescription[pesIndex]["patient"]['hx']['hpi'] =
+                                history.hpi;
+                            finaPrescription[pesIndex]["patient"]['px']['abd'] =
+                                physical.abd;
+                            finaPrescription[pesIndex]["patient"]['px']['cvs'] =
+                                physical.cvs;
+                            finaPrescription[pesIndex]["patient"]['px']['ga'] =
+                                physical.ga;
+                            finaPrescription[pesIndex]["patient"]['px']['bp'] =
+                                physical.bp;
+                            finaPrescription[pesIndex]["patient"]['px']
+                                ['heent'] = physical.heent;
+                            finaPrescription[pesIndex]["patient"]['px']['lgs'] =
+                                physical.lgs;
+                            finaPrescription[pesIndex]["patient"]['px']['pr'] =
+                                physical.pr;
+                            finaPrescription[pesIndex]["patient"]['px']['rr'] =
+                                physical.rr;
+                            finaPrescription[pesIndex]["patient"]['px']['rs'] =
+                                physical.rs;
+                            finaPrescription[pesIndex]["patient"]['px']
+                                ['temp'] = physical.temp;
+                            finaPrescription[pesIndex]["patient"]['px']
+                                    ['general_apearance'] =
+                                physical.general_apearance;
+                            finaPrescription[pesIndex]["patient"]['px']
+                                ['ints'] = physical.ints;
+                            finaPrescription[pesIndex]["patient"]['px']['cns'] =
+                                physical.cns;
+                            finaPrescription[pesIndex]["patient"]['px']['msk'] =
+                                physical.msk;
+                            finaPrescription[pesIndex]["patient"]['px']['gus'] =
+                                physical.gus;
                           });
                         }
                         widget.setPrescription(precriptionData);

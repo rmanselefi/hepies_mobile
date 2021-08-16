@@ -46,6 +46,7 @@ class UserProvider with ChangeNotifier {
       'proffesion':user.profession,
       'speciality': user.speciality,
       'workplace': user.workplace,
+      'profile':profile,
       'user': {
         'id': user.userId,
         'username': user.username,
