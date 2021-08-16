@@ -47,9 +47,9 @@ class AuthProvider with ChangeNotifier {
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Map<String, dynamic> responseData = json.decode(response.body);
 
-
+      print("authUserauthUserauthUser ${responseData}");
       User authUser = User.fromJson(responseData);
-      print("authUserauthUserauthUser ${authUser.username}");
+      // print("authUserauthUserauthUser ${authUser.username}");
       UserPreferences().saveUser(authUser);
 
       _loggedInStatus = Status.LoggedIn;
@@ -75,6 +75,8 @@ class AuthProvider with ChangeNotifier {
       String password,
       String profession,interests,
       File file) async {
+    _loggedInStatus = Status.Authenticating;
+    notifyListeners();
     var license;
     if (file != null) {
       await uploadBackImage(file).then((res) {
@@ -92,6 +94,7 @@ class AuthProvider with ChangeNotifier {
       'phone': phone,
       'license': license,
       'interests':interests,
+      'proffesion':profession,
       'user': {'username': username, 'password': password, 'role': role},
     };
     Response response = await post(Uri.parse(AppUrl.register),
@@ -102,14 +105,10 @@ class AuthProvider with ChangeNotifier {
       final Map<String, dynamic> responseData = json.decode(response.body);
       print("ResponseResponseResponse ${responseData}");
 
-      User authUser = User.fromJson(responseData);
-
-      UserPreferences().saveUser(authUser);
-
       _loggedInStatus = Status.LoggedIn;
       notifyListeners();
 
-      result = {'status': true, 'message': 'Successful', 'user': authUser};
+      result = {'status': true, 'message': 'Successful', 'user': responseData};
     } else {
       _loggedInStatus = Status.NotLoggedIn;
       notifyListeners();

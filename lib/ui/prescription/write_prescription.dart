@@ -42,6 +42,14 @@ class _WritePrescriptionState extends State<WritePrescription> {
     });
   }
 
+  var loading = Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: <Widget>[
+      CircularProgressIndicator(),
+      Text("Sending your prescription ... Please wait")
+    ],
+  );
+
   @override
   Widget build(BuildContext context) {
     var prescProvider =
@@ -229,48 +237,51 @@ class _WritePrescriptionState extends State<WritePrescription> {
                   ),
                 ),
               ),
-              GestureDetector(
-                onTap: () async {
-                  print("object $prescription");
-                  try {
-                    var res =
-                        await prescProvider.writePrescription(prescription);
-                    if (res['status']) {
-                      Flushbar(
-                        title: 'Sent',
-                        message: 'Your prescriptions are sent succesfully',
-                        duration: Duration(seconds: 10),
-                      ).show(context);
-                    } else {
-                      Flushbar(
-                        title: 'Error',
-                        message: 'Unable to send your prescriptions',
-                        duration: Duration(seconds: 10),
-                      ).show(context);
-                    }
-                  } catch (e) {
-                    print("object $e");
-                  }
-                },
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Container(
-                    width: 100,
-                    height: 40,
-                    margin: EdgeInsets.only(right: 20.0, top: 0.0),
-                    decoration: BoxDecoration(
-                        color: Color(0xff07febb),
-                        border: Border.all(color: Colors.black45),
-                        borderRadius: BorderRadius.circular(10.0)),
-                    child: Center(
-                        child: Text(
-                      'Send',
-                      style: TextStyle(
-                          fontSize: 20.0, fontWeight: FontWeight.bold),
-                    )),
-                  ),
-                ),
-              )
+              prescProvider.sentStatus == Status.Sending
+                  ? loading
+                  : GestureDetector(
+                      onTap: () async {
+                        print("object $prescription");
+                        try {
+                          var res = await prescProvider
+                              .writePrescription(prescription);
+                          if (res['status']) {
+                            Flushbar(
+                              title: 'Sent',
+                              message:
+                                  'Your prescriptions are sent succesfully',
+                              duration: Duration(seconds: 10),
+                            ).show(context);
+                          } else {
+                            Flushbar(
+                              title: 'Error',
+                              message: 'Unable to send your prescriptions',
+                              duration: Duration(seconds: 10),
+                            ).show(context);
+                          }
+                        } catch (e) {
+                          print("object $e");
+                        }
+                      },
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Container(
+                          width: 100,
+                          height: 40,
+                          margin: EdgeInsets.only(right: 20.0, top: 0.0),
+                          decoration: BoxDecoration(
+                              color: Color(0xff07febb),
+                              border: Border.all(color: Colors.black45),
+                              borderRadius: BorderRadius.circular(10.0)),
+                          child: Center(
+                              child: Text(
+                            'Send',
+                            style: TextStyle(
+                                fontSize: 20.0, fontWeight: FontWeight.bold),
+                          )),
+                        ),
+                      ),
+                    )
             ],
           ),
         ],

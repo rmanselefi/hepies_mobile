@@ -19,7 +19,26 @@ class AddHistory extends StatefulWidget {
   final Function setHx;
   final Function setDx;
   final Function setPx;
-  AddHistory({this.pageNumber,this.setHx,this.setPx,this.setDx});
+  final Function setChemistry;
+  final Function setEndocrinology;
+  final Function setHematology;
+  final Function setSerology;
+  final Function setUrine;
+  final Function setTumor;
+  final Function setInvestigation;
+
+  AddHistory(
+      {this.pageNumber,
+      this.setHx,
+      this.setPx,
+      this.setDx,
+      this.setChemistry,
+      this.setEndocrinology,
+      this.setHematology,
+      this.setSerology,
+      this.setUrine,
+      this.setTumor,
+      this.setInvestigation});
 
   @override
   _AddHistoryState createState() => _AddHistoryState();
@@ -70,7 +89,7 @@ class _AddHistoryState extends State<AddHistory>
         shrinkWrap: true,
         children: [
           Container(
-            height: 2 * MediaQuery.of(context).size.height / 3+180,
+            height: 2 * MediaQuery.of(context).size.height / 3 + 180,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -140,7 +159,20 @@ class _AddHistoryState extends State<AddHistory>
                       });
                     },
                     controller: _pageController,
-                    children: [HX(widget.setHx), PX(widget.setPx), IX(), DX(widget.setDx)],
+                    children: [
+                      HX(widget.setHx),
+                      PX(widget.setPx),
+                      IX(
+                          setChemistry: widget.setChemistry,
+                          setEndocrinology: widget.setEndocrinology,
+                          setHematology: widget.setHematology,
+                          setSerology: widget.setSerology,
+                          setUrine: widget.setUrine,
+                          setTumor: widget.setTumor,
+                          setInvestigation: widget.setInvestigation
+                      ),
+                      DX(widget.setDx)
+                    ],
                   ),
                 )
               ],
@@ -148,9 +180,6 @@ class _AddHistoryState extends State<AddHistory>
           ),
           GestureDetector(
             onTap: () async {
-              print("hxhxhx ${history.cc}  ${history.hpi}");
-              print("pxpxpxpxpx ${physical.rs}  ${physical.heent}");
-              print("dxdxdx ${diagnosis.diagnosis}");
               final SharedPreferences prefs =
                   await SharedPreferences.getInstance();
               var type = prefs.getString('type');

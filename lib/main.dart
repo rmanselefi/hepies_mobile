@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
                   default:
                     if (snapshot.hasError)
                       return Text('Error: ${snapshot.error}');
-                    else if (snapshot.data == null)
+                    else if (snapshot.data.name == null)
                       return Login();
                     else
                       Welcome(user: snapshot.data);

@@ -10,7 +10,17 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+enum Status {
+  NotSent,
+  Sent,
+  Sending,
+}
+
 class PrescriptionProvider with ChangeNotifier {
+
+  Status _sentStatus = Status.NotSent;
+  Status get sentStatus => _sentStatus;
+
   Future<List<dynamic>> getPrescriptions() async {
     var result;
     List<Consult> consults = [];
@@ -29,6 +39,8 @@ class PrescriptionProvider with ChangeNotifier {
   }
 
   Future<Map<String, dynamic>> writePrescription(List precriptionData) async {
+    _sentStatus = Status.Sending;
+    notifyListeners();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
     var result;
@@ -42,7 +54,7 @@ class PrescriptionProvider with ChangeNotifier {
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Map<String, dynamic> responseData = json.decode(response.body);
-      print("ResponseResponseResponse ${responseData}");
+      _sentStatus = Status.Sent;
       notifyListeners();
       result = {
         'status': true,
@@ -50,6 +62,7 @@ class PrescriptionProvider with ChangeNotifier {
         'consult': responseData
       };
     } else {
+      _sentStatus = Status.NotSent;
       notifyListeners();
       result = {
         'status': false,

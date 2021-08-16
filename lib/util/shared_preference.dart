@@ -10,14 +10,15 @@ class UserPreferences {
     prefs.setInt("professionid", user.professionid);
     prefs.setString("name", user.name);
     prefs.setString("username", user.username);
-    prefs.setString("email", user.email);
+    prefs.setString("email", user.email != null ? user.email : '');
     prefs.setString("phone", user.phone);
     prefs.setString("profession", user.profession);
     prefs.setString("token", user.token);
-    prefs.setString("points", user.points);
+    prefs.setString("points", user.points != null ? user.points : "0");
     prefs.setString("fathername", user.fathername);
-    prefs.setString("grandfathername", user.grandfathername);
-    prefs.setString("profile", user.profile);
+    prefs.setString("grandfathername",
+        user.grandfathername != null ? user.grandfathername : '');
+    prefs.setString("profile", user.profile != null ? user.profile : '');
     prefs.setString("workplace", user.workplace != null ? user.workplace : '');
     prefs.setString(
         "speciality", user.speciality != null ? user.speciality : '');

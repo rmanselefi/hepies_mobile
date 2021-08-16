@@ -10,8 +10,10 @@ import 'package:http/http.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class UserProvider with ChangeNotifier {
+  Status _loggedInStatus = Status.NotLoggedIn;
   Status _registeredInStatus = Status.NotRegistered;
   firebase_storage.UploadTask uploadTask;
+  Status get loggedInStatus => _loggedInStatus;
   Status get registeredInStatus => _registeredInStatus;
   User _user = new User();
 
@@ -22,6 +24,8 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<Map<String, dynamic>> updateProfile(User user, File file) async {
+    _registeredInStatus = Status.Authenticating;
+    notifyListeners();
     var profile;
     if (file != null) {
       await AuthProvider().uploadBackImage(file).then((res) {
@@ -38,7 +42,8 @@ class UserProvider with ChangeNotifier {
       'fathername': user.fathername,
       'phone': user.phone,
       'email': user.email,
-      'profile': user.profile,
+      'profile': profile,
+      'proffesion':user.profession,
       'speciality': user.speciality,
       'workplace': user.workplace,
       'user': {
@@ -54,14 +59,10 @@ class UserProvider with ChangeNotifier {
       final Map<String, dynamic> responseData = json.decode(response.body);
       print("ResponseResponseResponse ${responseData}");
 
-      User authUser = User.fromJson(responseData);
-
-      UserPreferences().saveUser(authUser);
-
       _registeredInStatus = Status.LoggedIn;
       notifyListeners();
 
-      result = {'status': true, 'message': 'Successful', 'user': authUser};
+      result = {'status': true, 'message': 'Successful', 'user': responseData};
     } else {
       _registeredInStatus = Status.NotLoggedIn;
       notifyListeners();

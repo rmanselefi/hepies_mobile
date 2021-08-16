@@ -1,12 +1,18 @@
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:hepies/models/chemistry.dart';
 import 'package:hepies/models/drug.dart';
 import 'package:hepies/models/dx.dart';
+import 'package:hepies/models/endocrinology.dart';
+import 'package:hepies/models/hematology.dart';
 import 'package:hepies/models/hx.dart';
 import 'package:hepies/models/investigation.dart';
 import 'package:hepies/models/patient.dart';
 import 'package:hepies/models/prescription.dart';
 import 'package:hepies/models/px.dart';
+import 'package:hepies/models/serology.dart';
+import 'package:hepies/models/tumor.dart';
+import 'package:hepies/models/urine.dart';
 import 'package:hepies/providers/drug_provider.dart';
 import 'package:hepies/ui/medicalrecords/add_history.dart';
 import 'package:provider/provider.dart';
@@ -48,7 +54,13 @@ class _PrescribeFormState extends State<PrescribeForm> {
 
   var history = new History();
   var physical = new Physical();
+  var tumor = new Tumor();
   var diagnosis = new Diagnosis();
+  var hematology = new Hematology();
+  var serology = new Serology();
+  var chemistry = new Chemistry();
+  var endocrinology = new Endocrinology();
+  var urine = new Urine();
   var ix = new Investigation();
 
   void _setHx(History hx) {
@@ -70,7 +82,51 @@ class _PrescribeFormState extends State<PrescribeForm> {
     });
   }
 
-  void _openImagePicker(BuildContext context, int pageNum) {
+  void _setHematology(Hematology hema) {
+    setState(() {
+      hematology = hema;
+    });
+    print("object hx ${history.hpi}");
+  }
+
+  void _setSerology(Serology sero) {
+    setState(() {
+      serology = sero;
+    });
+  }
+
+  void _setChemistry(Chemistry chem) {
+    setState(() {
+      chemistry = chem;
+    });
+  }
+
+  void _setEndocrinology(Endocrinology endoc) {
+    setState(() {
+      endocrinology = endoc;
+    });
+    print("object hx ${history.hpi}");
+  }
+
+  void _setUrine(Urine uri) {
+    setState(() {
+      urine = uri;
+    });
+  }
+
+  void _setInvestigation(Investigation ix) {
+    setState(() {
+      ix = ix;
+    });
+  }
+
+  void _setTumor(Tumor tum) {
+    setState(() {
+      tumor = tum;
+    });
+  }
+
+  void _openHistoryForm(BuildContext context, int pageNum) {
     showModalBottomSheet(
         isScrollControlled: true,
         context: context,
@@ -82,11 +138,17 @@ class _PrescribeFormState extends State<PrescribeForm> {
               child: Container(
                 height: MediaQuery.of(context).size.height - 40,
                 child: AddHistory(
-                  pageNumber: pageNum,
-                  setDx: _setDx,
-                  setHx: _setHx,
-                  setPx: _setPx,
-                ),
+                    pageNumber: pageNum,
+                    setDx: _setDx,
+                    setHx: _setHx,
+                    setPx: _setPx,
+                    setChemistry: _setChemistry,
+                    setEndocrinology: _setEndocrinology,
+                    setHematology: _setHematology,
+                    setSerology: _setSerology,
+                    setUrine: _setUrine,
+                    setTumor: _setTumor,
+                    setInvestigation: _setInvestigation),
               ),
             ),
           );
@@ -395,7 +457,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                     drug.strength = val;
                                   });
                                 },
-                                keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
                                     border: OutlineInputBorder(),
                                     labelText: 'Strength',
@@ -426,7 +487,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                   drug.unit = val;
                                 });
                               },
-                              keyboardType: TextInputType.number,
                               decoration: InputDecoration(
                                   border: OutlineInputBorder(),
                                   labelText: 'Unit',
@@ -457,7 +517,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                 });
                               },
                               minLines: 1,
-                              keyboardType: TextInputType.number,
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(),
                                 labelText: 'Route',
@@ -546,7 +605,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                               final SharedPreferences prefs =
                                   await SharedPreferences.getInstance();
                               prefs.setString('type', widget.type);
-                              _openImagePicker(context, 3);
+                              _openHistoryForm(context, 3);
                               // Navigator.push(
                               //     context,
                               //     MaterialPageRoute(
@@ -574,7 +633,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                               final SharedPreferences prefs =
                                   await SharedPreferences.getInstance();
                               prefs.setString('type', widget.type);
-                              _openImagePicker(context, 2);
+                              _openHistoryForm(context, 2);
                               // Navigator.push(
                               //     context,
                               //     MaterialPageRoute(
@@ -606,7 +665,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                               final SharedPreferences prefs =
                                   await SharedPreferences.getInstance();
                               prefs.setString('type', widget.type);
-                              _openImagePicker(context, 0);
+                              _openHistoryForm(context, 0);
                               // Navigator.push(
                               //     context,
                               //     MaterialPageRoute(
@@ -634,7 +693,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                               final SharedPreferences prefs =
                                   await SharedPreferences.getInstance();
                               prefs.setString('type', widget.type);
-                              _openImagePicker(context, 1);
+                              _openHistoryForm(context, 1);
                             },
                             child: Container(
                               width: 50,
@@ -691,9 +750,11 @@ class _PrescribeFormState extends State<PrescribeForm> {
                       ).show(context);
                     } else {
                       if (_formKey.currentState.validate()) {
-                        print("saved");
+                        print("saved ${serology.toJson()}");
                         final Map<String, dynamic> precriptionData = {
-                          'drug_name': _selectedAnimal,
+                          'drug_name': _selectedAnimal != null
+                              ? _selectedAnimal
+                              : drug.name,
                           "strength": strengthController.text,
                           "unit": unitController.text,
                           "route": routeController.text,
@@ -703,6 +764,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                           "material_name": "",
                           "size": "",
                           "type": widget.type,
+                          "ampule": ampuleController.text,
                           "patient": {
                             "name": patient.name,
                             "age": patient.age,
@@ -711,7 +773,11 @@ class _PrescribeFormState extends State<PrescribeForm> {
                             "phone": patient.phone,
                             "sex": _chosenValue,
                             "weight": patient.weight,
-                            "dx": {"diagnosis": diagnosis.diagnosis_list},
+                            "dx": {
+                              "diagnosis": diagnosis.diagnosis_list.length != 0
+                                  ? diagnosis.diagnosis_list.join(",")
+                                  : ""
+                            },
                             "hx": {"cc": history.cc, "hpi": history.hpi},
                             "px": {
                               "abd": physical.abd,
@@ -723,28 +789,33 @@ class _PrescribeFormState extends State<PrescribeForm> {
                               "pr": physical.pr,
                               "rr": physical.rr,
                               "rs": physical.rs,
-                              "temp": physical.temp
+                              "temp": physical.temp,
+                              "gus": physical.gus,
+                              "msk": physical.msk,
+                              "ints": physical.ints,
+                              "cns": physical.cns,
+                              "general_apearnce": physical.general_apearance
                             },
                             "ix": {
-                              "microbiology": "micro",
-                              "pathologyindex": "1023",
-                              "radiologyindex": "456",
-                              "others": "",
-                              "chemistry": "{}",
-                              "endocrinology": "{}",
-                              "hemathology": "{}",
-                              "serology": "{}",
-                              "urine": "{}"
+                              "microbiology": ix.microbiology,
+                              "pathologyindex": ix.pathologyindex,
+                              "radiologyindex": ix.radiologyindex,
+                              "chemistry": chemistry.toJson(),
+                              "endocrinology": endocrinology.toJson(),
+                              "hemathology": hematology.toJson(),
+                              "serology": serology.toJson(),
+                              "urine": urine.toJson()
                             }
                           }
                         };
-                        print("objectobjectobjectobject $status");
+                        print("objectobjectobjectobject $precriptionData");
                         if (status == 'add') {
                           setState(() {
                             finaPrescription.add(precriptionData);
                           });
                         } else {
-                          print("finaPrescription[pesIndex] ${finaPrescription[pesIndex]['drug_name']}");
+                          print(
+                              "finaPrescription[pesIndex] ${finaPrescription[pesIndex]['drug_name']}");
                           setState(() {
                             finaPrescription[pesIndex]['drug_name'] =
                                 _selectedAnimal;
@@ -835,6 +906,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                               children: [
                                 IconButton(
                                   onPressed: () {
+                                    print("object $pres");
                                     setState(() {
                                       status = 'edit';
                                       pesIndex = finaPrescription.indexOf(pres);
@@ -843,12 +915,17 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                         pres['patient']['phone'];
                                     nameController.text =
                                         pres['patient']['name'];
+                                    fnameController.text =
+                                        pres['patient']['fathername'];
+                                    weightController.text =
+                                        pres['patient']['weight'];
                                     ageController.text = pres['patient']['age'];
                                     strengthController.text = pres['strength'];
                                     unitController.text = pres['unit'];
                                     routeController.text = pres['route'];
                                     everyController.text = pres['frequency'];
                                     forController.text = pres['takein'];
+                                    ampuleController.text = pres['ampule'];
                                   },
                                   icon: Icon(Icons.edit),
                                 ),

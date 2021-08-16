@@ -43,7 +43,7 @@ class _EditProfileState extends State<EditProfile>
   int professionid = 0;
   String username = '';
   String grandfathername = '';
-
+  var _professionController;
   @override
   void initState() {
     // TODO: implement initState
@@ -70,7 +70,29 @@ class _EditProfileState extends State<EditProfile>
 
   @override
   Widget build(BuildContext context) {
-    // var _interests = interest != '' || interest!=null ? interest.split(',') : [];
+    UserProvider auth = Provider.of<UserProvider>(context);
+    final professionField = DropdownButtonFormField(
+      value: _professionController,
+      items: ["Medical Doctor", "Pharmacist", "Nurse", "Health Officer"]
+          .map((label) => DropdownMenuItem(
+                child: Text(label.toString()),
+                value: label,
+              ))
+          .toList(),
+      hint: Text('Choose Profession'),
+      onChanged: (value) {
+        setState(() {
+          _professionController = value;
+        });
+      },
+    );
+    var loading = Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        CircularProgressIndicator(),
+        Text(" Updating your profile ... Please wait")
+      ],
+    );
     var _interests;
     return Scaffold(
       body: ListView(
@@ -290,6 +312,15 @@ class _EditProfileState extends State<EditProfile>
                                   ),
                                 ],
                               )),
+                          SizedBox(height: 15.0),
+                          label("Profession"),
+                          SizedBox(height: 5.0),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 25.0, right: 25.0, top: 2.0),
+                            child: professionField,
+                          ),
+                          SizedBox(height: 15.0),
                           Padding(
                               padding: EdgeInsets.only(
                                   left: 25.0, right: 25.0, top: 2.0),
@@ -451,7 +482,9 @@ class _EditProfileState extends State<EditProfile>
                                   ),
                                 ],
                               )),
-                          _getActionButtons(),
+                          auth.registeredInStatus == Status.Authenticating
+                              ? loading
+                              : _getActionButtons(),
                         ],
                       ),
                     ),
@@ -492,6 +525,7 @@ class _EditProfileState extends State<EditProfile>
                       userId: userId,
                       username: username,
                       professionid: professionid,
+                      profession: _professionController,
                       name: _nameController.text,
                       fathername: _fatherNameController.text,
                       grandfathername: grandfathername,
@@ -547,4 +581,12 @@ class _EditProfileState extends State<EditProfile>
       ),
     );
   }
+
+  label(String title) => Padding(
+        padding: const EdgeInsets.only(left: 25.0, right: 25.0, top: 2.0),
+        child: Text(
+          title,
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+      );
 }

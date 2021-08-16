@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hepies/models/user.dart';
 import 'package:hepies/providers/auth.dart';
 import 'package:hepies/providers/user_provider.dart';
+import 'package:hepies/ui/auth/login.dart';
 import 'package:hepies/ui/welcome.dart';
 import 'package:hepies/util/image.dart';
 import 'package:hepies/util/validators.dart';
@@ -31,7 +32,7 @@ class _RegisterState extends State<Register> {
   XFile file;
   var _professionController;
 
-  List<dynamic> _myInterests=[];
+  List<dynamic> _myInterests = [];
   void _setImage(XFile image) {
     file = image;
     print("_formData_formData_formData${file}");
@@ -165,24 +166,23 @@ class _RegisterState extends State<Register> {
     );
 
     var doRegister = () {
-      var interests=_myInterests.join(",");
+      var interests = _myInterests.join(",");
       print("interestsinterests $interests");
       final form = formKey.currentState;
       if (form.validate() && file != null) {
         form.save();
         auth
             .register(_name, _fathername, _username, _phone, _password,
-                _professionController, interests,File(file.path))
+                _professionController, interests, File(file.path))
             .then((response) {
           if (response['status']) {
-            User user = response['data'];
-            Provider.of<UserProvider>(context, listen: false).setUser(user);
+            Flushbar(
+              title: "Registration Successful. Please login ",
+              message: response.toString(),
+              duration: Duration(seconds: 10),
+            ).show(context);
             Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => Welcome(
-                          user: user,
-                        )));
+                context, MaterialPageRoute(builder: (context) => Login()));
           } else {
             Flushbar(
               title: "Registration Failed",
