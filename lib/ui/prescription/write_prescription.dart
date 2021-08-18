@@ -5,6 +5,7 @@ import 'package:hepies/models/dx.dart';
 import 'package:hepies/models/hx.dart';
 import 'package:hepies/models/px.dart';
 import 'package:hepies/providers/prescription_provider.dart';
+import 'package:hepies/ui/guidelines/guidelines.dart';
 import 'package:hepies/ui/medicalrecords/add_history.dart';
 import 'package:hepies/ui/prescription/prescription_types/general_prescription.dart';
 import 'package:hepies/ui/prescription/prescription_types/instrument_prescription.dart';
@@ -71,6 +72,10 @@ class _WritePrescriptionState extends State<WritePrescription> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Guidelines()));
+                  },
                   child: Container(
                     height: 40,
                     width: 100,

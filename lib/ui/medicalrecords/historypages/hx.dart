@@ -10,10 +10,11 @@ class HX extends StatefulWidget {
   _HXState createState() => _HXState();
 }
 
-class _HXState extends State<HX> {
+class _HXState extends State<HX>  with AutomaticKeepAliveClientMixin {
   var hx=new History();
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return ListView(
       children: [
         Center(
@@ -78,4 +79,8 @@ class _HXState extends State<HX> {
       ],
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

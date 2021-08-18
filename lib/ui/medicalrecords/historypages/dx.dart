@@ -8,7 +8,7 @@ class DX extends StatefulWidget {
   _DXState createState() => _DXState();
 }
 
-class _DXState extends State<DX> {
+class _DXState extends State<DX>  with AutomaticKeepAliveClientMixin {
   var dx = new Diagnosis();
   List<dynamic> diags = ["", "", "", "", ""];
   void setDiagnosis(val, id) {
@@ -23,6 +23,7 @@ class _DXState extends State<DX> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return ListView(
       children: [
         Center(
@@ -148,4 +149,8 @@ class _DXState extends State<DX> {
       ],
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

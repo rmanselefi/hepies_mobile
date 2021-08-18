@@ -8,10 +8,11 @@ class PX extends StatefulWidget {
   _PXState createState() => _PXState();
 }
 
-class _PXState extends State<PX> {
+class _PXState extends State<PX>  with AutomaticKeepAliveClientMixin {
   var px = new Physical();
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return ListView(
       shrinkWrap: true,
       children: [
@@ -37,7 +38,7 @@ class _PXState extends State<PX> {
         Row(
           children: [
             Padding(
-              padding: const EdgeInsets.only(left:10.0),
+              padding: const EdgeInsets.only(left: 10.0),
               child: Text(
                 'BP',
                 style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
@@ -67,11 +68,6 @@ class _PXState extends State<PX> {
               'mmgh',
               style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
             ),
-            Container(
-              margin: EdgeInsets.only(bottom: 20.0),
-              width: 100,
-              child: TextField(),
-            ),
           ],
         ),
         Row(
@@ -85,7 +81,7 @@ class _PXState extends State<PX> {
             ),
             Container(
               margin: EdgeInsets.only(bottom: 20.0),
-              width: 100,
+              width: 200,
               child: TextField(
                 onChanged: (val) {
                   px.pr = val;
@@ -101,11 +97,6 @@ class _PXState extends State<PX> {
               '/min',
               style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
             ),
-            Container(
-              margin: EdgeInsets.only(bottom: 20.0),
-              width: 100,
-              child: TextField(),
-            ),
           ],
         ),
         Row(
@@ -119,7 +110,7 @@ class _PXState extends State<PX> {
             ),
             Container(
               margin: EdgeInsets.only(bottom: 20.0),
-              width:100,
+              width: 200,
               child: TextField(
                 onChanged: (val) {
                   px.rr = val;
@@ -131,14 +122,6 @@ class _PXState extends State<PX> {
             Text(
               '/min',
               style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(
-              width: 20.0,
-            ),
-            Container(
-              margin: EdgeInsets.only(bottom: 20.0),
-              width: 100,
-              child: TextField(),
             ),
           ],
         ),
@@ -153,29 +136,18 @@ class _PXState extends State<PX> {
             ),
             Container(
               margin: EdgeInsets.only(bottom: 20.0),
-              width: 100,
+              width: 200,
               child: TextField(
-                  onChanged: (val){
-                    px.temp = val;
-                    print("object ${px.temp}");
-                    widget.setPx(px);
-                  },
-                  ),
+                onChanged: (val) {
+                  px.temp = val;
+                  print("object ${px.temp}");
+                  widget.setPx(px);
+                },
+              ),
             ),
             Text(
               'C',
               style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
-            ),
-            Container(
-              margin: EdgeInsets.only(bottom: 20.0),
-              width: 100,
-              child: TextField(
-                // onChanged: (val){
-                //   px.temp = val;
-                //   print("object ${px.temp}");
-                //   widget.setPx(px);
-                // },
-              ),
             ),
           ],
         ),
@@ -190,10 +162,10 @@ class _PXState extends State<PX> {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(bottom: 0.0,left: 10),
+              margin: EdgeInsets.only(bottom: 0.0, left: 10),
               width: 150,
               child: TextField(
-                  onChanged: (val){
+                  onChanged: (val) {
                     px.general_apearance = val;
                     print("object ${px.general_apearance}");
                     widget.setPx(px);
@@ -201,8 +173,8 @@ class _PXState extends State<PX> {
                   decoration: InputDecoration(
                       hintText: 'General Appearance',
                       border: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.black45, width: 2)))
-              ),
+                          borderSide:
+                              BorderSide(color: Colors.black45, width: 2)))),
             ),
           ],
         ),
@@ -407,4 +379,8 @@ class _PXState extends State<PX> {
       ],
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

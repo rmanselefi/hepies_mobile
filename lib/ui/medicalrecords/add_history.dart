@@ -44,8 +44,7 @@ class AddHistory extends StatefulWidget {
   _AddHistoryState createState() => _AddHistoryState();
 }
 
-class _AddHistoryState extends State<AddHistory>
-    with AutomaticKeepAliveClientMixin {
+class _AddHistoryState extends State<AddHistory> {
   var history = new History();
   var physical = new Physical();
   var diagnosis = new Diagnosis();
@@ -79,11 +78,7 @@ class _AddHistoryState extends State<AddHistory>
   }
 
   @override
-  bool get wantKeepAlive => true;
-
-  @override
   Widget build(BuildContext context) {
-    super.build(context);
     return Scaffold(
       body: ListView(
         shrinkWrap: true,
@@ -169,8 +164,7 @@ class _AddHistoryState extends State<AddHistory>
                           setSerology: widget.setSerology,
                           setUrine: widget.setUrine,
                           setTumor: widget.setTumor,
-                          setInvestigation: widget.setInvestigation
-                      ),
+                          setInvestigation: widget.setInvestigation),
                       DX(widget.setDx)
                     ],
                   ),

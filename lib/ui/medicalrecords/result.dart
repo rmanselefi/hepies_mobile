@@ -42,23 +42,26 @@ class _MedicalResultState extends State<MedicalResult> {
                       )
                     ],
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => AddHistory(pageNumber: 0)));
-                    },
-                    child: Container(
-                      width: 100,
-                      height: 40,
-                      alignment: Alignment.centerRight,
-                      decoration: BoxDecoration(
-                          border: Border.all(width: 1, color: Colors.white24),
-                          borderRadius: BorderRadius.circular(40.0),
-                          color: Colors.green),
-                      child: Center(
-                        child: Text('ADD'),
+                  Align(
+                    alignment: Alignment.bottomRight,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AddHistory(pageNumber: 0)));
+                      },
+                      child: Container(
+                        width: 100,
+                        height: 40,
+                        alignment: Alignment.centerRight,
+                        decoration: BoxDecoration(
+                            border: Border.all(width: 1, color: Colors.white24),
+                            borderRadius: BorderRadius.circular(40.0),
+                            color: Colors.green),
+                        child: Center(
+                          child: Text('ADD'),
+                        ),
                       ),
                     ),
                   ),
@@ -80,14 +83,22 @@ class _MedicalResultState extends State<MedicalResult> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ResultDetail(patient,e['createdAt'])));
+                                    builder: (context) => ResultDetail(patient,e['createdAt'],e['professional'])));
                           },
-                          child: Text(
-                            '$date                           $hour',
-                            style: TextStyle(
-                                decoration: TextDecoration.underline,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 23.0),
+                          child: Container(
+                            margin: EdgeInsets.only(bottom: 10.0),
+                            padding: EdgeInsets.all(10.0),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.grey,
+                                    width: 1
+                              )
+                            ),
+                            child: Text(
+                              '$date                           $hour',
+                              style: TextStyle(
+                                  fontSize: 23.0),
+                            ),
                           ),
                         );
                       }).toList()),

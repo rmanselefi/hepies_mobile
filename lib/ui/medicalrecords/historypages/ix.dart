@@ -30,7 +30,7 @@ class IX extends StatefulWidget {
   _IXState createState() => _IXState();
 }
 
-class _IXState extends State<IX> {
+class _IXState extends State<IX> with AutomaticKeepAliveClientMixin {
   bool isExpanded = false;
   var hematology = new Hematology();
   var serology = new Serology();
@@ -39,8 +39,208 @@ class _IXState extends State<IX> {
   var urine = new Urine();
   var ix = new Investigation();
   var tumor = new Tumor();
+
+  //Hematology
+  TextEditingController _wbccountController;
+  TextEditingController _hgbController;
+  TextEditingController _hctController;
+  TextEditingController _mcvController;
+  TextEditingController _mchController;
+  TextEditingController _mchcController;
+  TextEditingController _pltcountController;
+  TextEditingController _reticulocyteController;
+  TextEditingController _bgrhController;
+  TextEditingController _esrController;
+
+  //Chemistry
+  TextEditingController fbs;
+  TextEditingController rbs;
+  TextEditingController hba1c;
+  TextEditingController bunurea;
+  TextEditingController creatinine;
+  TextEditingController astsgot;
+  TextEditingController altsgpt;
+  TextEditingController alp;
+  TextEditingController albumin;
+  TextEditingController protein;
+  TextEditingController triglyceride;
+  TextEditingController cholesterol;
+  TextEditingController hdl;
+  TextEditingController ldl;
+  TextEditingController amylase;
+  TextEditingController lipase;
+  TextEditingController sodium;
+  TextEditingController potassium;
+  TextEditingController calcium;
+  TextEditingController calciumionized;
+  TextEditingController phosphorous;
+  TextEditingController chloride;
+  TextEditingController magnesium;
+  TextEditingController TIBC;
+  TextEditingController iron;
+  TextEditingController transferrinsaturation;
+  TextEditingController ferritin;
+  TextEditingController serumfolate;
+  TextEditingController bilirubintotal;
+  TextEditingController bilirubindirect;
+  TextEditingController bilirubinindirect;
+  TextEditingController totalprotein;
+
+  //Urine
+  TextEditingController urinehcg;
+  TextEditingController stoolexam;
+  TextEditingController stooloccultblood;
+  TextEditingController stoolplylori;
+
+  //Serology
+  TextEditingController widal;
+  TextEditingController welfelix;
+  TextEditingController aso;
+  TextEditingController rf;
+  TextEditingController crp;
+  TextEditingController ana;
+  TextEditingController betahcg;
+  TextEditingController coombs;
+  TextEditingController hbsag;
+  TextEditingController hivmedical;
+  TextEditingController hivviralload;
+  TextEditingController cd4count;
+
+  //Tumor
+  TextEditingController tpsa;
+  TextEditingController afp;
+  TextEditingController cea;
+  TextEditingController ca125;
+  TextEditingController ca19;
+
+  //Endocrinology
+  TextEditingController t3;
+  TextEditingController t4;
+  TextEditingController pth;
+  TextEditingController tsh;
+  TextEditingController fsh;
+  TextEditingController lh;
+  TextEditingController progesterone;
+  TextEditingController estradiol;
+  TextEditingController testosterone;
+  TextEditingController prolactin;
+  TextEditingController serumcortisol;
+  TextEditingController serumcalcitonin;
+  TextEditingController erythropoietin;
+  TextEditingController growthhormone;
+  TextEditingController vitb12;
+  TextEditingController vitD;
+
+  //Investigation
+  TextEditingController _pathologyController;
+  TextEditingController _microbiologyController;
+  TextEditingController _radiologyController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    //Investigation
+    _pathologyController = new TextEditingController();
+    _microbiologyController = new TextEditingController();
+    _radiologyController = new TextEditingController();
+
+    //Endocrinology
+    t3 = new TextEditingController();
+    t4 = new TextEditingController();
+    pth = new TextEditingController();
+    tsh = new TextEditingController();
+    fsh = new TextEditingController();
+    lh = new TextEditingController();
+    progesterone = new TextEditingController();
+    estradiol = new TextEditingController();
+    testosterone = new TextEditingController();
+    prolactin = new TextEditingController();
+    serumcortisol = new TextEditingController();
+    serumcalcitonin = new TextEditingController();
+    erythropoietin = new TextEditingController();
+    growthhormone = new TextEditingController();
+    vitb12 = new TextEditingController();
+    vitD = new TextEditingController();
+
+    //Tumor
+    tpsa = new TextEditingController();
+    afp = new TextEditingController();
+    cea = new TextEditingController();
+    ca125 = new TextEditingController();
+    ca19 = new TextEditingController();
+
+    //Serology
+    widal = new TextEditingController();
+    welfelix = new TextEditingController();
+    aso = new TextEditingController();
+    rf = new TextEditingController();
+    crp = new TextEditingController();
+    ana = new TextEditingController();
+    betahcg = new TextEditingController();
+    coombs = new TextEditingController();
+    hbsag = new TextEditingController();
+    hivmedical = new TextEditingController();
+    hivviralload = new TextEditingController();
+    cd4count = new TextEditingController();
+
+    //Hematology
+    _wbccountController = new TextEditingController();
+    _hgbController = new TextEditingController();
+    _hctController = new TextEditingController();
+    _mcvController = new TextEditingController();
+    _mchController = new TextEditingController();
+    _mchcController = new TextEditingController();
+    _pltcountController = new TextEditingController();
+    _reticulocyteController = new TextEditingController();
+    _bgrhController = new TextEditingController();
+    _esrController = new TextEditingController();
+
+    //Chemistry
+    fbs = new TextEditingController();
+    rbs = new TextEditingController();
+    hba1c = new TextEditingController();
+    bunurea = new TextEditingController();
+    creatinine = new TextEditingController();
+    astsgot = new TextEditingController();
+    altsgpt = new TextEditingController();
+    alp = new TextEditingController();
+    albumin = new TextEditingController();
+    protein = new TextEditingController();
+    triglyceride = new TextEditingController();
+    cholesterol = new TextEditingController();
+    hdl = new TextEditingController();
+    ldl = new TextEditingController();
+    amylase = new TextEditingController();
+    lipase = new TextEditingController();
+    sodium = new TextEditingController();
+    potassium = new TextEditingController();
+    calcium = new TextEditingController();
+    calciumionized = new TextEditingController();
+    phosphorous = new TextEditingController();
+    chloride = new TextEditingController();
+    magnesium = new TextEditingController();
+    TIBC = new TextEditingController();
+    iron = new TextEditingController();
+    transferrinsaturation = new TextEditingController();
+    ferritin = new TextEditingController();
+    serumfolate = new TextEditingController();
+    bilirubintotal = new TextEditingController();
+    bilirubindirect = new TextEditingController();
+    bilirubinindirect = new TextEditingController();
+    totalprotein = new TextEditingController();
+
+    //Urine
+    urinehcg = new TextEditingController();
+    stoolexam = new TextEditingController();
+    stooloccultblood = new TextEditingController();
+    stoolplylori = new TextEditingController();
+  }
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return ExpandableTheme(
       data: const ExpandableThemeData(
         iconColor: Colors.blue,
@@ -48,6 +248,7 @@ class _IXState extends State<IX> {
       ),
       child: ListView(
         physics: const BouncingScrollPhysics(),
+        addAutomaticKeepAlives: true,
         children: [
           Center(
             child: Container(
@@ -59,87 +260,97 @@ class _IXState extends State<IX> {
             ),
           ),
           ExpandableNotifier(
+              key: PageStorageKey('hematology'),
               child: Card(
-            clipBehavior: Clip.antiAlias,
-            child: Column(
-              children: <Widget>[
-                ScrollOnExpand(
-                  scrollOnExpand: true,
-                  scrollOnCollapse: false,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.redAccent, width: 3)),
-                    child: ExpandablePanel(
-                      collapsed: Text('Tap to see more'),
-                      theme: const ExpandableThemeData(
-                        headerAlignment: ExpandablePanelHeaderAlignment.center,
-                        tapBodyToCollapse: true,
-                      ),
-                      header: Padding(
-                          padding: EdgeInsets.all(10),
-                          child: Text(
-                            "Hematology",
-                            style: Theme.of(context).textTheme.body2,
-                          )),
-                      expanded: _buildHemtologyForm(),
-                      builder: (_, collapsed, expanded) {
-                        return Padding(
-                          padding:
-                              EdgeInsets.only(left: 10, right: 10, bottom: 10),
-                          child: Expandable(
-                            collapsed: collapsed,
-                            expanded: expanded,
-                            theme: const ExpandableThemeData(crossFadePoint: 0),
+                clipBehavior: Clip.antiAlias,
+                child: Column(
+                  children: <Widget>[
+                    ScrollOnExpand(
+                      key: PageStorageKey('hematology'),
+                      scrollOnExpand: true,
+                      scrollOnCollapse: false,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            border:
+                                Border.all(color: Colors.redAccent, width: 3)),
+                        child: ExpandablePanel(
+                          collapsed: Text('Tap to see more'),
+                          theme: const ExpandableThemeData(
+                            headerAlignment:
+                                ExpandablePanelHeaderAlignment.center,
+                            tapBodyToCollapse: true,
                           ),
-                        );
-                      },
+                          header: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Text(
+                                "Hematology",
+                                style: Theme.of(context).textTheme.body2,
+                              )),
+                          expanded: _buildHemtologyForm(),
+                          builder: (_, collapsed, expanded) {
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                  left: 10, right: 10, bottom: 10),
+                              child: Expandable(
+                                collapsed: collapsed,
+                                expanded: expanded,
+                                theme: const ExpandableThemeData(
+                                    crossFadePoint: 0),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
-          )),
+              )),
           ExpandableNotifier(
+              key: PageStorageKey('chemistry'),
               child: Card(
-            clipBehavior: Clip.antiAlias,
-            child: Column(
-              children: <Widget>[
-                ScrollOnExpand(
-                  scrollOnExpand: true,
-                  scrollOnCollapse: false,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Color(0xff0be9e2), width: 3)),
-                    child: ExpandablePanel(
-                      collapsed: Text('Tap to see more'),
-                      theme: const ExpandableThemeData(
-                        headerAlignment: ExpandablePanelHeaderAlignment.center,
-                        tapBodyToCollapse: true,
-                      ),
-                      header: Padding(
-                          padding: EdgeInsets.all(10),
-                          child: Text(
-                            "Chemistry",
-                            style: Theme.of(context).textTheme.body2,
-                          )),
-                      expanded: _buildChemistryForm(),
-                      builder: (_, collapsed, expanded) {
-                        return Padding(
-                          padding:
-                              EdgeInsets.only(left: 10, right: 10, bottom: 10),
-                          child: Expandable(
-                            collapsed: collapsed,
-                            expanded: expanded,
-                            theme: const ExpandableThemeData(crossFadePoint: 0),
+                clipBehavior: Clip.antiAlias,
+                child: Column(
+                  children: <Widget>[
+                    ScrollOnExpand(
+                      key: PageStorageKey('chemistry'),
+                      scrollOnExpand: true,
+                      scrollOnCollapse: false,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            border:
+                                Border.all(color: Color(0xff0be9e2), width: 3)),
+                        child: ExpandablePanel(
+                          collapsed: Text('Tap to see more'),
+                          theme: const ExpandableThemeData(
+                            headerAlignment:
+                                ExpandablePanelHeaderAlignment.center,
+                            tapBodyToCollapse: true,
                           ),
-                        );
-                      },
+                          header: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Text(
+                                "Chemistry",
+                                style: Theme.of(context).textTheme.body2,
+                              )),
+                          expanded: _buildChemistryForm(),
+                          builder: (_, collapsed, expanded) {
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                  left: 10, right: 10, bottom: 10),
+                              child: Expandable(
+                                collapsed: collapsed,
+                                expanded: expanded,
+                                theme: const ExpandableThemeData(
+                                    crossFadePoint: 0),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
-          )),
+              )),
           ExpandableNotifier(
               child: Card(
             clipBehavior: Clip.antiAlias,
@@ -382,6 +593,7 @@ class _IXState extends State<IX> {
                                 border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         color: Colors.black45, width: 2))),
+                            controller: _microbiologyController,
                           ),
                         ],
                       ),
@@ -439,6 +651,7 @@ class _IXState extends State<IX> {
                                 border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         color: Colors.black45, width: 2))),
+                            controller: _pathologyController,
                           )
                         ],
                       ),
@@ -496,6 +709,7 @@ class _IXState extends State<IX> {
                                 border: OutlineInputBorder(
                                     borderSide: BorderSide(
                                         color: Colors.black45, width: 2))),
+                            controller: _radiologyController,
                           )
                         ],
                       ),
@@ -526,6 +740,7 @@ class _IXState extends State<IX> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         TextFormField(
+          controller: _wbccountController,
           onChanged: (val) {
             hematology.wbccount = val;
             print("object ${hematology.wbccount}");
@@ -537,6 +752,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+            controller: _hgbController,
             onChanged: (val) {
               hematology.hgb = val;
               print("object ${hematology.hgb}");
@@ -547,6 +763,7 @@ class _IXState extends State<IX> {
                 border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.black45, width: 2)))),
         TextFormField(
+          controller: _hctController,
           onChanged: (val) {
             hematology.hct = val;
             print("object ${hematology.hct}");
@@ -558,6 +775,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+            controller: _mcvController,
             onChanged: (val) {
               hematology.mcv = val;
               print("object ${hematology.mcv}");
@@ -568,6 +786,7 @@ class _IXState extends State<IX> {
                 border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.black45, width: 2)))),
         TextFormField(
+          controller: _mchController,
           onChanged: (val) {
             hematology.mch = val;
             print("object ${hematology.mch}");
@@ -579,6 +798,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+            controller: _mchcController,
             onChanged: (val) {
               hematology.mchc = val;
               print("object ${hematology.mchc}");
@@ -589,6 +809,7 @@ class _IXState extends State<IX> {
                 border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.black45, width: 2)))),
         TextFormField(
+          controller: _pltcountController,
           onChanged: (val) {
             hematology.pltcount = val;
             print("object ${hematology.pltcount}");
@@ -600,6 +821,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+            controller: _reticulocyteController,
             onChanged: (val) {
               hematology.reticulocyte = val;
               print("object ${hematology.reticulocyte}");
@@ -610,6 +832,7 @@ class _IXState extends State<IX> {
                 border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.black45, width: 2)))),
         TextFormField(
+          controller: _bgrhController,
           onChanged: (val) {
             hematology.bgrh = val;
             print("object ${hematology.bgrh}");
@@ -621,6 +844,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+          controller: _esrController,
           onChanged: (val) {
             hematology.esr = val;
             print("object ${hematology.esr}");
@@ -640,6 +864,7 @@ class _IXState extends State<IX> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         TextFormField(
+          controller: fbs,
           onChanged: (val) {
             chemistry.fbs = val;
             print("object ${chemistry.fbs}");
@@ -651,6 +876,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+            controller: rbs,
             onChanged: (val) {
               chemistry.rbs = val;
               print("object ${chemistry.rbs}");
@@ -661,6 +887,7 @@ class _IXState extends State<IX> {
                 border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.black45, width: 2)))),
         TextFormField(
+          controller: hba1c,
           onChanged: (val) {
             chemistry.hba1c = val;
             print("object ${chemistry.hba1c}");
@@ -672,6 +899,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+            controller: bunurea,
             onChanged: (val) {
               chemistry.bunurea = val;
               print("object ${chemistry.bunurea}");
@@ -682,6 +910,7 @@ class _IXState extends State<IX> {
                 border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.black45, width: 2)))),
         TextFormField(
+          controller: creatinine,
           onChanged: (val) {
             chemistry.creatinine = val;
             print("object ${chemistry.creatinine}");
@@ -693,6 +922,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+            controller: astsgot,
             onChanged: (val) {
               chemistry.astsgot = val;
               print("object ${chemistry.astsgot}");
@@ -703,6 +933,7 @@ class _IXState extends State<IX> {
                 border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.black45, width: 2)))),
         TextFormField(
+          controller: altsgpt,
           onChanged: (val) {
             chemistry.altsgpt = val;
             print("object ${chemistry.altsgpt}");
@@ -714,6 +945,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+            controller: alp,
             onChanged: (val) {
               chemistry.alp = val;
               print("object ${chemistry.alp}");
@@ -724,6 +956,7 @@ class _IXState extends State<IX> {
                 border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.black45, width: 2)))),
         TextFormField(
+          controller: bilirubintotal,
           onChanged: (val) {
             chemistry.bilirubintotal = val;
             print("object ${chemistry.bilirubintotal}");
@@ -735,6 +968,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+          controller: bilirubindirect,
           onChanged: (val) {
             chemistry.bilirubindirect = val;
             print("object ${chemistry.bilirubindirect}");
@@ -746,6 +980,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+            controller: bilirubinindirect,
             onChanged: (val) {
               chemistry.bilirubinindirect = val;
               print("object ${chemistry.bilirubinindirect}");
@@ -756,6 +991,7 @@ class _IXState extends State<IX> {
                 border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.black45, width: 2)))),
         TextFormField(
+          controller: albumin,
           onChanged: (val) {
             chemistry.albumin = val;
             print("object ${chemistry.albumin}");
@@ -767,6 +1003,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+            controller: totalprotein,
             onChanged: (val) {
               chemistry.totalprotein = val;
               print("object ${chemistry.totalprotein}");
@@ -777,6 +1014,7 @@ class _IXState extends State<IX> {
                 border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.black45, width: 2)))),
         TextFormField(
+          controller: triglyceride,
           onChanged: (val) {
             chemistry.triglyceride = val;
             print("object ${chemistry.triglyceride}");
@@ -788,6 +1026,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+            controller: cholesterol,
             onChanged: (val) {
               chemistry.cholesterol = val;
               print("object ${chemistry.cholesterol}");
@@ -798,6 +1037,7 @@ class _IXState extends State<IX> {
                 border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.black45, width: 2)))),
         TextFormField(
+          controller: hdl,
           onChanged: (val) {
             chemistry.hdl = val;
             print("object ${chemistry.hdl}");
@@ -809,6 +1049,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+            controller: ldl,
             onChanged: (val) {
               chemistry.ldl = val;
               print("object ${chemistry.ldl}");
@@ -819,6 +1060,7 @@ class _IXState extends State<IX> {
                 border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.black45, width: 2)))),
         TextFormField(
+          controller: amylase,
           onChanged: (val) {
             chemistry.amylase = val;
             print("object ${chemistry.amylase}");
@@ -830,6 +1072,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+          controller: lipase,
           onChanged: (val) {
             chemistry.lipase = val;
             print("object ${chemistry.lipase}");
@@ -849,6 +1092,7 @@ class _IXState extends State<IX> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         TextFormField(
+          controller: urinehcg,
           onChanged: (val) {
             urine.urinehcg = val;
             print("object ${urine.urinehcg}");
@@ -868,6 +1112,7 @@ class _IXState extends State<IX> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         TextFormField(
+          controller: stoolexam,
           onChanged: (val) {
             urine.stoolexam = val;
             print("object ${urine.stoolexam}");
@@ -879,6 +1124,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+          controller: stooloccultblood,
           onChanged: (val) {
             urine.stooloccultblood = val;
             print("object ${urine.stooloccultblood}");
@@ -898,6 +1144,7 @@ class _IXState extends State<IX> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         TextFormField(
+          controller: widal,
           onChanged: (val) {
             serology.widal = val;
             print("object ${serology.widal}");
@@ -909,6 +1156,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+            controller: welfelix,
             onChanged: (val) {
               serology.welfelix = val;
               print("object ${serology.welfelix}");
@@ -919,6 +1167,7 @@ class _IXState extends State<IX> {
                 border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.black45, width: 2)))),
         TextFormField(
+          controller: hbsag,
           onChanged: (val) {
             serology.hbsag = val;
             print("object ${serology.hbsag}");
@@ -930,6 +1179,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+            controller: hivmedical,
             onChanged: (val) {
               serology.hivmedical = val;
               print("object ${serology.hivmedical}");
@@ -940,6 +1190,7 @@ class _IXState extends State<IX> {
                 border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.black45, width: 2)))),
         TextFormField(
+          controller: hivviralload,
           onChanged: (val) {
             serology.hivviralload = val;
             print("object ${serology.hivviralload}");
@@ -951,6 +1202,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+            controller: cd4count,
             onChanged: (val) {
               serology.cd4count = val;
               print("object ${serology.cd4count}");
@@ -961,6 +1213,7 @@ class _IXState extends State<IX> {
                 border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.black45, width: 2)))),
         TextFormField(
+          controller: aso,
           onChanged: (val) {
             serology.aso = val;
             print("object ${serology.aso}");
@@ -972,6 +1225,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+            controller: rf,
             onChanged: (val) {
               serology.rf = val;
               print("object ${serology.rf}");
@@ -982,6 +1236,7 @@ class _IXState extends State<IX> {
                 border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.black45, width: 2)))),
         TextFormField(
+          controller: crp,
           onChanged: (val) {
             serology.crp = val;
             print("object ${serology.crp}");
@@ -993,6 +1248,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+          controller: ana,
           onChanged: (val) {
             serology.ana = val;
             print("object ${serology.ana}");
@@ -1004,6 +1260,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+          controller: betahcg,
           onChanged: (val) {
             serology.betahcg = val;
             print("object ${serology.betahcg}");
@@ -1015,6 +1272,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+          controller: coombs,
           onChanged: (val) {
             serology.coombs = val;
             print("object ${serology.coombs}");
@@ -1034,6 +1292,7 @@ class _IXState extends State<IX> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         TextFormField(
+          controller: tpsa,
           onChanged: (val) {
             tumor.tpsa = val;
             print("object ${tumor.tpsa}");
@@ -1045,6 +1304,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+          controller: afp,
           onChanged: (val) {
             tumor.afp = val;
             print("object ${tumor.afp}");
@@ -1056,6 +1316,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+          controller: cea,
           onChanged: (val) {
             tumor.cea = val;
             print("object ${tumor.cea}");
@@ -1067,6 +1328,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+          controller: ca125,
           onChanged: (val) {
             tumor.ca125 = val;
             print("object ${tumor.ca125}");
@@ -1078,6 +1340,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+          controller: ca19,
           onChanged: (val) {
             tumor.ca19 = val;
             print("object ${tumor.ca19}");
@@ -1097,6 +1360,7 @@ class _IXState extends State<IX> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         TextFormField(
+          controller: t3,
           onChanged: (val) {
             endocrinology.t3 = val;
             print("object ${endocrinology.t3}");
@@ -1108,6 +1372,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+            controller: t4,
             onChanged: (val) {
               endocrinology.t4 = val;
               print("object ${endocrinology.t4}");
@@ -1118,6 +1383,7 @@ class _IXState extends State<IX> {
                 border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.black45, width: 2)))),
         TextFormField(
+          controller: pth,
           onChanged: (val) {
             endocrinology.pth = val;
             print("object ${endocrinology.pth}");
@@ -1129,6 +1395,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+            controller: tsh,
             onChanged: (val) {
               endocrinology.tsh = val;
               print("object ${endocrinology.tsh}");
@@ -1139,6 +1406,7 @@ class _IXState extends State<IX> {
                 border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.black45, width: 2)))),
         TextFormField(
+          controller: fsh,
           onChanged: (val) {
             endocrinology.fsh = val;
             print("object ${endocrinology.fsh}");
@@ -1150,6 +1418,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+            controller: lh,
             onChanged: (val) {
               endocrinology.lh = val;
               print("object ${endocrinology.lh}");
@@ -1160,6 +1429,7 @@ class _IXState extends State<IX> {
                 border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.black45, width: 2)))),
         TextFormField(
+          controller: progesterone,
           onChanged: (val) {
             endocrinology.progesterone = val;
             print("object ${endocrinology.progesterone}");
@@ -1171,6 +1441,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+            controller: estradiol,
             onChanged: (val) {
               endocrinology.estradiol = val;
               print("object ${endocrinology.estradiol}");
@@ -1181,6 +1452,7 @@ class _IXState extends State<IX> {
                 border: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.black45, width: 2)))),
         TextFormField(
+          controller: testosterone,
           onChanged: (val) {
             endocrinology.testosterone = val;
             print("object ${endocrinology.testosterone}");
@@ -1192,6 +1464,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+          controller: prolactin,
           onChanged: (val) {
             endocrinology.prolactin = val;
             print("object ${endocrinology.prolactin}");
@@ -1203,6 +1476,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+          controller: serumcortisol,
           onChanged: (val) {
             endocrinology.serumcortisol = val;
             print("object ${endocrinology.serumcortisol}");
@@ -1214,6 +1488,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+          controller: serumcalcitonin,
           onChanged: (val) {
             endocrinology.serumcalcitonin = val;
             print("object ${endocrinology.serumcalcitonin}");
@@ -1225,6 +1500,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+          controller: erythropoietin,
           onChanged: (val) {
             endocrinology.erythropoietin = val;
             print("object ${endocrinology.erythropoietin}");
@@ -1236,6 +1512,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+          controller: growthhormone,
           onChanged: (val) {
             endocrinology.growthhormone = val;
             print("object ${endocrinology.growthhormone}");
@@ -1247,6 +1524,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+          controller: vitb12,
           onChanged: (val) {
             endocrinology.vitb12 = val;
             print("object ${endocrinology.vitb12}");
@@ -1258,6 +1536,7 @@ class _IXState extends State<IX> {
                   borderSide: BorderSide(color: Colors.black45, width: 2))),
         ),
         TextFormField(
+          controller: vitD,
           onChanged: (val) {
             endocrinology.vitD = val;
             print("object ${endocrinology.vitD}");
@@ -1271,4 +1550,8 @@ class _IXState extends State<IX> {
       ],
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
