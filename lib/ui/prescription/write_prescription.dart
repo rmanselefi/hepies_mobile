@@ -5,12 +5,14 @@ import 'package:hepies/models/dx.dart';
 import 'package:hepies/models/hx.dart';
 import 'package:hepies/models/px.dart';
 import 'package:hepies/providers/prescription_provider.dart';
+import 'package:hepies/ui/favorites/favorites.dart';
 import 'package:hepies/ui/guidelines/guidelines.dart';
 import 'package:hepies/ui/medicalrecords/add_history.dart';
 import 'package:hepies/ui/prescription/prescription_types/general_prescription.dart';
 import 'package:hepies/ui/prescription/prescription_types/instrument_prescription.dart';
 import 'package:hepies/ui/prescription/prescription_types/narcotic_prescription.dart';
 import 'package:hepies/ui/prescription/prescription_types/psychotropic_prescription.dart';
+import 'package:hepies/util/shared_preference.dart';
 import 'package:provider/provider.dart';
 
 enum type { general, narcotic, psychotropic, instrument }
@@ -53,8 +55,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
 
   @override
   Widget build(BuildContext context) {
-    var prescProvider =
-        Provider.of<PrescriptionProvider>(context, listen: false);
+    var prescProvider = Provider.of<PrescriptionProvider>(context);
     return Scaffold(
       body: ListView(
         children: [
@@ -108,6 +109,14 @@ class _WritePrescriptionState extends State<WritePrescription> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: GestureDetector(
+                  onTap: () async {
+                    var user = await UserPreferences().getUser();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                FavoritesPage(user.professionid)));
+                  },
                   child: Container(
                     height: 40,
                     width: 100,
@@ -204,17 +213,14 @@ class _WritePrescriptionState extends State<WritePrescription> {
           ),
           Builder(builder: (context) {
             if (pretype == "general") {
-              return GeneralPrescription(
-                  diagnosis: widget.diagnosis,
-                  history: widget.history,
-                  physical: widget.physical,
-                  setPrescription: _setPrescription);
+              return GeneralPrescription(setPrescription: _setPrescription);
             } else if (pretype == "instrument") {
-              return InstrumentPrescription();
+              return InstrumentPrescription(setPrescription: _setPrescription);
             } else if (pretype == "narcotic") {
-              return NarcoticPrescription();
+              return NarcoticPrescription(setPrescription: _setPrescription);
             } else if (pretype == "psychotropic") {
-              return PsychotropicPrescription();
+              return PsychotropicPrescription(
+                  setPrescription: _setPrescription);
             } else {
               return Container();
             }
@@ -248,22 +254,32 @@ class _WritePrescriptionState extends State<WritePrescription> {
                       onTap: () async {
                         print("object $prescription");
                         try {
-                          var res = await prescProvider
-                              .writePrescription(prescription);
-                          if (res['status']) {
-                            Flushbar(
-                              title: 'Sent',
-                              message:
-                                  'Your prescriptions are sent succesfully',
-                              duration: Duration(seconds: 10),
-                            ).show(context);
-                          } else {
+                          if(prescription.length!=0){
+                            var res = await prescProvider
+                                .writePrescription(prescription);
+                            if (res['status']) {
+                              Flushbar(
+                                title: 'Sent',
+                                message:
+                                'Your prescriptions are sent succesfully',
+                                duration: Duration(seconds: 10),
+                              ).show(context);
+                            } else {
+                              Flushbar(
+                                title: 'Error',
+                                message: 'Unable to send your prescriptions',
+                                duration: Duration(seconds: 10),
+                              ).show(context);
+                            }
+                          }
+                          else{
                             Flushbar(
                               title: 'Error',
-                              message: 'Unable to send your prescriptions',
+                              message: 'Please fill at least one prescription.',
                               duration: Duration(seconds: 10),
                             ).show(context);
                           }
+
                         } catch (e) {
                           print("object $e");
                         }

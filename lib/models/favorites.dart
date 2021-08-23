@@ -1,6 +1,6 @@
 class Favorites {
   final int id;
-  final int professional_id;
+  final int profession_id;
   final String drug_name;
   final String name;
   final String route;
@@ -9,7 +9,7 @@ class Favorites {
 
   Favorites(
       {this.id,
-      this.professional_id,
+      this.profession_id,
       this.drug_name,
       this.name,
       this.route,
@@ -22,7 +22,7 @@ class Favorites {
     return {
       'id': id,
       'name': name,
-      'professional_id': professional_id,
+      'profession_id': profession_id,
       'drug_name': drug_name,
       'route': route,
       'strength': strength,

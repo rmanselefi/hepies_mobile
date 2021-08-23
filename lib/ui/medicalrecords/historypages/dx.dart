@@ -24,6 +24,7 @@ class _DXState extends State<DX>  with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    int i=0;
     return ListView(
       children: [
         Center(
@@ -43,7 +44,8 @@ class _DXState extends State<DX>  with AutomaticKeepAliveClientMixin {
             children: [
               Column(
                 children: diags.map<Widget>((e) {
-                  var index = diags.indexOf(e);
+                  var index = i++;
+                  print("indexindex $index");
                   return Column(
                     children: [
                       Padding(

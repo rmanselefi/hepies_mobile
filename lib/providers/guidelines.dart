@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:hepies/models/consult.dart';
 import 'package:hepies/util/app_url.dart';
@@ -28,6 +29,24 @@ class GuidelinesProvider with ChangeNotifier {
     }
     return json.decode(response.body);
   }
+
+  Future<void> downloadFile(String url) async {
+    final Response downloadData = await get(Uri.parse(url));
+    final Directory systemTempDir = Directory.systemTemp;
+    final File tempFile = File('${systemTempDir.path}/tmp.jpg');
+    if (tempFile.existsSync()) {
+      await tempFile.delete();
+    }
+    await tempFile.create();
+
+    var bodyBytes = downloadData.bodyBytes;
+    print(
+      'Success!\nDownloaded  \nUrl: '
+          '\npath:  \nBytes Count :: ',
+    );
+    return bodyBytes;
+  }
+
 
   get getDrug{
     return guidelines;

@@ -18,6 +18,6 @@ class _PsychotropicPrescriptionState extends State<PsychotropicPrescription> {
 
   @override
   Widget build(BuildContext context) {
-    return PrescribeForm(widget.setPrescription, 'psychotropic');
+    return PrescribeForm(widget.setPrescription, 'psychotropic',Color(0xffD24F95));
   }
 }

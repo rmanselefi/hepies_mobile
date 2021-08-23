@@ -67,7 +67,7 @@ class _HeaderState extends State<Header> {
         GestureDetector(
           onTap: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Welcome(currenIndex: 2,)));
+                context, MaterialPageRoute(builder: (context) => Points(points: points,)));
           },
           child: Column(
             children: [

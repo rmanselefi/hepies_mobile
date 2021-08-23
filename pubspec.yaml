@@ -38,6 +38,7 @@ dependencies:
   multiselect_formfield:
   expandable:
   sqflite:
+  path_provider:
 
 dev_dependencies:
   flutter_test:

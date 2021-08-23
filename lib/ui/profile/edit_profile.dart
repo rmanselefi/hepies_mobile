@@ -26,7 +26,6 @@ class _EditProfileState extends State<EditProfile>
 
   XFile file;
 
-
   void _setImage(XFile image) {
     file = image;
     print("_formData_formData_formData${file}");
@@ -49,7 +48,7 @@ class _EditProfileState extends State<EditProfile>
   var _professionController;
   String points = '';
   String license = '';
-  String _profession='Medical Doctor';
+  String _profession = 'Medical Doctor';
   List<dynamic> _interests = [];
   @override
   void initState() {
@@ -80,7 +79,6 @@ class _EditProfileState extends State<EditProfile>
 
   @override
   Widget build(BuildContext context) {
-
     UserProvider auth = Provider.of<UserProvider>(context);
     final professionField = DropdownButtonFormField(
       value: _professionController,
@@ -158,10 +156,11 @@ class _EditProfileState extends State<EditProfile>
                                     })
                               ],
                             )),
-                        // Container(
-                        //   height: 100.0,
-                        //     child: ImageInputProfile(_setImage, profile)
-                        // )
+                        Expanded(
+                          child: Container(
+                              height: 100.0,
+                              child: ImageInputProfile(_setImage, profile)),
+                        )
                       ],
                     ),
                   ),
@@ -362,55 +361,6 @@ class _EditProfileState extends State<EditProfile>
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
                                       new Text(
-                                        'Profession',
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 25.0),
-                              child: new Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: <Widget>[
-                                    new Flexible(
-                                      child: new DropdownButtonFormField(
-                                        value: _profession,
-                                        items: [
-                                          "Medical Doctor",
-                                          "Pharmacist",
-                                          "Nurse",
-                                          "Health Officer"
-                                        ]
-                                            .map((label) => DropdownMenuItem(
-                                                  child: Text(label.toString()),
-                                                  value: label,
-                                                ))
-                                            .toList(),
-                                        hint: Text('Choose Profession'),
-                                        onChanged: (value) {
-                                          // setState(() {
-                                          //   _profession = value;
-                                          // });
-                                        },
-                                      ),
-                                    ),
-                                  ])),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 25.0),
-                              child: new Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  new Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      new Text(
                                         'Interests',
                                         style: TextStyle(
                                             fontSize: 16.0,
@@ -568,6 +518,14 @@ class _EditProfileState extends State<EditProfile>
     super.dispose();
   }
 
+  var loading = Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: <Widget>[
+      CircularProgressIndicator(),
+      Text(" Authenticating ... Please wait")
+    ],
+  );
+
   Widget _getActionButtons() {
     return Padding(
       padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 45.0),
@@ -602,7 +560,8 @@ class _EditProfileState extends State<EditProfile>
                       license: license);
                   var res =
                       await Provider.of<UserProvider>(context, listen: false)
-                          .updateProfile(user, File(file.path));
+                          .updateProfile(
+                              user, file != null ? File(file.path) : null,profile);
                   if (res['status']) {
                     Flushbar(
                       title: 'Sent',

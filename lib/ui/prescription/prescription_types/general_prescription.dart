@@ -5,12 +5,9 @@ import 'package:hepies/models/px.dart';
 import 'package:hepies/ui/prescription/forms/prescribe_form.dart';
 
 class GeneralPrescription extends StatefulWidget {
-  final History history;
-  final Diagnosis diagnosis;
-  final Physical physical;
+  final color;
   final Function setPrescription;
-  GeneralPrescription(
-      {this.physical, this.diagnosis, this.history, this.setPrescription});
+  GeneralPrescription({this.color, this.setPrescription});
 
   @override
   _GeneralPrescriptionState createState() => _GeneralPrescriptionState();
@@ -27,7 +24,7 @@ class _GeneralPrescriptionState extends State<GeneralPrescription>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return PrescribeForm(widget.setPrescription, 'general');
+    return PrescribeForm(widget.setPrescription, 'general',Colors.white);
   }
 
   @override

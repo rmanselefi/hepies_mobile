@@ -14,8 +14,7 @@ class _ConsultListState extends State<ConsultList> {
     var consults = widget.consults;
     return Container(
       height: 2 * MediaQuery.of(context).size.height / 3,
-      child: ListView(
-          shrinkWrap: true,
+      child: Column(
           children: consults.map<Widget>((e) {
             var date = DateFormat.yMMMd()
                 .format(DateTime.parse(e['createdAt']));

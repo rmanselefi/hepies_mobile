@@ -11,7 +11,7 @@ class FavoritesProvider with ChangeNotifier {
       onCreate: (db, version) {
 // Run the CREATE TABLE statement on the database.
         return db.execute(
-          'CREATE TABLE favorites(id INTEGER PRIMARY KEY, name TEXT, route TEXT,strength TEXT)',
+          'CREATE TABLE favorites(id INTEGER PRIMARY KEY, name TEXT, route TEXT,strength TEXT,profession_id INTEGER,drug_name TEXT, unit TEXT )',
         );
       },
 // Set the version. This executes the onCreate function and provides a

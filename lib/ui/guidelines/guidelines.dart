@@ -82,18 +82,22 @@ class _GuidelinesState extends State<Guidelines> {
                           children: [
                             GestureDetector(
                               onTap: () {
-
+                                Provider.of<GuidelinesProvider>(context)
+                                    .downloadFile(e['url']);
                               },
-                              child: Container(
-                                  width: 370,
-                                  padding:
-                                      EdgeInsets.only(left: 10.0, top: 10.0),
-                                  child: Text(
-                                    e['name'] != null ? e['name'] : '',
-                                    style: TextStyle(
-                                        fontSize: 20.0,
-                                        decoration: TextDecoration.underline),
-                                  )),
+                              child: GestureDetector(
+                                onTap: () {},
+                                child: Container(
+                                    width: 370,
+                                    padding:
+                                        EdgeInsets.only(left: 10.0, top: 10.0),
+                                    child: Text(
+                                      e['name'] != null ? e['name'] : '',
+                                      style: TextStyle(
+                                          fontSize: 20.0,
+                                          decoration: TextDecoration.underline),
+                                    )),
+                              ),
                             ),
                             IconButton(
                                 padding: EdgeInsets.zero,

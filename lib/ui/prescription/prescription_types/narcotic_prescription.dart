@@ -18,6 +18,6 @@ class _NarcoticPrescriptionState extends State<NarcoticPrescription> {
 
   @override
   Widget build(BuildContext context) {
-    return PrescribeForm(widget.setPrescription, 'narcotic');
+    return PrescribeForm(widget.setPrescription, 'narcotic', Color(0xffF211C5));
   }
 }

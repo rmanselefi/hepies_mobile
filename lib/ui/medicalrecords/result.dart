@@ -16,6 +16,13 @@ class _MedicalResultState extends State<MedicalResult> {
   @override
   Widget build(BuildContext context) {
     var patient = widget.res[0];
+    var pres = patient['prescription'];
+    pres.sort((a, b) {
+      return b['createdAt']
+          .toString()
+          .toLowerCase()
+          .compareTo(a['createdAt'].toString().toLowerCase());
+    });
     return SafeArea(
       child: Scaffold(
         body: ListView(
@@ -33,7 +40,7 @@ class _MedicalResultState extends State<MedicalResult> {
                     children: [
                       PersonalInfo(patient),
                       MaterialButton(
-                        onPressed: (){
+                        onPressed: () {
                           Navigator.of(context).pop();
                         },
                         child: Text('Back'),
@@ -49,7 +56,8 @@ class _MedicalResultState extends State<MedicalResult> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => AddHistory(pageNumber: 0)));
+                                builder: (context) =>
+                                    AddHistory(pageNumber: 0)));
                       },
                       child: Container(
                         width: 100,
@@ -73,7 +81,7 @@ class _MedicalResultState extends State<MedicalResult> {
                     child: Container(
                       height: 2 * MediaQuery.of(context).size.height / 3,
                       child: ListView(
-                          children: patient['prescription'].map<Widget>((e) {
+                          children: pres.map<Widget>((e) {
                         var date = DateFormat.yMMMd()
                             .format(DateTime.parse(e['createdAt']));
                         var hour = DateFormat.jm()
@@ -83,21 +91,18 @@ class _MedicalResultState extends State<MedicalResult> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ResultDetail(patient,e['createdAt'],e['professional'])));
+                                    builder: (context) => ResultDetail(patient,
+                                        e['createdAt'], e['professional'])));
                           },
                           child: Container(
                             margin: EdgeInsets.only(bottom: 10.0),
                             padding: EdgeInsets.all(10.0),
                             decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.grey,
-                                    width: 1
-                              )
-                            ),
+                                border:
+                                    Border.all(color: Colors.grey, width: 1)),
                             child: Text(
                               '$date                           $hour',
-                              style: TextStyle(
-                                  fontSize: 23.0),
+                              style: TextStyle(fontSize: 23.0),
                             ),
                           ),
                         );

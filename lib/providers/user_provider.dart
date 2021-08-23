@@ -23,7 +23,10 @@ class UserProvider with ChangeNotifier {
     _user = user;
   }
 
-  Future<Map<String, dynamic>> updateProfile(User user, File file) async {
+  Future<Map<String, dynamic>> updateProfile(
+      User user, File file, var old_profile) async {
+    _loggedInStatus = Status.Authenticating;
+    notifyListeners();
     _registeredInStatus = Status.Authenticating;
     notifyListeners();
     var profile;
@@ -34,6 +37,8 @@ class UserProvider with ChangeNotifier {
           profile = res;
         }
       });
+    } else {
+      profile = old_profile;
     }
     var result;
     final Map<String, dynamic> registrationData = {
@@ -43,16 +48,17 @@ class UserProvider with ChangeNotifier {
       'phone': user.phone,
       'email': user.email,
       'profile': profile,
-      'proffesion':user.profession,
+      'proffesion': user.profession,
       'speciality': user.speciality,
       'workplace': user.workplace,
-      'profile':profile,
+      'profile': profile,
       'user': {
         'id': user.userId,
         'username': user.username,
       },
     };
-    Response response = await put(Uri.parse(AppUrl.profile + '/${user.professionid}'),
+    Response response = await put(
+        Uri.parse(AppUrl.profile + '/${user.professionid}'),
         body: json.encode(registrationData),
         headers: {'Content-Type': 'application/json'});
 

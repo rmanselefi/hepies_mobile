@@ -20,6 +20,7 @@ import 'package:hepies/providers/drug_provider.dart';
 import 'package:hepies/providers/favorites.dart';
 import 'package:hepies/providers/patient_provider.dart';
 import 'package:hepies/ui/medicalrecords/add_history.dart';
+import 'package:hepies/util/database_helper.dart';
 import 'package:hepies/util/shared_preference.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,7 +28,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PrescribeForm extends StatefulWidget {
   final Function setPrescription;
   final String type;
-  PrescribeForm(this.setPrescription, this.type);
+  final color;
+  PrescribeForm(this.setPrescription, this.type, this.color);
   @override
   _PrescribeFormState createState() => _PrescribeFormState();
 }
@@ -55,6 +57,8 @@ class _PrescribeFormState extends State<PrescribeForm> {
   var routeController = new TextEditingController();
   var remarkController = new TextEditingController();
   var favoriteController = new TextEditingController();
+  var materialController = new TextEditingController();
+  var sizeController = new TextEditingController();
   List<dynamic> finaPrescription = [];
   List<dynamic> drugs;
   String _selectedAnimal;
@@ -172,322 +176,22 @@ class _PrescribeFormState extends State<PrescribeForm> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      width: 200,
-                      height: textHeight,
-                      child: TextFormField(
-                        controller: phoneController,
-                        validator: (val) {
-                          if (val.isEmpty) {
-                            setState(() {
-                              textHeight = 60.0;
-                            });
-                            return '';
-                          } else {
-                            setState(() {
-                              textHeight = 60.0;
-                            });
-                            return null;
-                          }
-                        },
-                        onSaved: (value) {
-                          setState(() {
-                            patient.phone = value;
-                          });
-                        },
-                        onChanged: (val) async {
-                          var res = await Provider.of<PatientProvider>(context,
-                                  listen: false)
-                              .getMedicalRecord(val);
-                          if (res.length != 0) {
-                            print("resresresres ${res}");
-                            setState(() {
-                              ageController.text = res[0]['age'];
-                              _chosenValue = res[0]['sex'];
-                              nameController.text = res[0]['name'];
-                              fnameController.text = res[0]['fathername'];
-                              weightController.text = res[0]['weight'];
-                            });
-                          }
-                          setState(() {
-                            patient.phone = val;
-                          });
-                        },
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Enter Phone Number',
-                            hintText: 'Enter Phone Number'),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 80,
-                    height: textHeight,
-                    child: TextFormField(
-                      controller: ageController,
-                      validator: (val) {
-                        if (val.isEmpty) {
-                          setState(() {
-                            textHeight = 60.0;
-                          });
-                          return '';
-                        } else {
-                          setState(() {
-                            textHeight = 60.0;
-                          });
-                          return null;
-                        }
-                      },
-                      onSaved: (value) => patient.age = value,
-                      onChanged: (val) {
-                        setState(() {
-                          patient.age = val;
-                        });
-                      },
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Age',
-                          hintText: 'Age'),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: DropdownButton<String>(
-                      focusColor: Colors.white,
-                      value: _chosenValue,
-                      //elevation: 5,
-                      style: TextStyle(color: Colors.white),
-                      iconEnabledColor: Colors.black,
-                      items: <String>[
-                        'Male',
-                        'Female',
-                      ].map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(
-                            value,
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        );
-                      }).toList(),
-                      hint: Text(
-                        "Sex",
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      onChanged: (String value) {
-                        setState(() {
-                          _chosenValue = value;
-                        });
-                      },
-                    ),
-                  ),
-                ],
+              SizedBox(
+                height: 20.0,
               ),
-              Row(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      width: 150,
-                      height: textHeight,
-                      child: TextFormField(
-                        controller: nameController,
-                        validator: (val) {
-                          if (val.isEmpty) {
-                            setState(() {
-                              textHeight = 60.0;
-                            });
-                            return '';
-                          } else {
-                            setState(() {
-                              textHeight = 60.0;
-                            });
-                            return null;
-                          }
-                        },
-                        onSaved: (value) => patient.name = value,
-                        onChanged: (val) {
-                          setState(() {
-                            patient.name = val;
-                          });
-                        },
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Name',
-                            hintText: 'Name'),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 150,
-                    height: textHeight,
-                    child: TextFormField(
-                      controller: fnameController,
-                      validator: (val) {
-                        print("valval ${val}");
-                        if (val.isEmpty) {
-                          setState(() {
-                            textHeight = 60.0;
-                          });
-                          return '';
-                        } else {
-                          setState(() {
-                            textHeight = 60.0;
-                          });
-                          return null;
-                        }
-                      },
-                      onSaved: (value) => patient.fathername = value,
-                      onChanged: (val) {
-                        setState(() {
-                          patient.fathername = val;
-                        });
-                      },
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Father Name',
-                          hintText: 'Father Name'),
-                    ),
-                  ),
-                  Container(
-                    width: 80,
-                    height: textHeight,
-                    child: TextFormField(
-                      controller: weightController,
-                      onSaved: (value) => patient.weight = value,
-                      onChanged: (val) {
-                        setState(() {
-                          patient.weight = val;
-                        });
-                      },
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Kg',
-                          hintText: 'Kg'),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          width: 270,
-                          height: 40,
-                          child: Autocomplete(
-                            optionsBuilder: (TextEditingValue value) {
-                              // When the field is empty
-                              if (value.text.isEmpty) {
-                                return [];
-                              }
-
-                              // The logic to find out which ones should appear
-                              return drugs.where((drug) {
-                                return drug['name']
-                                    .toLowerCase()
-                                    .contains(value.text.toLowerCase());
-                              });
-                            },
-                            onSelected: (value) {
-                              strengthController.text = value['strength'];
-                              unitController.text = value['unit'];
-                              routeController.text = value['route'];
-                              setState(() {
-                                prescription.drug = value['id'].toString();
-                                _selectedAnimal = value['name'];
-                              });
-                            },
-                            displayStringForOption: (option) => option['name'],
-                            fieldViewBuilder: (BuildContext context,
-                                TextEditingController
-                                    fieldTextEditingController,
-                                FocusNode fieldFocusNode,
-                                VoidCallback onFieldSubmitted) {
-                              return Container(
-                                height: textHeight,
-                                child: TextFormField(
-                                  controller: fieldTextEditingController,
-                                  focusNode: fieldFocusNode,
-                                  validator: (val) {
-                                    if (val.isEmpty) {
-                                      setState(() {
-                                        textHeight = 60.0;
-                                      });
-                                      return '';
-                                    } else {
-                                      setState(() {
-                                        textHeight = 60.0;
-                                      });
-                                      return null;
-                                    }
-                                  },
-                                  onSaved: (val) {
-                                    setState(() {
-                                      drug.name = val;
-                                    });
-                                  },
-                                  decoration: InputDecoration(
-                                      border: OutlineInputBorder(),
-                                      labelText: 'Name Of Drug',
-                                      hintText: 'Name Of Drug'),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              width: 120,
-                              height: textHeight,
-                              child: TextFormField(
-                                validator: (val) {
-                                  if (val.isEmpty) {
-                                    setState(() {
-                                      textHeight = 60.0;
-                                    });
-                                    return '';
-                                  } else {
-                                    setState(() {
-                                      textHeight = 60.0;
-                                    });
-                                    return null;
-                                  }
-                                },
-                                controller: strengthController,
-                                onChanged: (val) {
-                                  setState(() {
-                                    drug.strength = val;
-                                  });
-                                },
-                                decoration: InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    labelText: 'Strength',
-                                    hintText: 'Strength'),
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: 80,
+              Container(
+                color: widget.color,
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            width: 200,
                             height: textHeight,
                             child: TextFormField(
+                              controller: phoneController,
                               validator: (val) {
                                 if (val.isEmpty) {
                                   setState(() {
@@ -501,22 +205,113 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                   return null;
                                 }
                               },
-                              controller: unitController,
-                              onChanged: (val) {
+                              onSaved: (value) {
                                 setState(() {
-                                  drug.unit = val;
+                                  patient.phone = value;
+                                });
+                              },
+                              onChanged: (val) async {
+                                var res = await Provider.of<PatientProvider>(
+                                        context,
+                                        listen: false)
+                                    .getMedicalRecord(val);
+                                if (res.length != 0) {
+                                  print("resresresres ${res}");
+                                  setState(() {
+                                    ageController.text = res[0]['age'];
+                                    _chosenValue = res[0]['sex'];
+                                    nameController.text = res[0]['name'];
+                                    fnameController.text = res[0]['fathername'];
+                                    weightController.text = res[0]['weight'];
+                                  });
+                                }
+                                setState(() {
+                                  patient.phone = val;
                                 });
                               },
                               decoration: InputDecoration(
                                   border: OutlineInputBorder(),
-                                  labelText: 'Unit',
-                                  hintText: 'Unit'),
+                                  labelText: 'Enter Phone Number',
+                                  hintText: 'Enter Phone Number'),
                             ),
                           ),
-                          Container(
-                            width: 80,
+                        ),
+                        Container(
+                          width: 80,
+                          height: textHeight,
+                          child: TextFormField(
+                            controller: ageController,
+                            validator: (val) {
+                              if (val.isEmpty) {
+                                setState(() {
+                                  textHeight = 60.0;
+                                });
+                                return '';
+                              } else {
+                                setState(() {
+                                  textHeight = 60.0;
+                                });
+                                return null;
+                              }
+                            },
+                            onSaved: (value) => patient.age = value,
+                            onChanged: (val) {
+                              setState(() {
+                                patient.age = val;
+                              });
+                            },
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: 'Age',
+                                hintText: 'Age'),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: DropdownButton<String>(
+                            focusColor: Colors.white,
+                            value: _chosenValue,
+                            //elevation: 5,
+                            style: TextStyle(color: Colors.white),
+                            iconEnabledColor: Colors.black,
+                            items: <String>[
+                              'Male',
+                              'Female',
+                            ].map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(
+                                  value,
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              );
+                            }).toList(),
+                            hint: Text(
+                              "Sex",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                            onChanged: (String value) {
+                              setState(() {
+                                _chosenValue = value;
+                              });
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            width: 150,
                             height: textHeight,
                             child: TextFormField(
+                              controller: nameController,
                               validator: (val) {
                                 if (val.isEmpty) {
                                   setState(() {
@@ -530,230 +325,461 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                   return null;
                                 }
                               },
-                              controller: routeController,
+                              onSaved: (value) => patient.name = value,
                               onChanged: (val) {
                                 setState(() {
-                                  prescription.route = val;
+                                  patient.name = val;
                                 });
                               },
-                              minLines: 1,
                               decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: 'Name',
+                                  hintText: 'Name'),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: 150,
+                          height: textHeight,
+                          child: TextFormField(
+                            controller: fnameController,
+                            validator: (val) {
+                              print("valval ${val}");
+                              if (val.isEmpty) {
+                                setState(() {
+                                  textHeight = 60.0;
+                                });
+                                return '';
+                              } else {
+                                setState(() {
+                                  textHeight = 60.0;
+                                });
+                                return null;
+                              }
+                            },
+                            onSaved: (value) => patient.fathername = value,
+                            onChanged: (val) {
+                              setState(() {
+                                patient.fathername = val;
+                              });
+                            },
+                            decoration: InputDecoration(
                                 border: OutlineInputBorder(),
-                                labelText: 'Route',
-                                hintText: 'Route',
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: 15.0, horizontal: 10.0),
-                              ),
-                            ),
+                                labelText: 'Father Name',
+                                hintText: 'Father Name'),
                           ),
-                        ],
+                        ),
+                        Container(
+                          width: 80,
+                          height: textHeight,
+                          child: TextFormField(
+                            controller: weightController,
+                            onSaved: (value) => patient.weight = value,
+                            onChanged: (val) {
+                              setState(() {
+                                patient.weight = val;
+                              });
+                            },
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                labelText: 'Kg',
+                                hintText: 'Kg'),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        widget.type == 'instrument'
+                            ? _instrumentForm()
+                            : Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      width: 270,
+                                      height: 40,
+                                      child: Autocomplete(
+                                        optionsBuilder:
+                                            (TextEditingValue value) {
+                                          // When the field is empty
+                                          if (value.text.isEmpty) {
+                                            return [];
+                                          }
+
+                                          // The logic to find out which ones should appear
+                                          return drugs.where((drug) {
+                                            return drug['name']
+                                                .toLowerCase()
+                                                .contains(
+                                                    value.text.toLowerCase());
+                                          });
+                                        },
+                                        onSelected: (value) {
+                                          strengthController.text =
+                                              value['strength'];
+                                          unitController.text = value['unit'];
+                                          routeController.text = value['route'];
+                                          setState(() {
+                                            prescription.drug =
+                                                value['id'].toString();
+                                            _selectedAnimal = value['name'];
+                                          });
+                                        },
+                                        displayStringForOption: (option) =>
+                                            option['name'],
+                                        fieldViewBuilder: (BuildContext context,
+                                            TextEditingController
+                                                fieldTextEditingController,
+                                            FocusNode fieldFocusNode,
+                                            VoidCallback onFieldSubmitted) {
+                                          return Container(
+                                            height: textHeight,
+                                            child: TextFormField(
+                                              controller:
+                                                  fieldTextEditingController,
+                                              focusNode: fieldFocusNode,
+                                              validator: (val) {
+                                                if (val.isEmpty) {
+                                                  setState(() {
+                                                    textHeight = 60.0;
+                                                  });
+                                                  return '';
+                                                } else {
+                                                  setState(() {
+                                                    textHeight = 60.0;
+                                                  });
+                                                  return null;
+                                                }
+                                              },
+                                              onSaved: (val) {
+                                                setState(() {
+                                                  drug.name = val;
+                                                });
+                                              },
+                                              decoration: InputDecoration(
+                                                  border: OutlineInputBorder(),
+                                                  labelText: 'Name Of Drug',
+                                                  hintText: 'Name Of Drug'),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                  Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          width: 120,
+                                          height: textHeight,
+                                          child: TextFormField(
+                                            validator: (val) {
+                                              if (val.isEmpty) {
+                                                setState(() {
+                                                  textHeight = 60.0;
+                                                });
+                                                return '';
+                                              } else {
+                                                setState(() {
+                                                  textHeight = 60.0;
+                                                });
+                                                return null;
+                                              }
+                                            },
+                                            controller: strengthController,
+                                            onChanged: (val) {
+                                              setState(() {
+                                                drug.strength = val;
+                                              });
+                                            },
+                                            decoration: InputDecoration(
+                                                border: OutlineInputBorder(),
+                                                labelText: 'Strength',
+                                                hintText: 'Strength'),
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        width: 80,
+                                        height: textHeight,
+                                        child: TextFormField(
+                                          validator: (val) {
+                                            if (val.isEmpty) {
+                                              setState(() {
+                                                textHeight = 60.0;
+                                              });
+                                              return '';
+                                            } else {
+                                              setState(() {
+                                                textHeight = 60.0;
+                                              });
+                                              return null;
+                                            }
+                                          },
+                                          controller: unitController,
+                                          onChanged: (val) {
+                                            setState(() {
+                                              drug.unit = val;
+                                            });
+                                          },
+                                          decoration: InputDecoration(
+                                              border: OutlineInputBorder(),
+                                              labelText: 'Unit',
+                                              hintText: 'Unit'),
+                                        ),
+                                      ),
+                                      Container(
+                                        width: 80,
+                                        height: textHeight,
+                                        child: TextFormField(
+                                          validator: (val) {
+                                            if (val.isEmpty) {
+                                              setState(() {
+                                                textHeight = 60.0;
+                                              });
+                                              return '';
+                                            } else {
+                                              setState(() {
+                                                textHeight = 60.0;
+                                              });
+                                              return null;
+                                            }
+                                          },
+                                          controller: routeController,
+                                          onChanged: (val) {
+                                            setState(() {
+                                              prescription.route = val;
+                                            });
+                                          },
+                                          minLines: 1,
+                                          decoration: InputDecoration(
+                                            border: OutlineInputBorder(),
+                                            labelText: 'Route',
+                                            hintText: 'Route',
+                                            contentPadding:
+                                                EdgeInsets.symmetric(
+                                                    vertical: 15.0,
+                                                    horizontal: 10.0),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          width: 80,
+                                          height: 40,
+                                          child: TextFormField(
+                                            controller: everyController,
+                                            onChanged: (val) {
+                                              setState(() {
+                                                prescription.frequency = val;
+                                              });
+                                            },
+                                            decoration: InputDecoration(
+                                                border: OutlineInputBorder(),
+                                                labelText: 'Every',
+                                                hintText: 'Every'),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          width: 80,
+                                          height: 40,
+                                          child: TextFormField(
+                                            controller: forController,
+                                            onChanged: (val) {
+                                              setState(() {
+                                                prescription.takein = val;
+                                              });
+                                            },
+                                            decoration: InputDecoration(
+                                                border: OutlineInputBorder(),
+                                                labelText: 'For',
+                                                hintText: 'For'),
+                                          ),
+                                        ),
+                                      ),
+                                      Text(
+                                        'OR',
+                                        style: TextStyle(
+                                            fontSize: 18.0,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          width: 80,
+                                          height: 40,
+                                          child: TextFormField(
+                                            controller: ampuleController,
+                                            onChanged: (val) {
+                                              setState(() {
+                                                prescription.ampule = val;
+                                              });
+                                            },
+                                            decoration: InputDecoration(
+                                                border: OutlineInputBorder(),
+                                                labelText: 'Ampule',
+                                                hintText: 'Ampule'),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                        Column(
+                          children: [
+                            Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () async {
+                                    final SharedPreferences prefs =
+                                        await SharedPreferences.getInstance();
+                                    prefs.setString('type', widget.type);
+                                    _openHistoryForm(context, 3);
+                                    // Navigator.push(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //         builder: (context) => AddHistory(3)));
+                                  },
+                                  child: Container(
+                                    width: 50,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Colors.green[400], width: 2),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        'DX',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20.0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    final SharedPreferences prefs =
+                                        await SharedPreferences.getInstance();
+                                    prefs.setString('type', widget.type);
+                                    _openHistoryForm(context, 2);
+                                    // Navigator.push(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //         builder: (context) => AddHistory(2)));
+                                  },
+                                  child: Container(
+                                    width: 50,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Colors.green[400], width: 2),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        'IX',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20.0),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () async {
+                                    final SharedPreferences prefs =
+                                        await SharedPreferences.getInstance();
+                                    prefs.setString('type', widget.type);
+                                    _openHistoryForm(context, 0);
+                                    // Navigator.push(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //         builder: (context) => AddHistory(0)));
+                                  },
+                                  child: Container(
+                                    width: 50,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Colors.green[400], width: 2),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        'HX',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20.0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    final SharedPreferences prefs =
+                                        await SharedPreferences.getInstance();
+                                    prefs.setString('type', widget.type);
+                                    _openHistoryForm(context, 1);
+                                  },
+                                  child: Container(
+                                    width: 50,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Colors.green[400], width: 2),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        'PX',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20.0),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 40,
+                        child: TextFormField(
+                          controller: remarkController,
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: 'Remark',
+                              hintText: 'Remark'),
+                        ),
                       ),
-                      Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              width: 80,
-                              height: 40,
-                              child: TextFormField(
-                                controller: everyController,
-                                onChanged: (val) {
-                                  setState(() {
-                                    prescription.frequency = val;
-                                  });
-                                },
-                                decoration: InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    labelText: 'Every',
-                                    hintText: 'Every'),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              width: 80,
-                              height: 40,
-                              child: TextFormField(
-                                controller: forController,
-                                onChanged: (val) {
-                                  setState(() {
-                                    prescription.takein = val;
-                                  });
-                                },
-                                decoration: InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    labelText: 'For',
-                                    hintText: 'For'),
-                              ),
-                            ),
-                          ),
-                          Text(
-                            'OR',
-                            style: TextStyle(
-                                fontSize: 18.0, fontWeight: FontWeight.bold),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              width: 80,
-                              height: 40,
-                              child: TextFormField(
-                                controller: ampuleController,
-                                onChanged: (val) {
-                                  setState(() {
-                                    prescription.ampule = val;
-                                  });
-                                },
-                                decoration: InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    labelText: 'Ampule',
-                                    hintText: 'Ampule'),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () async {
-                              final SharedPreferences prefs =
-                                  await SharedPreferences.getInstance();
-                              prefs.setString('type', widget.type);
-                              _openHistoryForm(context, 3);
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) => AddHistory(3)));
-                            },
-                            child: Container(
-                              width: 50,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Colors.green[400], width: 2),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'DX',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20.0),
-                                ),
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () async {
-                              final SharedPreferences prefs =
-                                  await SharedPreferences.getInstance();
-                              prefs.setString('type', widget.type);
-                              _openHistoryForm(context, 2);
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) => AddHistory(2)));
-                            },
-                            child: Container(
-                              width: 50,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Colors.green[400], width: 2),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'IX',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20.0),
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          GestureDetector(
-                            onTap: () async {
-                              final SharedPreferences prefs =
-                                  await SharedPreferences.getInstance();
-                              prefs.setString('type', widget.type);
-                              _openHistoryForm(context, 0);
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) => AddHistory(0)));
-                            },
-                            child: Container(
-                              width: 50,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Colors.green[400], width: 2),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'HX',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20.0),
-                                ),
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () async {
-                              final SharedPreferences prefs =
-                                  await SharedPreferences.getInstance();
-                              prefs.setString('type', widget.type);
-                              _openHistoryForm(context, 1);
-                            },
-                            child: Container(
-                              width: 50,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: Colors.green[400], width: 2),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'PX',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20.0),
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
-                      )
-                    ],
-                  )
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: 40,
-                  child: TextFormField(
-                    controller: remarkController,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Remark',
-                        hintText: 'Remark'),
-                  ),
+                    ),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                  ],
                 ),
-              ),
-              SizedBox(
-                height: 10.0,
               ),
               Center(
                 child: MaterialButton(
@@ -771,6 +797,11 @@ class _PrescribeFormState extends State<PrescribeForm> {
                     } else {
                       if (_formKey.currentState.validate()) {
                         print("saved ${serology.toJson()}");
+                        var diag_list = diagnosis.diagnosis_list != null
+                            ? diagnosis.diagnosis_list
+                                .where((element) => element != "")
+                                .toList()
+                            : [];
                         User user = await UserPreferences().getUser();
                         var profession =
                             "${user.profession} ${user.name} ${user.fathername}";
@@ -798,8 +829,8 @@ class _PrescribeFormState extends State<PrescribeForm> {
                             "sex": _chosenValue,
                             "weight": patient.weight,
                             "dx": {
-                              "diagnosis": diagnosis.diagnosis_list.length != 0
-                                  ? diagnosis.diagnosis_list.join(",")
+                              "diagnosis": diag_list.length != 0
+                                  ? diag_list.join(",")
                                   : ""
                             },
                             "hx": {"cc": history.cc, "hpi": history.hpi},
@@ -986,25 +1017,33 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                           onPressed: () async {
                                             var user = await UserPreferences()
                                                 .getUser();
-                                            finaPrescription.forEach((element) {
+
+                                            finaPrescription
+                                                .forEach((element) async {
                                               Favorites favorites =
                                                   new Favorites(
                                                       drug_name:
                                                           element['drug_name'],
                                                       name: favoriteController
                                                           .text,
-                                                      professional_id:
+                                                      profession_id:
                                                           user.professionid,
                                                       route: element['route'],
                                                       strength:
                                                           element['strength']);
 
-                                              Provider.of<FavoritesProvider>(
-                                                      context)
+                                              var db = new DatabaseHelper();
+                                              var res = await db
                                                   .saveFavorites(favorites);
                                             });
-
                                             Navigator.pop(context, 'OK');
+                                            Flushbar(
+                                              title: 'Saved',
+                                              message:
+                                                  'Your prescriptions are saved to favorites successfully',
+                                              duration: Duration(seconds: 10),
+                                            ).show(context);
+
                                           },
                                           child: const Text('OK'),
                                         ),
@@ -1023,50 +1062,57 @@ class _PrescribeFormState extends State<PrescribeForm> {
                       children: finaPrescription.map<Widget>((pres) {
                         return Row(
                           children: [
-                            Text(
-                                '${finaPrescription.indexOf(pres) + 1}. ${pres['drug_name']} ${pres['strength']} ${pres['unit']} ${pres['route']} Every ${pres['frequency']} For ${pres['takein']}'),
-                            Row(
-                              children: [
-                                IconButton(
-                                  onPressed: () {
-                                    print("object $pres");
-                                    setState(() {
-                                      status = 'edit';
-                                      pesIndex = finaPrescription.indexOf(pres);
-                                    });
-                                    phoneController.text =
-                                        pres['patient']['phone'];
-                                    nameController.text =
-                                        pres['patient']['name'];
-                                    fnameController.text =
-                                        pres['patient']['fathername'];
-                                    weightController.text =
-                                        pres['patient']['weight'];
-                                    ageController.text = pres['patient']['age'];
-                                    strengthController.text = pres['strength'];
-                                    unitController.text = pres['unit'];
-                                    routeController.text = pres['route'];
-                                    everyController.text = pres['frequency'];
-                                    forController.text = pres['takein'];
-                                    ampuleController.text = pres['ampule'];
-                                  },
-                                  icon: Icon(Icons.edit),
-                                ),
-                                IconButton(
-                                  onPressed: () {
-                                    var index = pesIndex =
-                                        finaPrescription.indexOf(pres);
-                                    setState(() {
-                                      finaPrescription.removeAt(index);
-                                    });
-                                  },
-                                  icon: Icon(Icons.cancel),
-                                  padding: EdgeInsets.all(0.0),
-                                  iconSize: 20.0,
-                                ),
-                              ],
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.end,
+                            Expanded(
+                              child: Text(
+                                  '${finaPrescription.indexOf(pres) + 1}. ${pres['drug_name']} ${pres['strength']} ${pres['unit']} ${pres['route']} Every ${pres['frequency']} For ${pres['takein']}'),
+                            ),
+                            Expanded(
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      print("object $pres");
+                                      setState(() {
+                                        status = 'edit';
+                                        pesIndex =
+                                            finaPrescription.indexOf(pres);
+                                      });
+                                      phoneController.text =
+                                          pres['patient']['phone'];
+                                      nameController.text =
+                                          pres['patient']['name'];
+                                      fnameController.text =
+                                          pres['patient']['fathername'];
+                                      weightController.text =
+                                          pres['patient']['weight'];
+                                      ageController.text =
+                                          pres['patient']['age'];
+                                      strengthController.text =
+                                          pres['strength'];
+                                      unitController.text = pres['unit'];
+                                      routeController.text = pres['route'];
+                                      everyController.text = pres['frequency'];
+                                      forController.text = pres['takein'];
+                                      ampuleController.text = pres['ampule'];
+                                    },
+                                    icon: Icon(Icons.edit),
+                                  ),
+                                  IconButton(
+                                    onPressed: () {
+                                      var index = pesIndex =
+                                          finaPrescription.indexOf(pres);
+                                      setState(() {
+                                        finaPrescription.removeAt(index);
+                                      });
+                                    },
+                                    icon: Icon(Icons.cancel),
+                                    padding: EdgeInsets.all(0.0),
+                                    iconSize: 20.0,
+                                  ),
+                                ],
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                              ),
                             ),
                           ],
                         );
@@ -1078,5 +1124,58 @@ class _PrescribeFormState extends State<PrescribeForm> {
             ],
           ),
         ));
+  }
+
+  Widget _instrumentForm() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            width: 270,
+            height: 40,
+            child: TextFormField(
+              controller: materialController,
+              decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Name Of Instrument',
+                  hintText: 'Name Of Instrument'),
+            ),
+          ),
+        ),
+        Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                width: 120,
+                height: 40,
+                child: TextFormField(
+                  controller: sizeController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Size',
+                      hintText: 'Size'),
+                ),
+              ),
+            ),
+            Container(
+              width: 80,
+              height: 40,
+              child: TextField(
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: '#',
+                    hintText: '#'),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
   }
 }
