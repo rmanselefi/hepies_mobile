@@ -17,6 +17,5 @@ class _InstrumentPrescriptionState extends State<InstrumentPrescription> {
 
   @override
   Widget build(BuildContext context) {
-    return PrescribeForm(widget.setPrescription, 'instrument', Colors.blue);
-  }
+    return Container();  }
 }

@@ -2,12 +2,16 @@ import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hepies/models/dx.dart';
+import 'package:hepies/models/favorites.dart';
 import 'package:hepies/models/hx.dart';
 import 'package:hepies/models/px.dart';
 import 'package:hepies/providers/prescription_provider.dart';
 import 'package:hepies/ui/favorites/favorites.dart';
 import 'package:hepies/ui/guidelines/guidelines.dart';
 import 'package:hepies/ui/medicalrecords/add_history.dart';
+import 'package:hepies/ui/prescription/forms/prescribe_form.dart';
+import 'package:hepies/ui/prescription/papers/prescription_paper.dart';
+import 'package:hepies/ui/prescription/papers/psycho_narco_paper.dart';
 import 'package:hepies/ui/prescription/prescription_types/general_prescription.dart';
 import 'package:hepies/ui/prescription/prescription_types/instrument_prescription.dart';
 import 'package:hepies/ui/prescription/prescription_types/narcotic_prescription.dart';
@@ -22,7 +26,9 @@ class WritePrescription extends StatefulWidget {
   final Diagnosis diagnosis;
   final Physical physical;
   final String type;
-  WritePrescription({this.physical, this.diagnosis, this.history, this.type});
+  final String from;
+  WritePrescription(
+      {this.physical, this.diagnosis, this.history, this.type, this.from});
   @override
   _WritePrescriptionState createState() => _WritePrescriptionState();
 }
@@ -30,18 +36,113 @@ class WritePrescription extends StatefulWidget {
 class _WritePrescriptionState extends State<WritePrescription> {
   var pretype = "general";
   List<dynamic> prescription = [];
+  List<dynamic> psycoPrescription = [];
+  String phoneNumber = "";
+  String age = "";
+  String name = "";
+  String fatherName = "";
+  String sex = "";
+  String weight = "";
+  String isFit = "";
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    setIsFit();
     setState(() {
       pretype = widget.type != null ? widget.type : 'general';
     });
   }
 
-  void _setPrescription(Map pres) {
+  @override
+  void didUpdateWidget(covariant WritePrescription oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+  }
+
+  // @override
+  // void didChangeDependencies() {
+  //   // TODO: implement didChangeDependencies
+  //   super.didChangeDependencies();
+  //   print("widget.from ===== > ${widget.from}");
+  //   if (widget.from == "favorites") {
+  //     List<dynamic> favorites =
+  //         Provider.of<PrescriptionProvider>(context).prescription;
+  //     prescription.clear();
+  //     setFromFavorites(favorites);
+  //   }
+  // }
+
+  void setIsFit() async {
+    var user = await UserPreferences().getUser();
     setState(() {
-      prescription.add(pres);
+      isFit = user.isFit;
+    });
+  }
+
+  void setFromFavorites(List<dynamic> fav) {
+    List<dynamic> favorites = [];
+    for (var i = 0; i < fav.length; i++) {
+      print("precriptionDataprecriptionData ${fav[i]}");
+      final Map<String, dynamic> precriptionData = {
+        'drug_name': fav[i]['drug_name'],
+        "strength": fav[i]['strength'],
+        "unit": fav[i]['unit'],
+        "route": fav[i]['route'],
+        "takein": fav[i]['takein'],
+        "frequency": fav[i]['frequency'],
+        "drug": "",
+        "professional": "",
+        "material_name": "",
+        "size": "",
+        "type": fav[i]['type'],
+        "ampule": "",
+        "patient": {
+          "name": "",
+          "age": "",
+          "fathername": "",
+          "grandfathername": "kebede",
+          "phone": "",
+          "sex": "",
+          "weight": "",
+          "dx": {
+            "diagnosis": "",
+          },
+          "hx": {"cc": "", "hpi": ""},
+          "px": {
+            "abd": "",
+            "bp": "",
+            "cvs": "",
+            "ga": "",
+            "heent": "",
+            "lgs": "",
+            "pr": "",
+            "rr": "",
+            "rs": "",
+            "temp": "",
+            "gus": "",
+            "msk": "",
+            "ints": "",
+            "cns": "",
+            "general_apearnce": ""
+          },
+        }
+      };
+      favorites.add(precriptionData);
+    }
+    _setPrescription(favorites);
+  }
+
+  void _setPrescription(List<dynamic> pres) {
+    setState(() {
+      prescription = pres;
+    });
+  }
+
+  void _setPsycoPrescription(List<dynamic> pres) {
+    setState(() {
+      psycoPrescription = pres;
     });
   }
 
@@ -56,6 +157,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
   @override
   Widget build(BuildContext context) {
     var prescProvider = Provider.of<PrescriptionProvider>(context);
+    print("prescProviderprescProvider $prescription");
     return Scaffold(
       body: ListView(
         children: [
@@ -132,8 +234,10 @@ class _WritePrescriptionState extends State<WritePrescription> {
             ],
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              SizedBox(
+                width: 50.0,
+              ),
               GestureDetector(
                 onTap: () {
                   setState(() {
@@ -153,43 +257,8 @@ class _WritePrescriptionState extends State<WritePrescription> {
                   )),
                 ),
               ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    pretype = 'psychotropic';
-                  });
-                },
-                child: Container(
-                  height: 30,
-                  width: 80,
-                  decoration: BoxDecoration(
-                    color: Colors.redAccent[400],
-                    border: Border.all(color: Colors.black45, width: 2),
-                  ),
-                  child: Center(
-                      child: Text(
-                    'Psychotropic',
-                    style: TextStyle(fontSize: 14.0),
-                  )),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    pretype = 'narcotic';
-                  });
-                },
-                child: Container(
-                  height: 30,
-                  width: 80,
-                  decoration: BoxDecoration(
-                    color: Colors.purple,
-                    border: Border.all(color: Colors.black45, width: 2),
-                  ),
-                  child: Center(
-                      child:
-                          Text('Narcotic', style: TextStyle(fontSize: 15.0))),
-                ),
+              SizedBox(
+                width: 10.0,
               ),
               GestureDetector(
                 onTap: () {
@@ -208,23 +277,83 @@ class _WritePrescriptionState extends State<WritePrescription> {
                       child: Text('Instruments',
                           style: TextStyle(fontSize: 15.0))),
                 ),
-              )
+              ),
+              SizedBox(
+                width: 10.0,
+              ),
+              isFit == "true"
+                  ? Builder(builder: (context) {
+                      return Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                pretype = 'psychotropic';
+                              });
+                            },
+                            child: Container(
+                              height: 30,
+                              width: 80,
+                              decoration: BoxDecoration(
+                                color: Colors.redAccent[400],
+                                border:
+                                    Border.all(color: Colors.black45, width: 2),
+                              ),
+                              child: Center(
+                                  child: Text(
+                                'Psychotropic',
+                                style: TextStyle(fontSize: 14.0),
+                              )),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10.0,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                pretype = 'narcotic';
+                              });
+                            },
+                            child: Container(
+                              height: 30,
+                              width: 80,
+                              decoration: BoxDecoration(
+                                color: Colors.purple,
+                                border:
+                                    Border.all(color: Colors.black45, width: 2),
+                              ),
+                              child: Center(
+                                  child: Text('Narcotic',
+                                      style: TextStyle(fontSize: 15.0))),
+                            ),
+                          ),
+                        ],
+                      );
+                    })
+                  : Container(),
             ],
           ),
           Builder(builder: (context) {
             if (pretype == "general") {
-              return GeneralPrescription(setPrescription: _setPrescription);
+              return PrescribeForm(
+                  _setPrescription, 'general', Colors.white, widget.from);
             } else if (pretype == "instrument") {
-              return InstrumentPrescription(setPrescription: _setPrescription);
+              return PrescribeForm(
+                  _setPrescription, 'instrument', Colors.white, widget.from);
             } else if (pretype == "narcotic") {
-              return NarcoticPrescription(setPrescription: _setPrescription);
+              return PrescribeForm(
+                  _setPrescription, 'narcotic', Colors.white, widget.from);
             } else if (pretype == "psychotropic") {
-              return PsychotropicPrescription(
-                  setPrescription: _setPrescription);
+              return PrescribeForm(
+                  _setPrescription, 'psychotropic', Colors.white, widget.from);
             } else {
               return Container();
             }
           }),
+          pretype == "general" || pretype == "instrument"
+              ? PrescriptionPaper(prescription, pretype)
+              : PsychoNarcoPaper(psycoPrescription),
           Row(
             children: [
               GestureDetector(
@@ -248,38 +377,89 @@ class _WritePrescriptionState extends State<WritePrescription> {
                   ),
                 ),
               ),
-              prescProvider.sentStatus == Status.Sending
+              prescProvider.sentStatus == PrescriptionStatus.Sending
                   ? loading
                   : GestureDetector(
                       onTap: () async {
-                        print("object $prescription");
+                        print(
+                            "prescriptionprescriptionprescription=.....===> $prescription");
+
                         try {
-                          if(prescription.length!=0){
-                            var res = await prescProvider
-                                .writePrescription(prescription);
-                            if (res['status']) {
-                              Flushbar(
-                                title: 'Sent',
-                                message:
-                                'Your prescriptions are sent succesfully',
-                                duration: Duration(seconds: 10),
-                              ).show(context);
+                          if (pretype == "general" || pretype == "instrument") {
+                            if (prescription.length != 0) {
+                              for (var i = 0; i < prescription.length; i++) {
+                                var phone = prescription[i]['patient']['phone'];
+                                var name = prescription[i]['patient']['name'];
+                                var age = prescription[i]['patient']['age'];
+                                var sex = prescription[i]['patient']['sex'];
+                                if (phone == "" ||
+                                    phone == null ||
+                                    sex == "" ||
+                                    sex == null ||
+                                    name == "" ||
+                                    name == null ||
+                                    age == "" ||
+                                    age == null) {
+                                  Flushbar(
+                                    title: 'Error',
+                                    message:
+                                        'Please make sure all patient information is provided before sending prescription',
+                                    duration: Duration(seconds: 10),
+                                  ).show(context);
+                                  return;
+                                }
+                              }
+                              var res = await prescProvider
+                                  .writePrescription(prescription);
+                              if (res['status']) {
+                                Flushbar(
+                                  title: 'Sent',
+                                  message:
+                                      'Your prescriptions are sent succesfully',
+                                  duration: Duration(seconds: 10),
+                                ).show(context);
+                              } else {
+                                Flushbar(
+                                  title: 'Error',
+                                  message: 'Unable to send your prescriptions',
+                                  duration: Duration(seconds: 10),
+                                ).show(context);
+                              }
                             } else {
                               Flushbar(
                                 title: 'Error',
-                                message: 'Unable to send your prescriptions',
+                                message:
+                                    'Please fill at least one prescription.',
+                                duration: Duration(seconds: 10),
+                              ).show(context);
+                            }
+                          } else {
+                            if (psycoPrescription.length != 0) {
+                              var res = await prescProvider
+                                  .writePrescription(psycoPrescription);
+                              if (res['status']) {
+                                Flushbar(
+                                  title: 'Sent',
+                                  message:
+                                      'Your prescriptions are sent succesfully',
+                                  duration: Duration(seconds: 10),
+                                ).show(context);
+                              } else {
+                                Flushbar(
+                                  title: 'Error',
+                                  message: 'Unable to send your prescriptions',
+                                  duration: Duration(seconds: 10),
+                                ).show(context);
+                              }
+                            } else {
+                              Flushbar(
+                                title: 'Error',
+                                message:
+                                    'Please fill at least one prescription.',
                                 duration: Duration(seconds: 10),
                               ).show(context);
                             }
                           }
-                          else{
-                            Flushbar(
-                              title: 'Error',
-                              message: 'Please fill at least one prescription.',
-                              duration: Duration(seconds: 10),
-                            ).show(context);
-                          }
-
                         } catch (e) {
                           print("object $e");
                         }

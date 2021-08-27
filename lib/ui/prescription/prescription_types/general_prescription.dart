@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hepies/models/consult.dart';
 import 'package:hepies/models/dx.dart';
 import 'package:hepies/models/hx.dart';
 import 'package:hepies/models/px.dart';
@@ -24,7 +25,8 @@ class _GeneralPrescriptionState extends State<GeneralPrescription>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return PrescribeForm(widget.setPrescription, 'general',Colors.white);
+    // return PrescribeForm(widget.setPrescription, 'general',Colors.white);
+    return Container();
   }
 
   @override

@@ -6,6 +6,9 @@ class Favorites {
   final String route;
   final String strength;
   final String unit;
+  final String type;
+  final String takein;
+  final String frequency;
 
   Favorites(
       {this.id,
@@ -14,7 +17,10 @@ class Favorites {
       this.name,
       this.route,
       this.strength,
-      this.unit});
+      this.unit,
+      this.type,
+      this.frequency,
+      this.takein});
 
   // Convert a Dog into a Map. The keys must correspond to the names of the
   // columns in the database.
@@ -26,14 +32,10 @@ class Favorites {
       'drug_name': drug_name,
       'route': route,
       'strength': strength,
-      'unit': unit
+      'unit': unit,
+      'type': type,
+      'frequency': frequency,
+      'takein': takein
     };
-  }
-
-  // Implement toString to make it easier to see information about
-  // each dog when using the print statement.
-  @override
-  String toString() {
-    return 'Dog{id: $id, name: $name, age: $strength}';
   }
 }

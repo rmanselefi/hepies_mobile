@@ -15,6 +15,7 @@ class User {
   String workplace;
   String speciality;
   String license;
+  String isFit;
 
   User(
       {this.userId,
@@ -32,11 +33,14 @@ class User {
       this.speciality,
       this.workplace,
       this.grandfathername,
-      this.license});
+      this.license,
+        this.isFit
+      });
 
   factory User.fromJson(Map<String, dynamic> responseData) {
     return User(
       userId: responseData['id'],
+      isFit: responseData['isFit'],
       name: responseData['profession'][0]['name'],
       professionid: responseData['profession'][0]['id'],
       email: responseData['profession'][0]['email'],

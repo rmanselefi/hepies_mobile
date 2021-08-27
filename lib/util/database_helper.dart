@@ -31,7 +31,7 @@ class DatabaseHelper {
 
   void _onCreate(Database db, int version) async {
     await db.execute(
-        'CREATE TABLE favorites(id INTEGER PRIMARY KEY, name TEXT, route TEXT,strength TEXT,profession_id INTEGER,drug_name TEXT, unit TEXT )');
+        'CREATE TABLE favorites(id INTEGER PRIMARY KEY, name TEXT, route TEXT,strength TEXT,profession_id INTEGER,drug_name TEXT, unit TEXT,type TEXT,frequency TEXT,takein TEXT )');
   }
 
   Future<int> saveFavorites(Favorites favorites) async {
@@ -46,7 +46,9 @@ class DatabaseHelper {
     List<Favorites> fav = [];
     var dbClient = await db;
     var ress = await dbClient.query("favorites",
-        columns: ["id,name,route,strength,profession_id,drug_name,unit"],
+        columns: [
+          "id,name,route,strength,profession_id,drug_name,unit,type,frequency,takein"
+        ],
         where: "profession_id = ?",
         whereArgs: [id]);
     if (ress.length == 0) return null;
@@ -57,14 +59,44 @@ class DatabaseHelper {
           name: element['name'],
           drug_name: element['drug_name'],
           profession_id: element['profession_id'],
-          unit: element['unit']);
+          unit: element['unit'],
+          takein: element['takein'],
+          frequency: element['frequency'],
+          type: element['type']);
       fav.add(favorites);
     });
     return fav;
   }
 
+  Future<List<dynamic>> getFavoritesByName(String name) async {
+    List<Favorites> favor = [];
+    var dbClient = await db;
+    var ress = await dbClient.query("favorites",
+        columns: [
+          "id,name,route,strength,profession_id,drug_name,unit,type,frequency,takein"
+        ],
+        where: "name = ?",
+        whereArgs: [name]);
+    if (ress.length == 0) return null;
+    // for (var i = 0; i < ress.length; i++) {
+    //   var element = ress[i];
+    //   print("object object object object object ${element['strength']}");
+    //   Favorites favorites = new Favorites(
+    //       strength: element['strength'],
+    //       route: element['route'],
+    //       name: element['name'],
+    //       drug_name: element['drug_name'],
+    //       profession_id: element['profession_id'],
+    //       );
+    //   favor.add(favorites);
+    // }
+
+    return ress;
+  }
+
   Future<int> deleteFavorite(String name) async {
     var dbClient = await db;
-    return await dbClient.delete("favorites", where: 'name = ?', whereArgs: [name]);
+    return await dbClient
+        .delete("favorites", where: 'name = ?', whereArgs: [name]);
   }
 }

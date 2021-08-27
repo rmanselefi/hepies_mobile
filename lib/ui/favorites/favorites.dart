@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:hepies/models/favorites.dart';
+import 'package:hepies/providers/prescription_provider.dart';
+import 'package:hepies/ui/prescription/write_prescription.dart';
 import 'package:hepies/util/database_helper.dart';
 import 'package:hepies/widgets/footer.dart';
 import 'package:hepies/widgets/header.dart';
+import 'package:provider/provider.dart';
 
 class FavoritesPage extends StatefulWidget {
   final profession_id;
@@ -14,6 +18,7 @@ class FavoritesPage extends StatefulWidget {
 class _FavoritesState extends State<FavoritesPage> {
   @override
   Widget build(BuildContext context) {
+    var presProvider = Provider.of<PrescriptionProvider>(context);
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -48,7 +53,6 @@ class _FavoritesState extends State<FavoritesPage> {
                                       child: Text('No data to show'),
                                     );
                                   }
-                                  print("object ${snapshot.data}");
                                   var data = snapshot.data;
                                   final names = data.map((e) => e.name).toSet();
                                   data.retainWhere((x) => names.remove(x.name));
@@ -59,33 +63,60 @@ class _FavoritesState extends State<FavoritesPage> {
                                             const Divider(),
                                     itemBuilder:
                                         (BuildContext context, int index) {
-                                      return ListTile(
-                                        title: Text(
-                                          '${index + 1} ${data[index].name}',
-                                          style: TextStyle(
-                                              decoration:
-                                                  TextDecoration.underline,
-                                              fontSize: 23.0,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        trailing: Container(
-                                          width: 100.0,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            children: [
-                                              Text('Rename'),
-                                              IconButton(
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      DatabaseHelper().deleteFavorite(data[index].name);
-                                                    });
-                                                  },
-                                                  icon: Icon(
-                                                    Icons.cancel,
-                                                    color: Colors.redAccent,
-                                                  ))
-                                            ],
+                                      return GestureDetector(
+                                        onTap: () async {
+                                          List<dynamic> combinations =
+                                              await DatabaseHelper()
+                                                  .getFavoritesByName(
+                                                      data[index].name);
+                                          for (var i = 0;
+                                              i < combinations.length;
+                                              i++) {}
+
+                                          presProvider.setFavoriteCombinations(
+                                              combinations);
+                                          SchedulerBinding.instance
+                                              .addPostFrameCallback((_) {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        WritePrescription(
+                                                          from: "favorites",
+                                                        )));
+                                          });
+                                        },
+                                        child: ListTile(
+                                          title: Text(
+                                            '${index + 1} ${data[index].name}',
+                                            style: TextStyle(
+                                                decoration:
+                                                    TextDecoration.underline,
+                                                fontSize: 23.0,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          trailing: Container(
+                                            width: 100.0,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: [
+                                                Text('Rename'),
+                                                IconButton(
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        DatabaseHelper()
+                                                            .deleteFavorite(
+                                                                data[index]
+                                                                    .name);
+                                                      });
+                                                    },
+                                                    icon: Icon(
+                                                      Icons.cancel,
+                                                      color: Colors.redAccent,
+                                                    ))
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       );

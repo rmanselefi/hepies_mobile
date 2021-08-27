@@ -8,6 +8,7 @@ class UserPreferences {
 
     prefs.setInt("userId", user.userId);
     prefs.setInt("professionid", user.professionid);
+    prefs.setString("isFit", user.isFit);
     prefs.setString("name", user.name);
     prefs.setString("username", user.username);
     prefs.setString("email", user.email != null ? user.email : '');
@@ -45,8 +46,10 @@ class UserPreferences {
     String fathername = prefs.getString("fathername");
     String grandfathername = prefs.getString("grandfathername");
     String username = prefs.getString("username");
+    String isFit = prefs.getString('isFit');
     return User(
         userId: userId,
+        isFit: isFit,
         professionid: professionid,
         name: name,
         email: email,
@@ -66,7 +69,6 @@ class UserPreferences {
   void removeUser() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.clear();
-
   }
 
   Future<String> getToken(args) async {

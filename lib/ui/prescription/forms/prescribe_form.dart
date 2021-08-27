@@ -19,6 +19,7 @@ import 'package:hepies/models/user.dart';
 import 'package:hepies/providers/drug_provider.dart';
 import 'package:hepies/providers/favorites.dart';
 import 'package:hepies/providers/patient_provider.dart';
+import 'package:hepies/providers/prescription_provider.dart';
 import 'package:hepies/ui/medicalrecords/add_history.dart';
 import 'package:hepies/util/database_helper.dart';
 import 'package:hepies/util/shared_preference.dart';
@@ -29,13 +30,15 @@ class PrescribeForm extends StatefulWidget {
   final Function setPrescription;
   final String type;
   final color;
-  PrescribeForm(this.setPrescription, this.type, this.color);
+  final from;
+  PrescribeForm(this.setPrescription, this.type, this.color, this.from);
   @override
   _PrescribeFormState createState() => _PrescribeFormState();
 }
 
 class _PrescribeFormState extends State<PrescribeForm> {
   String status = 'add';
+  var action_status = 'populate';
   int pesIndex = 0;
   String _chosenValue;
   var textHeight = 40.0;
@@ -59,6 +62,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
   var favoriteController = new TextEditingController();
   var materialController = new TextEditingController();
   var sizeController = new TextEditingController();
+  var drugnameController = new TextEditingController();
   List<dynamic> finaPrescription = [];
   List<dynamic> drugs;
   String _selectedAnimal;
@@ -78,7 +82,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
     setState(() {
       history = hx;
     });
-    print("object hx ${history.hpi}");
   }
 
   void _setPx(Physical px) {
@@ -97,7 +100,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
     setState(() {
       hematology = hema;
     });
-    print("object hx ${history.hpi}");
   }
 
   void _setSerology(Serology sero) {
@@ -116,7 +118,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
     setState(() {
       endocrinology = endoc;
     });
-    print("object hx ${history.hpi}");
   }
 
   void _setUrine(Urine uri) {
@@ -167,8 +168,106 @@ class _PrescribeFormState extends State<PrescribeForm> {
   }
 
   @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    if (widget.from == "favorites" && status != "edit") {
+      List<dynamic> favorites =
+          Provider.of<PrescriptionProvider>(context).prescription;
+      setFromFavorites(favorites);
+      Future.delayed(Duration.zero, () async {
+        widget.setPrescription(finaPrescription);
+      });
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant PrescribeForm oldWidget) {
+    // TODO: implement didUpdateWidget
+    super.didUpdateWidget(oldWidget);
+
+    var selectedPrescription =
+        Provider.of<PrescriptionProvider>(context).singlePrescription;
+    var statuse = Provider.of<PrescriptionProvider>(context).status;
+    var actionstatus = Provider.of<PrescriptionProvider>(context).actionStatus;
+    setState(() {
+      status = statuse;
+      action_status = action_status;
+    });
+    print("i got here =======> $action_status");
+    if (statuse == 'edit' && action_status == 'populate') {
+      drugnameController.value =
+          TextEditingValue(text: selectedPrescription['drug_name']);
+      _selectedAnimal = selectedPrescription['drug_name'];
+      phoneController.text = selectedPrescription['patient']['phone'];
+      nameController.text = selectedPrescription['patient']['name'];
+      fnameController.text = selectedPrescription['patient']['fathername'];
+      weightController.text = selectedPrescription['patient']['weight'];
+      ageController.text = selectedPrescription['patient']['age'];
+      strengthController.text = selectedPrescription['strength'];
+      unitController.text = selectedPrescription['unit'];
+      routeController.text = selectedPrescription['route'];
+      everyController.text = selectedPrescription['frequency'];
+      forController.text = selectedPrescription['takein'];
+      ampuleController.text = selectedPrescription['ampule'];
+    }
+  }
+
+  void setFromFavorites(List<dynamic> fav) {
+    for (var i = 0; i < fav.length; i++) {
+      print("precriptionDataprecriptionData ${fav[i]}");
+      final Map<String, dynamic> precriptionData = {
+        'drug_name': fav[i]['drug_name'],
+        "strength": fav[i]['strength'],
+        "unit": fav[i]['unit'],
+        "route": fav[i]['route'],
+        "takein": fav[i]['takein'],
+        "frequency": fav[i]['frequency'],
+        "drug": "",
+        "professional": "",
+        "material_name": "",
+        "size": "",
+        "type": fav[i]['type'],
+        "ampule": "",
+        "patient": {
+          "name": "",
+          "age": "",
+          "fathername": "",
+          "grandfathername": "kebede",
+          "phone": "",
+          "sex": "",
+          "weight": "",
+          "dx": {
+            "diagnosis": "",
+          },
+          "hx": {"cc": "", "hpi": ""},
+          "px": {
+            "abd": "",
+            "bp": "",
+            "cvs": "",
+            "ga": "",
+            "heent": "",
+            "lgs": "",
+            "pr": "",
+            "rr": "",
+            "rs": "",
+            "temp": "",
+            "gus": "",
+            "msk": "",
+            "ints": "",
+            "cns": "",
+            "general_apearnce": ""
+          },
+        }
+      };
+      finaPrescription.add(precriptionData);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     drugs = Provider.of<DrugProvider>(context, listen: true).drugs;
+    var patientProvider = Provider.of<PatientProvider>(context);
     return Form(
         // autovalidateMode: AutovalidateMode.onUserInteraction,
         key: _formKey,
@@ -192,44 +291,38 @@ class _PrescribeFormState extends State<PrescribeForm> {
                             height: textHeight,
                             child: TextFormField(
                               controller: phoneController,
-                              validator: (val) {
-                                if (val.isEmpty) {
-                                  setState(() {
-                                    textHeight = 60.0;
-                                  });
-                                  return '';
-                                } else {
-                                  setState(() {
-                                    textHeight = 60.0;
-                                  });
-                                  return null;
-                                }
-                              },
                               onSaved: (value) {
                                 setState(() {
                                   patient.phone = value;
                                 });
                               },
-                              onChanged: (val) async {
-                                var res = await Provider.of<PatientProvider>(
-                                        context,
-                                        listen: false)
-                                    .getMedicalRecord(val);
-                                if (res.length != 0) {
-                                  print("resresresres ${res}");
+                              onChanged: (String val) async {
+                                if (val.length > 9) {
+                                  var res = await patientProvider
+                                      .getMedicalRecord(val);
+                                  if (res.length != 0) {
+                                    setState(() {
+                                      ageController.text = res[0]['age'];
+                                      _chosenValue = res[0]['sex'];
+                                      nameController.text = res[0]['name'];
+                                      fnameController.text =
+                                          res[0]['fathername'];
+                                      weightController.text = res[0]['weight'];
+                                    });
+                                  }
                                   setState(() {
-                                    ageController.text = res[0]['age'];
-                                    _chosenValue = res[0]['sex'];
-                                    nameController.text = res[0]['name'];
-                                    fnameController.text = res[0]['fathername'];
-                                    weightController.text = res[0]['weight'];
+                                    patient.phone = val;
                                   });
                                 }
-                                setState(() {
-                                  patient.phone = val;
-                                });
                               },
                               decoration: InputDecoration(
+                                  suffix: patientProvider.fetchStatus ==
+                                          Status.Fetching
+                                      ? Container(
+                                          height: 20.0,
+                                          width: 20.0,
+                                          child: CircularProgressIndicator())
+                                      : null,
                                   border: OutlineInputBorder(),
                                   labelText: 'Enter Phone Number',
                                   hintText: 'Enter Phone Number'),
@@ -241,19 +334,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
                           height: textHeight,
                           child: TextFormField(
                             controller: ageController,
-                            validator: (val) {
-                              if (val.isEmpty) {
-                                setState(() {
-                                  textHeight = 60.0;
-                                });
-                                return '';
-                              } else {
-                                setState(() {
-                                  textHeight = 60.0;
-                                });
-                                return null;
-                              }
-                            },
                             onSaved: (value) => patient.age = value,
                             onChanged: (val) {
                               setState(() {
@@ -312,19 +392,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
                             height: textHeight,
                             child: TextFormField(
                               controller: nameController,
-                              validator: (val) {
-                                if (val.isEmpty) {
-                                  setState(() {
-                                    textHeight = 60.0;
-                                  });
-                                  return '';
-                                } else {
-                                  setState(() {
-                                    textHeight = 60.0;
-                                  });
-                                  return null;
-                                }
-                              },
                               onSaved: (value) => patient.name = value,
                               onChanged: (val) {
                                 setState(() {
@@ -343,20 +410,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
                           height: textHeight,
                           child: TextFormField(
                             controller: fnameController,
-                            validator: (val) {
-                              print("valval ${val}");
-                              if (val.isEmpty) {
-                                setState(() {
-                                  textHeight = 60.0;
-                                });
-                                return '';
-                              } else {
-                                setState(() {
-                                  textHeight = 60.0;
-                                });
-                                return null;
-                              }
-                            },
                             onSaved: (value) => patient.fathername = value,
                             onChanged: (val) {
                               setState(() {
@@ -439,8 +492,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                           return Container(
                                             height: textHeight,
                                             child: TextFormField(
-                                              controller:
-                                                  fieldTextEditingController,
+                                              controller: drugnameController,
                                               focusNode: fieldFocusNode,
                                               validator: (val) {
                                                 if (val.isEmpty) {
@@ -454,11 +506,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                                   });
                                                   return null;
                                                 }
-                                              },
-                                              onSaved: (val) {
-                                                setState(() {
-                                                  drug.name = val;
-                                                });
                                               },
                                               decoration: InputDecoration(
                                                   border: OutlineInputBorder(),
@@ -787,7 +834,8 @@ class _PrescribeFormState extends State<PrescribeForm> {
                     _formKey.currentState.save();
                     if (forController.text == "" &&
                         everyController.text == "" &&
-                        ampuleController.text == "") {
+                        ampuleController.text == "" &&
+                        widget.type == "general") {
                       Flushbar(
                         title: 'Error',
                         message:
@@ -796,7 +844,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
                       ).show(context);
                     } else {
                       if (_formKey.currentState.validate()) {
-                        print("saved ${serology.toJson()}");
                         var diag_list = diagnosis.diagnosis_list != null
                             ? diagnosis.diagnosis_list
                                 .where((element) => element != "")
@@ -805,73 +852,74 @@ class _PrescribeFormState extends State<PrescribeForm> {
                         User user = await UserPreferences().getUser();
                         var profession =
                             "${user.profession} ${user.name} ${user.fathername}";
-                        final Map<String, dynamic> precriptionData = {
-                          'drug_name': _selectedAnimal != null
-                              ? _selectedAnimal
-                              : drug.name,
-                          "strength": strengthController.text,
-                          "unit": unitController.text,
-                          "route": routeController.text,
-                          "takein": prescription.takein,
-                          "frequency": prescription.frequency,
-                          "drug": prescription.drug,
-                          "professional": profession,
-                          "material_name": "",
-                          "size": "",
-                          "type": widget.type,
-                          "ampule": ampuleController.text,
-                          "patient": {
-                            "name": patient.name,
-                            "age": patient.age,
-                            "fathername": patient.fathername,
-                            "grandfathername": "kebede",
-                            "phone": patient.phone,
-                            "sex": _chosenValue,
-                            "weight": patient.weight,
-                            "dx": {
-                              "diagnosis": diag_list.length != 0
-                                  ? diag_list.join(",")
-                                  : ""
-                            },
-                            "hx": {"cc": history.cc, "hpi": history.hpi},
-                            "px": {
-                              "abd": physical.abd,
-                              "bp": physical.bp,
-                              "cvs": physical.cvs,
-                              "ga": physical.ga,
-                              "heent": physical.heent,
-                              "lgs": physical.lgs,
-                              "pr": physical.pr,
-                              "rr": physical.rr,
-                              "rs": physical.rs,
-                              "temp": physical.temp,
-                              "gus": physical.gus,
-                              "msk": physical.msk,
-                              "ints": physical.ints,
-                              "cns": physical.cns,
-                              "general_apearnce": physical.general_apearance
-                            },
-                            "ix": {
-                              "microbiology": ix.microbiology,
-                              "pathologyindex": ix.pathologyindex,
-                              "radiologyindex": ix.radiologyindex,
-                              "chemistry": chemistry.toJson(),
-                              "endocrinology": endocrinology.toJson(),
-                              "hemathology": hematology.toJson(),
-                              "serology": serology.toJson(),
-                              "urine": urine.toJson()
-                            }
-                          }
-                        };
-                        print("objectobjectobjectobject ${ix.microbiology}");
+
+                        print("statusstatusstatus ===> ${status}");
                         if (status == 'add') {
+                          final Map<String, dynamic> precriptionData = {
+                            'drug_name': _selectedAnimal != null
+                                ? _selectedAnimal
+                                : drug.name,
+                            "strength": strengthController.text,
+                            "unit": unitController.text,
+                            "route": routeController.text,
+                            "takein": prescription.takein,
+                            "frequency": prescription.frequency,
+                            "drug": prescription.drug,
+                            "professional": profession,
+                            "material_name": materialController.text,
+                            "size": sizeController.text,
+                            "type": widget.type,
+                            "ampule": ampuleController.text,
+                            "patient": {
+                              "name": patient.name,
+                              "age": patient.age,
+                              "fathername": patient.fathername,
+                              "grandfathername": "kebede",
+                              "phone": patient.phone,
+                              "sex": _chosenValue,
+                              "weight": patient.weight,
+                              "dx": {
+                                "diagnosis": diag_list.length != 0
+                                    ? diag_list.join(",")
+                                    : ""
+                              },
+                              "hx": {"cc": history.cc, "hpi": history.hpi},
+                              "px": {
+                                "abd": physical.abd,
+                                "bp": physical.bp,
+                                "cvs": physical.cvs,
+                                "ga": physical.ga,
+                                "heent": physical.heent,
+                                "lgs": physical.lgs,
+                                "pr": physical.pr,
+                                "rr": physical.rr,
+                                "rs": physical.rs,
+                                "temp": physical.temp,
+                                "gus": physical.gus,
+                                "msk": physical.msk,
+                                "ints": physical.ints,
+                                "cns": physical.cns,
+                                "general_apearnce": physical.general_apearance
+                              },
+                              "ix": {
+                                "microbiology": ix.microbiology,
+                                "pathologyindex": ix.pathologyindex,
+                                "radiologyindex": ix.radiologyindex,
+                                "chemistry": chemistry.toJson(),
+                                "endocrinology": endocrinology.toJson(),
+                                "hemathology": hematology.toJson(),
+                                "serology": serology.toJson(),
+                                "urine": urine.toJson()
+                              }
+                            }
+                          };
                           setState(() {
                             finaPrescription.add(precriptionData);
                           });
                         } else {
-                          print(
-                              "finaPrescription[pesIndex] ${finaPrescription[pesIndex]['drug_name']}");
                           setState(() {
+                            status = 'add';
+                            action_status = 'manipulate';
                             finaPrescription[pesIndex]['drug_name'] =
                                 _selectedAnimal;
                             finaPrescription[pesIndex]["strength"] =
@@ -881,9 +929,11 @@ class _PrescribeFormState extends State<PrescribeForm> {
                             finaPrescription[pesIndex]['route'] =
                                 routeController.text;
                             finaPrescription[pesIndex]['takein'] =
-                                prescription.takein;
+                                forController.text;
                             finaPrescription[pesIndex]['frequency'] =
-                                prescription.frequency;
+                                everyController.text;
+                            finaPrescription[pesIndex]['ampule'] =
+                                ampuleController.text;
                             finaPrescription[pesIndex]["drug"] =
                                 prescription.drug;
                             finaPrescription[pesIndex]["type"] = widget.type;
@@ -904,7 +954,9 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                 weightController.text;
                             finaPrescription[pesIndex]["patient"]['dx']
                                     ['diagnosis'] =
-                                diagnosis.diagnosis_list.join(",");
+                                diagnosis.diagnosis_list != null
+                                    ? diagnosis.diagnosis_list.join(",")
+                                    : "";
                             finaPrescription[pesIndex]["patient"]['hx']['cc'] =
                                 history.cc;
                             finaPrescription[pesIndex]["patient"]['hx']['hpi'] =
@@ -942,8 +994,9 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                 physical.gus;
                           });
                         }
-                        widget.setPrescription(precriptionData);
+                        widget.setPrescription(finaPrescription);
                         _formKey.currentState.reset();
+                        drugnameController.text = "";
                         nameController.text = '';
                         fnameController.text = '';
                         weightController.text = '';
@@ -954,10 +1007,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
                         routeController.text = '';
                         everyController.text = '';
                         forController.text = '';
-
-                        setState(() {
-                          status = 'add';
-                        });
                       }
                     }
                   },
@@ -983,144 +1032,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
               SizedBox(
                 height: 10.0,
               ),
-              Container(
-                height: 230.0,
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey[200]),
-                    color: Colors.lightBlueAccent[100]),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        finaPrescription.length != 0
-                            ? MaterialButton(
-                                color: Colors.green[400],
-                                onPressed: () {
-                                  showDialog<String>(
-                                    context: context,
-                                    builder: (BuildContext context) =>
-                                        AlertDialog(
-                                      title: const Text('AlertDialog Title'),
-                                      content: TextFormField(
-                                        controller: favoriteController,
-                                        decoration: InputDecoration(
-                                            hintText: 'Group name'),
-                                      ),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.pop(context, 'Cancel'),
-                                          child: const Text('Cancel'),
-                                        ),
-                                        TextButton(
-                                          onPressed: () async {
-                                            var user = await UserPreferences()
-                                                .getUser();
-
-                                            finaPrescription
-                                                .forEach((element) async {
-                                              Favorites favorites =
-                                                  new Favorites(
-                                                      drug_name:
-                                                          element['drug_name'],
-                                                      name: favoriteController
-                                                          .text,
-                                                      profession_id:
-                                                          user.professionid,
-                                                      route: element['route'],
-                                                      strength:
-                                                          element['strength']);
-
-                                              var db = new DatabaseHelper();
-                                              var res = await db
-                                                  .saveFavorites(favorites);
-                                            });
-                                            Navigator.pop(context, 'OK');
-                                            Flushbar(
-                                              title: 'Saved',
-                                              message:
-                                                  'Your prescriptions are saved to favorites successfully',
-                                              duration: Duration(seconds: 10),
-                                            ).show(context);
-
-                                          },
-                                          child: const Text('OK'),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                                child: Text('Add to favorites'),
-                              )
-                            : Container()
-                      ],
-                      mainAxisAlignment: MainAxisAlignment.end,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: finaPrescription.map<Widget>((pres) {
-                        return Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                  '${finaPrescription.indexOf(pres) + 1}. ${pres['drug_name']} ${pres['strength']} ${pres['unit']} ${pres['route']} Every ${pres['frequency']} For ${pres['takein']}'),
-                            ),
-                            Expanded(
-                              child: Row(
-                                children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      print("object $pres");
-                                      setState(() {
-                                        status = 'edit';
-                                        pesIndex =
-                                            finaPrescription.indexOf(pres);
-                                      });
-                                      phoneController.text =
-                                          pres['patient']['phone'];
-                                      nameController.text =
-                                          pres['patient']['name'];
-                                      fnameController.text =
-                                          pres['patient']['fathername'];
-                                      weightController.text =
-                                          pres['patient']['weight'];
-                                      ageController.text =
-                                          pres['patient']['age'];
-                                      strengthController.text =
-                                          pres['strength'];
-                                      unitController.text = pres['unit'];
-                                      routeController.text = pres['route'];
-                                      everyController.text = pres['frequency'];
-                                      forController.text = pres['takein'];
-                                      ampuleController.text = pres['ampule'];
-                                    },
-                                    icon: Icon(Icons.edit),
-                                  ),
-                                  IconButton(
-                                    onPressed: () {
-                                      var index = pesIndex =
-                                          finaPrescription.indexOf(pres);
-                                      setState(() {
-                                        finaPrescription.removeAt(index);
-                                      });
-                                    },
-                                    icon: Icon(Icons.cancel),
-                                    padding: EdgeInsets.all(0.0),
-                                    iconSize: 20.0,
-                                  ),
-                                ],
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                              ),
-                            ),
-                          ],
-                        );
-                      }).toList(),
-                    ),
-                  ],
-                ),
-              )
             ],
           ),
         ));

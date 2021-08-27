@@ -16,8 +16,16 @@ class _MedicalRecordState extends State<MedicalRecord> {
   final formKey = new GlobalKey<FormState>();
   var phoneController = new TextEditingController();
   var pinController = new TextEditingController();
+  var loading = Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: <Widget>[
+      CircularProgressIndicator(),
+      Text("Sending your prescription ... Please wait")
+    ],
+  );
   @override
   Widget build(BuildContext context) {
+    var patientProvider = Provider.of<PatientProvider>(context);
     return Scaffold(
       body: ListView(
         children: [
@@ -40,8 +48,8 @@ class _MedicalRecordState extends State<MedicalRecord> {
                       width: 200,
                       child: TextFormField(
                         controller: phoneController,
-                        onSaved: (val){
-                          pinController.text=val;
+                        onSaved: (val) {
+                          pinController.text = val;
                         },
                         decoration: InputDecoration(
                             border: OutlineInputBorder(),
@@ -66,8 +74,8 @@ class _MedicalRecordState extends State<MedicalRecord> {
                       width: 200,
                       child: TextFormField(
                         controller: pinController,
-                        onSaved: (val){
-                          pinController.text=val;
+                        onSaved: (val) {
+                          pinController.text = val;
                         },
                         decoration: InputDecoration(
                             border: OutlineInputBorder(),
@@ -85,48 +93,54 @@ class _MedicalRecordState extends State<MedicalRecord> {
                     SizedBox(
                       width: 150,
                     ),
-                    GestureDetector(
-                      onTap: () async {
-                        print("object clicked ${phoneController.text}");
-                        // formKey.currentState.save();
-                        var res = await Provider.of<PatientProvider>(context,listen: false).getMedicalRecord(phoneController.text);
-                        print("objectobjectobjectobject $res");
-                        if(res.length!=0){
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => MedicalResult(res:res)),
-                          );
-                        }
-                        else{
-                          Flushbar(
-                            title: 'Error',
-                            message: 'Unable to load medical record',
-                            duration: Duration(seconds: 10),
-                          ).show(context);
-                        }
-                      },
-                      child: Container(
-                        width: 180,
-                        height: 70,
-                        padding: EdgeInsets.all(10.0),
-                        decoration: BoxDecoration(
-                            color: Colors.greenAccent,
-                            borderRadius: BorderRadius.circular(40.0),
-                            border: Border.all(color: Colors.black45, width: 1)),
-                        child: Center(
-                          child: Text('See Record',style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold
-                          ),),
-                        ),
-                      ),
-                    )
+                    patientProvider.fetchStatus == Status.Fetching
+                        ? loading
+                        : GestureDetector(
+                            onTap: () async {
+                              print("object clicked ${phoneController.text}");
+                              // formKey.currentState.save();
+                              var res = await patientProvider
+                                  .getMedicalRecord(phoneController.text);
+                              print("objectobjectobjectobject $res");
+                              if (res.length != 0) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          MedicalResult(res: res)),
+                                );
+                              } else {
+                                Flushbar(
+                                  title: 'Error',
+                                  message: 'Unable to load medical record',
+                                  duration: Duration(seconds: 10),
+                                ).show(context);
+                              }
+                            },
+                            child: Container(
+                              width: 180,
+                              height: 70,
+                              padding: EdgeInsets.all(10.0),
+                              decoration: BoxDecoration(
+                                  color: Colors.greenAccent,
+                                  borderRadius: BorderRadius.circular(40.0),
+                                  border: Border.all(
+                                      color: Colors.black45, width: 1)),
+                              child: Center(
+                                child: Text(
+                                  'See Record',
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                          )
                   ],
                 ),
               ],
             ),
           ),
-
         ],
       ),
     );

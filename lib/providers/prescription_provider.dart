@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:hepies/models/consult.dart';
 import 'package:hepies/models/drug.dart';
+import 'package:hepies/models/favorites.dart';
 import 'package:hepies/models/patient.dart';
 import 'package:hepies/models/prescription.dart';
 import 'package:hepies/util/app_url.dart';
@@ -10,16 +11,24 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-enum Status {
+enum PrescriptionStatus {
   NotSent,
   Sent,
   Sending,
 }
 
 class PrescriptionProvider with ChangeNotifier {
+  PrescriptionStatus _sentStatus = PrescriptionStatus.NotSent;
+  PrescriptionStatus get sentStatus => _sentStatus;
+  String _status = 'add';
+  String _actionStatus = 'populate';
+  String get status => _status;
+  String get actionStatus => _status;
+  List<dynamic> _prescription = [];
+  List<dynamic> get prescription => _prescription;
 
-  Status _sentStatus = Status.NotSent;
-  Status get sentStatus => _sentStatus;
+  Map<String, dynamic> _singlePrescription = {};
+  Map<String, dynamic> get singlePrescription => _singlePrescription;
 
   Future<List<dynamic>> getPrescriptions() async {
     var result;
@@ -39,7 +48,7 @@ class PrescriptionProvider with ChangeNotifier {
   }
 
   Future<Map<String, dynamic>> writePrescription(List precriptionData) async {
-    _sentStatus = Status.Sending;
+    _sentStatus = PrescriptionStatus.Sending;
     notifyListeners();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
@@ -53,8 +62,8 @@ class PrescriptionProvider with ChangeNotifier {
         });
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      final Map<String, dynamic> responseData = json.decode(response.body);
-      _sentStatus = Status.Sent;
+      final bool responseData = json.decode(response.body);
+      _sentStatus = PrescriptionStatus.Sent;
       notifyListeners();
       result = {
         'status': true,
@@ -62,7 +71,7 @@ class PrescriptionProvider with ChangeNotifier {
         'consult': responseData
       };
     } else {
-      _sentStatus = Status.NotSent;
+      _sentStatus = PrescriptionStatus.NotSent;
       notifyListeners();
       result = {
         'status': false,
@@ -70,5 +79,18 @@ class PrescriptionProvider with ChangeNotifier {
       };
     }
     return result;
+  }
+
+  void setPrescriptionForm(Map<String, dynamic> prescription) {
+    print("i got here");
+    _singlePrescription = prescription;
+    _actionStatus = "populate";
+    _status = 'edit';
+    notifyListeners();
+  }
+
+  void setFavoriteCombinations(List<dynamic> prescriptions) {
+    _prescription = prescriptions;
+    notifyListeners();
   }
 }

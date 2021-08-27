@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hepies/models/consult.dart';
 import 'package:hepies/ui/medicalrecords/personal_info.dart';
 import 'package:hepies/widgets/header.dart';
 import 'package:intl/intl.dart';
@@ -44,8 +45,8 @@ class _ResultDetailState extends State<ResultDetail> {
         .toList();
     var ix = patient['ix']
         .where((ele) =>
-    DateTime.parse(ele['createdAt']).difference(_pickedDate).inHours ==
-        0)
+            DateTime.parse(ele['createdAt']).difference(_pickedDate).inHours ==
+            0)
         .toList();
     var diagnosis = dx[0]['diagnosis'];
     final splitNames = diagnosis.split(',');
@@ -465,7 +466,6 @@ class _ResultDetailState extends State<ResultDetail> {
                     )
                   ],
                 ),
-
                 Row(
                   children: [
                     Padding(
@@ -478,46 +478,7 @@ class _ResultDetailState extends State<ResultDetail> {
                     ),
                   ],
                 ),
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 50.0),
-                      child: Text(
-                        'HGB',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 25.0),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 10.0,
-                    ),
-                    Text('--'),
-                    SizedBox(
-                      width: 10.0,
-                    ),
-                    Text(px[0]['ints'] != null ? px[0]['ints'] : '')
-                  ],
-                ),
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 50.0),
-                      child: Text(
-                        'CNS',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 25.0),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 10.0,
-                    ),
-                    Text('--'),
-                    SizedBox(
-                      width: 10.0,
-                    ),
-                    Text(px[0]['cns'] != null ? px[0]['cns'] : '')
-                  ],
-                ),
+                _hematologyList(ix),
                 Row(
                   children: [
                     Padding(
@@ -530,6 +491,7 @@ class _ResultDetailState extends State<ResultDetail> {
                     ),
                   ],
                 ),
+                _chemistryList(ix),
                 Row(
                   children: [
                     Padding(
@@ -614,6 +576,1660 @@ class _ResultDetailState extends State<ResultDetail> {
           )
         ],
       ),
+    );
+  }
+
+  Widget _hematologyList(ix) {
+    var hema = ix[0]['hemathology'];
+    return Column(
+      children: [
+        hema['wbccount'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'WBC count',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['wbccount'])
+                ],
+              )
+            : Container(),
+        hema['hgb'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'HGB',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['hgb'])
+                ],
+              )
+            : Container(),
+        hema['hct'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'HCT',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['hct'])
+                ],
+              )
+            : Container(),
+        hema['mcv'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'MCV',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['mcv'])
+                ],
+              )
+            : Container(),
+        hema['mch'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'MCH',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['mch'])
+                ],
+              )
+            : Container(),
+        hema['mchc'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'MCHC',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['mchc'])
+                ],
+              )
+            : Container(),
+        hema['pltcount'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'Pltcount',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['pltcount'])
+                ],
+              )
+            : Container(),
+        hema['reticulocyte'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'reticulocyte',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['reticulocyte'])
+                ],
+              )
+            : Container(),
+        hema['bgrh'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'BGRH',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['bgrh'])
+                ],
+              )
+            : Container(),
+        hema['esr'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'ESR',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['esr'])
+                ],
+              )
+            : Container(),
+      ],
+    );
+  }
+
+  Widget _chemistryList(ix) {
+    var hema = ix[0]['chemistry'];
+    print("object $hema");
+    return Column(
+      children: [
+        hema['albumin'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'Albumin',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['albumin'])
+                ],
+              )
+            : Container(),
+        hema['alp'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'Alp',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['alp'])
+                ],
+              )
+            : Container(),
+        hema['altsgpt'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'Altsgpt',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['altsgpt'])
+                ],
+              )
+            : Container(),
+        hema['amylase'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'Amylase',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['amylase'])
+                ],
+              )
+            : Container(),
+        hema['astsgot'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'Astsgot',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['astsgot'])
+                ],
+              )
+            : Container(),
+        hema['bunurea'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'Bunurea',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['bunurea'])
+                ],
+              )
+            : Container(),
+        hema['calcium'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'Calcium',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['calcium'])
+                ],
+              )
+            : Container(),
+        hema['totalprotein'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'Total Protein',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['totalprotein'])
+                ],
+              )
+            : Container(),
+        hema['calciumionized'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'Calcium Ionized',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['calciumionized'])
+                ],
+              )
+            : Container(),
+        hema['bilirubindirect'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'Bilirubin direct',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['bilirubindirect'])
+                ],
+              )
+            : Container(),
+        hema['bilirubinindirect'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'Bilirubin indirect',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['bilirubinindirect'])
+                ],
+              )
+            : Container(),
+        hema['bilirubintotal'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'Bilirubin total',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['bilirubintotal'])
+                ],
+              )
+            : Container(),
+        hema['creatinine'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'Creatinine',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['creatinine'])
+                ],
+              )
+            : Container(),
+        hema['chloride'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'Chloride',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['chloride'])
+                ],
+              )
+            : Container(),
+        hema['cholesterol'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'Cholesterol',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['cholesterol'])
+                ],
+              )
+            : Container(),
+        hema['fbs'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'FBS',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['fbs'])
+                ],
+              )
+            : Container(),
+        hema['ferritin'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'Ferritin',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['ferritin'])
+                ],
+              )
+            : Container(),
+        hema['hba1c'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'HBA1C',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['hba1c'])
+                ],
+              )
+            : Container(),
+        hema['hdl'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'HDL',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['hdl'])
+                ],
+              )
+            : Container(),
+        hema['iron'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'Iron',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['iron'])
+                ],
+              )
+            : Container(),
+        hema['ldl'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'LDL',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['ldl'])
+                ],
+              )
+            : Container(),
+        hema['lipase'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'Lipase',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['lipase'])
+                ],
+              )
+            : Container(),
+        hema['magnesium'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'Magnesium',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['magnesium'])
+                ],
+              )
+            : Container(),
+        hema['phosphorous'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'Phosphorous',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['phosphorous'])
+                ],
+              )
+            : Container(),
+        hema['potassium'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'Potassium',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['potassium'])
+                ],
+              )
+            : Container(),
+        hema['protein'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'Protein',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['protein'])
+                ],
+              )
+            : Container(),
+        hema['rbs'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'RBS',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['rbs'])
+                ],
+              )
+            : Container(),
+        hema['serumfolate'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'Serumfolate',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['serumfolate'])
+                ],
+              )
+            : Container(),
+        hema['sodium'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'Sodium',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['sodium'])
+                ],
+              )
+            : Container(),
+        hema['TIBC'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'TIBC',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['TIBC'])
+                ],
+              )
+            : Container(),
+        hema['transferrinsaturation'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'Transferrin saturation',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['transferrinsaturation'])
+                ],
+              )
+            : Container(),
+        hema['triglyceride'] != null
+            ? Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 100.0),
+                    child: Text(
+                      'Triglyceride',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 20.0),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text('--'),
+                  SizedBox(
+                    width: 10.0,
+                  ),
+                  Text(hema['triglyceride'])
+                ],
+              )
+            : Container(),
+      ],
+    );
+  }
+
+  Widget _serologyList(ix) {
+    var hema = ix[0]['chemistry'];
+    print("object $hema");
+    return Column(
+      children: [
+        hema['albumin'] != null
+            ? Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 100.0),
+              child: Text(
+                'Albumin',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text('--'),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(hema['albumin'])
+          ],
+        )
+            : Container(),
+        hema['alp'] != null
+            ? Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 100.0),
+              child: Text(
+                'Alp',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text('--'),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(hema['alp'])
+          ],
+        )
+            : Container(),
+        hema['altsgpt'] != null
+            ? Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 100.0),
+              child: Text(
+                'Altsgpt',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text('--'),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(hema['altsgpt'])
+          ],
+        )
+            : Container(),
+        hema['amylase'] != null
+            ? Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 100.0),
+              child: Text(
+                'Amylase',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text('--'),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(hema['amylase'])
+          ],
+        )
+            : Container(),
+        hema['astsgot'] != null
+            ? Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 100.0),
+              child: Text(
+                'Astsgot',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text('--'),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(hema['astsgot'])
+          ],
+        )
+            : Container(),
+        hema['bunurea'] != null
+            ? Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 100.0),
+              child: Text(
+                'Bunurea',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text('--'),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(hema['bunurea'])
+          ],
+        )
+            : Container(),
+        hema['calcium'] != null
+            ? Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 100.0),
+              child: Text(
+                'Calcium',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text('--'),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(hema['calcium'])
+          ],
+        )
+            : Container(),
+        hema['totalprotein'] != null
+            ? Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 100.0),
+              child: Text(
+                'Total Protein',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text('--'),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(hema['totalprotein'])
+          ],
+        )
+            : Container(),
+        hema['calciumionized'] != null
+            ? Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 100.0),
+              child: Text(
+                'Calcium Ionized',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text('--'),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(hema['calciumionized'])
+          ],
+        )
+            : Container(),
+        hema['bilirubindirect'] != null
+            ? Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 100.0),
+              child: Text(
+                'Bilirubin direct',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text('--'),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(hema['bilirubindirect'])
+          ],
+        )
+            : Container(),
+        hema['bilirubinindirect'] != null
+            ? Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 100.0),
+              child: Text(
+                'Bilirubin indirect',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text('--'),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(hema['bilirubinindirect'])
+          ],
+        )
+            : Container(),
+        hema['bilirubintotal'] != null
+            ? Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 100.0),
+              child: Text(
+                'Bilirubin total',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text('--'),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(hema['bilirubintotal'])
+          ],
+        )
+            : Container(),
+        hema['creatinine'] != null
+            ? Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 100.0),
+              child: Text(
+                'Creatinine',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text('--'),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(hema['creatinine'])
+          ],
+        )
+            : Container(),
+        hema['chloride'] != null
+            ? Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 100.0),
+              child: Text(
+                'Chloride',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text('--'),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(hema['chloride'])
+          ],
+        )
+            : Container(),
+        hema['cholesterol'] != null
+            ? Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 100.0),
+              child: Text(
+                'Cholesterol',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text('--'),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(hema['cholesterol'])
+          ],
+        )
+            : Container(),
+        hema['fbs'] != null
+            ? Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 100.0),
+              child: Text(
+                'FBS',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text('--'),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(hema['fbs'])
+          ],
+        )
+            : Container(),
+        hema['ferritin'] != null
+            ? Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 100.0),
+              child: Text(
+                'Ferritin',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text('--'),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(hema['ferritin'])
+          ],
+        )
+            : Container(),
+        hema['hba1c'] != null
+            ? Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 100.0),
+              child: Text(
+                'HBA1C',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text('--'),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(hema['hba1c'])
+          ],
+        )
+            : Container(),
+        hema['hdl'] != null
+            ? Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 100.0),
+              child: Text(
+                'HDL',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text('--'),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(hema['hdl'])
+          ],
+        )
+            : Container(),
+        hema['iron'] != null
+            ? Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 100.0),
+              child: Text(
+                'Iron',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text('--'),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(hema['iron'])
+          ],
+        )
+            : Container(),
+        hema['ldl'] != null
+            ? Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 100.0),
+              child: Text(
+                'LDL',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text('--'),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(hema['ldl'])
+          ],
+        )
+            : Container(),
+        hema['lipase'] != null
+            ? Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 100.0),
+              child: Text(
+                'Lipase',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text('--'),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(hema['lipase'])
+          ],
+        )
+            : Container(),
+        hema['magnesium'] != null
+            ? Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 100.0),
+              child: Text(
+                'Magnesium',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text('--'),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(hema['magnesium'])
+          ],
+        )
+            : Container(),
+        hema['phosphorous'] != null
+            ? Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 100.0),
+              child: Text(
+                'Phosphorous',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text('--'),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(hema['phosphorous'])
+          ],
+        )
+            : Container(),
+        hema['potassium'] != null
+            ? Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 100.0),
+              child: Text(
+                'Potassium',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text('--'),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(hema['potassium'])
+          ],
+        )
+            : Container(),
+        hema['protein'] != null
+            ? Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 100.0),
+              child: Text(
+                'Protein',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text('--'),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(hema['protein'])
+          ],
+        )
+            : Container(),
+        hema['rbs'] != null
+            ? Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 100.0),
+              child: Text(
+                'RBS',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text('--'),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(hema['rbs'])
+          ],
+        )
+            : Container(),
+        hema['serumfolate'] != null
+            ? Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 100.0),
+              child: Text(
+                'Serumfolate',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text('--'),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(hema['serumfolate'])
+          ],
+        )
+            : Container(),
+        hema['sodium'] != null
+            ? Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 100.0),
+              child: Text(
+                'Sodium',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text('--'),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(hema['sodium'])
+          ],
+        )
+            : Container(),
+        hema['TIBC'] != null
+            ? Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 100.0),
+              child: Text(
+                'TIBC',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text('--'),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(hema['TIBC'])
+          ],
+        )
+            : Container(),
+        hema['transferrinsaturation'] != null
+            ? Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 100.0),
+              child: Text(
+                'Transferrin saturation',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text('--'),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(hema['transferrinsaturation'])
+          ],
+        )
+            : Container(),
+        hema['triglyceride'] != null
+            ? Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 100.0),
+              child: Text(
+                'Triglyceride',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 20.0),
+              ),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text('--'),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(hema['triglyceride'])
+          ],
+        )
+            : Container(),
+      ],
     );
   }
 }
