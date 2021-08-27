@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:hepies/models/favorites.dart';
 import 'package:hepies/providers/prescription_provider.dart';
-import 'package:hepies/ui/prescription/write_prescription.dart';
+import 'package:hepies/ui/doctor/prescription/write_prescription.dart';
 import 'package:hepies/util/database_helper.dart';
 import 'package:hepies/widgets/footer.dart';
 import 'package:hepies/widgets/header.dart';

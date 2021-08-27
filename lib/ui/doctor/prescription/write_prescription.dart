@@ -6,16 +6,16 @@ import 'package:hepies/models/favorites.dart';
 import 'package:hepies/models/hx.dart';
 import 'package:hepies/models/px.dart';
 import 'package:hepies/providers/prescription_provider.dart';
-import 'package:hepies/ui/favorites/favorites.dart';
-import 'package:hepies/ui/guidelines/guidelines.dart';
-import 'package:hepies/ui/medicalrecords/add_history.dart';
-import 'package:hepies/ui/prescription/forms/prescribe_form.dart';
-import 'package:hepies/ui/prescription/papers/prescription_paper.dart';
-import 'package:hepies/ui/prescription/papers/psycho_narco_paper.dart';
-import 'package:hepies/ui/prescription/prescription_types/general_prescription.dart';
-import 'package:hepies/ui/prescription/prescription_types/instrument_prescription.dart';
-import 'package:hepies/ui/prescription/prescription_types/narcotic_prescription.dart';
-import 'package:hepies/ui/prescription/prescription_types/psychotropic_prescription.dart';
+import 'package:hepies/ui/doctor/favorites/favorites.dart';
+import 'package:hepies/ui/doctor/guidelines/guidelines.dart';
+import 'package:hepies/ui/doctor/medicalrecords/add_history.dart';
+import 'package:hepies/ui/doctor/prescription/forms/prescribe_form.dart';
+import 'package:hepies/ui/doctor/prescription/papers/prescription_paper.dart';
+import 'package:hepies/ui/doctor/prescription/papers/psycho_narco_paper.dart';
+import 'package:hepies/ui/doctor/prescription/prescription_types/general_prescription.dart';
+import 'package:hepies/ui/doctor/prescription/prescription_types/instrument_prescription.dart';
+import 'package:hepies/ui/doctor/prescription/prescription_types/narcotic_prescription.dart';
+import 'package:hepies/ui/doctor/prescription/prescription_types/psychotropic_prescription.dart';
 import 'package:hepies/util/shared_preference.dart';
 import 'package:provider/provider.dart';
 
@@ -84,7 +84,6 @@ class _WritePrescriptionState extends State<WritePrescription> {
   void setFromFavorites(List<dynamic> fav) {
     List<dynamic> favorites = [];
     for (var i = 0; i < fav.length; i++) {
-      print("precriptionDataprecriptionData ${fav[i]}");
       final Map<String, dynamic> precriptionData = {
         'drug_name': fav[i]['drug_name'],
         "strength": fav[i]['strength'],
@@ -157,7 +156,6 @@ class _WritePrescriptionState extends State<WritePrescription> {
   @override
   Widget build(BuildContext context) {
     var prescProvider = Provider.of<PrescriptionProvider>(context);
-    print("prescProviderprescProvider $prescription");
     return Scaffold(
       body: ListView(
         children: [
@@ -381,11 +379,11 @@ class _WritePrescriptionState extends State<WritePrescription> {
                   ? loading
                   : GestureDetector(
                       onTap: () async {
-                        print(
-                            "prescriptionprescriptionprescription=.....===> $prescription");
+
 
                         try {
                           if (pretype == "general" || pretype == "instrument") {
+                            print("prescriptionprescription $prescription");
                             if (prescription.length != 0) {
                               for (var i = 0; i < prescription.length; i++) {
                                 var phone = prescription[i]['patient']['phone'];

@@ -3,7 +3,7 @@ import 'package:hepies/models/consult.dart';
 import 'package:hepies/models/dx.dart';
 import 'package:hepies/models/hx.dart';
 import 'package:hepies/models/px.dart';
-import 'package:hepies/ui/prescription/forms/prescribe_form.dart';
+import 'package:hepies/ui/doctor/prescription/forms/prescribe_form.dart';
 
 class GeneralPrescription extends StatefulWidget {
   final color;

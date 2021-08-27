@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:hepies/providers/consult.dart';
-import 'package:hepies/ui/consults/consult_list.dart';
+import 'package:hepies/ui/doctor/consults/consult_list.dart';
 import 'package:hepies/util/image_consult.dart';
 import 'package:hepies/widgets/footer.dart';
 import 'package:hepies/widgets/header.dart';

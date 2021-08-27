@@ -20,7 +20,7 @@ import 'package:hepies/providers/drug_provider.dart';
 import 'package:hepies/providers/favorites.dart';
 import 'package:hepies/providers/patient_provider.dart';
 import 'package:hepies/providers/prescription_provider.dart';
-import 'package:hepies/ui/medicalrecords/add_history.dart';
+import 'package:hepies/ui/doctor/medicalrecords/add_history.dart';
 import 'package:hepies/util/database_helper.dart';
 import 'package:hepies/util/shared_preference.dart';
 import 'package:provider/provider.dart';
@@ -39,7 +39,6 @@ class PrescribeForm extends StatefulWidget {
 class _PrescribeFormState extends State<PrescribeForm> {
   String status = 'add';
   var action_status = 'populate';
-  int pesIndex = 0;
   String _chosenValue;
   var textHeight = 40.0;
   final _formKey = new GlobalKey<FormState>();
@@ -77,6 +76,8 @@ class _PrescribeFormState extends State<PrescribeForm> {
   var endocrinology = new Endocrinology();
   var urine = new Urine();
   var ix = new Investigation();
+
+  int presIndex = 0;
 
   void _setHx(History hx) {
     setState(() {
@@ -190,9 +191,12 @@ class _PrescribeFormState extends State<PrescribeForm> {
         Provider.of<PrescriptionProvider>(context).singlePrescription;
     var statuse = Provider.of<PrescriptionProvider>(context).status;
     var actionstatus = Provider.of<PrescriptionProvider>(context).actionStatus;
+    var index = Provider.of<PrescriptionProvider>(context).prescriptionIndex;
+
     setState(() {
       status = statuse;
-      action_status = action_status;
+      action_status = actionstatus;
+      presIndex = index;
     });
     print("i got here =======> $action_status");
     if (statuse == 'edit' && action_status == 'populate') {
@@ -215,7 +219,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
 
   void setFromFavorites(List<dynamic> fav) {
     for (var i = 0; i < fav.length; i++) {
-      print("precriptionDataprecriptionData ${fav[i]}");
       final Map<String, dynamic> precriptionData = {
         'drug_name': fav[i]['drug_name'],
         "strength": fav[i]['strength'],
@@ -920,78 +923,78 @@ class _PrescribeFormState extends State<PrescribeForm> {
                           setState(() {
                             status = 'add';
                             action_status = 'manipulate';
-                            finaPrescription[pesIndex]['drug_name'] =
+                            finaPrescription[presIndex]['drug_name'] =
                                 _selectedAnimal;
-                            finaPrescription[pesIndex]["strength"] =
+                            finaPrescription[presIndex]["strength"] =
                                 strengthController.text;
-                            finaPrescription[pesIndex]["unit"] =
+                            finaPrescription[presIndex]["unit"] =
                                 unitController.text;
-                            finaPrescription[pesIndex]['route'] =
+                            finaPrescription[presIndex]['route'] =
                                 routeController.text;
-                            finaPrescription[pesIndex]['takein'] =
+                            finaPrescription[presIndex]['takein'] =
                                 forController.text;
-                            finaPrescription[pesIndex]['frequency'] =
+                            finaPrescription[presIndex]['frequency'] =
                                 everyController.text;
-                            finaPrescription[pesIndex]['ampule'] =
+                            finaPrescription[presIndex]['ampule'] =
                                 ampuleController.text;
-                            finaPrescription[pesIndex]["drug"] =
+                            finaPrescription[presIndex]["drug"] =
                                 prescription.drug;
-                            finaPrescription[pesIndex]["type"] = widget.type;
+                            finaPrescription[presIndex]["type"] = widget.type;
 
-                            finaPrescription[pesIndex]['patient']['name'] =
+                            finaPrescription[presIndex]['patient']['name'] =
                                 patient.name;
-                            finaPrescription[pesIndex]["patient"]['age'] =
+                            finaPrescription[presIndex]["patient"]['age'] =
                                 ageController.text;
-                            finaPrescription[pesIndex]["patient"]
+                            finaPrescription[presIndex]["patient"]
                                 ['fathername'] = fnameController.text;
-                            finaPrescription[pesIndex]['patient']
+                            finaPrescription[presIndex]['patient']
                                 ['grandfathername'] = 'kebede';
-                            finaPrescription[pesIndex]['patient']['phone'] =
+                            finaPrescription[presIndex]['patient']['phone'] =
                                 phoneController.text;
-                            finaPrescription[pesIndex]['patient']['sex'] =
+                            finaPrescription[presIndex]['patient']['sex'] =
                                 _chosenValue;
-                            finaPrescription[pesIndex]["patient"]['weight'] =
+                            finaPrescription[presIndex]["patient"]['weight'] =
                                 weightController.text;
-                            finaPrescription[pesIndex]["patient"]['dx']
+                            finaPrescription[presIndex]["patient"]['dx']
                                     ['diagnosis'] =
                                 diagnosis.diagnosis_list != null
                                     ? diagnosis.diagnosis_list.join(",")
                                     : "";
-                            finaPrescription[pesIndex]["patient"]['hx']['cc'] =
+                            finaPrescription[presIndex]["patient"]['hx']['cc'] =
                                 history.cc;
-                            finaPrescription[pesIndex]["patient"]['hx']['hpi'] =
-                                history.hpi;
-                            finaPrescription[pesIndex]["patient"]['px']['abd'] =
-                                physical.abd;
-                            finaPrescription[pesIndex]["patient"]['px']['cvs'] =
-                                physical.cvs;
-                            finaPrescription[pesIndex]["patient"]['px']['ga'] =
+                            finaPrescription[presIndex]["patient"]['hx']
+                                ['hpi'] = history.hpi;
+                            finaPrescription[presIndex]["patient"]['px']
+                                ['abd'] = physical.abd;
+                            finaPrescription[presIndex]["patient"]['px']
+                                ['cvs'] = physical.cvs;
+                            finaPrescription[presIndex]["patient"]['px']['ga'] =
                                 physical.ga;
-                            finaPrescription[pesIndex]["patient"]['px']['bp'] =
+                            finaPrescription[presIndex]["patient"]['px']['bp'] =
                                 physical.bp;
-                            finaPrescription[pesIndex]["patient"]['px']
+                            finaPrescription[presIndex]["patient"]['px']
                                 ['heent'] = physical.heent;
-                            finaPrescription[pesIndex]["patient"]['px']['lgs'] =
-                                physical.lgs;
-                            finaPrescription[pesIndex]["patient"]['px']['pr'] =
+                            finaPrescription[presIndex]["patient"]['px']
+                                ['lgs'] = physical.lgs;
+                            finaPrescription[presIndex]["patient"]['px']['pr'] =
                                 physical.pr;
-                            finaPrescription[pesIndex]["patient"]['px']['rr'] =
+                            finaPrescription[presIndex]["patient"]['px']['rr'] =
                                 physical.rr;
-                            finaPrescription[pesIndex]["patient"]['px']['rs'] =
+                            finaPrescription[presIndex]["patient"]['px']['rs'] =
                                 physical.rs;
-                            finaPrescription[pesIndex]["patient"]['px']
+                            finaPrescription[presIndex]["patient"]['px']
                                 ['temp'] = physical.temp;
-                            finaPrescription[pesIndex]["patient"]['px']
+                            finaPrescription[presIndex]["patient"]['px']
                                     ['general_apearance'] =
                                 physical.general_apearance;
-                            finaPrescription[pesIndex]["patient"]['px']
+                            finaPrescription[presIndex]["patient"]['px']
                                 ['ints'] = physical.ints;
-                            finaPrescription[pesIndex]["patient"]['px']['cns'] =
-                                physical.cns;
-                            finaPrescription[pesIndex]["patient"]['px']['msk'] =
-                                physical.msk;
-                            finaPrescription[pesIndex]["patient"]['px']['gus'] =
-                                physical.gus;
+                            finaPrescription[presIndex]["patient"]['px']
+                                ['cns'] = physical.cns;
+                            finaPrescription[presIndex]["patient"]['px']
+                                ['msk'] = physical.msk;
+                            finaPrescription[presIndex]["patient"]['px']
+                                ['gus'] = physical.gus;
                           });
                         }
                         widget.setPrescription(finaPrescription);

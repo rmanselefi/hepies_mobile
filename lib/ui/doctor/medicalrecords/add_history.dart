@@ -5,12 +5,12 @@ import 'package:hepies/models/dx.dart';
 import 'package:hepies/models/hx.dart';
 import 'package:hepies/models/investigation.dart';
 import 'package:hepies/models/px.dart';
-import 'package:hepies/ui/medicalrecords/historypages/dx.dart';
-import 'package:hepies/ui/medicalrecords/historypages/hx.dart';
-import 'package:hepies/ui/medicalrecords/historypages/ix.dart';
-import 'package:hepies/ui/medicalrecords/historypages/px.dart';
-import 'package:hepies/ui/prescription/prescription_types/general_prescription.dart';
-import 'package:hepies/ui/prescription/write_prescription.dart';
+import 'package:hepies/ui/doctor/medicalrecords/historypages/dx.dart';
+import 'package:hepies/ui/doctor/medicalrecords/historypages/hx.dart';
+import 'package:hepies/ui/doctor/medicalrecords/historypages/ix.dart';
+import 'package:hepies/ui/doctor/medicalrecords/historypages/px.dart';
+import 'package:hepies/ui/doctor/prescription/prescription_types/general_prescription.dart';
+import 'package:hepies/ui/doctor/prescription/write_prescription.dart';
 import 'package:hepies/widgets/header.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

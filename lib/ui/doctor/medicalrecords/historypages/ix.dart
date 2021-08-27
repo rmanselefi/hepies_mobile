@@ -8,7 +8,7 @@ import 'package:hepies/models/investigation.dart';
 import 'package:hepies/models/serology.dart';
 import 'package:hepies/models/tumor.dart';
 import 'package:hepies/models/urine.dart';
-import 'package:hepies/ui/medicalrecords/historypages/collapse.dart';
+import 'package:hepies/ui/doctor/medicalrecords/historypages/collapse.dart';
 
 class IX extends StatefulWidget {
   final Function setChemistry;

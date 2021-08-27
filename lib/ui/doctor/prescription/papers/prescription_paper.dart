@@ -110,13 +110,10 @@ class _PrescriptionPaperState extends State<PrescriptionPaper> {
                           IconButton(
                             onPressed: () {
                               print("object $pres");
-                              setState(() {
-                                status = 'edit';
-                                pesIndex = finaPrescription.indexOf(pres);
-                              });
+
                               Provider.of<PrescriptionProvider>(context,
                                       listen: false)
-                                  .setPrescriptionForm(pres);
+                                  .setPrescriptionForm(pres,finaPrescription.indexOf(pres));
                             },
                             icon: Icon(Icons.edit),
                           ),

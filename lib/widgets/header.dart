@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hepies/ui/points/points.dart';
-import 'package:hepies/ui/profile/edit_profile.dart';
+import 'package:hepies/ui/doctor/points/points.dart';
+import 'package:hepies/ui/doctor/profile/edit_profile.dart';
 import 'package:hepies/ui/welcome.dart';
 import 'package:hepies/util/gradient_text.dart';
 import 'package:hepies/util/shared_preference.dart';

@@ -39,6 +39,8 @@ dependencies:
   expandable:
   sqflite:
   path_provider:
+  collection:
+  supercharged:
 
 dev_dependencies:
   flutter_test:

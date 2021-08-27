@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:hepies/providers/patient_provider.dart';
-import 'package:hepies/ui/medicalrecords/result.dart';
+import 'package:hepies/ui/doctor/medicalrecords/result.dart';
 import 'package:hepies/widgets/header.dart';
 import 'package:provider/provider.dart';
 

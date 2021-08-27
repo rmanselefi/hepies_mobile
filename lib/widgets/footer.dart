@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hepies/ui/drugs/drugs.dart';
-import 'package:hepies/ui/medicalrecords/medical_records.dart';
-import 'package:hepies/ui/prescription/write_prescription.dart';
+import 'package:hepies/ui/doctor/drugs/drugs.dart';
+import 'package:hepies/ui/doctor/medicalrecords/medical_records.dart';
+import 'package:hepies/ui/doctor/prescription/write_prescription.dart';
 import 'package:hepies/ui/welcome.dart';
 
 class Footer extends StatefulWidget {

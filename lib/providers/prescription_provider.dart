@@ -20,10 +20,12 @@ enum PrescriptionStatus {
 class PrescriptionProvider with ChangeNotifier {
   PrescriptionStatus _sentStatus = PrescriptionStatus.NotSent;
   PrescriptionStatus get sentStatus => _sentStatus;
+  int _index = 0;
+  int get prescriptionIndex => _index;
   String _status = 'add';
   String _actionStatus = 'populate';
   String get status => _status;
-  String get actionStatus => _status;
+  String get actionStatus => _actionStatus;
   List<dynamic> _prescription = [];
   List<dynamic> get prescription => _prescription;
 
@@ -81,11 +83,11 @@ class PrescriptionProvider with ChangeNotifier {
     return result;
   }
 
-  void setPrescriptionForm(Map<String, dynamic> prescription) {
-    print("i got here");
+  void setPrescriptionForm(Map<String, dynamic> prescription, int index) {
     _singlePrescription = prescription;
     _actionStatus = "populate";
     _status = 'edit';
+    _index = index;
     notifyListeners();
   }
 

@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:hepies/ui/medicalrecords/personal_info.dart';
+import 'package:hepies/ui/doctor/medicalrecords/personal_info.dart';
 import 'package:intl/intl.dart';
-import 'package:hepies/ui/medicalrecords/add_history.dart';
-import 'package:hepies/ui/medicalrecords/result_detail.dart';
+import 'package:hepies/ui/doctor/medicalrecords/add_history.dart';
+import 'package:hepies/ui/doctor/medicalrecords/result_detail.dart';
 import 'package:hepies/widgets/header.dart';
+import 'package:supercharged/supercharged.dart';
 
 class MedicalResult extends StatefulWidget {
   final List<dynamic> res;
@@ -17,6 +20,12 @@ class _MedicalResultState extends State<MedicalResult> {
   Widget build(BuildContext context) {
     var patient = widget.res[0];
     var pres = patient['prescription'];
+    final map = pres.groupBy<String, Map>((item) =>
+    item['code'],
+      valueTransform: (item) => item..remove('code'),
+    );
+
+    print("prespresprespresprespres ${map}");
     pres.sort((a, b) {
       return b['createdAt']
           .toString()
