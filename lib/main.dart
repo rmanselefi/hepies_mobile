@@ -7,6 +7,7 @@ import 'package:hepies/providers/favorites.dart';
 import 'package:hepies/providers/guidelines.dart';
 import 'package:hepies/providers/patient_provider.dart';
 import 'package:hepies/providers/prescription_provider.dart';
+import 'package:hepies/switcher.dart';
 import 'package:hepies/ui/auth/login.dart';
 import 'package:hepies/ui/auth/sign_up.dart';
 import 'package:hepies/ui/dashboard.dart';
@@ -60,8 +61,8 @@ class MyApp extends StatelessWidget {
                     else if (snapshot.data.name == null)
                       return Login();
                     else
-                      Welcome(user: snapshot.data);
-                    return Welcome(user: snapshot.data);
+                      Switcher(user: snapshot.data);
+                    return Switcher(user: snapshot.data);
                 }
               }),
           routes: {

@@ -8,7 +8,8 @@ class ResultDetail extends StatefulWidget {
   final patient;
   final createdAt;
   final professional;
-  ResultDetail(this.patient, this.createdAt, this.professional);
+  final code;
+  ResultDetail(this.patient, this.createdAt, this.professional,this.code);
   @override
   _ResultDetailState createState() => _ResultDetailState();
 }
@@ -18,6 +19,7 @@ class _ResultDetailState extends State<ResultDetail> {
   Widget build(BuildContext context) {
     var patient = widget.patient;
     var createdAt = widget.createdAt;
+    var code=widget.code;
     var professional = widget.professional;
     DateTime dateTime = DateTime.now();
     DateTime _pickedDate =
@@ -25,27 +27,27 @@ class _ResultDetailState extends State<ResultDetail> {
 
     var hx = patient['hx']
         .where((ele) =>
-            DateTime.parse(ele['createdAt']).difference(_pickedDate).inHours ==
+            DateTime.parse(ele['createdAt']).difference(_pickedDate).inMinutes ==
             0)
         .toList();
     var pres = patient['prescription']
         .where((ele) =>
-            DateTime.parse(ele['createdAt']).difference(_pickedDate).inHours ==
+            DateTime.parse(ele['createdAt']).difference(_pickedDate).inMinutes ==
             0)
         .toList();
     var px = patient['px']
         .where((ele) =>
-            DateTime.parse(ele['createdAt']).difference(_pickedDate).inHours ==
+            DateTime.parse(ele['createdAt']).difference(_pickedDate).inMinutes ==
             0)
         .toList();
     var dx = patient['dx']
         .where((ele) =>
-            DateTime.parse(ele['createdAt']).difference(_pickedDate).inHours ==
+            DateTime.parse(ele['createdAt']).difference(_pickedDate).inMinutes ==
             0)
         .toList();
     var ix = patient['ix']
         .where((ele) =>
-            DateTime.parse(ele['createdAt']).difference(_pickedDate).inHours ==
+            DateTime.parse(ele['createdAt']).difference(_pickedDate).inMinutes ==
             0)
         .toList();
     var diagnosis = dx[0]['diagnosis'];

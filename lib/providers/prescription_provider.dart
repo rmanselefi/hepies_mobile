@@ -91,6 +91,13 @@ class PrescriptionProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void resetStatus() {
+    _actionStatus = "";
+    _status = 'add';
+    notifyListeners();
+  }
+
+
   void setFavoriteCombinations(List<dynamic> prescriptions) {
     _prescription = prescriptions;
     notifyListeners();

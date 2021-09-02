@@ -4,6 +4,8 @@ import 'package:hepies/models/user.dart';
 import 'package:hepies/providers/auth.dart';
 import 'package:hepies/providers/user_provider.dart';
 import 'package:hepies/ui/auth/sign_up.dart';
+import 'package:hepies/ui/pharmacy/ui/consults/share_consult.dart';
+import 'package:hepies/ui/pharmacy/welcome.dart';
 import 'package:hepies/ui/welcome.dart';
 import 'package:hepies/util/validators.dart';
 import 'package:hepies/util/widgets.dart';
@@ -80,13 +82,20 @@ class _LoginState extends State<Login> {
           print("object $response");
           if (response['status']) {
             User user = response['user'];
+            var role = response['role'];
+
             Provider.of<UserProvider>(context, listen: false).setUser(user);
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => Welcome(
-                          user: user,
-                        )));
+            if (role == "doctor") {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Welcome(
+                            user: user,
+                          )));
+            } else {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => WelcomePharmacy()));
+            }
           } else {
             Flushbar(
               title: "Failed Login",

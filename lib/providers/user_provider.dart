@@ -31,7 +31,7 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
     var profile;
     if (file != null) {
-      await AuthProvider().uploadBackImage(file).then((res) {
+      await AuthProvider().uploadImage(file).then((res) {
         print('imageuriimageuriimageuri$res');
         if (res != null) {
           profile = res;

@@ -20,12 +20,12 @@ class _MedicalResultState extends State<MedicalResult> {
   Widget build(BuildContext context) {
     var patient = widget.res[0];
     var pres = patient['prescription'];
-    final map = pres.groupBy<String, Map>((item) =>
-    item['code'],
-      valueTransform: (item) => item..remove('code'),
-    );
+    // final map = pres.groupBy<String, Map>((item) =>
+    // item['code'],
+    //   valueTransform: (item) => item..remove('code'),
+    // );
 
-    print("prespresprespresprespres ${map}");
+    print("prespresprespresprespres ${pres}");
     pres.sort((a, b) {
       return b['createdAt']
           .toString()
@@ -101,7 +101,7 @@ class _MedicalResultState extends State<MedicalResult> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => ResultDetail(patient,
-                                        e['createdAt'], e['professional'])));
+                                        e['createdAt'], e['professional'],e['code'])));
                           },
                           child: Container(
                             margin: EdgeInsets.only(bottom: 10.0),

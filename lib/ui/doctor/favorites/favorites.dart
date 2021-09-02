@@ -72,7 +72,7 @@ class _FavoritesState extends State<FavoritesPage> {
                                           for (var i = 0;
                                               i < combinations.length;
                                               i++) {}
-
+                                          Provider.of<PrescriptionProvider>(context,listen: false).resetStatus();
                                           presProvider.setFavoriteCombinations(
                                               combinations);
                                           SchedulerBinding.instance

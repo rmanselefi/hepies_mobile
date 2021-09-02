@@ -43,19 +43,23 @@ class AuthProvider with ChangeNotifier {
       body: json.encode(loginData),
       headers: {'Content-Type': 'application/json'},
     );
-    print("ResponseResponseResponse ${ response.statusCode}");
+    print("ResponseResponseResponse ${response.body}");
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Map<String, dynamic> responseData = json.decode(response.body);
 
       print("authUserauthUserauthUser ${responseData}");
       User authUser = User.fromJson(responseData);
-      // print("authUserauthUserauthUser ${authUser.username}");
       UserPreferences().saveUser(authUser);
-
+      var role = responseData['role']['name'];
       _loggedInStatus = Status.LoggedIn;
       notifyListeners();
 
-      result = {'status': true, 'message': 'Successful', 'user': authUser};
+      result = {
+        'status': true,
+        'message': 'Successful',
+        'role': role,
+        'user': authUser
+      };
     } else {
       _loggedInStatus = Status.NotLoggedIn;
       notifyListeners();
@@ -73,13 +77,14 @@ class AuthProvider with ChangeNotifier {
       String username,
       String phone,
       String password,
-      String profession,interests,
+      String profession,
+      interests,
       File file) async {
     _loggedInStatus = Status.Authenticating;
     notifyListeners();
     var license;
     if (file != null) {
-      await uploadBackImage(file).then((res) {
+      await uploadImage(file).then((res) {
         print('imageuriimageuriimageuri$res');
         if (res != null) {
           license = res;
@@ -87,14 +92,23 @@ class AuthProvider with ChangeNotifier {
       });
     }
     var result;
-    var role = profession == 'Medical Doctor' ? 2 : 3;
+    var role = 2;
+    if (profession == 'Pharmacist') {
+      role = 3;
+    }
+    if (profession == 'Nurse') {
+      role = 5;
+    }
+    if (profession == 'Health Officer') {
+      role = 4;
+    }
     final Map<String, dynamic> registrationData = {
       'name': name,
       'fathername': fathername,
       'phone': phone,
       'license': license,
-      'interests':interests,
-      'proffesion':profession,
+      'interests': interests,
+      'proffesion': profession,
       'user': {'username': username, 'password': password, 'role': role},
     };
     Response response = await post(Uri.parse(AppUrl.register),
@@ -148,7 +162,7 @@ class AuthProvider with ChangeNotifier {
     return result;
   }
 
-  Future<String> uploadBackImage(File back, {String path}) async {
+  Future<String> uploadImage(File back, {String path}) async {
     // final mimetypeData = lookupMimeType(image.path).split('/');
     firebase_storage.FirebaseStorage storage =
         firebase_storage.FirebaseStorage.instance;
@@ -171,7 +185,7 @@ class AuthProvider with ChangeNotifier {
     var backImage = '';
     try {
       if (file != null) {
-        await uploadBackImage(file).then((res) {
+        await uploadImage(file).then((res) {
           print('imageuriimageuriimageuri$res');
           if (res != null) {
             backImage = res;

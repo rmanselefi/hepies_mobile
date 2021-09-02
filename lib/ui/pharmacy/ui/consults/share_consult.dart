@@ -4,23 +4,25 @@ import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:hepies/providers/consult.dart';
 import 'package:hepies/ui/doctor/consults/consult_list.dart';
+import 'package:hepies/ui/pharmacy/widgets/footer.dart';
 import 'package:hepies/util/image_consult.dart';
 import 'package:hepies/widgets/footer.dart';
 import 'package:hepies/widgets/header.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
-class ShareConsult extends StatefulWidget {
+class PharmacyShareConsult extends StatefulWidget {
   @override
-  _ShareConsultState createState() => _ShareConsultState();
+  _PharmacyShareConsultState createState() => _PharmacyShareConsultState();
 }
 
-class _ShareConsultState extends State<ShareConsult> {
+class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
   final formKey = new GlobalKey<FormState>();
   String _topic;
   XFile file;
   void _setImage(XFile image) {
     file = image;
+    print("_formData_formData_formData${file}");
   }
 
   @override
@@ -128,7 +130,7 @@ class _ShareConsultState extends State<ShareConsult> {
               ],
             ),
           ),
-          Footer()
+          PharmacyFooter()
         ],
       ),
     );

@@ -169,6 +169,13 @@ class _PrescribeFormState extends State<PrescribeForm> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // Provider.of<PrescriptionProvider>(context).resetStatus();
+  }
+
+  @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
@@ -199,7 +206,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
       presIndex = index;
     });
     print("i got here =======> $action_status");
-    if (statuse == 'edit' && action_status == 'populate') {
+    if (status == 'edit' && action_status == 'populate') {
       drugnameController.value =
           TextEditingValue(text: selectedPrescription['drug_name']);
       _selectedAnimal = selectedPrescription['drug_name'];
@@ -217,7 +224,9 @@ class _PrescribeFormState extends State<PrescribeForm> {
     }
   }
 
-  void setFromFavorites(List<dynamic> fav) {
+  void setFromFavorites(List<dynamic> fav) async {
+    User user = await UserPreferences().getUser();
+    var profession = "${user.profession} ${user.name} ${user.fathername}";
     for (var i = 0; i < fav.length; i++) {
       final Map<String, dynamic> precriptionData = {
         'drug_name': fav[i]['drug_name'],
@@ -227,7 +236,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
         "takein": fav[i]['takein'],
         "frequency": fav[i]['frequency'],
         "drug": "",
-        "professional": "",
+        "professional": profession,
         "material_name": "",
         "size": "",
         "type": fav[i]['type'],
@@ -261,6 +270,16 @@ class _PrescribeFormState extends State<PrescribeForm> {
             "cns": "",
             "general_apearnce": ""
           },
+          "ix": {
+            "microbiology": ix.microbiology,
+            "pathologyindex": ix.pathologyindex,
+            "radiologyindex": ix.radiologyindex,
+            "chemistry": chemistry.toJson(),
+            "endocrinology": endocrinology.toJson(),
+            "hemathology": hematology.toJson(),
+            "serology": serology.toJson(),
+            "urine": urine.toJson()
+          }
         }
       };
       finaPrescription.add(precriptionData);
@@ -269,7 +288,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
 
   @override
   Widget build(BuildContext context) {
-    drugs = Provider.of<DrugProvider>(context, listen: true).drugs;
+    drugs = Provider.of<DrugProvider>(context).drugs;
     var patientProvider = Provider.of<PatientProvider>(context);
     return Form(
         // autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -456,7 +475,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Container(
-                                      width: 270,
+                                      width: 290,
                                       height: 40,
                                       child: Autocomplete(
                                         optionsBuilder:
@@ -495,7 +514,8 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                           return Container(
                                             height: textHeight,
                                             child: TextFormField(
-                                              controller: drugnameController,
+                                              controller:
+                                                  fieldTextEditingController,
                                               focusNode: fieldFocusNode,
                                               validator: (val) {
                                                 if (val.isEmpty) {
@@ -995,6 +1015,24 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                 ['msk'] = physical.msk;
                             finaPrescription[presIndex]["patient"]['px']
                                 ['gus'] = physical.gus;
+
+                            finaPrescription[presIndex]["patient"]['ix']
+                                ['microbiology'] = ix.microbiology;
+                            finaPrescription[presIndex]["patient"]['ix']
+                                ['pathologyindex'] = ix.pathologyindex;
+                            finaPrescription[presIndex]["patient"]['ix']
+                                ['radiologyindex'] = ix.radiologyindex;
+                            finaPrescription[presIndex]["patient"]['ix']
+                                ['chemistry'] = chemistry.toJson();
+
+                            finaPrescription[presIndex]["patient"]['ix']
+                                ['hemathology'] = hematology.toJson();
+                            finaPrescription[presIndex]["patient"]['ix']
+                                ['endocrinology'] = endocrinology.toJson();
+                            finaPrescription[presIndex]["patient"]['ix']
+                                ['serology'] = serology.toJson();
+                            finaPrescription[presIndex]["patient"]['ix']
+                                ['urine'] = urine.toJson();
                           });
                         }
                         widget.setPrescription(finaPrescription);

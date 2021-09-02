@@ -32,7 +32,7 @@ class ConsultProvider with ChangeNotifier {
     String token = prefs.getString('token');
     var image;
     if (file != null) {
-      await AuthProvider().uploadBackImage(file).then((res) {
+      await AuthProvider().uploadImage(file).then((res) {
         print('imageuriimageuriimageuri$res');
         if (res != null) {
           image = res;

@@ -6,17 +6,21 @@ class UserPreferences {
   Future<bool> saveUser(User user) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    prefs.setInt("userId", user.userId);
-    prefs.setInt("professionid", user.professionid);
-    prefs.setString("isFit", user.isFit);
-    prefs.setString("name", user.name);
-    prefs.setString("username", user.username);
+    prefs.setInt("userId", user.userId != null ? user.userId : 0);
+    prefs.setInt(
+        "professionid", user.professionid != null ? user.professionid : 0);
+    prefs.setString("isFit", user.isFit != null ? user.isFit : '');
+    prefs.setString("role", user.role != null ? user.role : '');
+    prefs.setString("name", user.name != null ? user.name : '');
+    prefs.setString("username", user.username != null ? user.username : '');
     prefs.setString("email", user.email != null ? user.email : '');
-    prefs.setString("phone", user.phone);
-    prefs.setString("profession", user.profession);
-    prefs.setString("token", user.token);
+    prefs.setString("phone", user.phone != null ? user.phone : '');
+    prefs.setString(
+        "profession", user.profession != null ? user.profession : '');
+    prefs.setString("token", user.token != null ? user.profession : '');
     prefs.setString("points", user.points != null ? user.points : "0");
-    prefs.setString("fathername", user.fathername);
+    prefs.setString(
+        "fathername", user.fathername != null ? user.fathername : '');
     prefs.setString("grandfathername",
         user.grandfathername != null ? user.grandfathername : '');
     prefs.setString("profile", user.profile != null ? user.profile : '');
@@ -47,6 +51,7 @@ class UserPreferences {
     String grandfathername = prefs.getString("grandfathername");
     String username = prefs.getString("username");
     String isFit = prefs.getString('isFit');
+    String role=prefs.getString('role');
     return User(
         userId: userId,
         isFit: isFit,
@@ -63,6 +68,7 @@ class UserPreferences {
         workplace: workplace,
         fathername: fathername,
         grandfathername: grandfathername,
+        role: role,
         username: username);
   }
 
