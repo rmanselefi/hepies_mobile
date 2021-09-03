@@ -4,6 +4,7 @@ import 'package:hepies/ui/doctor/medicalrecords/medical_records.dart';
 import 'package:hepies/ui/doctor/prescription/write_prescription.dart';
 import 'package:hepies/ui/pharmacy/ui/consults/share_consult.dart';
 import 'package:hepies/ui/pharmacy/ui/prescription/read_prescription.dart';
+import 'package:hepies/ui/pharmacy/welcome.dart';
 import 'package:hepies/ui/welcome.dart';
 
 class PharmacyFooter extends StatefulWidget {
@@ -29,7 +30,7 @@ class _PharmacyFooterState extends State<PharmacyFooter> {
           ),
           onPressed: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => PharmacyShareConsult()));
+                context, MaterialPageRoute(builder: (context) => WelcomePharmacy()));
           },
           child: Text('Home'),
         ),

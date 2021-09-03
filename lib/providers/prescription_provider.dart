@@ -6,6 +6,7 @@ import 'package:hepies/models/drug.dart';
 import 'package:hepies/models/favorites.dart';
 import 'package:hepies/models/patient.dart';
 import 'package:hepies/models/prescription.dart';
+import 'package:hepies/providers/patient_provider.dart';
 import 'package:hepies/util/app_url.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -17,9 +18,18 @@ enum PrescriptionStatus {
   Sending,
 }
 
+enum ReadStatus {
+  NotFetch,
+  Fetch,
+  Fetching,
+}
+
+
 class PrescriptionProvider with ChangeNotifier {
   PrescriptionStatus _sentStatus = PrescriptionStatus.NotSent;
   PrescriptionStatus get sentStatus => _sentStatus;
+  ReadStatus _fetchStatus = ReadStatus.NotFetch;
+  ReadStatus get readStatus => _fetchStatus;
   int _index = 0;
   int get prescriptionIndex => _index;
   String _status = 'add';
@@ -28,6 +38,7 @@ class PrescriptionProvider with ChangeNotifier {
   String get actionStatus => _actionStatus;
   List<dynamic> _prescription = [];
   List<dynamic> get prescription => _prescription;
+  List<dynamic> medical=[];
 
   Map<String, dynamic> _singlePrescription = {};
   Map<String, dynamic> get singlePrescription => _singlePrescription;
@@ -102,4 +113,66 @@ class PrescriptionProvider with ChangeNotifier {
     _prescription = prescriptions;
     notifyListeners();
   }
+
+
+  Future<List<dynamic>> readPrescription(var code) async {
+    _fetchStatus = ReadStatus.Fetching;
+    notifyListeners();
+    var result;
+    List<Consult> consults = [];
+    Response response = await get(Uri.parse("${AppUrl.readprescription}/$code"));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      _fetchStatus = ReadStatus.Fetch;
+      notifyListeners();
+      medical = json.decode(response.body);
+      print("consultconsultconsultconsultconsult ${medical.length}");
+      // notifyListeners();
+      return medical;
+    } else {
+      _fetchStatus = ReadStatus.NotFetch;
+      notifyListeners();
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    // return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> acceptPrescription(List id) async {
+    _sentStatus = PrescriptionStatus.Sending;
+    notifyListeners();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+    var result;
+    print("registrationData $id");
+    Response response = await post(Uri.parse(AppUrl.accept),
+        body: json.encode(id),
+        headers: {
+          'Content-Type': 'application/json',
+          HttpHeaders.authorizationHeader: "Bearer $token"
+        });
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final bool responseData = json.decode(response.body);
+      _sentStatus = PrescriptionStatus.Sent;
+      notifyListeners();
+      result = {
+        'status': true,
+        'message': 'Successful',
+        'consult': responseData
+      };
+    } else {
+      _sentStatus = PrescriptionStatus.NotSent;
+      notifyListeners();
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return result;
+  }
+
+
 }

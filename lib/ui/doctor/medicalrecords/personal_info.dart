@@ -45,6 +45,17 @@ class _PersonalInfoState extends State<PersonalInfo> {
             Text(
               '${patient['sex']}',
               style: TextStyle(fontSize: 18.0),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(
+              'Weight -- ',
+              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              '${patient['weight']}Kg',
+              style: TextStyle(fontSize: 18.0),
             )
           ],
         ),
