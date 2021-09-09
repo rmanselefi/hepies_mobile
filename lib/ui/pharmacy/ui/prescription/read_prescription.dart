@@ -40,16 +40,19 @@ class _ReadPrescriptionState extends State<ReadPrescription> {
                   SizedBox(
                     height: 15.0,
                   ),
-                  TextFormField(
-                    controller: codeController,
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.read_more,
-                          color: Color.fromRGBO(50, 62, 72, 1.0)),
-                      // hintText: hintText,
-                      contentPadding:
-                          EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5.0)),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      controller: codeController,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.read_more,
+                            color: Color.fromRGBO(50, 62, 72, 1.0)),
+                        // hintText: hintText,
+                        contentPadding:
+                            EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0)),
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -57,46 +60,49 @@ class _ReadPrescriptionState extends State<ReadPrescription> {
                   ),
                   prescriptionProvider.readStatus == ReadStatus.Fetching
                       ? loading
-                      : GestureDetector(
-                          onTap: () async {
-                            var res = await prescriptionProvider
-                                .readPrescription(codeController.text);
-                            print("objectobjectobjectobject $res");
-                            if (res != null) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        PrescriptionResult(res)),
-                              );
-                            } else {
-                              Flushbar(
-                                title: 'Error',
-                                message:
-                                    'Unable to read prescription. Make sure to provide correct code',
-                                duration: Duration(seconds: 10),
-                              ).show(context);
-                            }
-                          },
-                          child: Container(
-                            width: 180,
-                            height: 70,
-                            padding: EdgeInsets.all(10.0),
-                            decoration: BoxDecoration(
-                                color: Colors.greenAccent,
-                                borderRadius: BorderRadius.circular(40.0),
-                                border: Border.all(
-                                    color: Colors.black45, width: 1)),
-                            child: Center(
-                              child: Text(
-                                'READ',
-                                style: TextStyle(
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.bold),
+                      : Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: GestureDetector(
+                            onTap: () async {
+                              var res = await prescriptionProvider
+                                  .readPrescription(codeController.text);
+                              print("objectobjectobjectobject $res");
+                              if (res != null) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          PrescriptionResult(res)),
+                                );
+                              } else {
+                                Flushbar(
+                                  title: 'Error',
+                                  message:
+                                      'Unable to read prescription. Make sure to provide correct code',
+                                  duration: Duration(seconds: 10),
+                                ).show(context);
+                              }
+                            },
+                            child: Container(
+                              width: 180,
+                              height: 70,
+                              padding: EdgeInsets.all(10.0),
+                              decoration: BoxDecoration(
+                                  color: Colors.greenAccent,
+                                  borderRadius: BorderRadius.circular(40.0),
+                                  border: Border.all(
+                                      color: Colors.black45, width: 1)),
+                              child: Center(
+                                child: Text(
+                                  'READ',
+                                  style: TextStyle(
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
                             ),
                           ),
-                        ),
+                      ),
                 ],
               ),
             ),
@@ -111,7 +117,7 @@ class _ReadPrescriptionState extends State<ReadPrescription> {
     mainAxisAlignment: MainAxisAlignment.center,
     children: <Widget>[
       CircularProgressIndicator(),
-      Text("Sending your prescription ... Please wait")
+      Text("Reading prescription ... Please wait")
     ],
   );
 }

@@ -1,11 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:hepies/models/consult.dart';
 import 'package:hepies/util/app_url.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum Status {
   NotFetch,
@@ -16,7 +17,7 @@ enum Status {
 class PharmacyProvider with ChangeNotifier {
   Status _fetchStatus = Status.NotFetch;
   Status get fetchStatus => _fetchStatus;
-  List<dynamic> medical=[];
+  List<dynamic> medical = [];
   Future<List<dynamic>> getMedicalRecord(var code) async {
     _fetchStatus = Status.Fetching;
     notifyListeners();
@@ -42,7 +43,72 @@ class PharmacyProvider with ChangeNotifier {
     return json.decode(response.body);
   }
 
-  get getDrug{
+  Future<Map<String, dynamic>> addDrugToPharmacy(
+      String drug_name, String drug_id, String price) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String professionid = prefs.getInt('professionid').toString();
+    print("professionidprofessionid $professionid");
+    String token = prefs.getString('token');
+
+    var result;
+
+    final Map<String, dynamic> registrationData = {
+      'price': price,
+      'drug_name': drug_name,
+      'drug': drug_id,
+      'professional': professionid
+    };
+    print("registrationData $registrationData");
+    Response response = await post(Uri.parse(AppUrl.pharmacy),
+        body: json.encode(registrationData),
+        headers: {
+          'Content-Type': 'application/json',
+          HttpHeaders.authorizationHeader: "Bearer $token"
+        });
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      result = {
+        'status': true,
+        'message': 'Successful',
+      };
+    } else {
+      notifyListeners();
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return result;
+  }
+
+
+  Future<List<dynamic>> getMyPharmacy() async {
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String professionid = prefs.getInt('professionid').toString();
+    print("professionidprofessionid $professionid");
+    var result;
+    List<Consult> consults = [];
+    Response response = await get(Uri.parse("${AppUrl.mypharmacy}/$professionid"));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+
+      medical = json.decode(response.body);
+      print("consultconsultconsultconsultconsult ${medical.length}");
+      // notifyListeners();
+      return medical;
+    } else {
+
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return json.decode(response.body);
+  }
+
+
+  get getDrug {
     notifyListeners();
     return medical;
   }

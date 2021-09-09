@@ -3,6 +3,8 @@ import 'package:hepies/ui/doctor/drugs/drugs.dart';
 import 'package:hepies/ui/doctor/medicalrecords/medical_records.dart';
 import 'package:hepies/ui/doctor/prescription/write_prescription.dart';
 import 'package:hepies/ui/pharmacy/ui/consults/share_consult.dart';
+import 'package:hepies/ui/pharmacy/ui/history/history.dart';
+import 'package:hepies/ui/pharmacy/ui/mypharmacy/mypharmacy.dart';
 import 'package:hepies/ui/pharmacy/ui/prescription/read_prescription.dart';
 import 'package:hepies/ui/pharmacy/welcome.dart';
 import 'package:hepies/ui/welcome.dart';
@@ -62,7 +64,7 @@ class _PharmacyFooterState extends State<PharmacyFooter> {
           ),
           onPressed: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => MedicalRecord()));
+                context, MaterialPageRoute(builder: (context) => MyPharmacy()));
           },
           child: Text('My Pharmacy'),
         ),
@@ -78,7 +80,7 @@ class _PharmacyFooterState extends State<PharmacyFooter> {
           ),
           onPressed: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Drugs()));
+                context, MaterialPageRoute(builder: (context) => PharmacyHistory()));
           },
           child: Text('History'),
         )

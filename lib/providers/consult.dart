@@ -48,8 +48,10 @@ class ConsultProvider with ChangeNotifier {
     print("registrationData $registrationData");
     Response response = await post(Uri.parse(AppUrl.consults),
         body: json.encode(registrationData),
-        headers: {'Content-Type': 'application/json',
-          HttpHeaders.authorizationHeader: "Bearer $token"});
+        headers: {
+          'Content-Type': 'application/json',
+          HttpHeaders.authorizationHeader: "Bearer $token"
+        });
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Map<String, dynamic> responseData = json.decode(response.body);
@@ -62,6 +64,188 @@ class ConsultProvider with ChangeNotifier {
       };
     } else {
       notifyListeners();
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return result;
+  }
+
+  Future<List<dynamic>> getCommentByConsultId(var id) async {
+    var result;
+    List<Consult> consults = [];
+    Response response = await get(Uri.parse("${AppUrl.consults}/comment/$id"));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      print("mjbjhb ${response.body.length}");
+      return json.decode(response.body);
+    } else {
+      notifyListeners();
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return json.decode(response.body);
+  }
+
+  Future<int> getCommentsByConsultId(var id) async {
+    var result;
+    List<Consult> consults = [];
+    // getLikeByConsultIdForUser(id);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+    Response response =
+        await get(Uri.parse("${AppUrl.consults}/comments/$id"), headers: {
+      'Content-Type': 'application/json',
+      HttpHeaders.authorizationHeader: "Bearer $token"
+    });
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      print("comment_lenght ${response.body}");
+      return json.decode(response.body);
+    } else {
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return json.decode(response.body);
+  }
+
+  Future<int> getLikeByConsultIdForUser(var id) async {
+    var result;
+    List<Consult> consults = [];
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+    Response response =
+        await post(Uri.parse("${AppUrl.consults}/like/find/$id"), headers: {
+      'Content-Type': 'application/json',
+      HttpHeaders.authorizationHeader: "Bearer $token"
+    });
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      print("like_length ${response.body}");
+      return json.decode(response.body);
+    } else {
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return json.decode(response.body);
+  }
+
+  Future<int> getLikeByConsultId(var id) async {
+    var result;
+    List<Consult> consults = [];
+    Response response = await get(Uri.parse("${AppUrl.consults}/likes/$id"));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      print("comment_lenght ${response.body}");
+      return json.decode(response.body);
+    } else {
+      notifyListeners();
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> comment(
+      String topic, File file, var consultid) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+    var image;
+    if (file != null) {
+      await AuthProvider().uploadImage(file).then((res) {
+        print('imageuriimageuriimageuri$res');
+        if (res != null) {
+          image = res;
+        }
+      });
+    }
+    var result;
+
+    final Map<String, dynamic> registrationData = {
+      'comment': topic,
+      'image': image,
+    };
+    print("registrationData $registrationData");
+    Response response = await post(
+        Uri.parse("${AppUrl.consults}/comment/$consultid"),
+        body: json.encode(registrationData),
+        headers: {
+          'Content-Type': 'application/json',
+          HttpHeaders.authorizationHeader: "Bearer $token"
+        });
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      print("ResponseResponseResponse ${responseData}");
+      result = {
+        'status': true,
+        'message': 'Successful',
+        'consult': responseData
+      };
+    } else {
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return result;
+  }
+
+  Future<Map<String, dynamic>> likeConsult(var consultid) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+
+    var result;
+    Response response =
+        await post(Uri.parse("${AppUrl.consults}/like/$consultid"), headers: {
+      'Content-Type': 'application/json',
+      HttpHeaders.authorizationHeader: "Bearer $token"
+    });
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      print("ResponseResponseResponse ${responseData}");
+      result = {
+        'status': true,
+        'message': 'Successful',
+        'consult': responseData
+      };
+    } else {
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return result;
+  }
+
+  Future<Map<String, dynamic>> unlikeConsult(var consultid) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+
+    var result;
+    Response response =
+    await post(Uri.parse("${AppUrl.consults}/unlike/$consultid"), headers: {
+      'Content-Type': 'application/json',
+      HttpHeaders.authorizationHeader: "Bearer $token"
+    });
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+
+      result = {
+        'status': true,
+        'message': 'Successful',
+      };
+    } else {
       result = {
         'status': false,
         'message': json.decode(response.body)['error']

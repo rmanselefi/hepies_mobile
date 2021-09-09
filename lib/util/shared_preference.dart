@@ -17,7 +17,7 @@ class UserPreferences {
     prefs.setString("phone", user.phone != null ? user.phone : '');
     prefs.setString(
         "profession", user.profession != null ? user.profession : '');
-    prefs.setString("token", user.token != null ? user.profession : '');
+    prefs.setString("token", user.token != null ? user.token : '');
     prefs.setString("points", user.points != null ? user.points : "0");
     prefs.setString(
         "fathername", user.fathername != null ? user.fathername : '');

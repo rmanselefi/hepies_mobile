@@ -6,6 +6,7 @@ import 'package:hepies/providers/drug_provider.dart';
 import 'package:hepies/providers/favorites.dart';
 import 'package:hepies/providers/guidelines.dart';
 import 'package:hepies/providers/patient_provider.dart';
+import 'package:hepies/providers/pharmacy_provider.dart';
 import 'package:hepies/providers/prescription_provider.dart';
 import 'package:hepies/switcher.dart';
 import 'package:hepies/ui/auth/login.dart';
@@ -39,6 +40,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => PatientProvider()),
         ChangeNotifierProvider(create: (_) => GuidelinesProvider()),
         ChangeNotifierProvider(create: (_) => FavoritesProvider()),
+        ChangeNotifierProvider(create: (_) => PharmacyProvider()),
+
 
       ],
       child: MaterialApp(
