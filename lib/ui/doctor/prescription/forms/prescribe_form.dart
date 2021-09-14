@@ -321,15 +321,15 @@ class _PrescribeFormState extends State<PrescribeForm> {
                               onChanged: (String val) async {
                                 if (val.length > 9) {
                                   var res = await patientProvider
-                                      .getMedicalRecord(val);
-                                  if (res.length != 0) {
+                                      .getPatient(val);
+                                  if (res != null) {
                                     setState(() {
-                                      ageController.text = res[0]['age'];
-                                      _chosenValue = res[0]['sex'];
-                                      nameController.text = res[0]['name'];
+                                      ageController.text = res['age'];
+                                      _chosenValue = res['sex'];
+                                      nameController.text = res['name'];
                                       fnameController.text =
-                                          res[0]['fathername'];
-                                      weightController.text = res[0]['weight'];
+                                          res['fathername'];
+                                      weightController.text = res['weight'];
                                     });
                                   }
                                   setState(() {

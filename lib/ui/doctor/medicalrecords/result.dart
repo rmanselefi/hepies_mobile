@@ -1,11 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:hepies/providers/patient_provider.dart';
+import 'package:hepies/providers/prescription_provider.dart';
 import 'package:hepies/ui/doctor/medicalrecords/personal_info.dart';
 import 'package:intl/intl.dart';
 import 'package:hepies/ui/doctor/medicalrecords/add_history.dart';
 import 'package:hepies/ui/doctor/medicalrecords/result_detail.dart';
 import 'package:hepies/widgets/header.dart';
+import 'package:provider/provider.dart';
 import 'package:supercharged/supercharged.dart';
 
 class MedicalResult extends StatefulWidget {
@@ -18,107 +21,127 @@ class MedicalResult extends StatefulWidget {
 class _MedicalResultState extends State<MedicalResult> {
   @override
   Widget build(BuildContext context) {
-    var patient = widget.res[0];
-    var pres = patient['prescription'];
-    // final map = pres.groupBy<String, Map>((item) =>
-    // item['code'],
-    //   valueTransform: (item) => item..remove('code'),
-    // );
-
-    print("prespresprespresprespres ${pres}");
-    pres.sort((a, b) {
-      return b['createdAt']
-          .toString()
-          .toLowerCase()
-          .compareTo(a['createdAt'].toString().toLowerCase());
-    });
+    var res = widget.res;
+    var patient = widget.res[0]['patient'];
+    print("patientpatientpatientpatient $patient");
+    // var pres = patient['prescription'];
+    // // final map = pres.groupBy<String, Map>((item) =>
+    // // item['code'],
+    // //   valueTransform: (item) => item..remove('code'),
+    // // );
+    //
+    // print("prespresprespresprespres ${pres}");
+    // pres.sort((a, b) {
+    //   return b['createdAt']
+    //       .toString()
+    //       .toLowerCase()
+    //       .compareTo(a['createdAt'].toString().toLowerCase());
+    // });
     return SafeArea(
       child: Scaffold(
-        body: ListView(
+        body: Column(
           children: [
             Header(),
             SizedBox(
               height: 20.0,
             ),
-            Container(
-              padding: EdgeInsets.all(10.0),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      PersonalInfo(patient),
-                      MaterialButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.all(10.0),
+                child: ListView(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        PersonalInfo(patient),
+                        Expanded(
+                          child: MaterialButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text('Back'),
+                            color: Color(0xff07febb),
+                            textColor: Colors.black,
+                          ),
+                        )
+                      ],
+                    ),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      AddHistory(pageNumber: 0)));
                         },
-                        child: Text('Back'),
-                        color: Color(0xff07febb),
-                        textColor: Colors.black,
-                      )
-                    ],
-                  ),
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    AddHistory(pageNumber: 0)));
-                      },
-                      child: Container(
-                        width: 100,
-                        height: 40,
-                        alignment: Alignment.centerRight,
-                        decoration: BoxDecoration(
-                            border: Border.all(width: 1, color: Colors.white24),
-                            borderRadius: BorderRadius.circular(40.0),
-                            color: Colors.green),
-                        child: Center(
-                          child: Text('ADD'),
+                        child: Container(
+                          width: 100,
+                          height: 40,
+                          alignment: Alignment.centerRight,
+                          decoration: BoxDecoration(
+                              border:
+                                  Border.all(width: 1, color: Colors.white24),
+                              borderRadius: BorderRadius.circular(40.0),
+                              color: Colors.green),
+                          child: Center(
+                            child: Text('ADD'),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      height: 2 * MediaQuery.of(context).size.height / 3,
-                      child: ListView(
-                          children: pres.map<Widget>((e) {
-                        var date = DateFormat.yMMMd()
-                            .format(DateTime.parse(e['createdAt']));
-                        var hour = DateFormat.jm()
-                            .format(DateTime.parse(e['createdAt']));
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ResultDetail(patient,
-                                        e['createdAt'], e['professional'],e['code'])));
-                          },
-                          child: Container(
-                            margin: EdgeInsets.only(bottom: 10.0),
-                            padding: EdgeInsets.all(10.0),
-                            decoration: BoxDecoration(
-                                border:
-                                    Border.all(color: Colors.grey, width: 1)),
-                            child: Text(
-                              '$date                           $hour',
-                              style: TextStyle(fontSize: 23.0),
-                            ),
-                          ),
-                        );
-                      }).toList()),
+                    SizedBox(
+                      height: 20.0,
                     ),
-                  )
-                ],
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        height: 2 * MediaQuery.of(context).size.height / 3,
+                        child: ListView(
+                            children: res.map<Widget>((e) {
+                          var date = DateFormat.yMMMd()
+                              .format(DateTime.parse(e['createdAt']));
+                          var hour = DateFormat.jm()
+                              .format(DateTime.parse(e['createdAt']));
+                          return GestureDetector(
+                            onTap: () async {
+                              var pat = await Provider.of<PatientProvider>(
+                                      context,
+                                      listen: false)
+                                  .getPatientById(patient['id']);
+                              var prescription =
+                                  await Provider.of<PrescriptionProvider>(
+                                          context,
+                                          listen: false)
+                                      .readPrescription(e['code']);
+                              print("pattttttttttttttttt========>>>> $pat");
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ResultDetail(
+                                          pat,
+                                          e['createdAt'],
+                                          e['professional'],
+                                          prescription)));
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(bottom: 10.0),
+                              padding: EdgeInsets.all(10.0),
+                              decoration: BoxDecoration(
+                                  border:
+                                      Border.all(color: Colors.grey, width: 1)),
+                              child: Text(
+                                '$date                           $hour',
+                                style: TextStyle(fontSize: 23.0),
+                              ),
+                            ),
+                          );
+                        }).toList()),
+                      ),
+                    )
+                  ],
+                ),
               ),
             )
           ],
