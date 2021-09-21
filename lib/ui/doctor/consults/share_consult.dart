@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class ShareConsult extends StatefulWidget {
+  ShareConsult();
   @override
   _ShareConsultState createState() => _ShareConsultState();
 }
@@ -26,11 +27,10 @@ class _ShareConsultState extends State<ShareConsult> {
   @override
   Widget build(BuildContext context) {
     ConsultProvider consult = Provider.of<ConsultProvider>(context);
-
     return SafeArea(
       child: Column(
         children: [
-          Header(),
+          // Header(),
           SizedBox(
             height: 20.0,
           ),

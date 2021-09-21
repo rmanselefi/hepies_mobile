@@ -16,6 +16,7 @@ import 'package:hepies/ui/doctor/prescription/prescription_types/general_prescri
 import 'package:hepies/ui/doctor/prescription/prescription_types/instrument_prescription.dart';
 import 'package:hepies/ui/doctor/prescription/prescription_types/narcotic_prescription.dart';
 import 'package:hepies/ui/doctor/prescription/prescription_types/psychotropic_prescription.dart';
+import 'package:hepies/ui/welcome.dart';
 import 'package:hepies/util/shared_preference.dart';
 import 'package:provider/provider.dart';
 
@@ -250,7 +251,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                   ),
                   child: Center(
                       child: Text(
-                    'General',
+                    'Normal',
                     style: TextStyle(fontSize: 15.0),
                   )),
                 ),
@@ -329,7 +330,12 @@ class _WritePrescriptionState extends State<WritePrescription> {
                         ],
                       );
                     })
-                  : Container(),
+                  : Expanded(
+                      child: Container(
+                        child: Text(
+                            'Please contact your workplace to be authorized for writing psychotropic/narcotic medications'),
+                      ),
+                    ),
             ],
           ),
           Builder(builder: (context) {
@@ -355,7 +361,13 @@ class _WritePrescriptionState extends State<WritePrescription> {
           Row(
             children: [
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              Welcome()));
+                },
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: Container(
@@ -379,8 +391,6 @@ class _WritePrescriptionState extends State<WritePrescription> {
                   ? loading
                   : GestureDetector(
                       onTap: () async {
-
-
                         try {
                           if (pretype == "general" || pretype == "instrument") {
                             print("prescriptionprescription $prescription");
@@ -442,6 +452,11 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                       'Your prescriptions are sent succesfully',
                                   duration: Duration(seconds: 10),
                                 ).show(context);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            WritePrescription()));
                               } else {
                                 Flushbar(
                                   title: 'Error',

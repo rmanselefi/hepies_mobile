@@ -22,21 +22,9 @@ class _MedicalResultState extends State<MedicalResult> {
   @override
   Widget build(BuildContext context) {
     var res = widget.res;
+    res.sort((a, b) => b['createdAt'].compareTo(a['createdAt']));
     var patient = widget.res[0]['patient'];
-    print("patientpatientpatientpatient $patient");
-    // var pres = patient['prescription'];
-    // // final map = pres.groupBy<String, Map>((item) =>
-    // // item['code'],
-    // //   valueTransform: (item) => item..remove('code'),
-    // // );
-    //
-    // print("prespresprespresprespres ${pres}");
-    // pres.sort((a, b) {
-    //   return b['createdAt']
-    //       .toString()
-    //       .toLowerCase()
-    //       .compareTo(a['createdAt'].toString().toLowerCase());
-    // });
+
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -116,14 +104,16 @@ class _MedicalResultState extends State<MedicalResult> {
                                           listen: false)
                                       .readPrescription(e['code']);
                               print("pattttttttttttttttt========>>>> $pat");
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ResultDetail(
-                                          pat,
-                                          e['createdAt'],
-                                          e['professional'],
-                                          prescription)));
+                              if (prescription != null) {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ResultDetail(
+                                            pat,
+                                            e['createdAt'],
+                                            e['professional'],
+                                            prescription)));
+                              }
                             },
                             child: Container(
                               margin: EdgeInsets.only(bottom: 10.0),

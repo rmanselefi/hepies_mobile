@@ -7,6 +7,7 @@ import 'package:hepies/util/shared_preference.dart';
 import 'package:provider/provider.dart';
 
 class Header extends StatefulWidget {
+  Header();
   @override
   _HeaderState createState() => _HeaderState();
 }
@@ -23,7 +24,7 @@ class _HeaderState extends State<Header> {
       setState(() {
         name = user.name;
         profession = user.profession;
-        points=user.points;
+        points = user.points;
       });
     });
   }
@@ -54,7 +55,11 @@ class _HeaderState extends State<Header> {
         GestureDetector(
           onTap: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Welcome(currenIndex: 0,)));
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Welcome(
+                          currenIndex: 0,
+                        )));
           },
           child: GradientText(
             'Hepius',
@@ -67,7 +72,11 @@ class _HeaderState extends State<Header> {
         GestureDetector(
           onTap: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Points(points: points,)));
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Points(
+                          points: points,
+                        )));
           },
           child: Column(
             children: [
