@@ -22,24 +22,49 @@ class _LoginState extends State<Login> {
   final formKey = new GlobalKey<FormState>();
 
   String _username, _password;
+  bool _isObscure = true;
 
   @override
   Widget build(BuildContext context) {
     AuthProvider auth = Provider.of<AuthProvider>(context);
 
+    InputDecoration buildInputDecorationn(
+        String hintText, IconData icon) {
+      return InputDecoration(
+        prefixIcon: Icon(icon, color: Color.fromRGBO(50, 62, 72, 1.0)),
+        // hintText: hintText,
+        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+        suffixIcon: IconButton(
+            icon: Icon(_isObscure ? Icons.visibility : Icons.visibility_off),
+            onPressed: () {
+              setState(() {
+                _isObscure = !_isObscure;
+              });
+            }),
+      );
+    }
+
     final usernameField = TextFormField(
       autofocus: false,
       validator: (value) => value.isEmpty ? "Please enter username" : null,
       onSaved: (value) => _username = value,
-      decoration: buildInputDecoration("Confirm password", Icons.person),
+      decoration: InputDecoration(
+        prefixIcon: Icon(Icons.person, color: Color.fromRGBO(50, 62, 72, 1.0)),
+        // hintText: hintText,
+        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+
+      )
     );
 
     final passwordField = TextFormField(
       autofocus: false,
-      obscureText: true,
+      obscureText: _isObscure,
       validator: (value) => value.isEmpty ? "Please enter password" : null,
       onSaved: (value) => _password = value,
-      decoration: buildInputDecoration("Confirm password", Icons.lock),
+      decoration:
+      buildInputDecorationn("Confirm password", Icons.lock),
     );
 
     var loading = Row(
@@ -138,10 +163,12 @@ class _LoginState extends State<Login> {
                 SizedBox(height: 20.0),
                 auth.loggedInStatus == Status.Authenticating
                     ? loading
-                    : longButtons("Login",false, doLogin),
+                    : longButtons("Login", false, doLogin),
                 SizedBox(height: 5.0),
                 forgotLabel,
-                SizedBox(height: 50.0,),
+                SizedBox(
+                  height: 50.0,
+                ),
                 Center(child: Text("Copyright @2021 Hepius Trading PLC"))
               ],
             ),

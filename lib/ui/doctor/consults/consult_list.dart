@@ -139,30 +139,26 @@ class _ConsultListState extends State<ConsultList> {
                                                   .toString())),
                                         ],
                                       )
-                                    : Row(
-                                        children: [
-                                          TextButton.icon(
-                                              onPressed: () async {
-                                                var res = await Provider.of<
-                                                            ConsultProvider>(
-                                                        context,
-                                                        listen: false)
-                                                    .likeConsult(e['id']);
-                                                if (res['status']) {
-                                                  setState(() {
-                                                    Provider.of<ConsultProvider>(
-                                                            context,
-                                                            listen: false)
-                                                        .getLikeByConsultIdForUser(
-                                                            e['id']);
-                                                  });
-                                                }
-                                              },
-                                              icon: Icon(Icons.favorite_border),
-                                              label: Text(snapshot.data['likes']
-                                                  .toString())),
-                                        ],
-                                      );
+                                    : TextButton.icon(
+                                        onPressed: () async {
+                                          var res = await Provider.of<
+                                                      ConsultProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .likeConsult(e['id']);
+                                          if (res['status']) {
+                                            setState(() {
+                                              Provider.of<ConsultProvider>(
+                                                      context,
+                                                      listen: false)
+                                                  .getLikeByConsultIdForUser(
+                                                      e['id']);
+                                            });
+                                          }
+                                        },
+                                        icon: Icon(Icons.favorite_border),
+                                        label: Text(snapshot.data['likes']
+                                            .toString()));
                               }
                             })
                       ],

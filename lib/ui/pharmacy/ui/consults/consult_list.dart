@@ -94,7 +94,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                     ),
                     Row(
                       children: [
-                        FutureBuilder<int>(
+                        FutureBuilder<dynamic>(
                             future: Provider.of<ConsultProvider>(context,
                                     listen: false)
                                 .getLikeByConsultIdForUser(e['id']),
@@ -109,8 +109,9 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                     child: Text('No data to show'),
                                   );
                                 }
-                                return snapshot.data > 0
-                                    ? IconButton(
+                                print("snapshot.data ${snapshot.data}");
+                                return snapshot.data['length'] > 0
+                                    ? TextButton.icon(
                                         onPressed: () async {
                                           var res = await Provider.of<
                                                       ConsultProvider>(context,
@@ -129,8 +130,10 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                         icon: Icon(
                                           Icons.favorite,
                                           color: Colors.red,
-                                        ))
-                                    : IconButton(
+                                        ),
+                                        label: Text(
+                                            snapshot.data['likes'].toString()))
+                                    : TextButton.icon(
                                         onPressed: () async {
                                           var res = await Provider.of<
                                                       ConsultProvider>(context,
@@ -146,7 +149,9 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                             });
                                           }
                                         },
-                                        icon: Icon(Icons.favorite_border));
+                                        icon: Icon(Icons.favorite_border),
+                                        label: Text(
+                                            snapshot.data['likes'].toString()));
                               }
                             })
                       ],
