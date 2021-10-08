@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:hepies/providers/consult.dart';
 import 'package:hepies/ui/doctor/consults/consult_list.dart';
@@ -12,6 +11,8 @@ import 'package:hepies/widgets/footer.dart';
 import 'package:hepies/widgets/header.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class PharmacyShareComment extends StatefulWidget {
   final consultid;
@@ -85,28 +86,34 @@ class _PharmacyShareConsultState extends State<PharmacyShareComment> {
                                   setState(() {
                                     consult.getCommentByConsultId(consultid);
                                   });
-
-                                  Flushbar(
-                                    title: 'Comment Shared',
-                                    duration: Duration(seconds: 10),
-                                    message:
-                                        'Your Comment is shared succesfully',
-                                  ).show(context);
+                                  showTopSnackBar(
+                                    context,
+                                    CustomSnackBar.success(
+                                      message:
+                                      "Your Comment is shared succesfully",
+                                    ),
+                                  );
                                 }
                               } catch (e) {
                                 print("eeeee ${e}");
-                                Flushbar(
-                                  title: "Sharing Comment Failed",
-                                  message: 'Unable to share your Comment',
-                                  duration: Duration(seconds: 10),
-                                ).show(context);
+
+                                showTopSnackBar(
+                                  context,
+                                  CustomSnackBar.error(
+                                    message:
+                                    "Unable to share your Comment",
+                                  ),
+                                );
                               }
                             } else {
-                              Flushbar(
-                                title: "Invalid form",
-                                message: "Please Complete the form properly",
-                                duration: Duration(seconds: 10),
-                              ).show(context);
+
+                              showTopSnackBar(
+                                context,
+                                CustomSnackBar.error(
+                                  message:
+                                  "Please Complete the form properly",
+                                ),
+                              );
                             }
                           },
                           child: Text('Consult'),

@@ -17,8 +17,10 @@ class AppUrl {
   static const String patient = baseURL + "/patient/patient";
   static const String patienturl = baseURL + "/patient";
   static const String mypharmacy = baseURL + "/pharmacy";
+  static const String change_password = baseURL + "/users/change/password";
 
   static const String readprescription = baseURL + "/prescription/code";
+  static const String readprescriptionPhone = baseURL + "/prescription/phone";
 
   static const String forgotPassword = baseURL + "/forgot-password";
 }

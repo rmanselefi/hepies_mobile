@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:hepies/models/user.dart';
 import 'package:hepies/providers/auth.dart';
@@ -12,6 +11,8 @@ import 'package:hepies/widgets/header.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
 import 'package:provider/provider.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class EditProfile extends StatefulWidget {
   @override
@@ -558,22 +559,24 @@ class _EditProfileState extends State<EditProfile>
                       points: points,
                       interests: interests,
                       license: license);
-                  var res =
-                      await Provider.of<UserProvider>(context, listen: false)
-                          .updateProfile(
-                              user, file != null ? File(file.path) : null,profile);
+                  var res = await Provider.of<UserProvider>(context,
+                          listen: false)
+                      .updateProfile(
+                          user, file != null ? File(file.path) : null, profile);
                   if (res['status']) {
-                    Flushbar(
-                      title: 'Sent',
-                      message: 'Your profile is updated',
-                      duration: Duration(seconds: 10),
-                    ).show(context);
+                    showTopSnackBar(
+                      context,
+                      CustomSnackBar.success(
+                        message: 'Your profile is updated',
+                      ),
+                    );
                   } else {
-                    Flushbar(
-                      title: 'Error',
-                      message: 'Unable to update your profile',
-                      duration: Duration(seconds: 10),
-                    ).show(context);
+                    showTopSnackBar(
+                      context,
+                      CustomSnackBar.error(
+                        message: "Unable to update your profile",
+                      ),
+                    );
                   }
                 },
                 shape: new RoundedRectangleBorder(

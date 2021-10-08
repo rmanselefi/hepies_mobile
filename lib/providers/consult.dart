@@ -9,7 +9,15 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+enum ConsultStatus{
+  Shared,
+  NotShared,
+  Sharing
+}
+
 class ConsultProvider with ChangeNotifier {
+  ConsultStatus _shareStatus = ConsultStatus.NotShared;
+  ConsultStatus get shareStatus => _shareStatus;
   Future<List<dynamic>> getConsults() async {
     var result;
     List<Consult> consults = [];
@@ -28,6 +36,8 @@ class ConsultProvider with ChangeNotifier {
   }
 
   Future<Map<String, dynamic>> share(String topic, File file) async {
+    _shareStatus = ConsultStatus.Sharing;
+    notifyListeners();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
     var image;
@@ -45,7 +55,6 @@ class ConsultProvider with ChangeNotifier {
       'topic': topic,
       'image': image,
     };
-    print("registrationData $registrationData");
     Response response = await post(Uri.parse(AppUrl.consults),
         body: json.encode(registrationData),
         headers: {
@@ -56,6 +65,7 @@ class ConsultProvider with ChangeNotifier {
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Map<String, dynamic> responseData = json.decode(response.body);
       print("ResponseResponseResponse ${responseData}");
+      _shareStatus = ConsultStatus.Shared;
       notifyListeners();
       result = {
         'status': true,
@@ -63,6 +73,7 @@ class ConsultProvider with ChangeNotifier {
         'consult': responseData
       };
     } else {
+      _shareStatus = ConsultStatus.NotShared;
       notifyListeners();
       result = {
         'status': false,
@@ -114,7 +125,7 @@ class ConsultProvider with ChangeNotifier {
     return json.decode(response.body);
   }
 
-  Future<int> getLikeByConsultIdForUser(var id) async {
+  Future<dynamic> getLikeByConsultIdForUser(var id) async {
     var result;
     List<Consult> consults = [];
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -126,7 +137,7 @@ class ConsultProvider with ChangeNotifier {
     });
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      print("like_length ${response.body}");
+      print("like_length ${json.decode(response.body)}");
       return json.decode(response.body);
     } else {
       result = {
@@ -137,7 +148,7 @@ class ConsultProvider with ChangeNotifier {
     return json.decode(response.body);
   }
 
-  Future<int> getLikeByConsultId(var id) async {
+  Future<dynamic> getLikeByConsultId(var id) async {
     var result;
     List<Consult> consults = [];
     Response response = await get(Uri.parse("${AppUrl.consults}/likes/$id"));

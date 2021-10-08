@@ -69,18 +69,12 @@ class _ImageInputState extends State<ImageInputConsult> {
             _openImagePicker(context);
           },
           label: Text(
-            'Add Image',
+            '',
             style: TextStyle(color: Theme.of(context).accentColor),
           ),
-          icon: Icon(Icons.add_a_photo_outlined),
+          icon: Icon(Icons.attach_file_outlined),
         ),
-        SizedBox(height: 10.0),
-        _image == null
-            ? Text('Please Pick an image')
-            : Container(
-          width: 200.0,
-          child: Text(_image.name.toString()),
-        )
+
       ],
     );
   }

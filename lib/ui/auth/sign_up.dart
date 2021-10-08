@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:hepies/models/user.dart';
 import 'package:hepies/providers/auth.dart';
@@ -13,6 +12,8 @@ import 'package:hepies/util/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
 import 'package:provider/provider.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -21,6 +22,8 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   final formKey = new GlobalKey<FormState>();
+  bool rememberMe = false;
+
 
   String _username,
       _password,
@@ -176,27 +179,36 @@ class _RegisterState extends State<Register> {
                 _professionController, interests, File(file.path))
             .then((response) {
           if (response['status']) {
-            Flushbar(
-              title: "Registration Successful. Please login ",
-              message: response.toString(),
-              duration: Duration(seconds: 10),
-            ).show(context);
+
+            showTopSnackBar(
+              context,
+              CustomSnackBar.error(
+                message:
+                "Registration Successful. Please login",
+              ),
+            );
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => Login()));
           } else {
-            Flushbar(
-              title: "Registration Failed",
-              message: response.toString(),
-              duration: Duration(seconds: 10),
-            ).show(context);
+
+            showTopSnackBar(
+              context,
+              CustomSnackBar.error(
+                message:
+                response.toString(),
+              ),
+            );
           }
         });
       } else {
-        Flushbar(
-          title: "Invalid form",
-          message: "Please Complete the form properly",
-          duration: Duration(seconds: 10),
-        ).show(context);
+
+        showTopSnackBar(
+          context,
+          CustomSnackBar.error(
+            message:
+            "Please Complete the form properly",
+          ),
+        );
       }
     };
 
@@ -253,10 +265,24 @@ class _RegisterState extends State<Register> {
                     label("Confirm Password"),
                     SizedBox(height: 10.0),
                     confirmPassword,
+                    CheckboxListTile(
+                      title: Text('By signing up, you agree to our Terms Conditions and Privacy Policy'),
+                      value: rememberMe,
+                      onChanged: (newValue) {
+                        setState(() {
+                          rememberMe = newValue;
+                        });
+                      },
+                      controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
+                    ),
                     SizedBox(height: 20.0),
                     auth.loggedInStatus == Status.Authenticating
                         ? loading
-                        : longButtons("Login", doRegister),
+                        : longButtons("Signup", !rememberMe,doRegister),
+                    SizedBox(
+                      height: 10.0,
+                    ),
+
                   ],
                 ),
               ),

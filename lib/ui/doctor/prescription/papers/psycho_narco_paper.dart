@@ -1,10 +1,11 @@
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:hepies/models/favorites.dart';
 import 'package:hepies/providers/prescription_provider.dart';
 import 'package:hepies/util/database_helper.dart';
 import 'package:hepies/util/shared_preference.dart';
 import 'package:provider/provider.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class PsychoNarcoPaper extends StatefulWidget {
   final finaPrescription;
@@ -67,12 +68,14 @@ class _PrescriptionPaperState extends State<PsychoNarcoPaper> {
                                     var res = await db.saveFavorites(favorites);
                                   });
                                   Navigator.pop(context, 'OK');
-                                  Flushbar(
-                                    title: 'Saved',
-                                    message:
-                                        'Your prescriptions are saved to favorites successfully',
-                                    duration: Duration(seconds: 10),
-                                  ).show(context);
+
+                                  showTopSnackBar(
+                                    context,
+                                    CustomSnackBar.success(
+                                      message:
+                                      "Your prescriptions are saved to favorites successfully",
+                                    ),
+                                  );
                                 },
                                 child: const Text('OK'),
                               ),

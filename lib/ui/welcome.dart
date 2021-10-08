@@ -54,7 +54,7 @@ class _WelcomeState extends State<Welcome> {
         child: AppBar(
           automaticallyImplyLeading: false,
           titleSpacing: 0.0,
-          // elevation: 0.0,
+          elevation: 0.0,
           backgroundColor: Colors.white,
           leading: Builder(
             builder: (BuildContext context) {

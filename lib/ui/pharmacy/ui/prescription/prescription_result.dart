@@ -1,8 +1,9 @@
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:hepies/providers/prescription_provider.dart';
 import 'package:hepies/ui/doctor/medicalrecords/personal_info.dart';
 import 'package:provider/provider.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class PrescriptionResult extends StatefulWidget {
   final result;
@@ -134,18 +135,22 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
                               var res = await prescProvider
                                   .acceptPrescription(selectedList);
                               if (res['status']) {
-                                Flushbar(
-                                  title: 'Sent',
-                                  message:
-                                      'Your prescriptions are sent succesfully',
-                                  duration: Duration(seconds: 10),
-                                ).show(context);
+
+                                showTopSnackBar(
+                                  context,
+                                  CustomSnackBar.success(
+                                    message:
+                                    'Your prescriptions are sent succesfully',
+                                  ),
+                                );
                               } else {
-                                Flushbar(
-                                  title: 'Error',
-                                  message: 'Unable to send your prescriptions',
-                                  duration: Duration(seconds: 10),
-                                ).show(context);
+                                showTopSnackBar(
+                                  context,
+                                  CustomSnackBar.error(
+                                    message:
+                                    'Unable to send your prescriptions'
+                                  ),
+                                );
                               }
                             },
                             child: Align(

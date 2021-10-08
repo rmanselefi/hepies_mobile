@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-MaterialButton longButtons(String title, Function fun,
+MaterialButton longButtons(String title, bool disabled, Function fun,
     {Color color: const Color(0xff07febb), Color textColor: Colors.black}) {
   return MaterialButton(
-    onPressed: fun,
+    onPressed: disabled ? null : fun,
     textColor: textColor,
     color: color,
     child: SizedBox(
@@ -11,9 +11,7 @@ MaterialButton longButtons(String title, Function fun,
       child: Text(
         title,
         textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: 20.0
-        ),
+        style: TextStyle(fontSize: 20.0),
       ),
     ),
     height: 45,

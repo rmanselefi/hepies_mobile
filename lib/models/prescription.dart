@@ -8,6 +8,7 @@ class Prescription {
   String frequency;
   String drug;
   String ampule;
+  String diagnosis;
   Patient patient;
 
   Prescription(

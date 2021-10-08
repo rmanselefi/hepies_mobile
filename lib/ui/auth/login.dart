@@ -1,4 +1,3 @@
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:hepies/models/user.dart';
 import 'package:hepies/providers/auth.dart';
@@ -11,6 +10,8 @@ import 'package:hepies/util/validators.dart';
 import 'package:hepies/util/widgets.dart';
 
 import 'package:provider/provider.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -97,11 +98,12 @@ class _LoginState extends State<Login> {
                   MaterialPageRoute(builder: (context) => WelcomePharmacy()));
             }
           } else {
-            Flushbar(
-              title: "Failed Login",
-              message: response['message'].toString(),
-              duration: Duration(seconds: 3),
-            ).show(context);
+            showTopSnackBar(
+              context,
+              CustomSnackBar.error(
+                message: response['message'].toString(),
+              ),
+            );
           }
         });
       } else {
@@ -136,9 +138,11 @@ class _LoginState extends State<Login> {
                 SizedBox(height: 20.0),
                 auth.loggedInStatus == Status.Authenticating
                     ? loading
-                    : longButtons("Login", doLogin),
+                    : longButtons("Login",false, doLogin),
                 SizedBox(height: 5.0),
-                forgotLabel
+                forgotLabel,
+                SizedBox(height: 50.0,),
+                Center(child: Text("Copyright @2021 Hepius Trading PLC"))
               ],
             ),
           ),

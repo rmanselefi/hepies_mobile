@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:hepies/providers/consult.dart';
 import 'package:hepies/ui/doctor/consults/consult_list.dart';
@@ -11,6 +10,8 @@ import 'package:hepies/widgets/footer.dart';
 import 'package:hepies/widgets/header.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class PharmacyShareConsult extends StatefulWidget {
   @override
@@ -26,6 +27,13 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
     print("_formData_formData_formData${file}");
   }
 
+  var loading = Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: <Widget>[
+      CircularProgressIndicator(),
+      Text("Sharing....")
+    ],
+  );
   @override
   Widget build(BuildContext context) {
     ConsultProvider consult = Provider.of<ConsultProvider>(context);
@@ -57,54 +65,63 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
                     ),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ImageInputConsult(_setImage),
-                    SizedBox(
-                      width: 100,
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Container(
+                    padding: EdgeInsets.only(right: 15.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ImageInputConsult(_setImage),
+                        consult.shareStatus == ConsultStatus.Sharing
+                            ? loading
+                            : Align(
+                            alignment: Alignment.topRight,
+                            child: OutlinedButton(
+                              onPressed: () async {
+                                final form = formKey.currentState;
+                                if (form.validate()) {
+                                  form.save();
+                                  try {
+                                    var photo =
+                                    file != null ? File(file.path) : null;
+                                    var res =
+                                    await consult.share(_topic, photo);
+                                    if (res['status']) {
+                                      consult.getConsults();
+                                      showTopSnackBar(
+                                        context,
+                                        CustomSnackBar.success(
+                                          message:
+                                          "Your consult is uploaded succesfully",
+                                        ),
+                                      );
+                                    }
+                                  } catch (e) {
+                                    print("eeeee ${e}");
+                                    showTopSnackBar(
+                                      context,
+                                      CustomSnackBar.error(
+                                        message:
+                                        "Unable to share your consult",
+                                      ),
+                                    );
+                                  }
+                                } else {
+                                  showTopSnackBar(
+                                    context,
+                                    CustomSnackBar.error(
+                                      message:
+                                      "Please Complete the form properly",
+                                    ),
+                                  );
+                                }
+                              },
+                              child: Text('Consult'),
+                            )),
+                      ],
                     ),
-                    ButtonTheme(
-                      minWidth: 100,
-                      padding: EdgeInsets.only(right: 10.0),
-                      child: OutlinedButton(
-                        onPressed: () async {
-                          final form = formKey.currentState;
-                          print("_topic_topic_topic_topic ${_topic}");
-                          if (form.validate()) {
-                            form.save();
-                            try {
-                              var photo = file != null ? File(file.path) : null;
-                              var res = await consult.share(_topic, photo);
-                              if (res['status']) {
-                                consult.getConsults();
-                                Flushbar(
-                                  title: 'Consult Shared',
-                                  duration: Duration(seconds: 10),
-                                  message:
-                                      'Your consult is uploaded succesfully',
-                                ).show(context);
-                              }
-                            } catch (e) {
-                              print("eeeee ${e}");
-                              Flushbar(
-                                title: "Sharing Consult Failed",
-                                message: 'Unable to share your consult',
-                                duration: Duration(seconds: 10),
-                              ).show(context);
-                            }
-                          } else {
-                            Flushbar(
-                              title: "Invalid form",
-                              message: "Please Complete the form properly",
-                              duration: Duration(seconds: 10),
-                            ).show(context);
-                          }
-                        },
-                        child: Text('Consult'),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
                 SizedBox(
                   height: 20.0,
