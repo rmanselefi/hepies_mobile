@@ -46,7 +46,7 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
             height: 20.0,
           ),
           Expanded(
-            child: ListView(
+            child: Column(
               children: [
                 Form(
                   key: formKey,
@@ -55,13 +55,13 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
                     child: TextFormField(
                       onSaved: (value) => _topic = value,
                       validator: (value) =>
-                          value.isEmpty ? "Please enter your consult" : null,
-                      maxLines: 8,
+                      value.isEmpty ? "Please enter your consult" : null,
+                      maxLines: 4,
                       decoration: InputDecoration(
-                          hintText: 'Share consult',
+                          hintText: 'Share, consult, promote, inform..',
                           border: OutlineInputBorder(
                               borderSide:
-                                  BorderSide(color: Colors.grey, width: 2))),
+                              BorderSide(color: Colors.grey.shade50, width: 0.5))),
                     ),
                   ),
                 ),
@@ -123,9 +123,7 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 20.0,
-                ),
+
                 Divider(),
                 FutureBuilder<List<dynamic>>(
                     future: Provider.of<ConsultProvider>(context).getConsults(),
@@ -142,7 +140,7 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
                         }
 
                         print("objectobjectobject ${snapshot.data}");
-                        return PharmacyConsultList(snapshot.data);
+                        return Expanded(child: PharmacyConsultList(snapshot.data));
                       }
                     }),
               ],

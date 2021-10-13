@@ -43,6 +43,10 @@ dependencies:
   supercharged:
   dropdownfield:
   top_snackbar_flutter: ^1.0.1
+  readmore:
+  custom_check_box:
+  timeago:
+  bouncing_widget:
 
 dev_dependencies:
   flutter_test:

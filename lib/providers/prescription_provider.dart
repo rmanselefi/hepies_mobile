@@ -59,15 +59,13 @@ class PrescriptionProvider with ChangeNotifier {
     return json.decode(response.body);
   }
 
-  Future<Map<String, dynamic>> writePrescription(List precriptionData,List patientData) async {
+  Future<Map<String, dynamic>> writePrescription(
+      List precriptionData, List patientData) async {
     _sentStatus = PrescriptionStatus.Sending;
     notifyListeners();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
-    var sendData={
-      'patient':patientData,
-      'prescription':precriptionData
-    };
+    var sendData = {'patient': patientData, 'prescription': precriptionData};
     var result;
     print("registrationData $sendData");
     Response response = await post(Uri.parse(AppUrl.write),
@@ -117,13 +115,12 @@ class PrescriptionProvider with ChangeNotifier {
     notifyListeners();
   }
 
-
   void setFavoriteCombinations(List<dynamic> prescriptions) {
     _prescription = prescriptions;
     notifyListeners();
   }
 
-  Future<List<dynamic>> readPrescription(var code) async {
+  Future<dynamic> readPrescription(var code) async {
     _fetchStatus = ReadStatus.Fetching;
     notifyListeners();
     String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
@@ -140,7 +137,8 @@ class PrescriptionProvider with ChangeNotifier {
       medical = json.decode(response.body);
       print("consultconsultconsultconsultconsult ${medical.length}");
       // notifyListeners();
-      return medical;
+      result = {'status': true, 'isPhone': isPhone, 'data': medical};
+
     } else {
       _fetchStatus = ReadStatus.NotFetch;
       notifyListeners();
@@ -149,6 +147,7 @@ class PrescriptionProvider with ChangeNotifier {
         'message': json.decode(response.body)['error']
       };
     }
+    return result;
     // return json.decode(response.body);
   }
 

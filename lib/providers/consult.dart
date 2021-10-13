@@ -9,11 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-enum ConsultStatus{
-  Shared,
-  NotShared,
-  Sharing
-}
+enum ConsultStatus { Shared, NotShared, Sharing }
 
 class ConsultProvider with ChangeNotifier {
   ConsultStatus _shareStatus = ConsultStatus.NotShared;
@@ -168,6 +164,8 @@ class ConsultProvider with ChangeNotifier {
 
   Future<Map<String, dynamic>> comment(
       String topic, File file, var consultid) async {
+    _shareStatus = ConsultStatus.Sharing;
+    notifyListeners();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
     var image;
@@ -197,12 +195,16 @@ class ConsultProvider with ChangeNotifier {
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Map<String, dynamic> responseData = json.decode(response.body);
       print("ResponseResponseResponse ${responseData}");
+      _shareStatus = ConsultStatus.Shared;
+      notifyListeners();
       result = {
         'status': true,
         'message': 'Successful',
         'consult': responseData
       };
     } else {
+      _shareStatus = ConsultStatus.NotShared;
+      notifyListeners();
       result = {
         'status': false,
         'message': json.decode(response.body)['error']
@@ -245,13 +247,12 @@ class ConsultProvider with ChangeNotifier {
 
     var result;
     Response response =
-    await post(Uri.parse("${AppUrl.consults}/unlike/$consultid"), headers: {
+        await post(Uri.parse("${AppUrl.consults}/unlike/$consultid"), headers: {
       'Content-Type': 'application/json',
       HttpHeaders.authorizationHeader: "Bearer $token"
     });
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-
       result = {
         'status': true,
         'message': 'Successful',

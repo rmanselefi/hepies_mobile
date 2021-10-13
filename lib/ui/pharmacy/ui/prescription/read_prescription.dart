@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hepies/providers/patient_provider.dart';
 import 'package:hepies/providers/prescription_provider.dart';
 import 'package:hepies/ui/pharmacy/ui/prescription/prescription_result.dart';
+import 'package:hepies/ui/pharmacy/ui/prescription/result_phone.dart';
 import 'package:hepies/ui/pharmacy/widgets/footer.dart';
 import 'package:hepies/ui/pharmacy/widgets/header.dart';
 import 'package:provider/provider.dart';
@@ -62,25 +63,34 @@ class _ReadPrescriptionState extends State<ReadPrescription> {
                   prescriptionProvider.readStatus == ReadStatus.Fetching
                       ? loading
                       : Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: GestureDetector(
+                          padding: const EdgeInsets.all(8.0),
+                          child: GestureDetector(
                             onTap: () async {
                               var res = await prescriptionProvider
                                   .readPrescription(codeController.text);
                               print("objectobjectobjectobject $res");
-                              if (res != null) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          PrescriptionResult(res)),
-                                );
+                              if (res['status']) {
+                                if (res['isPhone']) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            PrescriptionResultPhone(res['data'])),
+                                  );
+                                } else {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            PrescriptionResult(res)),
+                                  );
+                                }
                               } else {
                                 showTopSnackBar(
                                   context,
                                   CustomSnackBar.error(
                                     message:
-                                    "Unable to read prescription. Make sure to provide correct code",
+                                        "Unable to read prescription. Make sure to provide correct code",
                                   ),
                                 );
                               }
@@ -104,7 +114,7 @@ class _ReadPrescriptionState extends State<ReadPrescription> {
                               ),
                             ),
                           ),
-                      ),
+                        ),
                 ],
               ),
             ),

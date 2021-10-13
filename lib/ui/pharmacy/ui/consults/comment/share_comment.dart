@@ -30,6 +30,11 @@ class _PharmacyShareConsultState extends State<PharmacyShareComment> {
     print("_formData_formData_formData${file}");
   }
 
+  var loading = Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: <Widget>[CircularProgressIndicator(), Text("Sharing....")],
+  );
+
   @override
   Widget build(BuildContext context) {
     ConsultProvider consult = Provider.of<ConsultProvider>(context);
@@ -53,8 +58,8 @@ class _PharmacyShareConsultState extends State<PharmacyShareComment> {
                       child: TextFormField(
                         onSaved: (value) => _topic = value,
                         validator: (value) =>
-                            value.isEmpty ? "Please enter your consult" : null,
-                        maxLines: 8,
+                            value.isEmpty ? "Please enter your comment" : null,
+                        maxLines: 3,
                         decoration: InputDecoration(
                             hintText: 'Comment',
                             border: OutlineInputBorder(
@@ -63,83 +68,87 @@ class _PharmacyShareConsultState extends State<PharmacyShareComment> {
                       ),
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ImageInputConsult(_setImage),
-                      SizedBox(
-                        width: 100,
-                      ),
-                      ButtonTheme(
-                        minWidth: 100,
-                        padding: EdgeInsets.only(right: 10.0),
-                        child: OutlinedButton(
-                          onPressed: () async {
-                            final form = formKey.currentState;
-                            print("_topic_topic_topic_topic ${_topic}");
-                            if (form.validate()) {
-                              form.save();
-                              try {
-                                var photo = file != null ? File(file.path) : null;
-                                var res = await consult.comment(_topic, photo,consultid);
-                                if (res['status']) {
-                                  setState(() {
-                                    consult.getCommentByConsultId(consultid);
-                                  });
-                                  showTopSnackBar(
-                                    context,
-                                    CustomSnackBar.success(
-                                      message:
-                                      "Your Comment is shared succesfully",
-                                    ),
-                                  );
-                                }
-                              } catch (e) {
-                                print("eeeee ${e}");
+                  consult.shareStatus == ConsultStatus.Sharing
+                      ? loading
+                      : Align(
+                          alignment: Alignment.topRight,
+                          child: Container(
+                            padding: EdgeInsets.only(right: 15.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                ImageInputConsult(_setImage),
+                                OutlinedButton(
+                                  onPressed: () async {
+                                    final form = formKey.currentState;
+                                    print("_topic_topic_topic_topic ${_topic}");
+                                    if (form.validate()) {
+                                      form.save();
+                                      try {
+                                        var photo = file != null
+                                            ? File(file.path)
+                                            : null;
+                                        var res = await consult.comment(
+                                            _topic, photo, consultid);
+                                        if (res['status']) {
+                                          setState(() {
+                                            consult.getCommentByConsultId(
+                                                consultid);
+                                          });
+                                          showTopSnackBar(
+                                            context,
+                                            CustomSnackBar.success(
+                                              message:
+                                                  "Your Comment is shared succesfully",
+                                            ),
+                                          );
+                                        }
+                                      } catch (e) {
+                                        print("eeeee ${e}");
 
-                                showTopSnackBar(
-                                  context,
-                                  CustomSnackBar.error(
-                                    message:
-                                    "Unable to share your Comment",
-                                  ),
-                                );
-                              }
-                            } else {
-
-                              showTopSnackBar(
-                                context,
-                                CustomSnackBar.error(
-                                  message:
-                                  "Please Complete the form properly",
+                                        showTopSnackBar(
+                                          context,
+                                          CustomSnackBar.error(
+                                            message:
+                                                "Unable to share your Comment",
+                                          ),
+                                        );
+                                      }
+                                    } else {
+                                      showTopSnackBar(
+                                        context,
+                                        CustomSnackBar.error(
+                                          message:
+                                              "Please Complete the form properly",
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  child: Text('Comment'),
                                 ),
-                              );
-                            }
-                          },
-                          child: Text('Consult'),
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
                   SizedBox(
                     height: 20.0,
                   ),
                   Divider(),
                   FutureBuilder<List<dynamic>>(
-                      future: Provider.of<ConsultProvider>(context).getCommentByConsultId(consultid),
+                      future: Provider.of<ConsultProvider>(context)
+                          .getCommentByConsultId(consultid),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) {
                           return Center(
                             child: CircularProgressIndicator(),
                           );
                         } else {
-                          if (snapshot.data == null) {
+                          if (snapshot.data == null ||
+                              snapshot.data.length == 0) {
                             return Center(
-                              child: Text('No data to show'),
+                              child: Text('No comment under this consult'),
                             );
                           }
-
-                          print("objectobjectobject ${snapshot.data}");
                           return PharmacyCommentList(snapshot.data);
                         }
                       }),

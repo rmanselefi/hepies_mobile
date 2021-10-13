@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hepies/providers/consult.dart';
 import 'package:hepies/ui/doctor/consults/consult_list.dart';
+import 'package:hepies/ui/pharmacy/ui/consults/comment/comment_list.dart';
+import 'package:hepies/ui/pharmacy/ui/consults/consult_list.dart';
 import 'package:hepies/util/image_consult.dart';
 import 'package:hepies/widgets/footer.dart';
 import 'package:hepies/widgets/header.dart';
@@ -28,10 +30,7 @@ class _ShareConsultState extends State<ShareConsult> {
 
   var loading = Row(
     mainAxisAlignment: MainAxisAlignment.center,
-    children: <Widget>[
-      CircularProgressIndicator(),
-      Text("Sharing....")
-    ],
+    children: <Widget>[CircularProgressIndicator(), Text("Sharing....")],
   );
   @override
   Widget build(BuildContext context) {
@@ -44,7 +43,7 @@ class _ShareConsultState extends State<ShareConsult> {
             height: 20.0,
           ),
           Expanded(
-            child: ListView(
+            child: Column(
               children: [
                 Form(
                   key: formKey,
@@ -58,8 +57,8 @@ class _ShareConsultState extends State<ShareConsult> {
                       decoration: InputDecoration(
                           hintText: 'Share, consult, promote, inform..',
                           border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.grey.shade50, width: 0.5))),
+                              borderSide: BorderSide(
+                                  color: Colors.grey.shade50, width: 0.5))),
                     ),
                   ),
                 ),
@@ -81,8 +80,9 @@ class _ShareConsultState extends State<ShareConsult> {
                                     if (form.validate()) {
                                       form.save();
                                       try {
-                                        var photo =
-                                            file != null ? File(file.path) : null;
+                                        var photo = file != null
+                                            ? File(file.path)
+                                            : null;
                                         var res =
                                             await consult.share(_topic, photo);
                                         if (res['status']) {
@@ -121,9 +121,7 @@ class _ShareConsultState extends State<ShareConsult> {
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: 20.0,
-                ),
+
                 Divider(),
                 FutureBuilder<List<dynamic>>(
                     future: Provider.of<ConsultProvider>(context).getConsults(),
@@ -133,14 +131,13 @@ class _ShareConsultState extends State<ShareConsult> {
                           child: CircularProgressIndicator(),
                         );
                       } else {
-                        if (snapshot.data == null) {
+                        if (snapshot.data == null ||
+                            snapshot.data.length == 0) {
                           return Center(
                             child: Text('No data to show'),
                           );
                         }
-
-                        print("objectobjectobject ${snapshot.data}");
-                        return ConsultList(snapshot.data);
+                        return PharmacyConsultList(snapshot.data);
                       }
                     }),
               ],

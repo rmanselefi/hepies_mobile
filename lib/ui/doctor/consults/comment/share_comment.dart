@@ -29,7 +29,13 @@ class _PharmacyShareConsultState extends State<ShareComment> {
     file = image;
     print("_formData_formData_formData${file}");
   }
-
+  var loading = Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: <Widget>[
+      CircularProgressIndicator(),
+      Text("Commenting....")
+    ],
+  );
   @override
   Widget build(BuildContext context) {
     ConsultProvider consult = Provider.of<ConsultProvider>(context);
@@ -53,8 +59,8 @@ class _PharmacyShareConsultState extends State<ShareComment> {
                       child: TextFormField(
                         onSaved: (value) => _topic = value,
                         validator: (value) =>
-                            value.isEmpty ? "Please enter your consult" : null,
-                        maxLines: 8,
+                            value.isEmpty ? "Please enter your comment" : null,
+                        maxLines: 4,
                         decoration: InputDecoration(
                             hintText: 'Comment',
                             border: OutlineInputBorder(
@@ -67,16 +73,13 @@ class _PharmacyShareConsultState extends State<ShareComment> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       ImageInputConsult(_setImage),
-                      SizedBox(
-                        width: 100,
-                      ),
-                      ButtonTheme(
-                        minWidth: 100,
-                        padding: EdgeInsets.only(right: 10.0),
+                      consult.shareStatus == ConsultStatus.Sharing
+                          ? loading:
+                      Align(
+                        alignment: Alignment.topRight,
                         child: OutlinedButton(
                           onPressed: () async {
                             final form = formKey.currentState;
-                            print("_topic_topic_topic_topic ${_topic}");
                             if (form.validate()) {
                               form.save();
                               try {
