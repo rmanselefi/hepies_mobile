@@ -41,7 +41,7 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
     return SafeArea(
       child: Column(
         children: [
-          Header(),
+          // Header(),
           SizedBox(
             height: 20.0,
           ),

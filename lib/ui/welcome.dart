@@ -6,6 +6,7 @@ import 'package:hepies/ui/doctor/consults/share_consult.dart';
 import 'package:hepies/ui/doctor/drugs/drugs.dart';
 import 'package:hepies/ui/doctor/points/points.dart';
 import 'package:hepies/ui/doctor/profile/edit_profile.dart';
+import 'package:hepies/ui/pharmacy/ui/consults/share_consult.dart';
 import 'package:hepies/util/gradient_text.dart';
 import 'package:hepies/util/shared_preference.dart';
 import 'package:hepies/widgets/drawer.dart';
@@ -152,7 +153,7 @@ class _WelcomeState extends State<Welcome> {
         ),
       ),
       drawer: DrawerCustom(),
-      body: ShareConsult(),
+      body: PharmacyShareConsult(),
     ));
   }
 }
