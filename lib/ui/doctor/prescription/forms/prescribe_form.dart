@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:hepies/models/chemistry.dart';
 import 'package:hepies/models/drug.dart';
 import 'package:hepies/models/dx.dart';
@@ -82,11 +83,13 @@ class _PrescribeFormState extends State<PrescribeForm> {
   var ix = new Investigation();
   final TextEditingController _controller = new TextEditingController();
   int presIndex = 0;
-
+  bool isAmpule = true;
+  bool isEvery = true;
   var _currentSelectedValue;
   bool rememberMe = false;
   var from = "";
 
+  var _labelController = "Y";
   @override
   void initState() {
     // TODO: implement initState
@@ -204,7 +207,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                       border: OutlineInputBorder(),
                       hintText: 'Route',
                       hintStyle:
-                          TextStyle(color: Colors.redAccent, fontSize: 12.0),
+                          TextStyle(color: Colors.redAccent, fontSize: 15.0),
                       suffixIcon: Container(
                         width: 10.0,
                         margin: const EdgeInsets.only(left: 5.0),
@@ -241,13 +244,27 @@ class _PrescribeFormState extends State<PrescribeForm> {
                   width: 80.0,
                   child: new TextField(
                     controller: everyController,
+                    onChanged: (val) {
+                      if (val.isNotEmpty) {
+                        setState(() {
+                          isAmpule = false;
+                        });
+                      }
+                      if (val.isEmpty) {
+                        setState(() {
+                          isAmpule = true;
+                        });
+                      }
+                    },
                     decoration: InputDecoration(
                       contentPadding:
                           EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                       border: OutlineInputBorder(),
                       hintText: 'Every',
-                      hintStyle:
-                          TextStyle(color: Colors.redAccent, fontSize: 12.0),
+                      enabled: isEvery,
+                      hintStyle: TextStyle(
+                          color: isEvery ? Colors.redAccent : Colors.grey,
+                          fontSize: 15.0),
                       suffixIcon: Container(
                         width: 10.0,
                         margin: const EdgeInsets.only(left: 5.0),
@@ -320,6 +337,23 @@ class _PrescribeFormState extends State<PrescribeForm> {
   Widget build(BuildContext context) {
     drugs = Provider.of<DrugProvider>(context).drugs;
     var patientProvider = Provider.of<PatientProvider>(context);
+    final professionField = DropdownButtonFormField(
+      decoration: InputDecoration(contentPadding: EdgeInsets.all(0.0)),
+      icon: Visibility (visible:false, child: Icon(Icons.arrow_downward)),
+      value: _labelController,
+      items: ["Y", "M", "D"]
+          .map((label) => DropdownMenuItem(
+                child: Text(label.toString()),
+                value: label,
+              ))
+          .toList(),
+      hint: Text(''),
+      onChanged: (value) {
+        setState(() {
+          _labelController = value;
+        });
+      },
+    );
     return Form(
         // autovalidateMode: AutovalidateMode.onUserInteraction,
         key: _formKey,
@@ -333,7 +367,20 @@ class _PrescribeFormState extends State<PrescribeForm> {
               Container(
                 color: widget.color.withOpacity(0.3),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    CheckboxListTile(
+                      title: Text("Favorite"),
+                      value: rememberMe,
+                      onChanged: (newValue) {
+                        setState(() {
+                          rememberMe = newValue;
+                        });
+                      },
+                      controlAffinity: ListTileControlAffinity
+                          .leading, //  <-- leading Checkbox
+                    ),
                     Row(
                       children: [
                         Padding(
@@ -343,6 +390,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                             height: 40.0,
                             child: TextFormField(
                               controller: phoneController,
+                              maxLength: 13,
                               onSaved: (value) {
                                 setState(() {
                                   patient.phone = value;
@@ -358,7 +406,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                       _chosenValue = res['sex'];
                                       nameController.text = res['name'];
                                       fnameController.text = res['fathername'];
-                                      weightController.text = res['weight'];
                                     });
                                   }
                                   setState(() {
@@ -367,6 +414,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                 }
                               },
                               decoration: InputDecoration(
+                                  counterText: "",
                                   suffix: patientProvider.fetchStatus ==
                                           Status.Fetching
                                       ? Container(
@@ -385,38 +433,77 @@ class _PrescribeFormState extends State<PrescribeForm> {
                             ),
                           ),
                         ),
-                        Container(
-                          width: 80,
-                          height: 40.0,
-                          child: TextFormField(
-                            controller: ageController,
-                            onSaved: (value) => patient.age = value,
-                            onChanged: (val) {
-                              setState(() {
-                                patient.age = val;
-                              });
-                            },
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                hintText: rememberMe ? 'Age' : 'Age (Required)',
-                                hintStyle: TextStyle(
-                                    color: !rememberMe
-                                        ? Colors.redAccent
-                                        : Colors.black26)),
+                        // Container(
+                        //   width: 80,
+                        //   height: 40.0,
+                        //   child: TextFormField(
+                        //     controller: ageController,
+                        //     onSaved: (value) => patient.age = value,
+                        //     onChanged: (val) {
+                        //       setState(() {
+                        //         patient.age = val;
+                        //       });
+                        //     },
+                        //     keyboardType: TextInputType.number,
+                        //     decoration: InputDecoration(
+                        //         border: OutlineInputBorder(),
+                        //         hintText: rememberMe ? 'Age' : 'Age (Required)',
+                        //         hintStyle: TextStyle(
+                        //             color: !rememberMe
+                        //                 ? Colors.redAccent
+                        //                 : Colors.black26)),
+                        //   ),
+                        // ),
+                        Expanded(
+                          child: Container(
+                            width: 80,
+                            height: 40,
+                            child: Row(
+                              children: [
+                                Flexible(
+                                    flex: 1,
+                                    child: TextFormField(
+                                      controller: ageController,
+                                      keyboardType: TextInputType.number,
+                                      inputFormatters: <TextInputFormatter>[],
+                                      decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.all(0.0),
+                                          // border: OutlineInputBorder(),
+                                          hintText: rememberMe
+                                              ? 'Age'
+                                              : 'Age (Required)',
+                                          hintStyle: TextStyle(
+                                              color: !rememberMe
+                                                  ? Colors.redAccent
+                                                  : Colors.black26)),
+                                      onChanged: (String newValue) {
+                                        patient.age = newValue;
+                                      },
+                                    )),
+                                Flexible(
+                                  flex: 1,
+                                  child: professionField,
+                                )
+                              ],
+                            ),
                           ),
                         ),
                         SizedBox(
-                          width: 3.0,
+                          width: 10.0,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(5.0),
+                        Container(
+                          width: 80,
+                          height: 50.0,
+                          padding: const EdgeInsets.only(left: 5.0),
                           child: DropdownButton<String>(
-                            focusColor: Colors.white,
+                            // decoration:
+                            //     InputDecoration(border: OutlineInputBorder()),
+                            focusColor: Colors.blueAccent,
                             value: _chosenValue,
                             elevation: 5,
                             style: TextStyle(color: Colors.white),
                             iconEnabledColor: Colors.black,
+                            isExpanded: true,
                             items: <String>[
                               'Male',
                               'Female',
@@ -578,11 +665,13 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                                     fieldTextEditingController,
                                                 FocusNode fieldFocusNode,
                                                 VoidCallback onFieldSubmitted) {
+                                              drugnameController =
+                                                  fieldTextEditingController;
                                               return Container(
                                                 height: 42.0,
                                                 child: TextFormField(
                                                   controller:
-                                                      fieldTextEditingController,
+                                                      drugnameController,
                                                   focusNode: fieldFocusNode,
                                                   decoration: InputDecoration(
                                                       border:
@@ -642,12 +731,25 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                                 setState(() {
                                                   prescription.takein = val;
                                                 });
+                                                if (val.isNotEmpty) {
+                                                  setState(() {
+                                                    isAmpule = false;
+                                                  });
+                                                }
+                                                if (val.isEmpty) {
+                                                  setState(() {
+                                                    isAmpule = true;
+                                                  });
+                                                }
                                               },
+                                              enabled: isEvery,
                                               decoration: InputDecoration(
                                                   border: OutlineInputBorder(),
                                                   hintText: 'For',
                                                   hintStyle: TextStyle(
-                                                      color: Colors.redAccent)),
+                                                      color: isEvery
+                                                          ? Colors.redAccent
+                                                          : Colors.grey)),
                                             ),
                                           ),
                                           Text(
@@ -667,14 +769,26 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                                   setState(() {
                                                     prescription.ampule = val;
                                                   });
+                                                  if (val.isNotEmpty) {
+                                                    setState(() {
+                                                      isEvery = false;
+                                                    });
+                                                  }
+                                                  if (val.isEmpty) {
+                                                    setState(() {
+                                                      isEvery = true;
+                                                    });
+                                                  }
                                                 },
                                                 decoration: InputDecoration(
                                                     border:
                                                         OutlineInputBorder(),
                                                     hintText: 'Ampule',
+                                                    enabled: isAmpule,
                                                     hintStyle: TextStyle(
-                                                        color:
-                                                            Colors.redAccent)),
+                                                        color: isAmpule
+                                                            ? Colors.redAccent
+                                                            : Colors.grey)),
                                               ),
                                             ),
                                           ),
@@ -759,17 +873,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
                         ),
                       ),
                     ),
-                    CheckboxListTile(
-                      title: Text("Favorite"),
-                      value: rememberMe,
-                      onChanged: (newValue) {
-                        setState(() {
-                          rememberMe = newValue;
-                        });
-                      },
-                      controlAffinity: ListTileControlAffinity
-                          .leading, //  <-- leading Checkbox
-                    )
                   ],
                 ),
               ),
@@ -858,11 +961,13 @@ class _PrescribeFormState extends State<PrescribeForm> {
                         final Map<String, dynamic> patientData = {
                           "name": patient.name,
                           "age": patient.age,
+                          "age_label": _labelController,
                           "fathername": patient.fathername,
                           "grandfathername": "kebede",
                           "phone": patient.phone,
                           "sex": _chosenValue,
                           "weight": patient.weight,
+                          "professionid": user.professionid
                         };
                         final Map<String, dynamic> precriptionData = {
                           'drug_name': _selectedAnimal != null
@@ -891,9 +996,10 @@ class _PrescribeFormState extends State<PrescribeForm> {
                           finaPrescription.add(precriptionData);
                         });
                       } else {
+                        Provider.of<PrescriptionProvider>(context,
+                                listen: false)
+                            .resetStatus();
                         setState(() {
-                          status = 'add';
-                          action_status = 'manipulate';
                           finaPrescription[presIndex]['drug_name'] =
                               _selectedAnimal;
                           finaPrescription[presIndex]["strength"] =
@@ -982,7 +1088,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Container(
-            width: 270,
+            width: MediaQuery.of(context).size.width - 20,
             height: 40,
             child: TextFormField(
               controller: materialController,

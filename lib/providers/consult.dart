@@ -164,6 +164,7 @@ class ConsultProvider with ChangeNotifier {
 
   Future<Map<String, dynamic>> comment(
       String topic, File file, var consultid) async {
+    print("filefilefile $file");
     _shareStatus = ConsultStatus.Sharing;
     notifyListeners();
     SharedPreferences prefs = await SharedPreferences.getInstance();

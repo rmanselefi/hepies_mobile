@@ -7,6 +7,7 @@ import 'package:hepies/models/favorites.dart';
 import 'package:hepies/models/patient.dart';
 import 'package:hepies/models/prescription.dart';
 import 'package:hepies/providers/patient_provider.dart';
+import 'package:hepies/providers/user_provider.dart';
 import 'package:hepies/util/app_url.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -151,15 +152,16 @@ class PrescriptionProvider with ChangeNotifier {
     // return json.decode(response.body);
   }
 
-  Future<Map<String, dynamic>> acceptPrescription(List id) async {
+  Future<Map<String, dynamic>> acceptPrescription(List id,List pres_id) async {
     _sentStatus = PrescriptionStatus.Sending;
     notifyListeners();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
+    List<dynamic> output = pres_id.where((element) => !id.contains(element)).toList();
     var result;
-    print("registrationData $id");
+    print("registrationData $output");
     Response response =
-        await post(Uri.parse(AppUrl.accept), body: json.encode(id), headers: {
+        await post(Uri.parse(AppUrl.accept), body: json.encode(output), headers: {
       'Content-Type': 'application/json',
       HttpHeaders.authorizationHeader: "Bearer $token"
     });

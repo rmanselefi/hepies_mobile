@@ -47,6 +47,9 @@ dependencies:
   custom_check_box:
   timeago:
   bouncing_widget:
+  dio:
+  percent_indicator:
+  flutter_pdfview:
 
 dev_dependencies:
   flutter_test:

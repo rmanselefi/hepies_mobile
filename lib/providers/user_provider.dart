@@ -9,11 +9,7 @@ import 'package:hepies/util/shared_preference.dart';
 import 'package:http/http.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
-enum ChangeStatus {
-  NotChanged,
-  Changed,
-  Changing
-}
+enum ChangeStatus { NotChanged, Changed, Changing }
 
 class UserProvider with ChangeNotifier {
   Status _loggedInStatus = Status.NotLoggedIn;
@@ -98,6 +94,37 @@ class UserProvider with ChangeNotifier {
     var registrationData = {'password': password};
     Response response = await put(
         Uri.parse(AppUrl.change_password + '/$user_id'),
+        body: json.encode(registrationData),
+        headers: {'Content-Type': 'application/json'});
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      // final Map<String, dynamic> responseData = json.decode(response.body);
+      print("ResponseResponseResponse ${response.body}");
+
+      _changedStatus = ChangeStatus.Changed;
+      notifyListeners();
+
+      result = {'status': true, 'message': 'Successful', 'user': response.body};
+    } else {
+      _changedStatus = ChangeStatus.NotChanged;
+      notifyListeners();
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return result;
+  }
+
+  Future<Map<String, dynamic>> rewardPoint(var point) async {
+    _changedStatus = ChangeStatus.Changing;
+    notifyListeners();
+
+    var result;
+    var user = await UserPreferences().getUser();
+    var user_id = user.professionid;
+    var registrationData = {'points': point};
+    Response response = await put(Uri.parse(AppUrl.reward + '/$user_id'),
         body: json.encode(registrationData),
         headers: {'Content-Type': 'application/json'});
 

@@ -33,26 +33,30 @@ class _MyPharmacyState extends State<MyPharmacy> {
                           controller: priceController,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
+                            hintText: 'Price',
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(5.0)),
                           ),
                         ),
                       ),
-                      ElevatedButton(
-                          onPressed: () async {
-                            var res = await Provider.of<PharmacyProvider>(
-                                    context,
-                                    listen: false)
-                                .addDrugToPharmacy(
-                                    drug_name, drug_id, priceController.text);
-                            if (res['status']) {
-                              setState(() {
-                                Provider.of<PharmacyProvider>(context,listen: false).getMyPharmacy();
-                              });
-                              Navigator.of(context).pop();
-                            }
-                          },
-                          child: Text('Add'))
+                      Container(
+                        width: 100.0,
+                        child: OutlinedButton(
+                            onPressed: () async {
+                              var res = await Provider.of<PharmacyProvider>(
+                                      context,
+                                      listen: false)
+                                  .addDrugToPharmacy(
+                                      drug_name, drug_id, priceController.text);
+                              if (res['status']) {
+                                setState(() {
+                                  Provider.of<PharmacyProvider>(context,listen: false).getMyPharmacy();
+                                });
+                                Navigator.of(context).pop();
+                              }
+                            },
+                            child: Text('Add')),
+                      )
                     ],
                   ),
                 ),

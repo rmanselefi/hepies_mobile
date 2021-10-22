@@ -33,7 +33,7 @@ class _DrawerCustomState extends State<DrawerCustom> {
         children: <Widget>[
           AppBar(
             automaticallyImplyLeading: false,
-            title: Text("Hepius"),
+            title: Text("WorkenehApp"),
             backgroundColor: Color(0xff0FF683).withOpacity(0.9),
           ),
           Container(

@@ -84,7 +84,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                             }
                           },
                           child: rowSingleButton(
-                              color: Colors.redAccent,
+                              color: Colors.blueAccent,
                               name: "Like",
                               iconImage: Icons.thumb_up_sharp,
                               isHover: false),
@@ -132,20 +132,18 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
   }
 
   Widget _listPostWidget() {
-    return Expanded(
-        child: MediaQuery.removePadding(
+    return MediaQuery.removePadding(
       context: context,
       removeTop: true,
       child: ListView.builder(
         controller: _scrollController,
+        shrinkWrap: true,
         itemCount: widget.consults.length,
         itemBuilder: (BuildContext context, int index) {
           var e = widget.consults[index];
-          var date = DateFormat.yMMMd().format(DateTime.parse(e['createdAt']));
-          var hour = DateFormat.jm().format(DateTime.parse(e['createdAt']));
+
           DateTime time = DateTime.parse(e['createdAt']);
-          var duration = timeago.format(time).substring(0, 4);
-          print("timeago ${timeago.format(time).substring(0, 4)}");
+          var duration = timeago.format(time);
           return Container(
             padding: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
             margin: EdgeInsets.only(bottom: 0.0, top: 8),
@@ -260,11 +258,11 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                       },
                                       icon: Icon(
                                         Icons.thumb_up_sharp,
-                                        color: Colors.blueAccent,
+                                        color: Colors.grey,
                                         size: 15,
                                       ),
                                       label: Text(
-                                          "${snapshot.data['likes'].toString()} likes"));
+                                          "${snapshot.data['likes'].toString()} likes", style: TextStyle(color: Colors.grey),));
                                 }
                               }),
 
@@ -300,8 +298,12 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                             }
                             return Row(
                               children: [
-                                Text(snapshot.data.toString()),
-                                Text(" comments")
+                                Text(
+                                  snapshot.data.toString(),
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                                Text(" comments",
+                                    style: TextStyle(color: Colors.grey))
                               ],
                             );
                             // return TextButton.icon(
@@ -328,7 +330,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
           );
         },
       ),
-    ));
+    );
   }
 
   @override

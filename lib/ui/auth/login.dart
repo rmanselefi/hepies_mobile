@@ -32,7 +32,7 @@ class _LoginState extends State<Login> {
         String hintText, IconData icon) {
       return InputDecoration(
         prefixIcon: Icon(icon, color: Color.fromRGBO(50, 62, 72, 1.0)),
-        // hintText: hintText,
+        hintText: hintText,
         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
         suffixIcon: IconButton(
@@ -51,7 +51,7 @@ class _LoginState extends State<Login> {
       onSaved: (value) => _username = value,
       decoration: InputDecoration(
         prefixIcon: Icon(Icons.person, color: Color.fromRGBO(50, 62, 72, 1.0)),
-        // hintText: hintText,
+        hintText: "Username",
         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
 
@@ -64,7 +64,7 @@ class _LoginState extends State<Login> {
       validator: (value) => value.isEmpty ? "Please enter password" : null,
       onSaved: (value) => _password = value,
       decoration:
-      buildInputDecorationn("Confirm password", Icons.lock),
+      buildInputDecorationn("Password", Icons.lock),
     );
 
     var loading = Row(
@@ -142,12 +142,11 @@ class _LoginState extends State<Login> {
           padding: EdgeInsets.all(40.0),
           child: Form(
             key: formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: ListView(
               children: [
                 Center(
                   child: Text(
-                    'Hepies',
+                    'WorkenehApp',
                     style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
                   ),
@@ -167,9 +166,9 @@ class _LoginState extends State<Login> {
                 SizedBox(height: 5.0),
                 forgotLabel,
                 SizedBox(
-                  height: 50.0,
+                  height: 300.0,
                 ),
-                Center(child: Text("Copyright @2021 Hepius Trading PLC"))
+                Center(child: Text("Copyright @2021 Hepius Pvt.Ltd.Co"))
               ],
             ),
           ),

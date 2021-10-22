@@ -143,7 +143,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
     // _setPrescription(favorites);
   }
 
-  void _setPrescription(List<dynamic> pres, List<dynamic> pat ) {
+  void _setPrescription(List<dynamic> pres, List<dynamic> pat) {
     setState(() {
       prescription = pres;
       patient = pat;
@@ -338,14 +338,63 @@ class _WritePrescriptionState extends State<WritePrescription> {
                         ],
                       );
                     })
-                  : Expanded(
-                      child: Container(
-                        child: Text(
-                          'Please contact your workplace to be authorized for writing psychotropic/narcotic medications',
-                          style: TextStyle(fontSize: 13.0),
-                        ),
-                      ),
-                    ),
+                  : Builder(builder: (context) {
+                      return Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              showTopSnackBar(
+                                context,
+                                CustomSnackBar.error(
+                                  message:
+                                      "Please contact your workplace to be authorized for writing psychotropic/narcotic medications",
+                                ),
+                              );
+                            },
+                            child: Container(
+                              height: 30,
+                              width: 80,
+                              decoration: BoxDecoration(
+                                color: Colors.redAccent[400],
+                                border:
+                                    Border.all(color: Colors.black45, width: 2),
+                              ),
+                              child: Center(
+                                  child: Text(
+                                'Psychotropic',
+                                style: TextStyle(fontSize: 14.0),
+                              )),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10.0,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              showTopSnackBar(
+                                context,
+                                CustomSnackBar.error(
+                                  message:
+                                      "Please contact your workplace to be authorized for writing psychotropic/narcotic medications",
+                                ),
+                              );
+                            },
+                            child: Container(
+                              height: 30,
+                              width: 80,
+                              decoration: BoxDecoration(
+                                color: Colors.purple,
+                                border:
+                                    Border.all(color: Colors.black45, width: 2),
+                              ),
+                              child: Center(
+                                  child: Text('Narcotic',
+                                      style: TextStyle(fontSize: 15.0))),
+                            ),
+                          ),
+                        ],
+                      );
+                    })
             ],
           ),
           Builder(builder: (context) {
@@ -394,7 +443,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                             prescription.forEach((element) async {
                               Favorites favorites = new Favorites(
                                   drug_name: element['drug_name'],
-                                  drug:int.parse(element['drug']),
+                                  drug: int.parse(element['drug']),
                                   name: favoriteController.text,
                                   profession_id: user.professionid,
                                   route: element['route'],
@@ -470,7 +519,8 @@ class _WritePrescriptionState extends State<WritePrescription> {
                         try {
                           if (pretype == "general" || pretype == "instrument") {
                             print("prescriptionprescription $prescription");
-                            if (prescription.length != 0 && patient.length!=0) {
+                            if (prescription.length != 0 &&
+                                patient.length != 0) {
                               for (var i = 0; i < patient.length; i++) {
                                 var phone = patient[i]['phone'];
                                 var name = patient[i]['name'];
@@ -495,8 +545,8 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                   return;
                                 }
                               }
-                              var res = await prescProvider
-                                  .writePrescription(prescription,patient);
+                              var res = await prescProvider.writePrescription(
+                                  prescription, patient);
                               if (res['status']) {
                                 Provider.of<PrescriptionProvider>(context,
                                         listen: false)
@@ -527,8 +577,8 @@ class _WritePrescriptionState extends State<WritePrescription> {
                             }
                           } else {
                             if (psycoPrescription.length != 0) {
-                              var res = await prescProvider
-                                  .writePrescription(psycoPrescription,patient);
+                              var res = await prescProvider.writePrescription(
+                                  psycoPrescription, patient);
                               if (res['status']) {
                                 Provider.of<PrescriptionProvider>(context,
                                         listen: false)

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hepies/providers/prescription_provider.dart';
 import 'package:hepies/ui/doctor/medicalrecords/personal_info.dart';
+import 'package:hepies/ui/pharmacy/welcome.dart';
 import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
@@ -25,11 +26,16 @@ class _PrescriptionResultState extends State<PrescriptionResultPhone> {
   @override
   Widget build(BuildContext context) {
     var prescProvider = Provider.of<PrescriptionProvider>(context);
-    print("readreadread ${widget.result}");
+
     List<dynamic> result = widget.result;
     var patient = result[0];
     var prescription=result[0]['prescription'];
-    var notReadPrescription = prescription.where((i) => i['status']=="NotRead").toList();
+    List<dynamic> notReadPrescription = prescription.where((i) => i['status']=="NotRead").toList();
+    List<dynamic> list_id=[];
+    notReadPrescription.forEach((element) {
+      list_id.add(element['id']);
+    });
+    print("readreadread $list_id");
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -81,21 +87,49 @@ class _PrescriptionResultState extends State<PrescriptionResultPhone> {
                                               fontSize: 20.0),
                                         ),
                                       ),
-
-                                      Checkbox(
-                                        value: selectedList.contains(e['id']),
-
-                                        onChanged: (bool value) {
+                                      InkWell(
+                                        child: Container(
+                                          width: 20,
+                                          height: 20,
+                                          margin:EdgeInsets.only(right: 10.0),
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Colors.black26, width: 1.5)),
+                                          child: selectedList.contains(e['id'])
+                                              ? FittedBox(
+                                              child: Icon(
+                                                Icons.cancel,
+                                                size: 10,
+                                              ))
+                                              : Container(),
+                                        ),
+                                        onTap: () {
                                           setState(() {
-                                            if (value) {
+                                            var selected =
+                                            selectedList.contains(e['id']);
+                                            if (!selected) {
                                               selectedList.add(e['id']);
                                             } else {
                                               selectedList.remove(e['id']);
                                             }
                                           });
-                                        },
 
+                                        },
                                       ),
+                                      // Checkbox(
+                                      //   value: selectedList.contains(e['id']),
+                                      //
+                                      //   onChanged: (bool value) {
+                                      //     setState(() {
+                                      //       if (value) {
+                                      //         selectedList.add(e['id']);
+                                      //       } else {
+                                      //         selectedList.remove(e['id']);
+                                      //       }
+                                      //     });
+                                      //   },
+                                      //
+                                      // ),
                                     ],
                                   );
                                 }).toList())
@@ -137,7 +171,7 @@ class _PrescriptionResultState extends State<PrescriptionResultPhone> {
                         GestureDetector(
                           onTap: () async {
                             var res = await prescProvider
-                                .acceptPrescription(selectedList);
+                                .acceptPrescription(selectedList,list_id);
                             if (res['status']) {
                               showTopSnackBar(
                                 context,
@@ -146,6 +180,7 @@ class _PrescriptionResultState extends State<PrescriptionResultPhone> {
                                   'Your have accepted prescriptions successfully',
                                 ),
                               );
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>WelcomePharmacy()));
                             } else {
                               showTopSnackBar(
                                 context,

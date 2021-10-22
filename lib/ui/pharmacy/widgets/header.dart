@@ -57,7 +57,7 @@ class _HeaderState extends State<Header> {
                 context, MaterialPageRoute(builder: (context) => Welcome(currenIndex: 0,)));
           },
           child: GradientText(
-            'Hepius',
+            'WorkenehApp',
             gradient: LinearGradient(colors: [
               Colors.blue.shade400,
               Colors.blue.shade900,

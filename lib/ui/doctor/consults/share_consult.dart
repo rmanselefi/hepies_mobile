@@ -1,11 +1,10 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hepies/providers/consult.dart';
 import 'package:hepies/ui/doctor/consults/consult_list.dart';
-import 'package:hepies/ui/pharmacy/ui/consults/comment/comment_list.dart';
 import 'package:hepies/ui/pharmacy/ui/consults/consult_list.dart';
+import 'package:hepies/ui/pharmacy/widgets/footer.dart';
 import 'package:hepies/util/image_consult.dart';
 import 'package:hepies/widgets/footer.dart';
 import 'package:hepies/widgets/header.dart';
@@ -15,7 +14,6 @@ import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class ShareConsult extends StatefulWidget {
-  ShareConsult();
   @override
   _ShareConsultState createState() => _ShareConsultState();
 }
@@ -26,15 +24,20 @@ class _ShareConsultState extends State<ShareConsult> {
   XFile file;
   void _setImage(XFile image) {
     file = image;
+    print("_formData_formData_formData${file}");
   }
 
   var loading = Row(
     mainAxisAlignment: MainAxisAlignment.center,
-    children: <Widget>[CircularProgressIndicator(), Text("Sharing....")],
+    children: <Widget>[
+      CircularProgressIndicator(),
+      Text("Sharing....")
+    ],
   );
   @override
   Widget build(BuildContext context) {
     ConsultProvider consult = Provider.of<ConsultProvider>(context);
+
     return SafeArea(
       child: Column(
         children: [
@@ -51,14 +54,12 @@ class _ShareConsultState extends State<ShareConsult> {
                     padding: EdgeInsets.all(10.0),
                     child: TextFormField(
                       onSaved: (value) => _topic = value,
-                      validator: (value) =>
-                          value.isEmpty ? "Please enter your consult" : null,
                       maxLines: 4,
                       decoration: InputDecoration(
                           hintText: 'Share, consult, promote, inform..',
                           border: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: Colors.grey.shade50, width: 0.5))),
+                              borderSide:
+                              BorderSide(color: Colors.grey.shade50, width: 0.5))),
                     ),
                   ),
                 ),
@@ -73,50 +74,49 @@ class _ShareConsultState extends State<ShareConsult> {
                         consult.shareStatus == ConsultStatus.Sharing
                             ? loading
                             : Align(
-                                alignment: Alignment.topRight,
-                                child: OutlinedButton(
-                                  onPressed: () async {
-                                    final form = formKey.currentState;
-                                    if (form.validate()) {
-                                      form.save();
-                                      try {
-                                        var photo = file != null
-                                            ? File(file.path)
-                                            : null;
-                                        var res =
-                                            await consult.share(_topic, photo);
-                                        if (res['status']) {
-                                          consult.getConsults();
-                                          showTopSnackBar(
-                                            context,
-                                            CustomSnackBar.success(
-                                              message:
-                                                  "Your consult is uploaded succesfully",
-                                            ),
-                                          );
-                                        }
-                                      } catch (e) {
-                                        print("eeeee ${e}");
-                                        showTopSnackBar(
-                                          context,
-                                          CustomSnackBar.error(
-                                            message:
-                                                "Unable to share your consult",
-                                          ),
-                                        );
-                                      }
-                                    } else {
+                            alignment: Alignment.topRight,
+                            child: OutlinedButton(
+                              onPressed: () async {
+                                final form = formKey.currentState;
+                                if (form.validate()) {
+                                  form.save();
+                                  try {
+                                    var photo =
+                                    file != null ? File(file.path) : null;
+                                    var res =
+                                    await consult.share(_topic, photo);
+                                    if (res['status']) {
+                                      consult.getConsults();
                                       showTopSnackBar(
                                         context,
-                                        CustomSnackBar.error(
+                                        CustomSnackBar.success(
                                           message:
-                                              "Please Complete the form properly",
+                                          "Your consult is uploaded succesfully",
                                         ),
                                       );
                                     }
-                                  },
-                                  child: Text('Consult'),
-                                )),
+                                  } catch (e) {
+                                    print("eeeee ${e}");
+                                    showTopSnackBar(
+                                      context,
+                                      CustomSnackBar.error(
+                                        message:
+                                        "Unable to share your consult",
+                                      ),
+                                    );
+                                  }
+                                } else {
+                                  showTopSnackBar(
+                                    context,
+                                    CustomSnackBar.error(
+                                      message:
+                                      "Please Complete the form properly",
+                                    ),
+                                  );
+                                }
+                              },
+                              child: Text('Consult'),
+                            )),
                       ],
                     ),
                   ),
@@ -131,13 +131,14 @@ class _ShareConsultState extends State<ShareConsult> {
                           child: CircularProgressIndicator(),
                         );
                       } else {
-                        if (snapshot.data == null ||
-                            snapshot.data.length == 0) {
+                        if (snapshot.data == null) {
                           return Center(
                             child: Text('No data to show'),
                           );
                         }
-                        return PharmacyConsultList(snapshot.data);
+
+                        print("objectobjectobject ${snapshot.data}");
+                        return Expanded(child: PharmacyConsultList(snapshot.data));
                       }
                     }),
               ],

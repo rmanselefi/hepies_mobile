@@ -74,6 +74,7 @@ class _WelcomeState extends State<Welcome> {
           flexibleSpace: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              SizedBox(width: 10.0,),
               Container(
                 height: 100.0,
                 child: Column(
@@ -111,7 +112,7 @@ class _WelcomeState extends State<Welcome> {
                               )));
                 },
                 child: GradientText(
-                  'Hepius',
+                  'WorkenehApp',
                   gradient: LinearGradient(colors: [
                     Colors.blue.shade400,
                     Colors.blue.shade900,
@@ -153,7 +154,7 @@ class _WelcomeState extends State<Welcome> {
         ),
       ),
       drawer: DrawerCustom(),
-      body: PharmacyShareConsult(),
+      body: ShareConsult(),
     ));
   }
 }

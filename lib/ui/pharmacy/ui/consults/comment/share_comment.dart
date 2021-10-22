@@ -50,6 +50,8 @@ class _PharmacyShareConsultState extends State<PharmacyShareComment> {
             ),
             Expanded(
               child: ListView(
+                shrinkWrap: true,
+                scrollDirection: Axis.vertical,
                 children: [
                   Form(
                     key: formKey,
@@ -130,9 +132,7 @@ class _PharmacyShareConsultState extends State<PharmacyShareComment> {
                             ),
                           ),
                         ),
-                  SizedBox(
-                    height: 20.0,
-                  ),
+
                   Divider(),
                   FutureBuilder<List<dynamic>>(
                       future: Provider.of<ConsultProvider>(context)

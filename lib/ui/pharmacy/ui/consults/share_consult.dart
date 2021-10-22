@@ -29,15 +29,11 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
 
   var loading = Row(
     mainAxisAlignment: MainAxisAlignment.center,
-    children: <Widget>[
-      CircularProgressIndicator(),
-      Text("Sharing....")
-    ],
+    children: <Widget>[CircularProgressIndicator(), Text("Sharing....")],
   );
   @override
   Widget build(BuildContext context) {
     ConsultProvider consult = Provider.of<ConsultProvider>(context);
-
     return SafeArea(
       child: Column(
         children: [
@@ -46,7 +42,9 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
             height: 20.0,
           ),
           Expanded(
-            child: Column(
+            child: ListView(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
               children: [
                 Form(
                   key: formKey,
@@ -55,13 +53,13 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
                     child: TextFormField(
                       onSaved: (value) => _topic = value,
                       validator: (value) =>
-                      value.isEmpty ? "Please enter your consult" : null,
+                          value.isEmpty ? "Please enter your consult" : null,
                       maxLines: 4,
                       decoration: InputDecoration(
                           hintText: 'Share, consult, promote, inform..',
                           border: OutlineInputBorder(
-                              borderSide:
-                              BorderSide(color: Colors.grey.shade50, width: 0.5))),
+                              borderSide: BorderSide(
+                                  color: Colors.grey.shade50, width: 0.5))),
                     ),
                   ),
                 ),
@@ -76,54 +74,54 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
                         consult.shareStatus == ConsultStatus.Sharing
                             ? loading
                             : Align(
-                            alignment: Alignment.topRight,
-                            child: OutlinedButton(
-                              onPressed: () async {
-                                final form = formKey.currentState;
-                                if (form.validate()) {
-                                  form.save();
-                                  try {
-                                    var photo =
-                                    file != null ? File(file.path) : null;
-                                    var res =
-                                    await consult.share(_topic, photo);
-                                    if (res['status']) {
-                                      consult.getConsults();
+                                alignment: Alignment.topRight,
+                                child: OutlinedButton(
+                                  onPressed: () async {
+                                    final form = formKey.currentState;
+                                    if (form.validate()) {
+                                      form.save();
+                                      try {
+                                        var photo = file != null
+                                            ? File(file.path)
+                                            : null;
+                                        var res =
+                                            await consult.share(_topic, photo);
+                                        if (res['status']) {
+                                          consult.getConsults();
+                                          showTopSnackBar(
+                                            context,
+                                            CustomSnackBar.success(
+                                              message:
+                                                  "Your consult is uploaded succesfully",
+                                            ),
+                                          );
+                                        }
+                                      } catch (e) {
+                                        print("eeeee ${e}");
+                                        showTopSnackBar(
+                                          context,
+                                          CustomSnackBar.error(
+                                            message:
+                                                "Unable to share your consult",
+                                          ),
+                                        );
+                                      }
+                                    } else {
                                       showTopSnackBar(
                                         context,
-                                        CustomSnackBar.success(
+                                        CustomSnackBar.error(
                                           message:
-                                          "Your consult is uploaded succesfully",
+                                              "Please Complete the form properly",
                                         ),
                                       );
                                     }
-                                  } catch (e) {
-                                    print("eeeee ${e}");
-                                    showTopSnackBar(
-                                      context,
-                                      CustomSnackBar.error(
-                                        message:
-                                        "Unable to share your consult",
-                                      ),
-                                    );
-                                  }
-                                } else {
-                                  showTopSnackBar(
-                                    context,
-                                    CustomSnackBar.error(
-                                      message:
-                                      "Please Complete the form properly",
-                                    ),
-                                  );
-                                }
-                              },
-                              child: Text('Consult'),
-                            )),
+                                  },
+                                  child: Text('Consult'),
+                                )),
                       ],
                     ),
                   ),
                 ),
-
                 Divider(),
                 FutureBuilder<List<dynamic>>(
                     future: Provider.of<ConsultProvider>(context).getConsults(),
@@ -140,7 +138,7 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
                         }
 
                         print("objectobjectobject ${snapshot.data}");
-                        return Expanded(child: PharmacyConsultList(snapshot.data));
+                        return PharmacyConsultList(snapshot.data);
                       }
                     }),
               ],

@@ -57,7 +57,7 @@ class _RegisterState extends State<Register> {
       validator: (value) =>
           value.isEmpty ? "Please enter your father name" : null,
       onSaved: (value) => _fathername = value,
-      decoration: buildInputDecoration("Confirm password", Icons.lock),
+      decoration: buildInputDecoration("Confirm password", Icons.person),
     );
 
     final phoneField = TextFormField(
@@ -65,7 +65,7 @@ class _RegisterState extends State<Register> {
       validator: (value) =>
           value.isEmpty ? "Please enter your phone number" : null,
       onSaved: (value) => _phone = value,
-      decoration: buildInputDecoration("Confirm password", Icons.lock),
+      decoration: buildInputDecoration("Confirm password", Icons.contact_phone),
     );
 
     final professionField = DropdownButtonFormField(
@@ -94,7 +94,7 @@ class _RegisterState extends State<Register> {
       dialogShapeBorder: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0))),
       title: Text(
-        "Title Of Form",
+        "Choose your Interests",
         style: TextStyle(fontSize: 16),
       ),
       dataSource: [
@@ -246,11 +246,11 @@ class _RegisterState extends State<Register> {
                     SizedBox(height: 5.0),
                     professionField,
                     SizedBox(height: 15.0),
-                    label("Interests"),
+                    label("Select your interests"),
                     SizedBox(height: 5.0),
                     interestField,
                     SizedBox(height: 15.0),
-                    label("License"),
+                    label("Upload your medical license"),
                     SizedBox(height: 5.0),
                     ImageInput(_setImage),
                     SizedBox(height: 15.0),
@@ -278,7 +278,7 @@ class _RegisterState extends State<Register> {
                     SizedBox(height: 20.0),
                     auth.loggedInStatus == Status.Authenticating
                         ? loading
-                        : longButtons("Signup", !rememberMe,doRegister),
+                        : longButtons("Register", !rememberMe,doRegister),
                     SizedBox(
                       height: 10.0,
                     ),

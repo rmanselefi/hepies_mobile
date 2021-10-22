@@ -90,7 +90,7 @@ class _ReadPrescriptionState extends State<ReadPrescription> {
                                   context,
                                   CustomSnackBar.error(
                                     message:
-                                        "Unable to read prescription. Make sure to provide correct code",
+                                        "Unable to read prescription. Make sure to provide correct code/phone",
                                   ),
                                 );
                               }

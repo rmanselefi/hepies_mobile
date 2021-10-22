@@ -5,6 +5,7 @@ class AppUrl {
   static const String baseURL = liveBaseURL;
   static const String login = baseURL + "/auth/login";
   static const String register = baseURL + "/users/register";
+  static const String reward = baseURL + "/users/rewardpoint";
   static const String profile = baseURL + "/users/profile/update";
   static const String consults = baseURL + "/consulting";
   static const String prescription = baseURL + "/prescription";
@@ -13,10 +14,13 @@ class AppUrl {
   static const String pharmacy = baseURL + "/pharmacy";
   static const String drugs = baseURL + "/drugs";
   static const String guidelines = baseURL + "/guidelines";
+  static const String guidelinestatus = baseURL + "/guidelines/status";
+
   static const String medicalrecord = baseURL + "/patient/medicalrecord";
   static const String patient = baseURL + "/patient/patient";
   static const String patienturl = baseURL + "/patient";
   static const String mypharmacy = baseURL + "/pharmacy";
+  static const String history = baseURL + "/prescription/readby";
   static const String change_password = baseURL + "/users/change/password";
 
   static const String readprescription = baseURL + "/prescription/code";
