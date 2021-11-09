@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:hepies/models/user.dart';
+import 'package:hepies/providers/consult.dart';
 import 'package:hepies/providers/drug_provider.dart';
+import 'package:hepies/providers/user_provider.dart';
 import 'package:hepies/ui/doctor/consults/consults.dart';
 import 'package:hepies/ui/doctor/consults/share_consult.dart';
 import 'package:hepies/ui/doctor/drugs/drugs.dart';
 import 'package:hepies/ui/doctor/points/points.dart';
 import 'package:hepies/ui/doctor/profile/edit_profile.dart';
+import 'package:hepies/ui/pharmacy/ui/consults/share_consult.dart';
 import 'package:hepies/util/gradient_text.dart';
 import 'package:hepies/util/shared_preference.dart';
 import 'package:hepies/widgets/drawer.dart';
@@ -27,11 +30,11 @@ class _WelcomeState extends State<Welcome> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    UserPreferences().getUser().then((user) {
+    UserProvider().getProfile().then((user) {
       setState(() {
-        name = user.name;
-        profession = user.profession;
-        points = user.points;
+        name = user['profession'][0]['name'];
+        profession = user['profession'][0]['proffesion'];
+        points = user['profession'][0]['points'];
       });
     });
   }
@@ -54,7 +57,7 @@ class _WelcomeState extends State<Welcome> {
         child: AppBar(
           automaticallyImplyLeading: false,
           titleSpacing: 0.0,
-          // elevation: 0.0,
+          elevation: 0.0,
           backgroundColor: Colors.white,
           leading: Builder(
             builder: (BuildContext context) {
@@ -73,6 +76,9 @@ class _WelcomeState extends State<Welcome> {
           flexibleSpace: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
+              SizedBox(
+                width: 10.0,
+              ),
               Container(
                 height: 100.0,
                 child: Column(
@@ -110,7 +116,7 @@ class _WelcomeState extends State<Welcome> {
                               )));
                 },
                 child: GradientText(
-                  'Hepius',
+                  'WorkenehApp',
                   gradient: LinearGradient(colors: [
                     Colors.blue.shade400,
                     Colors.blue.shade900,

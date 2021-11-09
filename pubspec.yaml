@@ -31,7 +31,7 @@ dependencies:
   shared_preferences: ^2.0.6
   provider:
   http:
-  flushbar:
+#  flushbar:
   firebase_storage:
   image_picker:
   intl:
@@ -41,6 +41,20 @@ dependencies:
   path_provider:
   collection:
   supercharged:
+  dropdownfield:
+  top_snackbar_flutter: ^1.0.1
+  readmore:
+  custom_check_box:
+  timeago:
+  bouncing_widget:
+  dio:
+  percent_indicator:
+  flutter_pdfview:
+  hashtagable:
+  syncfusion_flutter_datepicker:
+  country_code_picker:
+  google_fonts:
+  math_expressions:
 
 dev_dependencies:
   flutter_test:

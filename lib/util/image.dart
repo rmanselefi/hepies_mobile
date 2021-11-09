@@ -69,7 +69,7 @@ class _ImageInputState extends State<ImageInput> {
             _openImagePicker(context);
           },
           label: Text(
-            'Add Image',
+            'upload your practicing license here for successful registration',
             style: TextStyle(color: Theme.of(context).accentColor),
           ),
           icon: Icon(Icons.add_a_photo_outlined),

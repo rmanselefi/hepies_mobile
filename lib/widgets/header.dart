@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hepies/providers/user_provider.dart';
 import 'package:hepies/ui/doctor/points/points.dart';
 import 'package:hepies/ui/doctor/profile/edit_profile.dart';
 import 'package:hepies/ui/welcome.dart';
@@ -20,11 +21,11 @@ class _HeaderState extends State<Header> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    UserPreferences().getUser().then((user) {
+    UserProvider().getProfile().then((user) {
       setState(() {
-        name = user.name;
-        profession = user.profession;
-        points = user.points;
+        name = user['profession'][0]['name'];
+        profession = user['profession'][0]['proffesion'];
+        points = user['profession'][0]['points'];
       });
     });
   }

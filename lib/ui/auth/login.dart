@@ -1,4 +1,3 @@
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:hepies/models/user.dart';
 import 'package:hepies/providers/auth.dart';
@@ -11,6 +10,8 @@ import 'package:hepies/util/validators.dart';
 import 'package:hepies/util/widgets.dart';
 
 import 'package:provider/provider.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -21,24 +22,49 @@ class _LoginState extends State<Login> {
   final formKey = new GlobalKey<FormState>();
 
   String _username, _password;
+  bool _isObscure = true;
 
   @override
   Widget build(BuildContext context) {
     AuthProvider auth = Provider.of<AuthProvider>(context);
 
+    InputDecoration buildInputDecorationn(
+        String hintText, IconData icon) {
+      return InputDecoration(
+        prefixIcon: Icon(icon, color: Color.fromRGBO(50, 62, 72, 1.0)),
+        hintText: hintText,
+        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+        suffixIcon: IconButton(
+            icon: Icon(_isObscure ? Icons.visibility : Icons.visibility_off),
+            onPressed: () {
+              setState(() {
+                _isObscure = !_isObscure;
+              });
+            }),
+      );
+    }
+
     final usernameField = TextFormField(
       autofocus: false,
       validator: (value) => value.isEmpty ? "Please enter username" : null,
       onSaved: (value) => _username = value,
-      decoration: buildInputDecoration("Confirm password", Icons.person),
+      decoration: InputDecoration(
+        prefixIcon: Icon(Icons.person, color: Color.fromRGBO(50, 62, 72, 1.0)),
+        hintText: "Username",
+        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+
+      )
     );
 
     final passwordField = TextFormField(
       autofocus: false,
-      obscureText: true,
+      obscureText: _isObscure,
       validator: (value) => value.isEmpty ? "Please enter password" : null,
       onSaved: (value) => _password = value,
-      decoration: buildInputDecoration("Confirm password", Icons.lock),
+      decoration:
+      buildInputDecorationn("Password", Icons.lock),
     );
 
     var loading = Row(
@@ -97,11 +123,12 @@ class _LoginState extends State<Login> {
                   MaterialPageRoute(builder: (context) => WelcomePharmacy()));
             }
           } else {
-            Flushbar(
-              title: "Failed Login",
-              message: response['message'].toString(),
-              duration: Duration(seconds: 3),
-            ).show(context);
+            showTopSnackBar(
+              context,
+              CustomSnackBar.error(
+                message: response['message'].toString(),
+              ),
+            );
           }
         });
       } else {
@@ -115,12 +142,11 @@ class _LoginState extends State<Login> {
           padding: EdgeInsets.all(40.0),
           child: Form(
             key: formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: ListView(
               children: [
                 Center(
                   child: Text(
-                    'Hepies',
+                    'WorkenehApp',
                     style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
                   ),
@@ -136,9 +162,13 @@ class _LoginState extends State<Login> {
                 SizedBox(height: 20.0),
                 auth.loggedInStatus == Status.Authenticating
                     ? loading
-                    : longButtons("Login", doLogin),
+                    : longButtons("Login", false, doLogin),
                 SizedBox(height: 5.0),
-                forgotLabel
+                forgotLabel,
+                SizedBox(
+                  height: 300.0,
+                ),
+                Center(child: Text("Copyright @2021 Hepius Pvt.Ltd.Co"))
               ],
             ),
           ),

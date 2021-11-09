@@ -7,6 +7,7 @@ import 'package:hepies/models/favorites.dart';
 import 'package:hepies/models/patient.dart';
 import 'package:hepies/models/prescription.dart';
 import 'package:hepies/providers/patient_provider.dart';
+import 'package:hepies/providers/user_provider.dart';
 import 'package:hepies/util/app_url.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -24,7 +25,6 @@ enum ReadStatus {
   Fetching,
 }
 
-
 class PrescriptionProvider with ChangeNotifier {
   PrescriptionStatus _sentStatus = PrescriptionStatus.NotSent;
   PrescriptionStatus get sentStatus => _sentStatus;
@@ -38,7 +38,7 @@ class PrescriptionProvider with ChangeNotifier {
   String get actionStatus => _actionStatus;
   List<dynamic> _prescription = [];
   List<dynamic> get prescription => _prescription;
-  List<dynamic> medical=[];
+  List<dynamic> medical = [];
 
   Map<String, dynamic> _singlePrescription = {};
   Map<String, dynamic> get singlePrescription => _singlePrescription;
@@ -60,15 +60,17 @@ class PrescriptionProvider with ChangeNotifier {
     return json.decode(response.body);
   }
 
-  Future<Map<String, dynamic>> writePrescription(List precriptionData) async {
+  Future<Map<String, dynamic>> writePrescription(
+      List precriptionData, List patientData) async {
     _sentStatus = PrescriptionStatus.Sending;
     notifyListeners();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
+    var sendData = {'patient': patientData, 'prescription': precriptionData};
     var result;
-    print("registrationData $precriptionData");
+    print("registrationData $sendData");
     Response response = await post(Uri.parse(AppUrl.write),
-        body: json.encode(precriptionData),
+        body: json.encode(sendData),
         headers: {
           'Content-Type': 'application/json',
           HttpHeaders.authorizationHeader: "Bearer $token"
@@ -108,19 +110,27 @@ class PrescriptionProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void whenSent() {
+    _actionStatus = "";
+    _status = 'sent';
+    notifyListeners();
+  }
 
   void setFavoriteCombinations(List<dynamic> prescriptions) {
     _prescription = prescriptions;
     notifyListeners();
   }
 
-
-  Future<List<dynamic>> readPrescription(var code) async {
+  Future<dynamic> readPrescription(var code) async {
     _fetchStatus = ReadStatus.Fetching;
     notifyListeners();
+    String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+    RegExp regExp = new RegExp(patttern);
+    bool isPhone = regExp.hasMatch(code);
+    var url = isPhone ? AppUrl.readprescriptionPhone : AppUrl.readprescription;
     var result;
     List<Consult> consults = [];
-    Response response = await get(Uri.parse("${AppUrl.readprescription}/$code"));
+    Response response = await get(Uri.parse("$url/$code"));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       _fetchStatus = ReadStatus.Fetch;
@@ -128,7 +138,8 @@ class PrescriptionProvider with ChangeNotifier {
       medical = json.decode(response.body);
       print("consultconsultconsultconsultconsult ${medical.length}");
       // notifyListeners();
-      return medical;
+      result = {'status': true, 'isPhone': isPhone, 'data': medical};
+
     } else {
       _fetchStatus = ReadStatus.NotFetch;
       notifyListeners();
@@ -137,22 +148,23 @@ class PrescriptionProvider with ChangeNotifier {
         'message': json.decode(response.body)['error']
       };
     }
+    return result;
     // return json.decode(response.body);
   }
 
-  Future<Map<String, dynamic>> acceptPrescription(List id) async {
+  Future<Map<String, dynamic>> acceptPrescription(List id,List pres_id) async {
     _sentStatus = PrescriptionStatus.Sending;
     notifyListeners();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
+    List<dynamic> output = pres_id.where((element) => !id.contains(element)).toList();
     var result;
-    print("registrationData $id");
-    Response response = await post(Uri.parse(AppUrl.accept),
-        body: json.encode(id),
-        headers: {
-          'Content-Type': 'application/json',
-          HttpHeaders.authorizationHeader: "Bearer $token"
-        });
+    print("registrationData $output");
+    Response response =
+        await post(Uri.parse(AppUrl.accept), body: json.encode(output), headers: {
+      'Content-Type': 'application/json',
+      HttpHeaders.authorizationHeader: "Bearer $token"
+    });
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       final bool responseData = json.decode(response.body);
@@ -173,6 +185,4 @@ class PrescriptionProvider with ChangeNotifier {
     }
     return result;
   }
-
-
 }

@@ -1,17 +1,21 @@
 import 'dart:io';
 
-import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:hepies/models/user.dart';
 import 'package:hepies/providers/auth.dart';
+import 'package:hepies/providers/consult.dart';
 import 'package:hepies/providers/user_provider.dart';
 import 'package:hepies/ui/auth/login.dart';
 import 'package:hepies/util/image_profile.dart';
 import 'package:hepies/util/shared_preference.dart';
 import 'package:hepies/widgets/header.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
 import 'package:provider/provider.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class EditProfile extends StatefulWidget {
   @override
@@ -37,15 +41,19 @@ class _EditProfileState extends State<EditProfile>
   TextEditingController _phoneController = new TextEditingController();
   TextEditingController _specialityController = new TextEditingController();
   TextEditingController _workplaceController = new TextEditingController();
+  TextEditingController _dobController = new TextEditingController();
+
+  List interestList = [];
 
   String profile = '';
-  String interest = '';
+  var interest;
   int userId = 0;
   int professionid = 0;
   String profession = '';
   String username = '';
   String grandfathername = '';
   var _professionController;
+  var _sexController;
   String points = '';
   String license = '';
   String _profession = 'Medical Doctor';
@@ -55,27 +63,49 @@ class _EditProfileState extends State<EditProfile>
     // TODO: implement initState
     super.initState();
     getUser();
+    getInterests();
   }
 
   getUser() async {
-    var user = await UserPreferences().getUser();
-    print("object ${user.username}");
-    _nameController.text = user.name;
-    _fatherNameController.text = user.fathername;
-    _emailController.text = user.email;
-    _phoneController.text = user.phone;
-    _specialityController.text = user.speciality;
-    _workplaceController.text = user.workplace;
-    profile = user.profile;
-    interest = user.interests;
-    userId = user.userId;
-    profession = user.profession;
-    username = user.username;
-    grandfathername = user.grandfathername;
-    points = user.points;
-    license = user.license;
-    professionid = user.professionid;
+    var user = await UserProvider().getProfile();
+    print("object ${user}");
+    setState(() {
+      _nameController.text = user['profession'][0]['name'];
+      _fatherNameController.text = user['profession'][0]['fathername'];
+      _emailController.text = user['profession'][0]['email'];
+      _phoneController.text = user['profession'][0]['phone'];
+      _specialityController.text = user['profession'][0]['speciality'];
+      _workplaceController.text = user['profession'][0]['workplace'];
+      profile = user['profession'][0]['profile'];
+      interest = user['profession'][0]['interests'].split(",");
+      userId = user['id'];
+      profession = user['profession'][0]['proffesion'];
+      username = user['username'];
+      grandfathername = user['profession'][0]['grandfathername'];
+      points = user['profession'][0]['points'];
+      license = user['profession'][0]['license'];
+      professionid = user['profession'][0]['id'];
+    });
   }
+
+  getInterests() async {
+    List interests = await ConsultProvider().getInterests();
+
+    setState(() {
+      interests.forEach((element) {
+        var property = {
+          'display': "#${element['interest']}",
+          'value': element['interest'],
+        };
+        interestList.add(property);
+      });
+    });
+  }
+
+  String _selectedDate = '';
+  String _dateCount = '';
+  String _range = '';
+  String _rangeCount = '';
 
   @override
   Widget build(BuildContext context) {
@@ -95,6 +125,44 @@ class _EditProfileState extends State<EditProfile>
         });
       },
     );
+    void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
+      setState(() {
+        if (args.value is PickerDateRange) {
+          _range =
+              DateFormat('dd/MM/yyyy').format(args.value.startDate).toString() +
+                  ' - ' +
+                  DateFormat('dd/MM/yyyy')
+                      .format(args.value.endDate ?? args.value.startDate)
+                      .toString();
+        } else if (args.value is DateTime) {
+          _selectedDate = args.value.toString();
+        } else if (args.value is List<DateTime>) {
+          _dateCount = args.value.length.toString();
+        } else {
+          _rangeCount = args.value.length.toString();
+        }
+      });
+    }
+
+    final dobField = SfDateRangePicker(
+      onSelectionChanged: _onSelectionChanged,
+      selectionMode: DateRangePickerSelectionMode.single,
+    );
+    final sexField = DropdownButtonFormField(
+      value: _sexController,
+      items: ["Male", "Female"]
+          .map((label) => DropdownMenuItem(
+                child: Text(label.toString()),
+                value: label,
+              ))
+          .toList(),
+      hint: Text('Choose Sex'),
+      onChanged: (value) {
+        setState(() {
+          _sexController = value;
+        });
+      },
+    );
     var loading = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -102,8 +170,6 @@ class _EditProfileState extends State<EditProfile>
         Text(" Updating your profile ... Please wait")
       ],
     );
-    var _interests;
-
     return Scaffold(
       body: ListView(
         children: [
@@ -185,7 +251,7 @@ class _EditProfileState extends State<EditProfile>
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
                                       new Text(
-                                        'Personal Information',
+                                        'Professional Information',
                                         style: TextStyle(
                                             fontSize: 18.0,
                                             fontWeight: FontWeight.bold),
@@ -326,15 +392,6 @@ class _EditProfileState extends State<EditProfile>
                                   ),
                                 ],
                               )),
-                          SizedBox(height: 15.0),
-                          label("Profession"),
-                          SizedBox(height: 5.0),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 25.0, right: 25.0, top: 2.0),
-                            child: professionField,
-                          ),
-                          SizedBox(height: 15.0),
                           Padding(
                               padding: EdgeInsets.only(
                                   left: 25.0, right: 25.0, top: 2.0),
@@ -350,6 +407,47 @@ class _EditProfileState extends State<EditProfile>
                                   ),
                                 ],
                               )),
+                          SizedBox(height: 15.0),
+                          label("Profession"),
+                          SizedBox(height: 5.0),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 25.0, right: 25.0, top: 2.0),
+                            child: professionField,
+                          ),
+                          SizedBox(height: 15.0),
+                          label("Sex"),
+                          SizedBox(height: 5.0),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 25.0, right: 25.0, top: 2.0),
+                            child: sexField,
+                          ),
+                          SizedBox(height: 15.0),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  left: 25.0, right: 25.0, top: 25.0),
+                              child: new Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: <Widget>[
+                                  new Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      new Text(
+                                        'Date of Birth',
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              )),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  left: 25.0, right: 25.0, top: 2.0),
+                              child: dobField),
                           Padding(
                               padding: EdgeInsets.only(
                                   left: 25.0, right: 25.0, top: 25.0),
@@ -393,42 +491,18 @@ class _EditProfileState extends State<EditProfile>
                                       "Select Your interests",
                                       style: TextStyle(fontSize: 16),
                                     ),
-                                    dataSource: [
-                                      {
-                                        "display": "#Dermatology",
-                                        "value": "Dermatology",
-                                      },
-                                      {
-                                        "display": "#ENT",
-                                        "value": "ENT",
-                                      },
-                                      {
-                                        "display": "#Gastroenterology",
-                                        "value": "Gastroenterology",
-                                      },
-                                      {
-                                        "display": "#General",
-                                        "value": "General",
-                                      },
-                                      {
-                                        "display": "#Gynecology",
-                                        "value": "Gynecology",
-                                      },
-                                      {
-                                        "display": "#InfectiousDisease",
-                                        "value": "InfectiousDisease",
-                                      },
-                                    ],
+                                    dataSource: interestList,
                                     textField: 'display',
                                     valueField: 'value',
                                     okButtonLabel: 'OK',
                                     cancelButtonLabel: 'CANCEL',
                                     hintWidget:
                                         Text('Please choose one or more'),
-                                    initialValue: _interests,
+                                    initialValue: interest,
                                     onSaved: (value) {
                                       if (value == null) return;
-                                      print("object ${value.join(",")}");
+                                      // print("_interests_interests_interests ${value.join(",")}");
+
                                       setState(() {
                                         _interests = value;
                                       });
@@ -543,6 +617,7 @@ class _EditProfileState extends State<EditProfile>
                 color: Colors.green,
                 onPressed: () async {
                   var interests = _interests.join(",");
+                  print("interestsinterestsinterests $interests");
                   User user = new User(
                       userId: userId,
                       username: username,
@@ -557,23 +632,27 @@ class _EditProfileState extends State<EditProfile>
                       phone: _phoneController.text,
                       points: points,
                       interests: interests,
-                      license: license);
-                  var res =
-                      await Provider.of<UserProvider>(context, listen: false)
-                          .updateProfile(
-                              user, file != null ? File(file.path) : null,profile);
+                      license: license,
+                      sex: _sexController,
+                      dob: _selectedDate);
+                  var res = await Provider.of<UserProvider>(context,
+                          listen: false)
+                      .updateProfile(
+                          user, file != null ? File(file.path) : null, profile);
                   if (res['status']) {
-                    Flushbar(
-                      title: 'Sent',
-                      message: 'Your profile is updated',
-                      duration: Duration(seconds: 10),
-                    ).show(context);
+                    showTopSnackBar(
+                      context,
+                      CustomSnackBar.success(
+                        message: 'Your profile is updated',
+                      ),
+                    );
                   } else {
-                    Flushbar(
-                      title: 'Error',
-                      message: 'Unable to update your profile',
-                      duration: Duration(seconds: 10),
-                    ).show(context);
+                    showTopSnackBar(
+                      context,
+                      CustomSnackBar.error(
+                        message: "Unable to update your profile",
+                      ),
+                    );
                   }
                 },
                 shape: new RoundedRectangleBorder(

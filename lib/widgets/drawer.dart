@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:hepies/providers/auth.dart';
+import 'package:hepies/ui/auth/change_password.dart';
 import 'package:hepies/ui/auth/login.dart';
 import 'package:provider/provider.dart';
 
@@ -32,7 +33,7 @@ class _DrawerCustomState extends State<DrawerCustom> {
         children: <Widget>[
           AppBar(
             automaticallyImplyLeading: false,
-            title: Text("Hepius"),
+            title: Text("WorkenehApp"),
             backgroundColor: Color(0xff0FF683).withOpacity(0.9),
           ),
           Container(
@@ -80,7 +81,9 @@ class _DrawerCustomState extends State<DrawerCustom> {
                       color: Color(0xff00FFDC).withOpacity(0.9)),
                   title: Text('Change Password',
                       style: TextStyle(color: Colors.black45)),
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>ChangePassword()));
+                  },
                 ),
                 Divider(
                   color: Color(0xff00FFDC).withOpacity(0.9),

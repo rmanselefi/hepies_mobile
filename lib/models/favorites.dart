@@ -9,11 +9,13 @@ class Favorites {
   final String type;
   final String takein;
   final String frequency;
+  final int drug;
 
   Favorites(
       {this.id,
       this.profession_id,
       this.drug_name,
+        this.drug,
       this.name,
       this.route,
       this.strength,
@@ -30,6 +32,7 @@ class Favorites {
       'name': name,
       'profession_id': profession_id,
       'drug_name': drug_name,
+      'drug':drug,
       'route': route,
       'strength': strength,
       'unit': unit,

@@ -81,24 +81,21 @@ class PharmacyProvider with ChangeNotifier {
     return result;
   }
 
-
   Future<List<dynamic>> getMyPharmacy() async {
-
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String professionid = prefs.getInt('professionid').toString();
     print("professionidprofessionid $professionid");
     var result;
     List<Consult> consults = [];
-    Response response = await get(Uri.parse("${AppUrl.mypharmacy}/$professionid"));
+    Response response =
+        await get(Uri.parse("${AppUrl.mypharmacy}/$professionid"));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-
       medical = json.decode(response.body);
       print("consultconsultconsultconsultconsult ${medical.length}");
       // notifyListeners();
       return medical;
     } else {
-
       result = {
         'status': false,
         'message': json.decode(response.body)['error']
@@ -107,6 +104,32 @@ class PharmacyProvider with ChangeNotifier {
     return json.decode(response.body);
   }
 
+  Future<List<dynamic>> getMyPharmacyHistory() async {
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+    print("object i got hereeeee");
+    print("professionidprofessionid $token");
+    var result;
+
+    Response response = await post(Uri.parse(AppUrl.history), headers: {
+      'Content-Type': 'application/json',
+      HttpHeaders.authorizationHeader: "Bearer $token"
+    });
+    print("responseresponseresponse ${response.body}");
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      medical = json.decode(response.body);
+      print("consultconsultconsultconsultconsult ${medical.length}");
+      // notifyListeners();
+      return medical;
+    } else {
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return json.decode(response.body);
+  }
 
   get getDrug {
     notifyListeners();

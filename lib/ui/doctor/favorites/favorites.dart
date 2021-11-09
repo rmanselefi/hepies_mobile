@@ -48,7 +48,7 @@ class _FavoritesState extends State<FavoritesPage> {
                                     child: CircularProgressIndicator(),
                                   );
                                 } else {
-                                  if (snapshot.data == null) {
+                                  if (snapshot.data == null || snapshot.data.length==0) {
                                     return Center(
                                       child: Text('No data to show'),
                                     );
@@ -69,9 +69,9 @@ class _FavoritesState extends State<FavoritesPage> {
                                               await DatabaseHelper()
                                                   .getFavoritesByName(
                                                       data[index].name);
-                                          for (var i = 0;
-                                              i < combinations.length;
-                                              i++) {}
+                                          // for (var i = 0;
+                                          //     i < combinations.length;
+                                          //     i++) {}
                                           Provider.of<PrescriptionProvider>(context,listen: false).resetStatus();
                                           presProvider.setFavoriteCombinations(
                                               combinations);

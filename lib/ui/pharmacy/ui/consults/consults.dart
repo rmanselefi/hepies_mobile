@@ -4,6 +4,7 @@ import 'package:hepies/providers/consult.dart';
 import 'package:hepies/ui/doctor/consults/consult_list.dart';
 import 'package:hepies/ui/doctor/medicalrecords/medical_records.dart';
 import 'package:hepies/ui/doctor/prescription/write_prescription.dart';
+import 'package:hepies/ui/pharmacy/ui/consults/consult_list.dart';
 import 'package:hepies/util/gradient_text.dart';
 import 'package:hepies/widgets/header.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +17,7 @@ class PharmacyConsults extends StatefulWidget {
 class _PharmacyConsultsState extends State<PharmacyConsults> {
   @override
   Widget build(BuildContext context) {
-    return ListView(
+    return Column(
       children: [
         Header(),
         Divider(),
@@ -83,7 +84,7 @@ class _PharmacyConsultsState extends State<PharmacyConsults> {
                 }
 
                 print("objectobjectobject ${snapshot.data}");
-                return ConsultList(snapshot.data);
+                return PharmacyConsultList(snapshot.data);
               }
             })
       ],

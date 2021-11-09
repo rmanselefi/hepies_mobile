@@ -50,19 +50,19 @@ class _FooterState extends State<Footer> {
         SizedBox(
           width: 5.0,
         ),
-        MaterialButton(
-          minWidth: 50.0,
-          elevation: 0.0,
-          color: Color(0xff0FF6A0),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12), // <-- Radius
-          ),
-          onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => MedicalRecord()));
-          },
-          child: Text('Medical Records'),
-        ),
+        // MaterialButton(
+        //   minWidth: 50.0,
+        //   elevation: 0.0,
+        //   color: Color(0xff0FF6A0),
+        //   shape: RoundedRectangleBorder(
+        //     borderRadius: BorderRadius.circular(12), // <-- Radius
+        //   ),
+        //   onPressed: () {
+        //     Navigator.push(
+        //         context, MaterialPageRoute(builder: (context) => MedicalRecord()));
+        //   },
+        //   child: Text('Medical Records'),
+        // ),
         SizedBox(
           width: 5.0,
         ),

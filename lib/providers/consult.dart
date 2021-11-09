@@ -9,7 +9,14 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+enum ConsultStatus { Shared, NotShared, Sharing }
+
 class ConsultProvider with ChangeNotifier {
+  ConsultStatus _shareStatus = ConsultStatus.NotShared;
+  ConsultStatus get shareStatus => _shareStatus;
+  List<dynamic> _interests = [];
+  List<dynamic> get interests => _interests;
+
   Future<List<dynamic>> getConsults() async {
     var result;
     List<Consult> consults = [];
@@ -28,6 +35,8 @@ class ConsultProvider with ChangeNotifier {
   }
 
   Future<Map<String, dynamic>> share(String topic, File file) async {
+    _shareStatus = ConsultStatus.Sharing;
+    notifyListeners();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
     var image;
@@ -45,7 +54,6 @@ class ConsultProvider with ChangeNotifier {
       'topic': topic,
       'image': image,
     };
-    print("registrationData $registrationData");
     Response response = await post(Uri.parse(AppUrl.consults),
         body: json.encode(registrationData),
         headers: {
@@ -55,7 +63,7 @@ class ConsultProvider with ChangeNotifier {
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Map<String, dynamic> responseData = json.decode(response.body);
-      print("ResponseResponseResponse ${responseData}");
+      _shareStatus = ConsultStatus.Shared;
       notifyListeners();
       result = {
         'status': true,
@@ -63,6 +71,7 @@ class ConsultProvider with ChangeNotifier {
         'consult': responseData
       };
     } else {
+      _shareStatus = ConsultStatus.NotShared;
       notifyListeners();
       result = {
         'status': false,
@@ -78,7 +87,6 @@ class ConsultProvider with ChangeNotifier {
     Response response = await get(Uri.parse("${AppUrl.consults}/comment/$id"));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      print("mjbjhb ${response.body.length}");
       return json.decode(response.body);
     } else {
       notifyListeners();
@@ -103,7 +111,6 @@ class ConsultProvider with ChangeNotifier {
     });
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      print("comment_lenght ${response.body}");
       return json.decode(response.body);
     } else {
       result = {
@@ -114,7 +121,7 @@ class ConsultProvider with ChangeNotifier {
     return json.decode(response.body);
   }
 
-  Future<int> getLikeByConsultIdForUser(var id) async {
+  Future<dynamic> getLikeByConsultIdForUser(var id) async {
     var result;
     List<Consult> consults = [];
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -126,7 +133,6 @@ class ConsultProvider with ChangeNotifier {
     });
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      print("like_length ${response.body}");
       return json.decode(response.body);
     } else {
       result = {
@@ -137,13 +143,12 @@ class ConsultProvider with ChangeNotifier {
     return json.decode(response.body);
   }
 
-  Future<int> getLikeByConsultId(var id) async {
+  Future<dynamic> getLikeByConsultId(var id) async {
     var result;
     List<Consult> consults = [];
     Response response = await get(Uri.parse("${AppUrl.consults}/likes/$id"));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      print("comment_lenght ${response.body}");
       return json.decode(response.body);
     } else {
       notifyListeners();
@@ -157,6 +162,8 @@ class ConsultProvider with ChangeNotifier {
 
   Future<Map<String, dynamic>> comment(
       String topic, File file, var consultid) async {
+    _shareStatus = ConsultStatus.Sharing;
+    notifyListeners();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
     var image;
@@ -174,7 +181,6 @@ class ConsultProvider with ChangeNotifier {
       'comment': topic,
       'image': image,
     };
-    print("registrationData $registrationData");
     Response response = await post(
         Uri.parse("${AppUrl.consults}/comment/$consultid"),
         body: json.encode(registrationData),
@@ -185,13 +191,16 @@ class ConsultProvider with ChangeNotifier {
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Map<String, dynamic> responseData = json.decode(response.body);
-      print("ResponseResponseResponse ${responseData}");
+      _shareStatus = ConsultStatus.Shared;
+      notifyListeners();
       result = {
         'status': true,
         'message': 'Successful',
         'consult': responseData
       };
     } else {
+      _shareStatus = ConsultStatus.NotShared;
+      notifyListeners();
       result = {
         'status': false,
         'message': json.decode(response.body)['error']
@@ -213,7 +222,6 @@ class ConsultProvider with ChangeNotifier {
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Map<String, dynamic> responseData = json.decode(response.body);
-      print("ResponseResponseResponse ${responseData}");
       result = {
         'status': true,
         'message': 'Successful',
@@ -234,13 +242,12 @@ class ConsultProvider with ChangeNotifier {
 
     var result;
     Response response =
-    await post(Uri.parse("${AppUrl.consults}/unlike/$consultid"), headers: {
+        await post(Uri.parse("${AppUrl.consults}/unlike/$consultid"), headers: {
       'Content-Type': 'application/json',
       HttpHeaders.authorizationHeader: "Bearer $token"
     });
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-
       result = {
         'status': true,
         'message': 'Successful',
@@ -252,5 +259,24 @@ class ConsultProvider with ChangeNotifier {
       };
     }
     return result;
+  }
+
+  Future<List<dynamic>> getInterests() async {
+    var result;
+
+    Response response = await get(Uri.parse(AppUrl.interests));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      _interests = json.decode(response.body);
+      notifyListeners();
+      return json.decode(response.body);
+    } else {
+      notifyListeners();
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return json.decode(response.body);
   }
 }
