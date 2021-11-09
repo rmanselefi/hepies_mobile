@@ -29,6 +29,8 @@ class _DrugDetailState extends State<DrugDetail> {
                 Container(
                   padding: EdgeInsets.all(20.0),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         'Drug Name',
@@ -71,18 +73,26 @@ class _DrugDetailState extends State<DrugDetail> {
                       SizedBox(
                         width: 10.0,
                       ),
-                      Expanded(
-                        child: IntrinsicHeight(
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: bolded.map<Widget>((e) {
-                              return Container(
-                                width: 100,
-                                  child: e);
-                            }).toList(),
-                          ),
+                      // Expanded(
+                      //   child: IntrinsicHeight(
+                      //     child: Row(
+                      //       crossAxisAlignment: CrossAxisAlignment.stretch,
+                      //       children: bolded.map<Widget>((e) {
+                      //         return Container(width: 100, child: e);
+                      //       }).toList(),
+                      //     ),
+                      //   ),
+                      // ),
+                      Container(
+                        width: 250,
+                        child: Wrap(
+                          alignment: WrapAlignment.start,
+                          direction: Axis.horizontal,
+                          children: bolded.map<Widget>((e) {
+                            return e;
+                          }).toList(),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 )
@@ -110,25 +120,26 @@ class _DrugDetailState extends State<DrugDetail> {
       "Side effects",
       "Storage"
     ];
+
     List<String> name = word.split(' ');
     List<Text> textWidgets = [];
     for (int i = 0; i < name.length; i++) {
-      bold_words.forEach((element) {
-        if (name[i].contains(element)) {
-          Text bold = Text(
-            name[i] + ' ',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-          );
-          textWidgets.add(bold);
-        } else {
-          Text normal = Text(
-            name[i] + ' ',
-          );
-          textWidgets.add(normal);
-        }
-      });
+      var spe=name[i].replaceAll(RegExp(",|!|'"), "");
+      print(spe);
+      if (bold_words.contains(spe)) {
+        Text bold = Text(
+          name[i] + ' ',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        );
+        textWidgets.add(bold);
+      } else {
+        Text normal = Text(
+          name[i] + ' ',
+        );
+        textWidgets.add(normal);
+      }
     }
     return textWidgets;
   }

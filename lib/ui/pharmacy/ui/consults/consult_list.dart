@@ -1,5 +1,6 @@
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:hashtagable/widgets/hashtag_text.dart';
 import 'package:hepies/providers/consult.dart';
 import 'package:hepies/ui/pharmacy/ui/consults/comment/share_comment.dart';
 import 'package:intl/intl.dart';
@@ -65,7 +66,6 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                       child: Text('No data to show'),
                     );
                   }
-                  print("snapshot.data ${snapshot.data}");
                   return snapshot.data['length'] > 0
                       ? BouncingWidget(
                           duration: Duration(milliseconds: 100),
@@ -199,9 +199,18 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                 SizedBox(
                   height: 5,
                 ),
-                Text(
-                  widget.consults[index]['topic'],
-                  style: TextStyle(fontSize: 14),
+                // Text(
+                //   widget.consults[index]['topic'],
+                //   style: TextStyle(fontSize: 14),
+                // ),
+                HashTagText(
+                  text: "${widget.consults[index]['topic']}",
+                  basicStyle: TextStyle(fontSize: 14, color: Colors.black),
+                  decoratedStyle: TextStyle(fontSize: 14, color: Colors.blueAccent),
+                  textAlign: TextAlign.start,
+                  onTap: (text) {
+                    print(text);
+                  },
                 ),
                 // Text(
                 //   _post[index].tags,
@@ -246,7 +255,6 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                       child: Text('No data to show'),
                                     );
                                   }
-                                  print("snapshot.data ${snapshot.data}");
                                   return TextButton.icon(
                                       onPressed: () async {
                                         Navigator.push(
@@ -262,7 +270,9 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                         size: 15,
                                       ),
                                       label: Text(
-                                          "${snapshot.data['likes'].toString()} likes", style: TextStyle(color: Colors.grey),));
+                                        "${snapshot.data['likes'].toString()} likes",
+                                        style: TextStyle(color: Colors.grey),
+                                      ));
                                 }
                               }),
 

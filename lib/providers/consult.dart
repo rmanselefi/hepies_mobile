@@ -14,6 +14,9 @@ enum ConsultStatus { Shared, NotShared, Sharing }
 class ConsultProvider with ChangeNotifier {
   ConsultStatus _shareStatus = ConsultStatus.NotShared;
   ConsultStatus get shareStatus => _shareStatus;
+  List<dynamic> _interests = [];
+  List<dynamic> get interests => _interests;
+
   Future<List<dynamic>> getConsults() async {
     var result;
     List<Consult> consults = [];
@@ -60,7 +63,6 @@ class ConsultProvider with ChangeNotifier {
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Map<String, dynamic> responseData = json.decode(response.body);
-      print("ResponseResponseResponse ${responseData}");
       _shareStatus = ConsultStatus.Shared;
       notifyListeners();
       result = {
@@ -85,7 +87,6 @@ class ConsultProvider with ChangeNotifier {
     Response response = await get(Uri.parse("${AppUrl.consults}/comment/$id"));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      print("mjbjhb ${response.body.length}");
       return json.decode(response.body);
     } else {
       notifyListeners();
@@ -110,7 +111,6 @@ class ConsultProvider with ChangeNotifier {
     });
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      print("comment_lenght ${response.body}");
       return json.decode(response.body);
     } else {
       result = {
@@ -133,7 +133,6 @@ class ConsultProvider with ChangeNotifier {
     });
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      print("like_length ${json.decode(response.body)}");
       return json.decode(response.body);
     } else {
       result = {
@@ -150,7 +149,6 @@ class ConsultProvider with ChangeNotifier {
     Response response = await get(Uri.parse("${AppUrl.consults}/likes/$id"));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      print("comment_lenght ${response.body}");
       return json.decode(response.body);
     } else {
       notifyListeners();
@@ -164,7 +162,6 @@ class ConsultProvider with ChangeNotifier {
 
   Future<Map<String, dynamic>> comment(
       String topic, File file, var consultid) async {
-    print("filefilefile $file");
     _shareStatus = ConsultStatus.Sharing;
     notifyListeners();
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -184,7 +181,6 @@ class ConsultProvider with ChangeNotifier {
       'comment': topic,
       'image': image,
     };
-    print("registrationData $registrationData");
     Response response = await post(
         Uri.parse("${AppUrl.consults}/comment/$consultid"),
         body: json.encode(registrationData),
@@ -195,7 +191,6 @@ class ConsultProvider with ChangeNotifier {
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Map<String, dynamic> responseData = json.decode(response.body);
-      print("ResponseResponseResponse ${responseData}");
       _shareStatus = ConsultStatus.Shared;
       notifyListeners();
       result = {
@@ -227,7 +222,6 @@ class ConsultProvider with ChangeNotifier {
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Map<String, dynamic> responseData = json.decode(response.body);
-      print("ResponseResponseResponse ${responseData}");
       result = {
         'status': true,
         'message': 'Successful',
@@ -265,5 +259,24 @@ class ConsultProvider with ChangeNotifier {
       };
     }
     return result;
+  }
+
+  Future<List<dynamic>> getInterests() async {
+    var result;
+
+    Response response = await get(Uri.parse(AppUrl.interests));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      _interests = json.decode(response.body);
+      notifyListeners();
+      return json.decode(response.body);
+    } else {
+      notifyListeners();
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return json.decode(response.body);
   }
 }

@@ -8,6 +8,7 @@ import 'package:hepies/util/app_url.dart';
 import 'package:hepies/util/shared_preference.dart';
 import 'package:http/http.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum ChangeStatus { NotChanged, Changed, Changing }
 
@@ -21,6 +22,8 @@ class UserProvider with ChangeNotifier {
   ChangeStatus _changedStatus = ChangeStatus.NotChanged;
   ChangeStatus get changedStatus => _changedStatus;
   User get user => _user;
+
+  var points = "";
 
   void setUser(User user) {
     _user = user;
@@ -55,6 +58,9 @@ class UserProvider with ChangeNotifier {
       'speciality': user.speciality,
       'workplace': user.workplace,
       'profile': profile,
+      'dob': user.dob,
+      'sex': user.sex,
+      'interests': user.interests,
       'user': {
         'id': user.userId,
         'username': user.username,
@@ -67,7 +73,6 @@ class UserProvider with ChangeNotifier {
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Map<String, dynamic> responseData = json.decode(response.body);
-      print("ResponseResponseResponse ${responseData}");
 
       _registeredInStatus = Status.LoggedIn;
       notifyListeners();
@@ -98,9 +103,6 @@ class UserProvider with ChangeNotifier {
         headers: {'Content-Type': 'application/json'});
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      // final Map<String, dynamic> responseData = json.decode(response.body);
-      print("ResponseResponseResponse ${response.body}");
-
       _changedStatus = ChangeStatus.Changed;
       notifyListeners();
 
@@ -129,9 +131,6 @@ class UserProvider with ChangeNotifier {
         headers: {'Content-Type': 'application/json'});
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      // final Map<String, dynamic> responseData = json.decode(response.body);
-      print("ResponseResponseResponse ${response.body}");
-
       _changedStatus = ChangeStatus.Changed;
       notifyListeners();
 
@@ -145,5 +144,27 @@ class UserProvider with ChangeNotifier {
       };
     }
     return result;
+  }
+
+  Future<dynamic> getProfile() async {
+    var result;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+    Response response = await post(Uri.parse(AppUrl.getprofile), headers: {
+      'Content-Type': 'application/json',
+      HttpHeaders.authorizationHeader: "Bearer $token"
+    });
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      var result = json.decode(response.body);
+      points = result['profession'][0]['points'];
+      return json.decode(response.body);
+    } else {
+      notifyListeners();
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return json.decode(response.body);
   }
 }

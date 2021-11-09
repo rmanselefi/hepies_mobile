@@ -18,6 +18,9 @@ class User {
   String license;
   String isFit;
 
+  String dob;
+  String sex;
+
   User(
       {this.userId,
       this.professionid,
@@ -36,7 +39,9 @@ class User {
       this.grandfathername,
       this.license,
       this.isFit,
-      this.role});
+      this.role,
+      this.dob,
+      this.sex});
 
   factory User.fromJson(Map<String, dynamic> responseData) {
     return User(
@@ -57,6 +62,9 @@ class User {
         fathername: responseData['profession'][0]['fathername'],
         grandfathername: responseData['profession'][0]['grandfathername'],
         license: responseData['profession'][0]['license'],
-        role: responseData['role']['name']);
+        role: responseData['role']['name'],
+        dob: responseData['profession'][0]['dob'],
+        sex: responseData['profession'][0]['sex']
+    );
   }
 }

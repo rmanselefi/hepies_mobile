@@ -51,20 +51,23 @@ class DatabaseHelper {
         ],
         where: "profession_id = ?",
         whereArgs: [id]);
-    if (ress.length == 0) return null;
-    ress.forEach((element) {
-      Favorites favorites = new Favorites(
-          strength: element['strength'],
-          route: element['route'],
-          name: element['name'],
-          drug_name: element['drug_name'],
-          profession_id: element['profession_id'],
-          unit: element['unit'],
-          takein: element['takein'],
-          frequency: element['frequency'],
-          type: element['type']);
-      fav.add(favorites);
-    });
+    print("ressressress $ress");
+    if (ress.length > 0) {
+      ress.forEach((element) {
+        Favorites favorites = new Favorites(
+            strength: element['strength'],
+            route: element['route'],
+            name: element['name'],
+            drug_name: element['drug_name'],
+            profession_id: element['profession_id'],
+            unit: element['unit'],
+            takein: element['takein'],
+            frequency: element['frequency'],
+            type: element['type']);
+        fav.add(favorites);
+      });
+    }
+
     return fav;
   }
 
@@ -77,7 +80,7 @@ class DatabaseHelper {
         ],
         where: "name = ?",
         whereArgs: [name]);
-    if (ress.length == 0) return null;
+
     // for (var i = 0; i < ress.length; i++) {
     //   var element = ress[i];
     //   print("object object object object object ${element['strength']}");

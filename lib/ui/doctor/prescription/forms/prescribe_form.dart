@@ -27,6 +27,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:country_code_picker/country_code_picker.dart';
 
 class PrescribeForm extends StatefulWidget {
   final Function setPrescription;
@@ -90,6 +91,8 @@ class _PrescribeFormState extends State<PrescribeForm> {
   var from = "";
 
   var _labelController = "Y";
+
+  String _countryCode;
   @override
   void initState() {
     // TODO: implement initState
@@ -339,7 +342,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
     var patientProvider = Provider.of<PatientProvider>(context);
     final professionField = DropdownButtonFormField(
       decoration: InputDecoration(contentPadding: EdgeInsets.all(0.0)),
-      icon: Visibility (visible:false, child: Icon(Icons.arrow_downward)),
+      icon: Visibility(visible: false, child: Icon(Icons.arrow_downward)),
       value: _labelController,
       items: ["Y", "M", "D"]
           .map((label) => DropdownMenuItem(
@@ -389,17 +392,19 @@ class _PrescribeFormState extends State<PrescribeForm> {
                             width: 200,
                             height: 40.0,
                             child: TextFormField(
+                              textAlign: TextAlign.start,
                               controller: phoneController,
-                              maxLength: 13,
+                              maxLength: 9,
                               onSaved: (value) {
                                 setState(() {
-                                  patient.phone = value;
+                                  patient.phone = "+251${value}";
                                 });
                               },
                               onChanged: (String val) async {
-                                if (val.length > 9) {
+                                if (val.length == 9) {
+                                  var phone = "+251${val}";
                                   var res =
-                                      await patientProvider.getPatient(val);
+                                      await patientProvider.getPatient(phone);
                                   if (res != null) {
                                     setState(() {
                                       ageController.text = res['age'];
@@ -409,12 +414,34 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                     });
                                   }
                                   setState(() {
-                                    patient.phone = val;
+                                    patient.phone = phone;
                                   });
                                 }
                               },
                               decoration: InputDecoration(
                                   counterText: "",
+                                  contentPadding: EdgeInsets.zero,
+                                  prefixIcon: SizedBox(
+                                    width: 35,
+                                    child: CountryCodePicker(
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _countryCode = value.dialCode;
+                                          _countryCode == null
+                                              ? _countryCode = "+251"
+                                              : _countryCode = _countryCode;
+                                        });
+                                      },
+                                      backgroundColor: Colors.white,
+                                      initialSelection: 'ET',
+                                      favorite: ['+251', 'ET'],
+                                      showCountryOnly: false,
+                                      showOnlyCountryWhenClosed: false,
+                                      alignLeft: false,
+                                      padding: EdgeInsets.all(0.0),
+                                      showFlag: false,
+                                    ),
+                                  ),
                                   suffix: patientProvider.fetchStatus ==
                                           Status.Fetching
                                       ? Container(
@@ -423,9 +450,8 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                           child: CircularProgressIndicator())
                                       : null,
                                   border: OutlineInputBorder(),
-                                  hintText: rememberMe
-                                      ? 'Phone Number'
-                                      : 'Phone Number (Required)',
+                                  hintText:
+                                      rememberMe ? '90000000' : '90000000',
                                   hintStyle: TextStyle(
                                       color: !rememberMe
                                           ? Colors.redAccent
@@ -433,27 +459,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
                             ),
                           ),
                         ),
-                        // Container(
-                        //   width: 80,
-                        //   height: 40.0,
-                        //   child: TextFormField(
-                        //     controller: ageController,
-                        //     onSaved: (value) => patient.age = value,
-                        //     onChanged: (val) {
-                        //       setState(() {
-                        //         patient.age = val;
-                        //       });
-                        //     },
-                        //     keyboardType: TextInputType.number,
-                        //     decoration: InputDecoration(
-                        //         border: OutlineInputBorder(),
-                        //         hintText: rememberMe ? 'Age' : 'Age (Required)',
-                        //         hintStyle: TextStyle(
-                        //             color: !rememberMe
-                        //                 ? Colors.redAccent
-                        //                 : Colors.black26)),
-                        //   ),
-                        // ),
                         Expanded(
                           child: Container(
                             width: 80,
@@ -951,12 +956,23 @@ class _PrescribeFormState extends State<PrescribeForm> {
                               "You got provide at least ampule or frequency(take in)",
                         ),
                       );
+                    } else if (weightController.text != "" &&
+                        (double.parse(weightController.text) < 1.5 ||
+                            double.parse(weightController.text) > 135) &&
+                        widget.type == "general") {
+                      showTopSnackBar(
+                        context,
+                        CustomSnackBar.error(
+                          message:
+                              "The weight value must be between 1.5 and 135 (Kg)",
+                        ),
+                      );
                     } else {
                       User user = await UserPreferences().getUser();
                       var profession =
                           "${user.profession} ${user.name} ${user.fathername}";
 
-                      print("statusstatusstatus ===> ${status}");
+                      print("statusstatusstatus ===> ${user.professionid}");
                       if (status == 'add') {
                         final Map<String, dynamic> patientData = {
                           "name": patient.name,
@@ -1020,6 +1036,8 @@ class _PrescribeFormState extends State<PrescribeForm> {
                           finaPrescription[presIndex]['dx']['diagnosis'] =
                               diagnosisController.text;
                           //update the patient info
+                          print(
+                              "finaPatientfinaPatientfinaPatient $finaPatient");
                           if (finaPatient.length == 0) {
                             final Map<String, dynamic> patientData = {
                               "name": patient.name,
@@ -1029,6 +1047,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                               "phone": phoneController.text,
                               "sex": _chosenValue,
                               "weight": weightController.text,
+                              "professionid": user.professionid
                             };
                             finaPatient.add(patientData);
                           } else {
@@ -1039,6 +1058,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                             finaPatient[0]['phone'] = phoneController.text;
                             finaPatient[0]['sex'] = _chosenValue;
                             finaPatient[0]['weight'] = weightController.text;
+                            finaPatient[0]['professionid'] = user.professionid;
                           }
                         });
                       }

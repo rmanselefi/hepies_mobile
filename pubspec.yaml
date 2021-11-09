@@ -50,6 +50,11 @@ dependencies:
   dio:
   percent_indicator:
   flutter_pdfview:
+  hashtagable:
+  syncfusion_flutter_datepicker:
+  country_code_picker:
+  google_fonts:
+  math_expressions:
 
 dev_dependencies:
   flutter_test:

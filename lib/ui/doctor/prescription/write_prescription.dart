@@ -5,6 +5,7 @@ import 'package:hepies/models/favorites.dart';
 import 'package:hepies/models/hx.dart';
 import 'package:hepies/models/px.dart';
 import 'package:hepies/providers/prescription_provider.dart';
+import 'package:hepies/ui/doctor/calculator/calculator.dart';
 import 'package:hepies/ui/doctor/favorites/favorites.dart';
 import 'package:hepies/ui/doctor/guidelines/guidelines.dart';
 import 'package:hepies/ui/doctor/medicalrecords/add_history.dart';
@@ -203,6 +204,10 @@ class _WritePrescriptionState extends State<WritePrescription> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Calculator()));
+                  },
                   child: Container(
                     height: 40,
                     width: 100,
@@ -518,7 +523,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                       onTap: () async {
                         try {
                           if (pretype == "general" || pretype == "instrument") {
-                            print("prescriptionprescription $prescription");
+                            print("prescriptionprescription $patient");
                             if (prescription.length != 0 &&
                                 patient.length != 0) {
                               for (var i = 0; i < patient.length; i++) {
@@ -583,7 +588,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                 Provider.of<PrescriptionProvider>(context,
                                         listen: false)
                                     .resetStatus();
-                                Navigator.push(
+                                Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => WritePrescription(

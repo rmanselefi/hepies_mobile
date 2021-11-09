@@ -48,7 +48,7 @@ class _FavoritesState extends State<FavoritesPage> {
                                     child: CircularProgressIndicator(),
                                   );
                                 } else {
-                                  if (snapshot.data == null) {
+                                  if (snapshot.data == null || snapshot.data.length==0) {
                                     return Center(
                                       child: Text('No data to show'),
                                     );
