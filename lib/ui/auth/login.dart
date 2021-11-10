@@ -28,8 +28,7 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     AuthProvider auth = Provider.of<AuthProvider>(context);
 
-    InputDecoration buildInputDecorationn(
-        String hintText, IconData icon) {
+    InputDecoration buildInputDecorationn(String hintText, IconData icon) {
       return InputDecoration(
         prefixIcon: Icon(icon, color: Color.fromRGBO(50, 62, 72, 1.0)),
         hintText: hintText,
@@ -46,25 +45,23 @@ class _LoginState extends State<Login> {
     }
 
     final usernameField = TextFormField(
-      autofocus: false,
-      validator: (value) => value.isEmpty ? "Please enter username" : null,
-      onSaved: (value) => _username = value,
-      decoration: InputDecoration(
-        prefixIcon: Icon(Icons.person, color: Color.fromRGBO(50, 62, 72, 1.0)),
-        hintText: "Username",
-        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
-
-      )
-    );
+        autofocus: false,
+        validator: (value) => value.isEmpty ? "Please enter username" : null,
+        onSaved: (value) => _username = value,
+        decoration: InputDecoration(
+          prefixIcon:
+              Icon(Icons.person, color: Color.fromRGBO(50, 62, 72, 1.0)),
+          hintText: "Username",
+          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+        ));
 
     final passwordField = TextFormField(
       autofocus: false,
       obscureText: _isObscure,
       validator: (value) => value.isEmpty ? "Please enter password" : null,
       onSaved: (value) => _password = value,
-      decoration:
-      buildInputDecorationn("Password", Icons.lock),
+      decoration: buildInputDecorationn("Password", Icons.lock),
     );
 
     var loading = Row(
@@ -144,12 +141,10 @@ class _LoginState extends State<Login> {
             key: formKey,
             child: ListView(
               children: [
-                Center(
-                  child: Text(
-                    'WorkenehApp',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
-                  ),
+                Text(
+                  'WorkenehApp',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
                 ),
                 SizedBox(height: 15.0),
                 label("Username"),

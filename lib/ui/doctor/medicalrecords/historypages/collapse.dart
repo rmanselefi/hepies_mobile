@@ -56,7 +56,7 @@ class Card1 extends StatelessWidget {
                     padding: EdgeInsets.all(10),
                     child: Text(
                       "Hematology",
-                      style: Theme.of(context).textTheme.body2,
+                      style: Theme.of(context).textTheme.bodyText2,
                     )),
                 collapsed: Text(
                   loremIpsum,
@@ -121,7 +121,7 @@ class Card2 extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     "Expandable",
-                    style: Theme.of(context).textTheme.body1,
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ],
               ),
@@ -148,7 +148,7 @@ class Card2 extends StatelessWidget {
                 children: <Widget>[
                   Text(
                     "Expandable",
-                    style: Theme.of(context).textTheme.body1,
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
                   Text(
                     "3 Expandable widgets",
@@ -325,16 +325,20 @@ class Card3 extends StatelessWidget {
 }
 
 class ArticleWidget extends StatelessWidget {
-
-
-
   @override
   Widget build(BuildContext context) {
     return ExpandablePanel(
       header: Text("title"),
-      collapsed: Text("articlebody", softWrap: true, maxLines: 2, overflow: TextOverflow.ellipsis,),
-      expanded: Text("articlebody", softWrap: true, ),
-
+      collapsed: Text(
+        "articlebody",
+        softWrap: true,
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+      ),
+      expanded: Text(
+        "articlebody",
+        softWrap: true,
+      ),
     );
   }
 }

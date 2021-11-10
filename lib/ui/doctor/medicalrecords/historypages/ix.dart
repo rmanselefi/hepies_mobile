@@ -284,7 +284,7 @@ class _IXState extends State<IX> with AutomaticKeepAliveClientMixin {
                               padding: EdgeInsets.all(10),
                               child: Text(
                                 "Hematology",
-                                style: Theme.of(context).textTheme.body2,
+                                style: Theme.of(context).textTheme.bodyText2,
                               )),
                           expanded: _buildHemtologyForm(),
                           builder: (_, collapsed, expanded) {
@@ -330,7 +330,7 @@ class _IXState extends State<IX> with AutomaticKeepAliveClientMixin {
                               padding: EdgeInsets.all(10),
                               child: Text(
                                 "Chemistry",
-                                style: Theme.of(context).textTheme.body2,
+                                style: Theme.of(context).textTheme.bodyText2,
                               )),
                           expanded: _buildChemistryForm(),
                           builder: (_, collapsed, expanded) {
@@ -372,7 +372,7 @@ class _IXState extends State<IX> with AutomaticKeepAliveClientMixin {
                           padding: EdgeInsets.all(10),
                           child: Text(
                             "Urine Analysis",
-                            style: Theme.of(context).textTheme.body2,
+                            style: Theme.of(context).textTheme.bodyText2,
                           )),
                       expanded: _buildUrineForm(),
                       builder: (_, collapsed, expanded) {
@@ -413,7 +413,7 @@ class _IXState extends State<IX> with AutomaticKeepAliveClientMixin {
                           padding: EdgeInsets.all(10),
                           child: Text(
                             "Stool Exam",
-                            style: Theme.of(context).textTheme.body2,
+                            style: Theme.of(context).textTheme.bodyText2,
                           )),
                       expanded: _buildStoolForm(),
                       builder: (_, collapsed, expanded) {
@@ -454,7 +454,7 @@ class _IXState extends State<IX> with AutomaticKeepAliveClientMixin {
                           padding: EdgeInsets.all(10),
                           child: Text(
                             "Serology",
-                            style: Theme.of(context).textTheme.body2,
+                            style: Theme.of(context).textTheme.bodyText2,
                           )),
                       expanded: _buildSerologyForm(),
                       builder: (_, collapsed, expanded) {
@@ -495,7 +495,7 @@ class _IXState extends State<IX> with AutomaticKeepAliveClientMixin {
                           padding: EdgeInsets.all(10),
                           child: Text(
                             "Endocrinology",
-                            style: Theme.of(context).textTheme.body2,
+                            style: Theme.of(context).textTheme.bodyText2,
                           )),
                       expanded: _buildEndocrinologyForm(),
                       builder: (_, collapsed, expanded) {
@@ -536,7 +536,7 @@ class _IXState extends State<IX> with AutomaticKeepAliveClientMixin {
                           padding: EdgeInsets.all(10),
                           child: Text(
                             "Tumor Markers",
-                            style: Theme.of(context).textTheme.body2,
+                            style: Theme.of(context).textTheme.bodyText2,
                           )),
                       expanded: _buildTumorForm(),
                       builder: (_, collapsed, expanded) {
@@ -577,7 +577,7 @@ class _IXState extends State<IX> with AutomaticKeepAliveClientMixin {
                           padding: EdgeInsets.all(10),
                           child: Text(
                             "Microbiology Index",
-                            style: Theme.of(context).textTheme.body2,
+                            style: Theme.of(context).textTheme.bodyText2,
                           )),
                       expanded: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -635,7 +635,7 @@ class _IXState extends State<IX> with AutomaticKeepAliveClientMixin {
                           padding: EdgeInsets.all(10),
                           child: Text(
                             "Pathology Index",
-                            style: Theme.of(context).textTheme.body2,
+                            style: Theme.of(context).textTheme.bodyText2,
                           )),
                       expanded: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -693,7 +693,7 @@ class _IXState extends State<IX> with AutomaticKeepAliveClientMixin {
                           padding: EdgeInsets.all(10),
                           child: Text(
                             "Radiology Index",
-                            style: Theme.of(context).textTheme.body2,
+                            style: Theme.of(context).textTheme.bodyText2,
                           )),
                       expanded: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
