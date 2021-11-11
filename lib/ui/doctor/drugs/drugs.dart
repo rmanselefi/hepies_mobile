@@ -54,6 +54,8 @@ class _DrugsState extends State<Drugs> {
                             hintStyle: TextStyle(color: Colors.grey[800]),
                             hintText: "Search",
                             fillColor: Colors.white70),
+                        textCapitalization: TextCapitalization
+                            .words, // Milkessa: Added 'textCapitalization' property to inforce keyboard to always start with a capital letter
                       ),
                     ),
                   ),

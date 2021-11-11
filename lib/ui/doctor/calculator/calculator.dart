@@ -436,7 +436,7 @@ class _CalculatorState extends State<Calculator> {
                                   width: width(context) * 0.2375,
                                   height: 35,
                                   decoration: BoxDecoration(
-                                    color: Colors.blue,
+                                    color: Color(0xff07febb),
                                     borderRadius: BorderRadius.all(
                                       Radius.circular(4.0),
                                     ),
@@ -464,7 +464,7 @@ class _CalculatorState extends State<Calculator> {
                                             !calculated ? 'calculate' : 'reset',
                                             style: TextStyle(
                                               fontSize: 15,
-                                              color: Colors.white,
+                                              color: Colors.black,
                                             ),
                                           ),
                                         ),
