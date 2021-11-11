@@ -13,7 +13,11 @@ class _DrugDetailState extends State<DrugDetail> {
   @override
   Widget build(BuildContext context) {
     String about = widget.drug['about'];
-    List<Text> bolded = about != null ? _transformWord(about) : "";
+    List<Text> bolded = about != null
+        ? _transformWord(about)
+        : [
+            Text('')
+          ]; // Milkessa: 'double quotation ("")' changed to '[Text('')]'
 
     return Scaffold(
       body: SafeArea(
@@ -124,7 +128,7 @@ class _DrugDetailState extends State<DrugDetail> {
     List<String> name = word.split(' ');
     List<Text> textWidgets = [];
     for (int i = 0; i < name.length; i++) {
-      var spe=name[i].replaceAll(RegExp(",|!|'"), "");
+      var spe = name[i].replaceAll(RegExp(",|!|'"), "");
       print(spe);
       if (bold_words.contains(spe)) {
         Text bold = Text(

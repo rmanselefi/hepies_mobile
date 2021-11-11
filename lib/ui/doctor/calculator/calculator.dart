@@ -44,6 +44,9 @@ class _CalculatorState extends State<Calculator> {
     });
   }
 
+// Milkessa: BMI calculator has been added to this page using an enum 'calcState' which controls the type of calculator to display
+// added variables: 'calcState', 'weightInput', 'bmiResult'
+//added method: 'bmiCalc'
   CalcState calcState = CalcState.normal;
   String weightInput, heightInput;
   String bmiResult = '';
@@ -182,10 +185,8 @@ class _CalculatorState extends State<Calculator> {
                   });
                 },
               ),
-              SizedBox(height: 5),
               calcState == CalcState.normal
-                  ? Card(
-                      elevation: 0,
+                  ? Container(
                       child: Column(
                         children: [
                           Container(
@@ -405,6 +406,7 @@ class _CalculatorState extends State<Calculator> {
                                             heightInput = input;
                                           },
                                         ),
+                                        SizedBox(height: 20),
                                       ],
                                     ),
                                   )
@@ -427,7 +429,6 @@ class _CalculatorState extends State<Calculator> {
                                       ),
                                     ),
                                   ),
-                            SizedBox(height: 30),
                             Padding(
                               padding: EdgeInsets.all(4.0),
                               child: Center(
@@ -444,12 +445,16 @@ class _CalculatorState extends State<Calculator> {
                                     color: Colors.transparent,
                                     child: InkWell(
                                       onTap: () {
-                                        calculated = !calculated;
                                         setState(() {
-                                          bmiResult = bmiCalc(
-                                            double.parse(weightInput ?? 0),
-                                            double.parse(heightInput ?? 1),
-                                          );
+                                          if (weightInput != null) {
+                                            calculated = !calculated;
+                                            bmiResult = bmiCalc(
+                                              double.parse(weightInput ?? 0),
+                                              double.parse(heightInput ?? 1),
+                                            );
+                                          } else {
+                                            calculated = false;
+                                          }
                                         });
                                       },
                                       child: Center(

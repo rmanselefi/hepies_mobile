@@ -39,7 +39,8 @@ class _DrugsState extends State<Drugs> {
                       child: TextField(
                         onChanged: (val) {
                           var drugs =
-                              Provider.of<DrugProvider>(context, listen: false).drugs;
+                              Provider.of<DrugProvider>(context, listen: false)
+                                  .drugs;
                           var drug = setState(() {
                             drugName = val;
                           });
@@ -75,7 +76,8 @@ class _DrugsState extends State<Drugs> {
 
                           print("objectobjectobject ${snapshot.data}");
                           List<dynamic> drugs = snapshot.data
-                              .where((element) => element['name'].contains(drugName))
+                              .where((element) => element['name'].startsWith(
+                                  drugName)) // Milkessa: 'contains' was changed to 'startsWith'
                               .toList();
                           return Container(
                             height: 2 * MediaQuery.of(context).size.height / 3,
@@ -83,9 +85,12 @@ class _DrugsState extends State<Drugs> {
                               shrinkWrap: true,
                               children: drugs.map<Widget>((e) {
                                 return GestureDetector(
-                                  onTap: (){
+                                  onTap: () {
                                     Navigator.push(
-                                        context, MaterialPageRoute(builder: (context) => DrugDetail(e)));
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                DrugDetail(e)));
                                   },
                                   child: Container(
                                       padding: EdgeInsets.all(10.0),
@@ -93,7 +98,8 @@ class _DrugsState extends State<Drugs> {
                                         e['name'] != null ? e['name'] : '',
                                         style: TextStyle(
                                             fontSize: 20.0,
-                                            decoration: TextDecoration.underline),
+                                            decoration:
+                                                TextDecoration.underline),
                                       )),
                                 );
                               }).toList(),
@@ -104,15 +110,13 @@ class _DrugsState extends State<Drugs> {
                 ],
               ),
             ),
-
             Container(
                 height: 50,
                 width: double.maxFinite,
                 decoration: BoxDecoration(
                     borderRadius:
-                    BorderRadius.vertical(top: Radius.circular(20.0))),
-                child: Footer()
-            )
+                        BorderRadius.vertical(top: Radius.circular(20.0))),
+                child: Footer())
           ],
         ),
       ),
