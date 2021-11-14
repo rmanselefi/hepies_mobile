@@ -204,9 +204,10 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                 //   style: TextStyle(fontSize: 14),
                 // ),
                 HashTagText(
-                  text: "${widget.consults[index]['topic']}",
+                  text: "${widget.consults[index]['topic'] ?? ' '}",
                   basicStyle: TextStyle(fontSize: 14, color: Colors.black),
-                  decoratedStyle: TextStyle(fontSize: 14, color: Colors.blueAccent),
+                  decoratedStyle:
+                      TextStyle(fontSize: 14, color: Colors.blueAccent),
                   textAlign: TextAlign.start,
                   onTap: (text) {
                     print(text);

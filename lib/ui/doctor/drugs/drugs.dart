@@ -77,10 +77,22 @@ class _DrugsState extends State<Drugs> {
                           }
 
                           print("objectobjectobject ${snapshot.data}");
-                          List<dynamic> drugs = snapshot.data
-                              .where((element) => element['name'].startsWith(
-                                  drugName)) // Milkessa: 'contains' was changed to 'startsWith'
-                              .toList();
+                          // Milkessa: search finding algorithm implemented inorder to list orderly.
+                          List<dynamic> drugs;
+                          for (int i = 0; i < 2; i++) {
+                            if (i == 0)
+                              drugs = snapshot.data
+                                  .where((element) =>
+                                      element['name'].startsWith(drugName))
+                                  .toList();
+                            else
+                              drugs.addAll(snapshot.data
+                                  .where((element) =>
+                                      element['name']
+                                          .contains(drugName.toLowerCase()) &
+                                      !element['name'].startsWith(drugName))
+                                  .toList());
+                          }
                           return Container(
                             height: 2 * MediaQuery.of(context).size.height / 3,
                             child: ListView(

@@ -63,7 +63,8 @@ class _ImageInputState extends State<ImageInputProfile> {
   @override
   Widget build(BuildContext context) {
     print("profileprofile ${widget.profile}");
-    bool _validURL = Uri.parse(widget.profile).isAbsolute;
+    //bool _validURL = Uri.parse(widget.profile).isAbsolute;
+    bool _validURL = false; // Milkessa: just for the time being
     // TODO: implement build
     return Column(
       children: <Widget>[
@@ -82,7 +83,8 @@ class _ImageInputState extends State<ImageInputProfile> {
                       image: !_validURL
                           ? new DecorationImage(
                               image: _image == null
-                                  ? new ExactAssetImage('assets/as.png')
+                                  ? new ExactAssetImage(
+                                      'assets/an.png') // Milkessa: changed profile place holder for a gender neutral place holder image
                                   : new FileImage(
                                       File(_image.path.toString()),
                                     ),

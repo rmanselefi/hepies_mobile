@@ -1,6 +1,9 @@
 import 'dart:io';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:hepies/constants.dart';
 import 'package:hepies/models/user.dart';
 import 'package:hepies/providers/auth.dart';
 import 'package:hepies/providers/user_provider.dart';
@@ -23,7 +26,97 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   final formKey = new GlobalKey<FormState>();
   bool rememberMe = false;
+  TapGestureRecognizer _tapRecognizer;
 
+  @override
+  void initState() {
+    super.initState();
+    _tapRecognizer = TapGestureRecognizer()..onTap = _handlePress;
+  }
+
+  @override
+  void dispose() {
+    _tapRecognizer.dispose();
+    super.dispose();
+  }
+
+  void _handlePress() {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        shape: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        elevation: 5,
+        child: Container(
+          width: width(context) * 0.8,
+          height: height(context) * 0.4,
+          padding: EdgeInsets.all(10),
+          child: Column(
+            children: [
+              SizedBox(height: 10),
+              Text(
+                'Terms & Conditions',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
+              ),
+              SizedBox(height: 10),
+              Expanded(
+                child: Text(
+                  'The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. ',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(4.0),
+                    child: Center(
+                      child: Container(
+                        width: width(context) * 0.2375,
+                        height: 35,
+                        decoration: BoxDecoration(
+                          color: Color(0xff07febb),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(4.0),
+                          ),
+                        ),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                rememberMe = true;
+                              });
+                              Navigator.pop(context);
+                            },
+                            child: Center(
+                              child: Padding(
+                                padding: EdgeInsets.all(4.0),
+                                child: Text(
+                                  'Agree',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
   String _username,
       _password,
@@ -179,34 +272,28 @@ class _RegisterState extends State<Register> {
                 _professionController, interests, File(file.path))
             .then((response) {
           if (response['status']) {
-
             showTopSnackBar(
               context,
               CustomSnackBar.error(
-                message:
-                "Registration Successful. Please login",
+                message: "Registration Successful. Please login",
               ),
             );
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => Login()));
           } else {
-
             showTopSnackBar(
               context,
               CustomSnackBar.error(
-                message:
-                response.toString(),
+                message: response.toString(),
               ),
             );
           }
         });
       } else {
-
         showTopSnackBar(
           context,
           CustomSnackBar.error(
-            message:
-            "Please Complete the form properly",
+            message: "Please Complete the form properly",
           ),
         );
       }
@@ -218,11 +305,10 @@ class _RegisterState extends State<Register> {
           padding: EdgeInsets.all(40.0),
           child: ListView(
             children: [
-              Center(
-                child: Text(
-                  'Hepies',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
-                ),
+              Text(
+                'Hepies',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
               ),
               Form(
                 key: formKey,
@@ -265,24 +351,41 @@ class _RegisterState extends State<Register> {
                     label("Confirm Password"),
                     SizedBox(height: 10.0),
                     confirmPassword,
+                    //'By signing up, you agree to our Terms Conditions and Privacy Policy'
                     CheckboxListTile(
-                      title: Text('By signing up, you agree to our Terms Conditions and Privacy Policy'),
+                      title: RichText(
+                        textAlign: TextAlign.start,
+                        maxLines: 2,
+                        text: TextSpan(
+                          text: 'By signing up, you agree to our ',
+                          style: TextStyle(fontSize: 14, color: Colors.black),
+                          children: <TextSpan>[
+                            TextSpan(
+                              text: 'Terms Conditions and Privacy Policy',
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.blue),
+                              recognizer: _tapRecognizer,
+                              mouseCursor: SystemMouseCursors.precise,
+                            ),
+                          ],
+                        ),
+                      ),
                       value: rememberMe,
                       onChanged: (newValue) {
                         setState(() {
                           rememberMe = newValue;
                         });
                       },
-                      controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
+                      controlAffinity: ListTileControlAffinity
+                          .leading, //  <-- leading Checkbox
                     ),
                     SizedBox(height: 20.0),
                     auth.loggedInStatus == Status.Authenticating
                         ? loading
-                        : longButtons("Register", !rememberMe,doRegister),
+                        : longButtons("Register", !rememberMe, doRegister),
                     SizedBox(
                       height: 10.0,
                     ),
-
                   ],
                 ),
               ),

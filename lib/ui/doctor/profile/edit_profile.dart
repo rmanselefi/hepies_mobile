@@ -187,39 +187,33 @@ class _EditProfileState extends State<EditProfile>
                             padding: EdgeInsets.only(left: 20.0, top: 20.0),
                             child: new Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                IconButton(
-                                  icon: new Icon(
-                                    Icons.arrow_back_ios,
-                                    color: Colors.black,
-                                    size: 22.0,
+                                Expanded(
+                                  child: IconButton(
+                                    alignment: Alignment.centerLeft,
+                                    icon: new Icon(
+                                      Icons.arrow_back_ios,
+                                      color: Colors.black,
+                                      size: 22.0,
+                                    ),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
                                   ),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.only(left: 25.0),
-                                  child: new Text('PROFILE',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20.0,
-                                          fontFamily: 'sans-serif-light',
-                                          color: Colors.black)),
-                                ),
-                                IconButton(
-                                    icon: Icon(Icons.logout),
-                                    onPressed: () async {
-                                      await Provider.of<AuthProvider>(context,
-                                              listen: false)
-                                          .logout();
-                                      Navigator.pushAndRemoveUntil(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => Login()),
-                                          (route) => false);
-                                    })
+                                Expanded(
+                                  flex: 2,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 25.0),
+                                    child: Text('PROFILE',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20.0,
+                                            fontFamily: 'sans-serif-light',
+                                            color: Colors.black)),
+                                  ),
+                                ), // Milkessa: Logout button deleted
                               ],
                             )),
                         Expanded(
@@ -257,83 +251,6 @@ class _EditProfileState extends State<EditProfile>
                                             fontWeight: FontWeight.bold),
                                       ),
                                     ],
-                                  ),
-                                ],
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 25.0),
-                              child: new Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  new Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      new Text(
-                                        'Name',
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 2.0),
-                              child: new Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  new Flexible(
-                                    child: new TextFormField(
-                                      decoration: const InputDecoration(
-                                        hintText: "Enter Your Name",
-                                      ),
-                                      controller: _nameController,
-                                      validator: (val) =>
-                                          val.isEmpty ? 'Name is required' : '',
-                                    ),
-                                  ),
-                                ],
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 25.0),
-                              child: new Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  new Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      new Text(
-                                        'Father Name',
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 2.0),
-                              child: new Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  new Flexible(
-                                    child: new TextFormField(
-                                      validator: (val) => val.isEmpty
-                                          ? 'Father Name is required'
-                                          : '',
-                                      controller: _fatherNameController,
-                                      decoration: const InputDecoration(
-                                        hintText: "Enter Your Father Name",
-                                      ),
-                                    ),
                                   ),
                                 ],
                               )),
@@ -408,46 +325,6 @@ class _EditProfileState extends State<EditProfile>
                                 ],
                               )),
                           SizedBox(height: 15.0),
-                          label("Profession"),
-                          SizedBox(height: 5.0),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 25.0, right: 25.0, top: 2.0),
-                            child: professionField,
-                          ),
-                          SizedBox(height: 15.0),
-                          label("Sex"),
-                          SizedBox(height: 5.0),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 25.0, right: 25.0, top: 2.0),
-                            child: sexField,
-                          ),
-                          SizedBox(height: 15.0),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 25.0),
-                              child: new Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  new Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      new Text(
-                                        'Date of Birth',
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 2.0),
-                              child: dobField),
                           Padding(
                               padding: EdgeInsets.only(
                                   left: 25.0, right: 25.0, top: 25.0),

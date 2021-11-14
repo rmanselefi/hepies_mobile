@@ -212,7 +212,7 @@ class _CalculatorState extends State<Calculator> {
                                 style: GoogleFonts.rubik(
                                   textStyle: TextStyle(
                                     fontSize: 48,
-                                    color: Colors.white,
+                                    color: Colors.black,
                                   ),
                                 ),
                               ),

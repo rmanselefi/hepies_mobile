@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hashtagable/widgets/hashtag_text.dart';
 import 'package:hashtagable/widgets/hashtag_text_field.dart';
+import 'package:hepies/constants.dart';
 import 'package:hepies/providers/consult.dart';
 import 'package:hepies/ui/doctor/consults/consult_list.dart';
 import 'package:hepies/ui/pharmacy/ui/consults/consult_list.dart';
@@ -30,7 +31,10 @@ class _ShareConsultState extends State<ShareConsult> {
 
   var name = '';
   void _setImage(XFile image) {
-    file = image;
+    setState(() {
+      file = image;
+    });
+
     print("_formData_formData_formData${file}");
   }
 
@@ -75,35 +79,71 @@ class _ShareConsultState extends State<ShareConsult> {
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               children: [
-                HashTagTextField(
-                  decoration: InputDecoration(
-                      hintText: 'Share, consult, promote, inform..',
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors.grey.shade50, width: 0.5))),
-                  basicStyle: TextStyle(fontSize: 15, color: Colors.black),
-                  decoratedStyle: TextStyle(fontSize: 15, color: Colors.blue),
-                  keyboardType: TextInputType.multiline,
-                  controller: _topic,
+                Row(
+                  // Milkesa: Added mini image display next to consult text field
+                  children: [
+                    Flexible(
+                      flex: 3,
+                      child: Padding(
+                        padding: EdgeInsets.all(3),
+                        child: HashTagTextField(
+                          decoration: InputDecoration(
+                              hintText: 'Share, consult, promote, inform..',
+                              border: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.grey.shade50, width: 0.5))),
+                          basicStyle:
+                              TextStyle(fontSize: 15, color: Colors.black),
+                          decoratedStyle:
+                              TextStyle(fontSize: 15, color: Colors.blue),
+                          keyboardType: TextInputType.multiline,
+                          controller: _topic,
 
-                  /// Called when detection (word starts with #, or # and @) is being typed
-                  onDetectionTyped: (text) {
-                    if (text.length > 1) {
-                      text.substring(2);
-                      print("text ${text.substring(2)}");
-                      setState(() {
-                        name = text.substring(2).toLowerCase();
-                      });
-                    }
+                          /// Called when detection (word starts with #, or # and @) is being typed
+                          onDetectionTyped: (text) {
+                            if (text.length > 1) {
+                              text.substring(2);
+                              print("text ${text.substring(2)}");
+                              setState(() {
+                                name = text.substring(2).toLowerCase();
+                              });
+                            }
 
-                    print("texttexttexttexttext $text");
-                  },
+                            print("texttexttexttexttext $text");
+                          },
 
-                  /// Called when detection is fully typed
-                  onDetectionFinished: () {
-                    print("detection finished");
-                  },
-                  maxLines: 4,
+                          /// Called when detection is fully typed
+                          onDetectionFinished: () {
+                            print("detection finished");
+                          },
+                          maxLines: 4,
+                        ),
+                      ),
+                    ),
+                    Flexible(
+                      child: file != null
+                          ? Container(
+                              width: width(context) * 0.25,
+                              margin: EdgeInsets.all(5),
+                              child: Stack(
+                                children: [
+                                  Image.file(File(file.path),
+                                      fit: BoxFit.contain),
+                                  IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        file = null;
+                                      });
+                                    },
+                                    icon: Icon(Icons.cancel_outlined,
+                                        color: Colors.blue),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : Container(width: 0),
+                    ),
+                  ],
                 ),
                 Align(
                   alignment: Alignment.topRight,
@@ -149,7 +189,8 @@ class _ShareConsultState extends State<ShareConsult> {
                                           var photo = file != null
                                               ? File(file.path)
                                               : null;
-                                          if (_topic.text != "" &&
+                                          if (_topic.text !=
+                                                  "" || //Milkessa: added posting capability with either text or image
                                               file != null) {
                                             var res = await consult.share(
                                                 _topic.text, photo);

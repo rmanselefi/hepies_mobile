@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:hepies/constants.dart';
 import 'package:hepies/models/chemistry.dart';
 import 'package:hepies/models/drug.dart';
 import 'package:hepies/models/dx.dart';
@@ -374,7 +375,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     CheckboxListTile(
-                      title: Text("Favorite"),
+                      title: Text("Add to favourite"),
                       value: rememberMe,
                       onChanged: (newValue) {
                         setState(() {
@@ -394,15 +395,20 @@ class _PrescribeFormState extends State<PrescribeForm> {
                             child: TextFormField(
                               textAlign: TextAlign.start,
                               controller: phoneController,
-                              maxLength: 9,
+                              maxLength: 10,
                               onSaved: (value) {
                                 setState(() {
-                                  patient.phone = "+251${value}";
+                                  // Milkessa: Added the option for phone numbers starting with '09'
+                                  patient.phone = value.startsWith('09')
+                                      ? "+251${value.substring(1)}"
+                                      : "+251${value}";
                                 });
                               },
                               onChanged: (String val) async {
-                                if (val.length == 9) {
-                                  var phone = "+251${val}";
+                                if (val.length == 9 || val.length == 10) {
+                                  var phone = val.startsWith('09')
+                                      ? "+251${val.substring(1)}"
+                                      : "+251${val}";
                                   var res =
                                       await patientProvider.getPatient(phone);
                                   if (res != null) {
@@ -805,25 +811,77 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                     children: [
                                       Row(
                                         children: [
-                                          Container(
-                                            width: 100,
-                                            height: 40,
-                                            child: TextFormField(
-                                              controller: diagnosisController,
-                                              onChanged: (val) {
-                                                setState(() {
-                                                  prescription.diagnosis = val;
-                                                });
-                                              },
-                                              decoration: InputDecoration(
-                                                border: OutlineInputBorder(),
-                                                enabledBorder:
-                                                    const OutlineInputBorder(
-                                                  borderSide: const BorderSide(
-                                                      color: Colors.green,
-                                                      width: 1.0),
+                                          GestureDetector(
+                                            onTap: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) => Dialog(
+                                                  shape: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                  ),
+                                                  elevation: 5,
+                                                  child: Container(
+                                                    width: width(context) * 0.8,
+                                                    height:
+                                                        height(context) * 0.4,
+                                                    padding: EdgeInsets.all(10),
+                                                    child: Center(
+                                                      child: TextFormField(
+                                                        controller:
+                                                            diagnosisController,
+                                                        onChanged: (val) {
+                                                          setState(() {
+                                                            prescription
+                                                                    .diagnosis =
+                                                                val;
+                                                          });
+                                                        },
+                                                        decoration:
+                                                            InputDecoration(
+                                                          border:
+                                                              OutlineInputBorder(),
+                                                          enabledBorder:
+                                                              const OutlineInputBorder(
+                                                            borderSide:
+                                                                const BorderSide(
+                                                                    color: Colors
+                                                                        .green,
+                                                                    width: 1.0),
+                                                          ),
+                                                          hintText:
+                                                              'DX/Diagnosis',
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
                                                 ),
-                                                hintText: 'DX/Diagnosis',
+                                              );
+                                            },
+                                            child: Container(
+                                              width: 100,
+                                              height: 40,
+                                              child: TextFormField(
+                                                enabled: false,
+                                                controller: diagnosisController,
+                                                onChanged: (val) {
+                                                  setState(() {
+                                                    prescription.diagnosis =
+                                                        val;
+                                                  });
+                                                },
+                                                decoration: InputDecoration(
+                                                  border: OutlineInputBorder(),
+                                                  enabledBorder:
+                                                      const OutlineInputBorder(
+                                                    borderSide:
+                                                        const BorderSide(
+                                                            color: Colors.green,
+                                                            width: 1.0),
+                                                  ),
+                                                  hintText: 'DX/Diagnosis',
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -834,25 +892,74 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                       ),
                                       Row(
                                         children: [
-                                          Container(
-                                            width: 100,
-                                            height: 40,
-                                            child: TextFormField(
-                                              controller: addressController,
-                                              onChanged: (val) {
-                                                setState(() {
-                                                  prescription.ampule = val;
-                                                });
-                                              },
-                                              decoration: InputDecoration(
-                                                border: OutlineInputBorder(),
-                                                enabledBorder:
-                                                    const OutlineInputBorder(
-                                                  borderSide: const BorderSide(
-                                                      color: Colors.green,
-                                                      width: 1.0),
+                                          GestureDetector(
+                                            onTap: () {
+                                              showDialog(
+                                                context: context,
+                                                builder: (context) => Dialog(
+                                                  shape: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                  ),
+                                                  elevation: 5,
+                                                  child: Container(
+                                                    width: width(context) * 0.8,
+                                                    height:
+                                                        height(context) * 0.4,
+                                                    padding: EdgeInsets.all(10),
+                                                    child: Center(
+                                                      child: TextFormField(
+                                                        controller:
+                                                            addressController,
+                                                        onChanged: (val) {
+                                                          setState(() {
+                                                            prescription
+                                                                .ampule = val;
+                                                          });
+                                                        },
+                                                        decoration:
+                                                            InputDecoration(
+                                                          border:
+                                                              OutlineInputBorder(),
+                                                          enabledBorder:
+                                                              const OutlineInputBorder(
+                                                            borderSide:
+                                                                const BorderSide(
+                                                                    color: Colors
+                                                                        .green,
+                                                                    width: 1.0),
+                                                          ),
+                                                          hintText: 'Address',
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
                                                 ),
-                                                hintText: 'Address',
+                                              );
+                                            },
+                                            child: Container(
+                                              width: 100,
+                                              height: 40,
+                                              child: TextFormField(
+                                                enabled: false,
+                                                controller: addressController,
+                                                onChanged: (val) {
+                                                  setState(() {
+                                                    prescription.ampule = val;
+                                                  });
+                                                },
+                                                decoration: InputDecoration(
+                                                  border: OutlineInputBorder(),
+                                                  enabledBorder:
+                                                      const OutlineInputBorder(
+                                                    borderSide:
+                                                        const BorderSide(
+                                                            color: Colors.green,
+                                                            width: 1.0),
+                                                  ),
+                                                  hintText: 'Address',
+                                                ),
                                               ),
                                             ),
                                           ),

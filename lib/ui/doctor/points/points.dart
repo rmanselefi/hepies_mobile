@@ -13,6 +13,7 @@ class Points extends StatefulWidget {
 }
 
 class _PointsState extends State<Points> {
+// Milkessa: Changed all green colors to Color(0xff0FF6A0)
   @override
   Widget build(BuildContext context) {
     var points = Provider.of<UserProvider>(context).points;
@@ -42,18 +43,18 @@ class _PointsState extends State<Points> {
                             );
                           }
                           var res = snapshot.data;
-                          var point = res['profession'][0]['points'];
+                          var point = res['profession'][0]['points'] ?? 0;
                           return Center(
                             child: Container(
                               padding: EdgeInsets.all(60.0),
                               decoration: BoxDecoration(
-                                  border:
-                                      Border.all(color: Colors.green, width: 2),
+                                  border: Border.all(
+                                      color: Color(0xff0FF6A0), width: 2),
                                   borderRadius: BorderRadius.circular(150.0)),
                               child: Text(
                                 '$point Pts',
                                 style: TextStyle(
-                                    color: Colors.green, fontSize: 40.0),
+                                    color: Color(0xff0FF6A0), fontSize: 40.0),
                               ),
                             ),
                           );
@@ -68,7 +69,7 @@ class _PointsState extends State<Points> {
                       style: TextStyle(
                           decoration: TextDecoration.underline,
                           fontSize: 25.0,
-                          color: Colors.green),
+                          color: Color(0xff0FF6A0)),
                     ),
                   ),
                   SizedBox(
@@ -80,21 +81,25 @@ class _PointsState extends State<Points> {
                       Container(
                         padding: EdgeInsets.all(15.0),
                         decoration: BoxDecoration(
-                            border: Border.all(color: Colors.green, width: 1),
+                            border:
+                                Border.all(color: Color(0xff0FF6A0), width: 1),
                             borderRadius: BorderRadius.circular(100.0)),
                         child: Text(
                           '50 Birr',
-                          style: TextStyle(color: Colors.green, fontSize: 18.0),
+                          style: TextStyle(
+                              color: Color(0xff0FF6A0), fontSize: 18.0),
                         ),
                       ),
                       Container(
                         padding: EdgeInsets.all(15.0),
                         decoration: BoxDecoration(
-                            border: Border.all(color: Colors.green, width: 1),
+                            border:
+                                Border.all(color: Color(0xff0FF6A0), width: 1),
                             borderRadius: BorderRadius.circular(100.0)),
                         child: Text(
                           '100 Birr',
-                          style: TextStyle(color: Colors.green, fontSize: 18.0),
+                          style: TextStyle(
+                              color: Color(0xff0FF6A0), fontSize: 18.0),
                         ),
                       ),
                     ],
@@ -104,11 +109,11 @@ class _PointsState extends State<Points> {
                   ),
                   Center(
                     child: Text(
-                      'Transfer to other professional',
+                      'Transfer points to other professional', //Milkessa: added to word 'points'
                       style: TextStyle(
                           decoration: TextDecoration.underline,
                           fontSize: 25.0,
-                          color: Colors.green),
+                          color: Color(0xff0FF6A0)),
                     ),
                   ),
                   SizedBox(
@@ -119,7 +124,8 @@ class _PointsState extends State<Points> {
                     children: [
                       Text(
                         'Phone number',
-                        style: TextStyle(fontSize: 25.0, color: Colors.green),
+                        style:
+                            TextStyle(fontSize: 25.0, color: Color(0xff0FF6A0)),
                       ),
                       Container(
                         height: 40,
@@ -141,7 +147,8 @@ class _PointsState extends State<Points> {
                     children: [
                       Text(
                         'Amount',
-                        style: TextStyle(fontSize: 25.0, color: Colors.green),
+                        style:
+                            TextStyle(fontSize: 25.0, color: Color(0xff0FF6A0)),
                       ),
                       Container(
                         height: 40,
@@ -165,13 +172,14 @@ class _PointsState extends State<Points> {
                         width: 100,
                         height: 40,
                         decoration: BoxDecoration(
-                            border: Border.all(color: Colors.green, width: 2),
+                            border:
+                                Border.all(color: Color(0xff0FF6A0), width: 2),
                             borderRadius: BorderRadius.circular(100.0)),
                         child: Center(
                           child: Text(
                             'send',
-                            style:
-                                TextStyle(fontSize: 18.0, color: Colors.green),
+                            style: TextStyle(
+                                fontSize: 18.0, color: Color(0xff0FF6A0)),
                           ),
                         ),
                       ),
