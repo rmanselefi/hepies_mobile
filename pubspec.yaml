@@ -55,6 +55,8 @@ dependencies:
   country_code_picker:
   google_fonts:
   math_expressions:
+  hive: ^2.0.4 ## Milkessa: added this package to store string values locally
+  hive_flutter: ^1.1.0
 
 dev_dependencies:
   flutter_test:
