@@ -23,6 +23,7 @@ class WelcomePharmacy extends StatefulWidget {
 
 class _WelcomePharmacyState extends State<WelcomePharmacy> {
 
+  var user_id;
   var name;
   var profession;
   var points;
@@ -32,6 +33,7 @@ class _WelcomePharmacyState extends State<WelcomePharmacy> {
     super.initState();
     UserProvider().getProfile().then((user) {
       setState(() {
+        user_id=user['id'];
         name = user['profession'][0]['name'];
         profession = user['profession'][0]['proffesion'];
         points = user['profession'][0]['points'];
@@ -156,7 +158,7 @@ class _WelcomePharmacyState extends State<WelcomePharmacy> {
             ),
           ),
           drawer: DrawerCustom(),
-          body: PharmacyShareConsult(),
+          body: PharmacyShareConsult(user_id),
         ));
   }
 }

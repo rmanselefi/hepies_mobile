@@ -15,6 +15,8 @@ import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class PharmacyShareConsult extends StatefulWidget {
+  final user_id;
+  PharmacyShareConsult(this.user_id);
   @override
   _PharmacyShareConsultState createState() => _PharmacyShareConsultState();
 }
@@ -57,6 +59,7 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
   @override
   Widget build(BuildContext context) {
     ConsultProvider consult = Provider.of<ConsultProvider>(context);
+
     List<dynamic> interest = interests
         .where((element) => element['interest'].toLowerCase().contains(name))
         .toList();
@@ -120,7 +123,7 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
                                   if (name == "") {
                                     setState(() {
                                       _topic.text =
-                                      "${_topic.text} #${e['interest']}";
+                                          "${_topic.text} #${e['interest']}";
                                     });
                                   }
                                 },
@@ -139,49 +142,49 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
                             consult.shareStatus == ConsultStatus.Sharing
                                 ? loading
                                 : Align(
-                                alignment: Alignment.topRight,
-                                child: OutlinedButton(
-                                  onPressed: () async {
-                                    try {
-                                      var photo = file != null
-                                          ? File(file.path)
-                                          : null;
-                                      if (_topic.text != "" &&
-                                          file != null) {
-                                        var res = await consult.share(
-                                            _topic.text, photo);
-                                        if (res['status']) {
-                                          consult.getConsults();
+                                    alignment: Alignment.topRight,
+                                    child: OutlinedButton(
+                                      onPressed: () async {
+                                        try {
+                                          var photo = file != null
+                                              ? File(file.path)
+                                              : null;
+                                          if (_topic.text != "" &&
+                                              file != null) {
+                                            var res = await consult.share(
+                                                _topic.text, photo);
+                                            if (res['status']) {
+                                              consult.getConsults();
+                                              showTopSnackBar(
+                                                context,
+                                                CustomSnackBar.success(
+                                                  message:
+                                                      "Your consult is uploaded succesfully",
+                                                ),
+                                              );
+                                            }
+                                          } else {
+                                            showTopSnackBar(
+                                              context,
+                                              CustomSnackBar.error(
+                                                message:
+                                                    "Invalid Data! Make sure you have inserted image or text",
+                                              ),
+                                            );
+                                          }
+                                        } catch (e) {
+                                          print("eeeee ${e}");
                                           showTopSnackBar(
                                             context,
-                                            CustomSnackBar.success(
+                                            CustomSnackBar.error(
                                               message:
-                                              "Your consult is uploaded succesfully",
+                                                  "Unable to share your consult",
                                             ),
                                           );
                                         }
-                                      } else {
-                                        showTopSnackBar(
-                                          context,
-                                          CustomSnackBar.error(
-                                            message:
-                                            "Invalid Data! Make sure you have inserted image or text",
-                                          ),
-                                        );
-                                      }
-                                    } catch (e) {
-                                      print("eeeee ${e}");
-                                      showTopSnackBar(
-                                        context,
-                                        CustomSnackBar.error(
-                                          message:
-                                          "Unable to share your consult",
-                                        ),
-                                      );
-                                    }
-                                  },
-                                  child: Text('Consult'),
-                                )),
+                                      },
+                                      child: Text('Consult'),
+                                    )),
                           ],
                         ),
                       ],
@@ -189,23 +192,7 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
                   ),
                 ),
                 Divider(),
-                FutureBuilder<List<dynamic>>(
-                    future: Provider.of<ConsultProvider>(context).getConsults(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else {
-                        if (snapshot.data == null) {
-                          return Center(
-                            child: Text('No data to show'),
-                          );
-                        }
-
-                        return PharmacyConsultList(snapshot.data);
-                      }
-                    }),
+                PharmacyConsultList(widget.user_id,interest)
               ],
             ),
           ),

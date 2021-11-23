@@ -18,6 +18,8 @@ import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class ShareConsult extends StatefulWidget {
+  final user_id;
+  ShareConsult(this.user_id);
   @override
   _ShareConsultState createState() => _ShareConsultState();
 }
@@ -233,23 +235,7 @@ class _ShareConsultState extends State<ShareConsult> {
                   ),
                 ),
                 Divider(),
-                FutureBuilder<List<dynamic>>(
-                    future: Provider.of<ConsultProvider>(context).getConsults(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else {
-                        if (snapshot.data == null) {
-                          return Center(
-                            child: Text('No data to show'),
-                          );
-                        }
-
-                        return PharmacyConsultList(snapshot.data);
-                      }
-                    }),
+                PharmacyConsultList(widget.user_id,interest)
               ],
             ),
           ),

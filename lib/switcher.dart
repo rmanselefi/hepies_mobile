@@ -16,6 +16,6 @@ class _SwitcherState extends State<Switcher> {
         ? Welcome(
             user: widget.user,
           )
-        : WelcomePharmacy();
+        : WelcomePharmacy(user: widget.user);
   }
 }
