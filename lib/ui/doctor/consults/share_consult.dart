@@ -18,6 +18,8 @@ import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class ShareConsult extends StatefulWidget {
+  final user_id;
+  ShareConsult(this.user_id);
   @override
   _ShareConsultState createState() => _ShareConsultState();
 }
@@ -247,13 +249,13 @@ class _ShareConsultState extends State<ShareConsult> {
                           );
                         }
 
-                        return PharmacyConsultList(snapshot.data);
+                        return PharmacyConsultList(widget.user_id,interest);
                       }
                     }),
               ],
             ),
           ),
-          Footer()
+          Footer(),
         ],
       ),
     );

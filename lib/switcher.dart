@@ -14,8 +14,8 @@ class _SwitcherState extends State<Switcher> {
   Widget build(BuildContext context) {
     return widget.user.role == 'doctor'
         ? Welcome(
-            user: widget.user,
-          )
-        : WelcomePharmacy();
+      user: widget.user,
+    )
+        : WelcomePharmacy(user: widget.user);
   }
 }

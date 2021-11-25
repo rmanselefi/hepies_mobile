@@ -109,11 +109,12 @@ class _GuidelinesState extends State<Guidelines> {
     }
   }
 
-  void viewFile(String directory, String id, BuildContext context) async {
+  Future<void> viewFile(
+      String directory, String id, BuildContext context) async {
     String fileName = directory.substring(directory.lastIndexOf("/") + 1);
     var path = await getFilePath(fileName);
     print('The file path is ------->' + path);
-    Navigator.push(
+    await Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => Scaffold(
@@ -176,7 +177,6 @@ class _GuidelinesState extends State<Guidelines> {
     return Scaffold(
       body: ListView(
         children: [
-          Header(),
           SizedBox(
             height: 30.0,
           ),
@@ -249,16 +249,11 @@ class _GuidelinesState extends State<Guidelines> {
                         return Padding(
                           padding: EdgeInsets.all(10),
                           child: Row(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               // Milkessa: Implemented download and delete functions
-                              GestureDetector(
-                                onTap: checkStatus(e['id'].toString())
-                                    ? () async {
-                                        print("object ${e['url']}");
-                                        viewFile(e['url'], e['id'].toString(),
-                                            context);
-                                      }
-                                    : () {},
+                              Flexible(
+                                flex: 4,
                                 child: Container(
                                     width: 370,
                                     padding:
@@ -271,28 +266,56 @@ class _GuidelinesState extends State<Guidelines> {
                                       ),
                                     )),
                               ),
-                              IconButton(
-                                  padding: EdgeInsets.zero,
-                                  constraints: BoxConstraints(),
-                                  onPressed: () {
-                                    if (!checkStatus(e['id'].toString())) {
-                                      setState(() {
-                                        downloadFile(e['url'], e['id']);
-                                        changeStatus(e['id'].toString(), true);
-                                      });
-                                    } else
-                                      setState(() {
-                                        deleteFile(
-                                            e['url'], e['id'].toString());
-                                        changeStatus(e['id'].toString(), false);
-                                      });
-                                  },
-                                  icon: Icon(
+                              Flexible(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
                                     checkStatus(e['id'].toString())
-                                        ? Icons.cancel_outlined
-                                        : Icons.download_outlined,
-                                    color: Colors.redAccent,
-                                  ))
+                                        ? IconButton(
+                                            padding: EdgeInsets.zero,
+                                            constraints: BoxConstraints(),
+                                            onPressed: () async {
+                                              print("object ${e['url']}");
+                                              await viewFile(e['url'],
+                                                  e['id'].toString(), context);
+                                            },
+                                            icon: Icon(
+                                              Icons.folder_open_outlined,
+                                              color: Colors.greenAccent[400],
+                                            ),
+                                          )
+                                        : Container(),
+                                    SizedBox(width: 6),
+                                    IconButton(
+                                      padding: EdgeInsets.zero,
+                                      constraints: BoxConstraints(),
+                                      onPressed: () {
+                                        if (!checkStatus(e['id'].toString())) {
+                                          setState(() {
+                                            downloadFile(e['url'], e['id']);
+                                            changeStatus(
+                                                e['id'].toString(), true);
+                                          });
+                                        } else
+                                          setState(() {
+                                            deleteFile(
+                                                e['url'], e['id'].toString());
+                                            changeStatus(
+                                                e['id'].toString(), false);
+                                          });
+                                      },
+                                      icon: Icon(
+                                        checkStatus(e['id'].toString())
+                                            ? Icons.delete_outline
+                                            : Icons.download_outlined,
+                                        color: checkStatus(e['id'].toString())
+                                            ? Colors.redAccent
+                                            : Colors.greenAccent[400],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ],
                           ),
                         );

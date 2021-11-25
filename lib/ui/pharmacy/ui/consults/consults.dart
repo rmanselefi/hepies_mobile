@@ -55,7 +55,7 @@ class _PharmacyConsultsState extends State<PharmacyConsults> {
                     borderRadius: BorderRadius.circular(35.0)),
                 child: Text('See Medical Records',
                     style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
+                    TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
               ),
               onTap: () {
                 Navigator.push(
@@ -69,24 +69,7 @@ class _PharmacyConsultsState extends State<PharmacyConsults> {
         SizedBox(
           height: 5.0,
         ),
-        FutureBuilder<List<dynamic>>(
-            future: Provider.of<ConsultProvider>(context).getConsults(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else {
-                if (snapshot.data == null) {
-                  return Center(
-                    child: Text('No data to show'),
-                  );
-                }
-
-                print("objectobjectobject ${snapshot.data}");
-                return PharmacyConsultList(snapshot.data);
-              }
-            })
+        PharmacyConsultList(1,null)
       ],
     );
   }
