@@ -10,6 +10,7 @@ class AppUrl {
   static const String transfer = baseURL + "/users/transfer";
   static const String profile = baseURL + "/users/profile/update";
   static const String consults = baseURL + "/consulting";
+  static const String fill = baseURL + "/voucher/fill";
 
   static const String interests = baseURL + "/consulting/interests";
   static const String prescription = baseURL + "/prescription";

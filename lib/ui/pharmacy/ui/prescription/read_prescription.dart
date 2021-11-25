@@ -68,7 +68,6 @@ class _ReadPrescriptionState extends State<ReadPrescription> {
                             onTap: () async {
                               var res = await prescriptionProvider
                                   .readPrescription(codeController.text);
-                              print("objectobjectobjectobject $res");
                               if (res['status']) {
                                 if (res['isPhone']) {
                                   Navigator.push(

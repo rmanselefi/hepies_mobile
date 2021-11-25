@@ -26,7 +26,6 @@ class ConsultProvider with ChangeNotifier {
     Response response = await get(Uri.parse(AppUrl.consults));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      print("consult ${json.decode(response.body)}");
       return json.decode(response.body);
     } else {
       notifyListeners();
@@ -46,7 +45,6 @@ class ConsultProvider with ChangeNotifier {
     var image;
     if (file != null) {
       await AuthProvider().uploadImage(file).then((res) {
-        print('imageuriimageuriimageuri$res');
         if (res != null) {
           image = res;
         }
@@ -94,7 +92,6 @@ class ConsultProvider with ChangeNotifier {
     var image;
     if (file != null) {
       await AuthProvider().uploadImage(file).then((res) {
-        print('imageuriimageuriimageuri$res');
         if (res != null) {
           image = res;
         }
@@ -114,7 +111,6 @@ class ConsultProvider with ChangeNotifier {
           'Content-Type': 'application/json',
           HttpHeaders.authorizationHeader: "Bearer $token"
         });
-    print("responseresponseresponse ${response.statusCode}");
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Map<String, dynamic> responseData = json.decode(response.body);
@@ -224,7 +220,6 @@ class ConsultProvider with ChangeNotifier {
     var image;
     if (file != null) {
       await AuthProvider().uploadImage(file).then((res) {
-        print('imageuriimageuriimageuri$res');
         if (res != null) {
           image = res;
         }

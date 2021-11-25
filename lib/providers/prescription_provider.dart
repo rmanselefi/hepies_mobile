@@ -127,6 +127,7 @@ class PrescriptionProvider with ChangeNotifier {
     String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
     RegExp regExp = new RegExp(patttern);
     bool isPhone = regExp.hasMatch(code);
+    print("isPhoneisPhone $isPhone");
     var url = isPhone ? AppUrl.readprescriptionPhone : AppUrl.readprescription;
     var result;
     List<Consult> consults = [];
@@ -165,6 +166,7 @@ class PrescriptionProvider with ChangeNotifier {
       'Content-Type': 'application/json',
       HttpHeaders.authorizationHeader: "Bearer $token"
     });
+
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       final bool responseData = json.decode(response.body);

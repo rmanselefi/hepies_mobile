@@ -35,7 +35,6 @@ class _PrescriptionResultState extends State<PrescriptionResultPhone> {
     notReadPrescription.forEach((element) {
       list_id.add(element['id']);
     });
-    print("readreadread $list_id");
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -170,25 +169,36 @@ class _PrescriptionResultState extends State<PrescriptionResultPhone> {
                         ),
                         GestureDetector(
                           onTap: () async {
-                            var res = await prescProvider
-                                .acceptPrescription(selectedList,list_id);
-                            if (res['status']) {
-                              showTopSnackBar(
-                                context,
-                                CustomSnackBar.success(
-                                  message:
-                                  'Your have accepted prescriptions successfully',
-                                ),
-                              );
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>WelcomePharmacy()));
-                            } else {
+                            if(selectedList.length==0){
                               showTopSnackBar(
                                 context,
                                 CustomSnackBar.error(
                                     message:
-                                    'Unable to accept prescriptions'
+                                    'Please select at least one prescription'
                                 ),
                               );
+                            }
+                            else {
+                              var res = await prescProvider
+                                  .acceptPrescription(selectedList, list_id);
+                              if (res['status']) {
+                                showTopSnackBar(
+                                  context,
+                                  CustomSnackBar.success(
+                                    message:
+                                    'Your have accepted prescriptions successfully',
+                                  ),
+                                );
+                                Navigator.push(context, MaterialPageRoute(builder: (context)=>WelcomePharmacy()));
+                              } else {
+                                showTopSnackBar(
+                                  context,
+                                  CustomSnackBar.error(
+                                      message:
+                                      'Unable to accept prescriptions'
+                                  ),
+                                );
+                              }
                             }
                           },
                           child: Align(

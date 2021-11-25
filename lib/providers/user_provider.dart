@@ -24,6 +24,9 @@ class UserProvider with ChangeNotifier {
 
   ChangeStatus _pointStatus = ChangeStatus.NotChanged;
   ChangeStatus get pointStatus => _pointStatus;
+
+  ChangeStatus _pointFiftyStatus = ChangeStatus.NotChanged;
+  ChangeStatus get pointFiftyStatus => _pointFiftyStatus;
   User get user => _user;
 
   var points = "";
@@ -176,6 +179,37 @@ class UserProvider with ChangeNotifier {
       result = {'status': true, 'message': 'Successful', 'user': response.body};
     } else {
       _pointStatus = ChangeStatus.NotChanged;
+      notifyListeners();
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return result;
+  }
+
+  Future<Map<String, dynamic>> buyCredit(var amount) async {
+    _pointFiftyStatus = ChangeStatus.Changing;
+    notifyListeners();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+    var result;
+    var user = await UserPreferences().getUser();
+    var user_id = user.professionid;
+    var registrationData = {'amount': amount};
+    Response response = await post(Uri.parse(AppUrl.fill),
+        body: json.encode(registrationData),
+        headers: {
+          'Content-Type': 'application/json',
+          HttpHeaders.authorizationHeader: "Bearer $token"
+        });
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      _pointFiftyStatus = ChangeStatus.Changed;
+      notifyListeners();
+      result = {'status': true, 'message': 'Successful', 'result': json.decode(response.body)};
+    } else {
+      _pointFiftyStatus = ChangeStatus.NotChanged;
       notifyListeners();
       result = {
         'status': false,

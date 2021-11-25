@@ -6,6 +6,7 @@ import 'package:hepies/widgets/header.dart';
 import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Points extends StatefulWidget {
   final points;
@@ -24,6 +25,13 @@ class _PointsState extends State<Points> {
 
   String _countryCode;
   var points;
+  var loading = Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: <Widget>[
+      CircularProgressIndicator(),
+      Text("Processing your request")
+    ],
+  );
   @override
   Widget build(BuildContext context) {
     var userProvider = Provider.of<UserProvider>(context);
@@ -86,35 +94,84 @@ class _PointsState extends State<Points> {
                   SizedBox(
                     height: 20.0,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Container(
-                        padding: EdgeInsets.all(15.0),
-                        decoration: BoxDecoration(
-                            border:
-                                Border.all(color: Color(0xff0FF6A0), width: 1),
-                            borderRadius: BorderRadius.circular(100.0)),
-                        child: Text(
-                          '50 Birr',
-                          style: TextStyle(
-                              color: Color(0xff0FF6A0), fontSize: 18.0),
+                  userProvider.pointFiftyStatus == ChangeStatus.Changing
+                      ? loading
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            GestureDetector(
+                              onTap: () async {
+                                if (double.parse(points) > 50) {
+                                  var res = await UserProvider().buyCredit(50);
+                                  print("resresresres $res");
+                                  if (res['status']) {
+                                    var voucher = res['result'];
+                                    launch("tel://*805*${voucher['code']}#");
+                                  } else {
+                                    showTopSnackBar(
+                                      context,
+                                      CustomSnackBar.error(
+                                        message:
+                                            "Something is wrong please contact system admin",
+                                      ),
+                                    );
+                                  }
+                                } else {
+                                  showTopSnackBar(
+                                    context,
+                                    CustomSnackBar.error(
+                                      message:
+                                          "You don't have enough points to buy 50 birr credit",
+                                    ),
+                                  );
+                                }
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(15.0),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Color(0xff0FF6A0), width: 1),
+                                    borderRadius: BorderRadius.circular(100.0)),
+                                child: Text(
+                                  '50 Birr',
+                                  style: TextStyle(
+                                      color: Color(0xff0FF6A0), fontSize: 18.0),
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () async {
+                                if (double.parse(points) > 100) {
+                                  var res = await UserProvider().buyCredit(100);
+                                  if (res['status']) {
+                                    var voucher = res['result'];
+                                    launch("tel://*805*${voucher['code']}#");
+                                  }
+                                } else {
+                                  showTopSnackBar(
+                                    context,
+                                    CustomSnackBar.error(
+                                      message:
+                                          "You don't have enough points to buy 50 birr credit",
+                                    ),
+                                  );
+                                }
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(15.0),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Color(0xff0FF6A0), width: 1),
+                                    borderRadius: BorderRadius.circular(100.0)),
+                                child: Text(
+                                  '100 Birr',
+                                  style: TextStyle(
+                                      color: Color(0xff0FF6A0), fontSize: 18.0),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(15.0),
-                        decoration: BoxDecoration(
-                            border:
-                                Border.all(color: Color(0xff0FF6A0), width: 1),
-                            borderRadius: BorderRadius.circular(100.0)),
-                        child: Text(
-                          '100 Birr',
-                          style: TextStyle(
-                              color: Color(0xff0FF6A0), fontSize: 18.0),
-                        ),
-                      ),
-                    ],
-                  ),
                   SizedBox(
                     height: 20.0,
                   ),
