@@ -446,82 +446,82 @@ class _WritePrescriptionState extends State<WritePrescription> {
           SizedBox(
             height: 5.0,
           ),
-          Row(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  showDialog<String>(
-                    context: context,
-                    builder: (BuildContext context) => AlertDialog(
-                      title: const Text('AlertDialog Title'),
-                      content: TextFormField(
-                        controller: favoriteController,
-                        decoration: InputDecoration(hintText: 'Group name'),
-                      ),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () => Navigator.pop(context, 'Cancel'),
-                          child: const Text('Cancel'),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    showDialog<String>(
+                      context: context,
+                      builder: (BuildContext context) => AlertDialog(
+                        title: const Text('AlertDialog Title'),
+                        content: TextFormField(
+                          controller: favoriteController,
+                          decoration: InputDecoration(hintText: 'Group name'),
                         ),
-                        TextButton(
-                          onPressed: () async {
-                            var user = await UserPreferences().getUser();
-                            prescription.forEach((element) async {
-                              Favorites favorites = new Favorites(
-                                  drug_name: element['drug_name'],
-                                  drug: int.parse(element['drug']),
-                                  name: favoriteController.text,
-                                  profession_id: user.professionid,
-                                  route: element['route'],
-                                  strength: element['strength'],
-                                  unit: element['unit'],
-                                  type: element['type'],
-                                  frequency: element['frequency'],
-                                  takein: element['takein']);
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, 'Cancel'),
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              var user = await UserPreferences().getUser();
+                              prescription.forEach((element) async {
+                                Favorites favorites = new Favorites(
+                                    drug_name: element['drug_name'],
+                                    drug: int.parse(element['drug']),
+                                    name: favoriteController.text,
+                                    profession_id: user.professionid,
+                                    route: element['route'],
+                                    strength: element['strength'],
+                                    unit: element['unit'],
+                                    type: element['type'],
+                                    frequency: element['frequency'],
+                                    takein: element['takein']);
 
-                              var db = new DatabaseHelper();
-                              var res = await db.saveFavorites(favorites);
-                            });
-                            Navigator.pop(context, 'OK');
-                            showTopSnackBar(
-                              context,
-                              CustomSnackBar.success(
-                                message:
-                                    "Your prescriptions are saved to favorites successfully",
-                              ),
-                            );
-                          },
-                          child: const Text('OK'),
-                        ),
-                      ],
+                                var db = new DatabaseHelper();
+                                var res = await db.saveFavorites(favorites);
+                              });
+                              Navigator.pop(context, 'OK');
+                              showTopSnackBar(
+                                context,
+                                CustomSnackBar.success(
+                                  message:
+                                      "Your prescriptions are saved to favorites successfully",
+                                ),
+                              );
+                            },
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  child: Flexible(
+                    child: Container(
+                      width: 150,
+                      padding: EdgeInsets.only(left: 5),
+                      height: 40,
+                      margin: EdgeInsets.only(right: 20.0, top: 0.0),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black45),
+                          borderRadius: BorderRadius.circular(10.0)),
+                      child: Center(
+                          child: Text(
+                        'Save to favorites',
+                        style: TextStyle(
+                            fontSize: 20.0, fontWeight: FontWeight.bold),
+                      )),
                     ),
-                  );
-                },
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Container(
-                    width: 150,
-                    height: 40,
-                    margin: EdgeInsets.only(right: 20.0, top: 0.0),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black45),
-                        borderRadius: BorderRadius.circular(10.0)),
-                    child: Center(
-                        child: Text(
-                      'Save to favorites',
-                      style: TextStyle(
-                          fontSize: 20.0, fontWeight: FontWeight.bold),
-                    )),
                   ),
                 ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Welcome()));
-                },
-                child: Align(
-                  alignment: Alignment.centerRight,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Welcome()));
+                  },
                   child: Container(
                     width: 100,
                     height: 40,
@@ -537,109 +537,106 @@ class _WritePrescriptionState extends State<WritePrescription> {
                     )),
                   ),
                 ),
-              ),
-              prescProvider.sentStatus == PrescriptionStatus.Sending
-                  ? loading
-                  : GestureDetector(
-                      onTap: () async {
-                        try {
-                          if (pretype == "general" || pretype == "instrument") {
-                            print("prescriptionprescription $patient");
-                            if (prescription.length != 0 &&
-                                patient.length != 0) {
-                              for (var i = 0; i < patient.length; i++) {
-                                var phone = patient[i]['phone'];
-                                var name = patient[i]['name'];
-                                var age = patient[i]['age'];
-                                var sex = patient[i]['sex'];
-                                if (phone == "" ||
-                                    phone == null ||
-                                    sex == "" ||
-                                    sex == null ||
-                                    name == "" ||
-                                    name == null ||
-                                    age == "" ||
-                                    age == null) {
+                prescProvider.sentStatus == PrescriptionStatus.Sending
+                    ? loading
+                    : GestureDetector(
+                        onTap: () async {
+                          try {
+                            if (pretype == "general" || pretype == "instrument") {
+                              print("prescriptionprescription $patient");
+                              if (prescription.length != 0 &&
+                                  patient.length != 0) {
+                                for (var i = 0; i < patient.length; i++) {
+                                  var phone = patient[i]['phone'];
+                                  var name = patient[i]['name'];
+                                  var age = patient[i]['age'];
+                                  var sex = patient[i]['sex'];
+                                  if (phone == "" ||
+                                      phone == null ||
+                                      sex == "" ||
+                                      sex == null ||
+                                      name == "" ||
+                                      name == null ||
+                                      age == "" ||
+                                      age == null) {
+                                    showTopSnackBar(
+                                      context,
+                                      CustomSnackBar.error(
+                                        message:
+                                            "Please make sure all patient information is provided before sending prescription",
+                                      ),
+                                    );
+
+                                    return;
+                                  }
+                                }
+                                var res = await prescProvider.writePrescription(
+                                    prescription, patient);
+                                if (res['status']) {
+                                  Provider.of<PrescriptionProvider>(context,
+                                          listen: false)
+                                      .resetStatus();
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => WritePrescription(
+                                                from: 'sent',
+                                              )));
+                                } else {
                                   showTopSnackBar(
                                     context,
                                     CustomSnackBar.error(
                                       message:
-                                          "Please make sure all patient information is provided before sending prescription",
+                                          "Unable to send your prescriptions",
                                     ),
                                   );
-
-                                  return;
                                 }
-                              }
-                              var res = await prescProvider.writePrescription(
-                                  prescription, patient);
-                              if (res['status']) {
-                                Provider.of<PrescriptionProvider>(context,
-                                        listen: false)
-                                    .resetStatus();
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => WritePrescription(
-                                              from: 'sent',
-                                            )));
                               } else {
                                 showTopSnackBar(
                                   context,
                                   CustomSnackBar.error(
                                     message:
-                                        "Unable to send your prescriptions",
+                                        'Please fill at least one prescription.',
                                   ),
                                 );
                               }
                             } else {
-                              showTopSnackBar(
-                                context,
-                                CustomSnackBar.error(
-                                  message:
-                                      'Please fill at least one prescription.',
-                                ),
-                              );
-                            }
-                          } else {
-                            if (psycoPrescription.length != 0) {
-                              var res = await prescProvider.writePrescription(
-                                  psycoPrescription, patient);
-                              if (res['status']) {
-                                Provider.of<PrescriptionProvider>(context,
-                                        listen: false)
-                                    .resetStatus();
-                                Navigator.pushReplacement(
+                              if (psycoPrescription.length != 0) {
+                                var res = await prescProvider.writePrescription(
+                                    psycoPrescription, patient);
+                                if (res['status']) {
+                                  Provider.of<PrescriptionProvider>(context,
+                                          listen: false)
+                                      .resetStatus();
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => WritePrescription(
+                                                from: 'sent',
+                                              )));
+                                } else {
+                                  showTopSnackBar(
                                     context,
-                                    MaterialPageRoute(
-                                        builder: (context) => WritePrescription(
-                                              from: 'sent',
-                                            )));
+                                    CustomSnackBar.error(
+                                      message:
+                                          'Unable to send your prescriptions',
+                                    ),
+                                  );
+                                }
                               } else {
                                 showTopSnackBar(
                                   context,
                                   CustomSnackBar.error(
                                     message:
-                                        'Unable to send your prescriptions',
+                                        'Please fill at least one prescription.',
                                   ),
                                 );
                               }
-                            } else {
-                              showTopSnackBar(
-                                context,
-                                CustomSnackBar.error(
-                                  message:
-                                      'Please fill at least one prescription.',
-                                ),
-                              );
                             }
+                          } catch (e) {
+                            print("object $e");
                           }
-                        } catch (e) {
-                          print("object $e");
-                        }
-                      },
-                      child: Align(
-                        alignment: Alignment.centerRight,
+                        },
                         child: Container(
                           width: 100,
                           height: 40,
@@ -655,9 +652,9 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                 fontSize: 20.0, fontWeight: FontWeight.bold),
                           )),
                         ),
-                      ),
-                    )
-            ],
+                      )
+              ],
+            ),
           ),
         ],
       ),

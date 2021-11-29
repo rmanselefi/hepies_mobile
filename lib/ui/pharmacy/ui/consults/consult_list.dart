@@ -10,11 +10,13 @@ import 'package:hepies/ui/pharmacy/ui/consults/comment/share_comment.dart';
 import 'package:hepies/util/image_consult.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:linkify_text/linkify_text.dart';
 import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PharmacyConsultList extends StatefulWidget {
   final user_id;
@@ -63,7 +65,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
           ),
           Text(
             name,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 16),
           ),
         ],
       ),
@@ -85,7 +87,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return Center(
-                    child: CircularProgressIndicator(),
+                    child: CircleAvatar(radius: width(context) * 0.025, backgroundColor: Colors.grey.shade100,),
                   );
                 } else {
                   if (snapshot.data == null) {
@@ -95,49 +97,49 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                   }
                   return snapshot.data['length'] > 0
                       ? BouncingWidget(
-                    duration: Duration(milliseconds: 100),
-                    scaleFactor: 1.5,
-                    onPressed: () async {
-                      var res = await Provider.of<ConsultProvider>(
-                          context,
-                          listen: false)
-                          .unlikeConsult(e['id']);
-                      if (res['status']) {
-                        setState(() {
-                          Provider.of<ConsultProvider>(context,
-                              listen: false)
-                              .getLikeByConsultIdForUser(e['id']);
-                        });
-                      }
-                    },
-                    child: rowSingleButton(
-                        color: Colors.blueAccent,
-                        name: "Like",
-                        iconImage: Icons.thumb_up_sharp,
-                        isHover: false),
-                  )
+                          duration: Duration(milliseconds: 100),
+                          scaleFactor: 1.5,
+                          onPressed: () async {
+                            var res = await Provider.of<ConsultProvider>(
+                                    context,
+                                    listen: false)
+                                .unlikeConsult(e['id']);
+                            if (res['status']) {
+                              setState(() {
+                                Provider.of<ConsultProvider>(context,
+                                        listen: false)
+                                    .getLikeByConsultIdForUser(e['id']);
+                              });
+                            }
+                          },
+                          child: rowSingleButton(
+                              color: Colors.blueAccent,
+                              name: "Like",
+                              iconImage: Icons.thumb_up_sharp,
+                              isHover: false),
+                        )
                       : BouncingWidget(
-                    duration: Duration(milliseconds: 100),
-                    scaleFactor: 1.5,
-                    onPressed: () async {
-                      var res = await Provider.of<ConsultProvider>(
-                          context,
-                          listen: false)
-                          .likeConsult(e['id']);
-                      if (res['status']) {
-                        setState(() {
-                          Provider.of<ConsultProvider>(context,
-                              listen: false)
-                              .getLikeByConsultIdForUser(e['id']);
-                        });
-                      }
-                    },
-                    child: rowSingleButton(
-                        color: Colors.black,
-                        name: "Like",
-                        iconImage: Icons.thumb_up_outlined,
-                        isHover: false),
-                  );
+                          duration: Duration(milliseconds: 100),
+                          scaleFactor: 1.5,
+                          onPressed: () async {
+                            var res = await Provider.of<ConsultProvider>(
+                                    context,
+                                    listen: false)
+                                .likeConsult(e['id']);
+                            if (res['status']) {
+                              setState(() {
+                                Provider.of<ConsultProvider>(context,
+                                        listen: false)
+                                    .getLikeByConsultIdForUser(e['id']);
+                              });
+                            }
+                          },
+                          child: rowSingleButton(
+                              color: Colors.black,
+                              name: "Like",
+                              iconImage: Icons.thumb_up_outlined,
+                              isHover: false),
+                        );
                 }
               }),
           InkWell(
@@ -145,7 +147,8 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => PharmacyShareComment(e['id'], post)));
+                      builder: (context) =>
+                          PharmacyShareComment(e['id'], post)));
             },
             child: rowSingleButton(
                 color: Colors.black,
@@ -385,7 +388,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
   Widget build(BuildContext context) {
     ConsultProvider consult = Provider.of<ConsultProvider>(context);
     Future<dynamic> _myData =
-    Provider.of<ConsultProvider>(context, listen: false).getConsults();
+        Provider.of<ConsultProvider>(context, listen: false).getConsults();
     showAlertDialog(BuildContext context, var id) {
       // set up the buttons
       Widget cancelButton = TextButton(
@@ -465,9 +468,9 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                         color: Colors.grey.shade50,
                                         width: 0.5))),
                             basicStyle:
-                            TextStyle(fontSize: 15, color: Colors.black),
+                                TextStyle(fontSize: 15, color: Colors.black),
                             decoratedStyle:
-                            TextStyle(fontSize: 15, color: Colors.blue),
+                                TextStyle(fontSize: 15, color: Colors.blue),
                             keyboardType: TextInputType.multiline,
                             controller: _topic,
 
@@ -495,24 +498,24 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                       Flexible(
                         child: file != null
                             ? Container(
-                          width: width(context) * 0.25,
-                          margin: EdgeInsets.all(5),
-                          child: Stack(
-                            children: [
-                              Image.file(File(file.path),
-                                  fit: BoxFit.contain),
-                              IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    file = null;
-                                  });
-                                },
-                                icon: Icon(Icons.cancel_outlined,
-                                    color: Colors.blue),
-                              ),
-                            ],
-                          ),
-                        )
+                                width: width(context) * 0.25,
+                                margin: EdgeInsets.all(5),
+                                child: Stack(
+                                  children: [
+                                    Image.file(File(file.path),
+                                        fit: BoxFit.contain),
+                                    IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          file = null;
+                                        });
+                                      },
+                                      icon: Icon(Icons.cancel_outlined,
+                                          color: Colors.blue),
+                                    ),
+                                  ],
+                                ),
+                              )
                             : Container(width: 0),
                       ),
                     ],
@@ -535,7 +538,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                     if (name == "") {
                                       setState(() {
                                         _topic.text =
-                                        "${_topic.text} #${e['interest']}";
+                                            "${_topic.text} #${e['interest']}";
                                       });
                                     }
                                   },
@@ -554,55 +557,55 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                               consult.editStatus == ConsultStatus.Sharing
                                   ? loading
                                   : Align(
-                                  alignment: Alignment.topRight,
-                                  child: OutlinedButton(
-                                    onPressed: () async {
-                                      try {
-                                        var photo = file != null
-                                            ? File(file.path)
-                                            : null;
-                                        if (_topic.text !=
-                                            "" || //Milkessa: added posting capability with either text or image
-                                            file != null) {
-                                          var res =
-                                          await consult.updateConsult(
-                                              post['id'],
-                                              _topic.text,
-                                              photo,
-                                              post['image']);
-                                          if (res['status']) {
-                                            consult.getConsults();
+                                      alignment: Alignment.topRight,
+                                      child: OutlinedButton(
+                                        onPressed: () async {
+                                          try {
+                                            var photo = file != null
+                                                ? File(file.path)
+                                                : null;
+                                            if (_topic.text !=
+                                                    "" || //Milkessa: added posting capability with either text or image
+                                                file != null) {
+                                              var res =
+                                                  await consult.updateConsult(
+                                                      post['id'],
+                                                      _topic.text,
+                                                      photo,
+                                                      post['image']);
+                                              if (res['status']) {
+                                                consult.getConsults();
+                                                showTopSnackBar(
+                                                  context,
+                                                  CustomSnackBar.success(
+                                                    message:
+                                                        "Your consult is updated succesfully",
+                                                  ),
+                                                );
+                                                Navigator.of(context).pop();
+                                              }
+                                            } else {
+                                              showTopSnackBar(
+                                                context,
+                                                CustomSnackBar.error(
+                                                  message:
+                                                      "Invalid Data! Make sure you have inserted image or text",
+                                                ),
+                                              );
+                                            }
+                                          } catch (e) {
+                                            print("eeeee ${e}");
                                             showTopSnackBar(
                                               context,
-                                              CustomSnackBar.success(
+                                              CustomSnackBar.error(
                                                 message:
-                                                "Your consult is updated succesfully",
+                                                    "Unable to share your consult",
                                               ),
                                             );
-                                            Navigator.of(context).pop();
                                           }
-                                        } else {
-                                          showTopSnackBar(
-                                            context,
-                                            CustomSnackBar.error(
-                                              message:
-                                              "Invalid Data! Make sure you have inserted image or text",
-                                            ),
-                                          );
-                                        }
-                                      } catch (e) {
-                                        print("eeeee ${e}");
-                                        showTopSnackBar(
-                                          context,
-                                          CustomSnackBar.error(
-                                            message:
-                                            "Unable to share your consult",
-                                          ),
-                                        );
-                                      }
-                                    },
-                                    child: Text('Edit'),
-                                  )),
+                                        },
+                                        child: Text('Edit'),
+                                      )),
                             ],
                           ),
                         ],
@@ -659,10 +662,10 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                               height: 40,
                               decoration: BoxDecoration(
                                   borderRadius:
-                                  BorderRadius.all(Radius.circular(40))),
+                                      BorderRadius.all(Radius.circular(40))),
                               child: ClipRRect(
                                   borderRadius:
-                                  BorderRadius.all(Radius.circular(40)),
+                                      BorderRadius.all(Radius.circular(40)),
                                   child: Icon(
                                     Icons.person,
                                     size: 40,
@@ -698,21 +701,21 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                               width: 94,
                             ),
                             e['author'] != null &&
-                                e['author']['id'] == widget.user_id
+                                    e['author']['id'] == widget.user_id
                                 ? IconButton(
-                                onPressed: () {
-                                  showAlertDialog(context, e['id']);
-                                },
-                                icon: Icon(Icons.cancel))
+                                    onPressed: () {
+                                      showAlertDialog(context, e['id']);
+                                    },
+                                    icon: Icon(Icons.cancel))
                                 : Container(),
                             e['author'] != null &&
-                                e['author']['id'] == widget.user_id
+                                    e['author']['id'] == widget.user_id
                                 ? IconButton(
-                                onPressed: () {
-                                  _topic.text = e['topic'] ?? '';
-                                  showEdit(context, e);
-                                },
-                                icon: Icon(Icons.edit))
+                                    onPressed: () {
+                                      _topic.text = e['topic'] ?? '';
+                                      showEdit(context, e);
+                                    },
+                                    icon: Icon(Icons.edit))
                                 : Container(),
                           ],
                         ),
@@ -723,16 +726,27 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                         //   widget.consults[index]['topic'],
                         //   style: TextStyle(fontSize: 14),
                         // ),
-                        HashTagText(
-                          text: "${snapshot.data[index]['topic'] ?? ' '}",
-                          basicStyle:
-                          TextStyle(fontSize: 14, color: Colors.black),
-                          decoratedStyle:
-                          TextStyle(fontSize: 14, color: Colors.blueAccent),
-                          textAlign: TextAlign.start,
-                          onTap: (text) {
-                            print(text);
-                          },
+                        // HashTagText(
+                        //   text: "${snapshot.data[index]['topic'] ?? ' '}",
+                        //   basicStyle:
+                        //       TextStyle(fontSize: 14, color: Colors.black),
+                        //   decoratedStyle:
+                        //       TextStyle(fontSize: 14, color: Colors.blueAccent),
+                        //   textAlign: TextAlign.start,
+                        //   onTap: (text) {
+                        //     print(text);
+                        //   },
+                        // ),
+                        LinkifyText(
+                          "${snapshot.data[index]['topic'] ?? ' '}",
+                          isLinkNavigationEnable: true,
+                          linkColor: Colors.blueAccent,
+                          fontColor: Colors.black,
+                          // linkStyle: TextStyle(color: Colors.blueAccent),
+                          // LinkTypes: [LinkType.url, LinkType.hashtag]
+                          // onTap: (link) {
+                          //   if(link.type == Link.url) launch(link.value);
+                          // },
                         ),
                         // Text(
                         //   _post[index].tags,
@@ -743,16 +757,17 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                         ),
                         e['image'] != null
                             ? Container(
-                          width: MediaQuery.of(context).size.width,
-                          child: Image.network(
-                            e['image'],
-                            fit: BoxFit.contain,
-                          ),
-                        )
+                                width: MediaQuery.of(context).size.width,
+                                height: height(context) * 0.5,
+                                child: Image.network(
+                                  e['image'],
+                                  fit: BoxFit.contain,
+                                ),
+                              )
                             : Container(
-                          height: 0.0,
-                          width: 0.0,
-                        ),
+                                height: 0.0,
+                                width: 0.0,
+                              ),
                         SizedBox(
                           height: 10,
                         ),
@@ -764,13 +779,13 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                 children: [
                                   FutureBuilder<dynamic>(
                                       future: Provider.of<ConsultProvider>(
-                                          context,
-                                          listen: false)
+                                              context,
+                                              listen: false)
                                           .getLikeByConsultIdForUser(e['id']),
                                       builder: (context, snapshot) {
                                         if (!snapshot.hasData) {
                                           return Center(
-                                            child: CircularProgressIndicator(),
+                                            child: CircleAvatar(radius: width(context) * 0.025, backgroundColor: Colors.grey.shade100,),
                                           );
                                         } else {
                                           if (snapshot.data == null) {
@@ -810,12 +825,12 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                             ),
                             FutureBuilder<int>(
                                 future: Provider.of<ConsultProvider>(context,
-                                    listen: false)
+                                        listen: false)
                                     .getCommentsByConsultId(e['id']),
                                 builder: (context, snapshot) {
                                   if (!snapshot.hasData) {
                                     return Center(
-                                      child: CircularProgressIndicator(),
+                                      child: CircleAvatar(radius: width(context) * 0.025, backgroundColor: Colors.grey.shade100,),
                                     );
                                   } else {
                                     if (snapshot.data == null) {
@@ -831,7 +846,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                         ),
                                         Text(" comments",
                                             style:
-                                            TextStyle(color: Colors.grey))
+                                                TextStyle(color: Colors.grey))
                                       ],
                                     );
                                   }
@@ -842,50 +857,50 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                           thickness: 0.50,
                           color: Colors.black26,
                         ),
-                        _rowButton(e, [Row(
-                          children: [
-                            Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                  BorderRadius.all(Radius.circular(40))),
-                              child: ClipRRect(
-                                  borderRadius:
-                                  BorderRadius.all(Radius.circular(40)),
-                                  child: Icon(
-                                    Icons.person,
-                                    size: 40,
-                                  )),
-                            ),
-                            SizedBox(
-                              width: 4,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  e['user'],
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                Container(
-                                  width: 100,
-                                  child: Text(
-                                    "Doctor",
+                        _rowButton(e, [
+                          Row(
+                            children: [
+                              Container(
+                                width: 40,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(40))),
+                                child: ClipRRect(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(40)),
+                                    child: Icon(
+                                      Icons.person,
+                                      size: 40,
+                                    )),
+                              ),
+                              SizedBox(
+                                width: 4,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    e['user'],
                                     style: TextStyle(
-                                        fontSize: 12, color: Colors.black54),
-                                    overflow: TextOverflow.ellipsis,
+                                        fontSize: 18,),
                                   ),
-                                ),
-                                Text('$duration',
-                                    style: TextStyle(
-                                        fontSize: 12, color: Colors.black54))
-                              ],
-                            ),
-                          ],
-                        ),
+                                  Container(
+                                    width: 100,
+                                    child: Text(
+                                      "Doctor",
+                                      style: TextStyle(
+                                          fontSize: 12, color: Colors.black54),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  Text('$duration',
+                                      style: TextStyle(
+                                          fontSize: 12, color: Colors.black54))
+                                ],
+                              ),
+                            ],
+                          ),
                           SizedBox(
                             height: 5,
                           ),
@@ -893,16 +908,27 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                           //   widget.consults[index]['topic'],
                           //   style: TextStyle(fontSize: 14),
                           // ),
-                          HashTagText(
-                            text: "${snapshot.data[index]['topic'] ?? ' '}",
-                            basicStyle:
-                            TextStyle(fontSize: 14, color: Colors.black),
-                            decoratedStyle:
-                            TextStyle(fontSize: 14, color: Colors.blueAccent),
-                            textAlign: TextAlign.start,
-                            onTap: (text) {
-                              print(text);
-                            },
+//                          HashTagText(
+//                            text: "${snapshot.data[index]['topic'] ?? ' '}",
+//                            basicStyle:
+//                                TextStyle(fontSize: 14, color: Colors.black),
+//                            decoratedStyle: TextStyle(
+//                                fontSize: 14, color: Colors.blueAccent),
+//                            textAlign: TextAlign.start,
+//                            onTap: (text) {
+//                              print(text);
+//                            },
+//                          ),
+                          LinkifyText(
+                            "${snapshot.data[index]['topic'] ?? ' '}",
+                            isLinkNavigationEnable: true,
+                            linkColor: Colors.blueAccent,
+                            fontColor: Colors.black,
+                            // linkStyle: TextStyle(color: Colors.blueAccent),
+                            // LinkTypes: [LinkType.url, LinkType.hashtag]
+                            // onTap: (link) {
+                            //   if(link.type == Link.url) launch(link.value);
+                            // },
                           ),
                           // Text(
                           //   _post[index].tags,
@@ -913,16 +939,18 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                           ),
                           e['image'] != null
                               ? Container(
-                            width: MediaQuery.of(context).size.width,
-                            child: Image.network(
-                              e['image'],
-                              fit: BoxFit.contain,
-                            ),
-                          )
+                                  width: MediaQuery.of(context).size.width,
+                                  height: height(context) * 0.4,
+                                  child: Image.network(
+                                    e['image'],
+                                    fit: BoxFit.contain,
+                                  ),
+                                )
                               : Container(
-                            height: 0.0,
-                            width: 0.0,
-                          ),]),
+                                  height: 0.0,
+                                  width: 0.0,
+                                ),
+                        ],),
                         SizedBox(
                           height: 10,
                         ),

@@ -50,10 +50,13 @@ class _PharmacyShareConsultState extends State<PharmacyShareComment> {
               SizedBox(
                 height: 20.0,
               ),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: widget.post,
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: widget.post,
+                ),
               ),
               SizedBox(
                 height: 10.0,

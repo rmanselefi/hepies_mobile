@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:hepies/constants.dart';
 import 'package:hepies/providers/auth.dart';
 import 'package:hepies/ui/auth/change_password.dart';
 import 'package:hepies/ui/auth/login.dart';
@@ -33,14 +34,26 @@ class _DrawerCustomState extends State<DrawerCustom> {
       child: ListView(
         shrinkWrap: true,
         children: <Widget>[
-          AppBar(
-            automaticallyImplyLeading: false,
-            title: Text("WorkenehApp"),
-            backgroundColor: Color(0xff0FF6A0).withOpacity(0.9),
-          ),
           Container(
-            height: 10.0,
-            color: Color(0xff0FF6A0).withOpacity(0.9),
+            height: height(context) * 0.25,
+            padding: EdgeInsets.all(5),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CircleAvatar(
+                  radius: width(context) * 0.15,
+                  backgroundColor: Colors.grey,
+                ),
+                SizedBox(height: 5),
+                Text(
+                  '     User',
+                  textScaleFactor: 1.1,
+                ),
+                Text('      www.qemer.com',
+                    style: TextStyle(color: Colors.black45)),
+              ],
+            ),
           ),
           Container(
             height: MediaQuery.of(context).size.height,
@@ -48,13 +61,12 @@ class _DrawerCustomState extends State<DrawerCustom> {
             child: Column(
               children: <Widget>[
                 ListTile(
-                  leading: Icon(Icons.inbox,
-                      color: Color(0xff0FF6A0)),
+                  leading: Icon(Icons.inbox, color: Color(0xff0FF6A0)),
                   title: Text(
                     'Contact Us',
                     style: TextStyle(color: Colors.black45),
                   ),
-                  onTap: () async{
+                  onTap: () async {
                     // Milkessa: Implemented intent to email with nice formatting
                     final mailtoLink = Mailto(
                       to: ['to@example.com'],
@@ -70,8 +82,7 @@ class _DrawerCustomState extends State<DrawerCustom> {
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.privacy_tip,
-                      color: Color(0xff0FF6A0)),
+                  leading: Icon(Icons.privacy_tip, color: Color(0xff0FF6A0)),
                   title: Text(
                     'Privacy Policy and Terms and Conditions',
                     style: TextStyle(color: Colors.black45),
@@ -84,12 +95,14 @@ class _DrawerCustomState extends State<DrawerCustom> {
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.person,
-                      color: Color(0xff0FF6A0)),
+                  leading: Icon(Icons.person, color: Color(0xff0FF6A0)),
                   title: Text('Change Password',
                       style: TextStyle(color: Colors.black45)),
                   onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>ChangePassword()));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ChangePassword()));
                   },
                 ),
                 ListTile(
@@ -97,7 +110,8 @@ class _DrawerCustomState extends State<DrawerCustom> {
                     Icons.exit_to_app,
                     color: Color(0xff0FF6A0),
                   ),
-                  title: Text('Logout', style: TextStyle(color: Colors.black45)),
+                  title:
+                      Text('Logout', style: TextStyle(color: Colors.black45)),
                   onTap: () async {
                     await Provider.of<AuthProvider>(context, listen: false)
                         .logout();

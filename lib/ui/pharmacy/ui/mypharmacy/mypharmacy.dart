@@ -96,10 +96,16 @@ class _MyPharmacyState extends State<MyPharmacy> {
                           }
 
                           // The logic to find out which ones should appear
+                          // Milkessa: implemented a search mechanism that is organized and alphabetical
                           return drugs.where((drug) {
-                            return drug['name']
-                                .toLowerCase()
-                                .contains(value.text.toLowerCase());
+                            return drug['name'].startsWith(
+                                value.text) ||
+                                (drug['name'].contains(value
+                                    .text
+                                    .toLowerCase()) &
+                                !drug['name']
+                                    .startsWith(
+                                    value.text));
                           });
                         },
                         onSelected: (value) {
@@ -117,6 +123,8 @@ class _MyPharmacyState extends State<MyPharmacy> {
                             child: TextFormField(
                               controller: fieldTextEditingController,
                               focusNode: fieldFocusNode,
+                              textCapitalization:
+                              TextCapitalization.words,
                               decoration: InputDecoration(
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(30.0),
