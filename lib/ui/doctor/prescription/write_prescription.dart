@@ -499,10 +499,10 @@ class _WritePrescriptionState extends State<WritePrescription> {
                       ),
                     );
                   },
-                  child: Flexible(
+                  child: Align(
+                    alignment: Alignment.centerRight,
                     child: Container(
                       width: 150,
-                      padding: EdgeInsets.only(left: 5),
                       height: 40,
                       margin: EdgeInsets.only(right: 20.0, top: 0.0),
                       decoration: BoxDecoration(
@@ -511,6 +511,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                       child: Center(
                           child: Text(
                         'Save to favorites',
+                        maxLines: 2,
                         style: TextStyle(
                             fontSize: 20.0, fontWeight: FontWeight.bold),
                       )),
@@ -522,19 +523,22 @@ class _WritePrescriptionState extends State<WritePrescription> {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) => Welcome()));
                   },
-                  child: Container(
-                    width: 100,
-                    height: 40,
-                    margin: EdgeInsets.only(right: 20.0, top: 0.0),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black45),
-                        borderRadius: BorderRadius.circular(10.0)),
-                    child: Center(
-                        child: Text(
-                      'Cancel',
-                      style: TextStyle(
-                          fontSize: 20.0, fontWeight: FontWeight.bold),
-                    )),
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Container(
+                      width: 100,
+                      height: 40,
+                      margin: EdgeInsets.only(right: 20.0, top: 0.0),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black45),
+                          borderRadius: BorderRadius.circular(10.0)),
+                      child: Center(
+                          child: Text(
+                        'Cancel',
+                        style: TextStyle(
+                            fontSize: 20.0, fontWeight: FontWeight.bold),
+                      )),
+                    ),
                   ),
                 ),
                 prescProvider.sentStatus == PrescriptionStatus.Sending
@@ -542,7 +546,8 @@ class _WritePrescriptionState extends State<WritePrescription> {
                     : GestureDetector(
                         onTap: () async {
                           try {
-                            if (pretype == "general" || pretype == "instrument") {
+                            if (pretype == "general" ||
+                                pretype == "instrument") {
                               print("prescriptionprescription $patient");
                               if (prescription.length != 0 &&
                                   patient.length != 0) {
@@ -579,7 +584,8 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => WritePrescription(
+                                          builder: (context) =>
+                                              WritePrescription(
                                                 from: 'sent',
                                               )));
                                 } else {
@@ -611,7 +617,8 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                   Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => WritePrescription(
+                                          builder: (context) =>
+                                              WritePrescription(
                                                 from: 'sent',
                                               )));
                                 } else {
@@ -637,20 +644,23 @@ class _WritePrescriptionState extends State<WritePrescription> {
                             print("object $e");
                           }
                         },
-                        child: Container(
-                          width: 100,
-                          height: 40,
-                          margin: EdgeInsets.only(right: 10.0, top: 0.0),
-                          decoration: BoxDecoration(
-                              color: Color(0xff07febb),
-                              border: Border.all(color: Colors.black45),
-                              borderRadius: BorderRadius.circular(10.0)),
-                          child: Center(
-                              child: Text(
-                            'Send',
-                            style: TextStyle(
-                                fontSize: 20.0, fontWeight: FontWeight.bold),
-                          )),
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Container(
+                            width: 100,
+                            height: 40,
+                            margin: EdgeInsets.only(right: 10.0, top: 0.0),
+                            decoration: BoxDecoration(
+                                color: Color(0xff07febb),
+                                border: Border.all(color: Colors.black45),
+                                borderRadius: BorderRadius.circular(10.0)),
+                            child: Center(
+                                child: Text(
+                              'Send',
+                              style: TextStyle(
+                                  fontSize: 20.0, fontWeight: FontWeight.bold),
+                            )),
+                          ),
                         ),
                       )
               ],

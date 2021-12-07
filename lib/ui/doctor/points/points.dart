@@ -84,7 +84,7 @@ class _PointsState extends State<Points> {
                   ),
                   Center(
                     child: Text(
-                      'But Air Time',
+                      'Buy Air Time',
                       style: TextStyle(
                           decoration: TextDecoration.underline,
                           fontSize: 25.0,
