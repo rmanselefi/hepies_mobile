@@ -55,10 +55,14 @@ class _HeaderState extends State<Header> {
         GestureDetector(
           onTap: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Welcome(currenIndex: 0,)));
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Welcome(
+                          currenIndex: 0,
+                        )));
           },
           child: GradientText(
-            'WorkenehApp',
+            'Hepius',
             gradient: LinearGradient(colors: [
               Colors.blue.shade400,
               Colors.blue.shade900,
@@ -68,7 +72,11 @@ class _HeaderState extends State<Header> {
         GestureDetector(
           onTap: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Points(points: points,)));
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Points(
+                          points: points,
+                        )));
           },
           child: Column(
             children: [

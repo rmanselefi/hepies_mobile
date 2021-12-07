@@ -393,22 +393,20 @@ class _PrescribeFormState extends State<PrescribeForm> {
                             width: 200,
                             height: 40.0,
                             child: TextFormField(
+                              // Milkessa: Fixed phone input field formatting
                               textAlign: TextAlign.start,
                               controller: phoneController,
-                              maxLength: 10,
+                              enabled: !rememberMe,
+                              maxLength: 8,
+                              keyboardType: TextInputType.number,
                               onSaved: (value) {
                                 setState(() {
-                                  // Milkessa: Added the option for phone numbers starting with '09'
-                                  patient.phone = value.startsWith('09')
-                                      ? "+251${value.substring(1)}"
-                                      : "+251${value}";
+                                  patient.phone = "+251${value}";
                                 });
                               },
                               onChanged: (String val) async {
                                 if (val.length == 9 || val.length == 10) {
-                                  var phone = val.startsWith('09')
-                                      ? "+251${val.substring(1)}"
-                                      : "+251${val}";
+                                  var phone = "+251${val}";
                                   var res =
                                       await patientProvider.getPatient(phone);
                                   if (res != null) {
@@ -429,24 +427,30 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                   contentPadding: EdgeInsets.zero,
                                   prefixIcon: SizedBox(
                                     width: 35,
-                                    child: CountryCodePicker(
-                                      onChanged: (value) {
-                                        setState(() {
-                                          _countryCode = value.dialCode;
-                                          _countryCode == null
-                                              ? _countryCode = "+251"
-                                              : _countryCode = _countryCode;
-                                        });
-                                      },
-                                      backgroundColor: Colors.white,
-                                      initialSelection: 'ET',
-                                      favorite: ['+251', 'ET'],
-                                      showCountryOnly: false,
-                                      showOnlyCountryWhenClosed: false,
-                                      alignLeft: false,
-                                      padding: EdgeInsets.all(0.0),
-                                      showFlag: false,
+                                    child: Center(
+                                      child: Text(
+                                        '+251 - 9',
+                                        textScaleFactor: 0.9,
+                                      ),
                                     ),
+                                    // CountryCodePicker(
+                                    //   onChanged: (value) {
+                                    //     setState(() {
+                                    //       _countryCode = value.dialCode;
+                                    //       _countryCode == null
+                                    //           ? _countryCode = "+251 - 9"
+                                    //           : _countryCode = '+251 - 9';
+                                    //     });
+                                    //   },
+                                    //   backgroundColor: Colors.white,
+                                    //   initialSelection: 'ET',
+                                    //   favorite: ['+251 - 9', 'ET'],
+                                    //   showCountryOnly: false,
+                                    //   showOnlyCountryWhenClosed: false,
+                                    //   alignLeft: false,
+                                    //   padding: EdgeInsets.all(0.0),
+                                    //   showFlag: false,
+                                    // ),
                                   ),
                                   suffix: patientProvider.fetchStatus ==
                                           Status.Fetching
@@ -456,8 +460,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                           child: CircularProgressIndicator())
                                       : null,
                                   border: OutlineInputBorder(),
-                                  hintText:
-                                      rememberMe ? '90000000' : '90000000',
                                   hintStyle: TextStyle(
                                       color: !rememberMe
                                           ? Colors.redAccent
@@ -476,6 +478,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                     child: TextFormField(
                                       controller: ageController,
                                       keyboardType: TextInputType.number,
+                                      enabled: !rememberMe,
                                       inputFormatters: <TextInputFormatter>[],
                                       decoration: InputDecoration(
                                           contentPadding: EdgeInsets.all(0.0),
@@ -555,6 +558,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                           height: 40.0,
                           child: TextFormField(
                             controller: nameController,
+                            enabled: !rememberMe,
                             onSaved: (value) => patient.name = value,
                             maxLines: 1,
                             onChanged: (val) {
@@ -572,11 +576,15 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                         : Colors.black26)),
                           ),
                         ),
+                        SizedBox(
+                          width: 10.0,
+                        ),
                         Container(
                           width: 150,
                           height: 40.0,
                           child: TextFormField(
                             controller: fnameController,
+                            enabled: !rememberMe,
                             onSaved: (value) => patient.fathername = value,
                             onChanged: (val) {
                               setState(() {
@@ -740,34 +748,168 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                             width: 8.0,
                                           ),
                                           _textEvery(),
-                                          Container(
-                                            width: 80,
-                                            height: 40,
-                                            child: TextFormField(
-                                              controller: forController,
-                                              onChanged: (val) {
-                                                setState(() {
-                                                  prescription.takein = val;
-                                                });
-                                                if (val.isNotEmpty) {
+                                          GestureDetector(
+                                            onTap: isEvery
+                                                ? () {
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (context) =>
+                                                          Dialog(
+                                                        shape:
+                                                            OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
+                                                        ),
+                                                        elevation: 5,
+                                                        child: Container(
+                                                          width:
+                                                              width(context) *
+                                                                  0.8,
+                                                          height:
+                                                              height(context) *
+                                                                  0.4,
+                                                          padding:
+                                                              EdgeInsets.all(
+                                                                  10),
+                                                          child: Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              TextFormField(
+                                                                controller:
+                                                                    forController,
+                                                                onChanged:
+                                                                    (val) {
+                                                                  setState(() {
+                                                                    prescription
+                                                                            .takein =
+                                                                        val;
+                                                                  });
+                                                                  if (val
+                                                                      .isNotEmpty) {
+                                                                    setState(
+                                                                        () {
+                                                                      isAmpule =
+                                                                          false;
+                                                                    });
+                                                                  }
+                                                                  if (val
+                                                                      .isEmpty) {
+                                                                    setState(
+                                                                        () {
+                                                                      isAmpule =
+                                                                          true;
+                                                                    });
+                                                                  }
+                                                                },
+                                                                enabled:
+                                                                    isEvery,
+                                                                decoration: InputDecoration(
+                                                                    border:
+                                                                        OutlineInputBorder(),
+                                                                    hintText:
+                                                                        'For',
+                                                                    hintStyle: TextStyle(
+                                                                        color: isEvery
+                                                                            ? Colors.redAccent
+                                                                            : Colors.grey)),
+                                                              ),
+                                                              SizedBox(
+                                                                  height: 10),
+                                                              Padding(
+                                                                padding:
+                                                                    EdgeInsets
+                                                                        .all(
+                                                                            4.0),
+                                                                child: Center(
+                                                                  child:
+                                                                      Container(
+                                                                    width: width(
+                                                                            context) *
+                                                                        0.2375,
+                                                                    height: 35,
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      color: Color(
+                                                                          0xff07febb),
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .all(
+                                                                        Radius.circular(
+                                                                            4.0),
+                                                                      ),
+                                                                    ),
+                                                                    child:
+                                                                        Material(
+                                                                      color: Colors
+                                                                          .transparent,
+                                                                      child:
+                                                                          InkWell(
+                                                                        onTap:
+                                                                            () {
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                        },
+                                                                        child:
+                                                                            Center(
+                                                                          child:
+                                                                              Padding(
+                                                                            padding:
+                                                                                EdgeInsets.all(4.0),
+                                                                            child:
+                                                                                Text(
+                                                                              'done',
+                                                                              style: TextStyle(
+                                                                                fontSize: 15,
+                                                                                color: Colors.black,
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  }
+                                                : () {},
+                                            child: Container(
+                                              width: 80,
+                                              height: 40,
+                                              child: TextFormField(
+                                                controller: forController,
+                                                onChanged: (val) {
                                                   setState(() {
-                                                    isAmpule = false;
+                                                    prescription.takein = val;
                                                   });
-                                                }
-                                                if (val.isEmpty) {
-                                                  setState(() {
-                                                    isAmpule = true;
-                                                  });
-                                                }
-                                              },
-                                              enabled: isEvery,
-                                              decoration: InputDecoration(
-                                                  border: OutlineInputBorder(),
-                                                  hintText: 'For',
-                                                  hintStyle: TextStyle(
-                                                      color: isEvery
-                                                          ? Colors.redAccent
-                                                          : Colors.grey)),
+                                                  if (val.isNotEmpty) {
+                                                    setState(() {
+                                                      isAmpule = false;
+                                                    });
+                                                  }
+                                                  if (val.isEmpty) {
+                                                    setState(() {
+                                                      isAmpule = true;
+                                                    });
+                                                  }
+                                                },
+                                                enabled: false,
+                                                decoration: InputDecoration(
+                                                    border:
+                                                        OutlineInputBorder(),
+                                                    hintText: 'For',
+                                                    hintStyle: TextStyle(
+                                                        color: isEvery
+                                                            ? Colors.redAccent
+                                                            : Colors.grey)),
+                                              ),
                                             ),
                                           ),
                                           Text(
@@ -819,114 +961,127 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                       Row(
                                         children: [
                                           GestureDetector(
-                                            onTap: () {
-                                              showDialog(
-                                                context: context,
-                                                builder: (context) => Dialog(
-                                                  shape: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                  ),
-                                                  elevation: 5,
-                                                  child: Container(
-                                                    width: width(context) * 0.8,
-                                                    height:
-                                                        height(context) * 0.4,
-                                                    padding: EdgeInsets.all(10),
-                                                    child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        TextFormField(
-                                                          controller:
-                                                              diagnosisController,
-                                                          onChanged: (val) {
-                                                            setState(() {
-                                                              prescription
-                                                                      .diagnosis =
-                                                                  val;
-                                                            });
-                                                          },
-                                                          decoration:
-                                                              InputDecoration(
-                                                            border:
-                                                                OutlineInputBorder(),
-                                                            enabledBorder:
-                                                                const OutlineInputBorder(
-                                                              borderSide:
-                                                                  const BorderSide(
-                                                                      color: Colors
-                                                                          .green,
-                                                                      width:
-                                                                          1.0),
-                                                            ),
-                                                            hintText:
-                                                                'DX/Diagnosis',
-                                                          ),
+                                            onTap: !rememberMe
+                                                ? () {
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (context) =>
+                                                          Dialog(
+                                                        shape:
+                                                            OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
                                                         ),
-                                                        SizedBox(height: 10),
-                                                        Padding(
+                                                        elevation: 5,
+                                                        child: Container(
+                                                          width:
+                                                              width(context) *
+                                                                  0.8,
+                                                          height:
+                                                              height(context) *
+                                                                  0.4,
                                                           padding:
                                                               EdgeInsets.all(
-                                                                  4.0),
-                                                          child: Center(
-                                                            child: Container(
-                                                              width: width(
-                                                                      context) *
-                                                                  0.2375,
-                                                              height: 35,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: Color(
-                                                                    0xff07febb),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .all(
-                                                                  Radius
-                                                                      .circular(
-                                                                          4.0),
+                                                                  10),
+                                                          child: Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              TextFormField(
+                                                                controller:
+                                                                    diagnosisController,
+                                                                enabled:
+                                                                    !rememberMe,
+                                                                onChanged:
+                                                                    (val) {
+                                                                  setState(() {
+                                                                    prescription
+                                                                            .diagnosis =
+                                                                        val;
+                                                                  });
+                                                                },
+                                                                decoration:
+                                                                    InputDecoration(
+                                                                  border:
+                                                                      OutlineInputBorder(),
+                                                                  enabledBorder:
+                                                                      const OutlineInputBorder(
+                                                                    borderSide: const BorderSide(
+                                                                        color: Colors
+                                                                            .green,
+                                                                        width:
+                                                                            1.0),
+                                                                  ),
+                                                                  hintText:
+                                                                      'DX/Diagnosis',
                                                                 ),
                                                               ),
-                                                              child: Material(
-                                                                color: Colors
-                                                                    .transparent,
-                                                                child: InkWell(
-                                                                  onTap: () {
-                                                                    Navigator.pop(
-                                                                        context);
-                                                                  },
-                                                                  child: Center(
+                                                              SizedBox(
+                                                                  height: 10),
+                                                              Padding(
+                                                                padding:
+                                                                    EdgeInsets
+                                                                        .all(
+                                                                            4.0),
+                                                                child: Center(
+                                                                  child:
+                                                                      Container(
+                                                                    width: width(
+                                                                            context) *
+                                                                        0.2375,
+                                                                    height: 35,
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      color: Color(
+                                                                          0xff07febb),
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .all(
+                                                                        Radius.circular(
+                                                                            4.0),
+                                                                      ),
+                                                                    ),
                                                                     child:
-                                                                        Padding(
-                                                                      padding:
-                                                                          EdgeInsets.all(
-                                                                              4.0),
+                                                                        Material(
+                                                                      color: Colors
+                                                                          .transparent,
                                                                       child:
-                                                                          Text(
-                                                                        'done',
-                                                                        style:
-                                                                            TextStyle(
-                                                                          fontSize:
-                                                                              15,
-                                                                          color:
-                                                                              Colors.black,
+                                                                          InkWell(
+                                                                        onTap:
+                                                                            () {
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                        },
+                                                                        child:
+                                                                            Center(
+                                                                          child:
+                                                                              Padding(
+                                                                            padding:
+                                                                                EdgeInsets.all(4.0),
+                                                                            child:
+                                                                                Text(
+                                                                              'done',
+                                                                              style: TextStyle(
+                                                                                fontSize: 15,
+                                                                                color: Colors.black,
+                                                                              ),
+                                                                            ),
+                                                                          ),
                                                                         ),
                                                                       ),
                                                                     ),
                                                                   ),
                                                                 ),
                                                               ),
-                                                            ),
+                                                            ],
                                                           ),
                                                         ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              );
-                                            },
+                                                      ),
+                                                    );
+                                                  }
+                                                : () {},
                                             child: Container(
                                               width: 100,
                                               height: 40,
@@ -961,112 +1116,127 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                       Row(
                                         children: [
                                           GestureDetector(
-                                            onTap: () {
-                                              showDialog(
-                                                context: context,
-                                                builder: (context) => Dialog(
-                                                  shape: OutlineInputBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                  ),
-                                                  elevation: 5,
-                                                  child: Container(
-                                                    width: width(context) * 0.8,
-                                                    height:
-                                                        height(context) * 0.4,
-                                                    padding: EdgeInsets.all(10),
-                                                    child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        TextFormField(
-                                                          controller:
-                                                              addressController,
-                                                          onChanged: (val) {
-                                                            setState(() {
-                                                              prescription
-                                                                  .ampule = val;
-                                                            });
-                                                          },
-                                                          decoration:
-                                                              InputDecoration(
-                                                            border:
-                                                                OutlineInputBorder(),
-                                                            enabledBorder:
-                                                                const OutlineInputBorder(
-                                                              borderSide:
-                                                                  const BorderSide(
-                                                                      color: Colors
-                                                                          .green,
-                                                                      width:
-                                                                          1.0),
-                                                            ),
-                                                            hintText: 'Address',
-                                                          ),
+                                            onTap: !rememberMe
+                                                ? () {
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (context) =>
+                                                          Dialog(
+                                                        shape:
+                                                            OutlineInputBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
                                                         ),
-                                                        SizedBox(height: 10),
-                                                        Padding(
+                                                        elevation: 5,
+                                                        child: Container(
+                                                          width:
+                                                              width(context) *
+                                                                  0.8,
+                                                          height:
+                                                              height(context) *
+                                                                  0.4,
                                                           padding:
                                                               EdgeInsets.all(
-                                                                  4.0),
-                                                          child: Center(
-                                                            child: Container(
-                                                              width: width(
-                                                                      context) *
-                                                                  0.2375,
-                                                              height: 35,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: Color(
-                                                                    0xff07febb),
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .all(
-                                                                  Radius
-                                                                      .circular(
-                                                                          4.0),
+                                                                  10),
+                                                          child: Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              TextFormField(
+                                                                controller:
+                                                                    addressController,
+                                                                enabled:
+                                                                    !rememberMe,
+                                                                onChanged:
+                                                                    (val) {
+                                                                  setState(() {
+                                                                    prescription
+                                                                            .ampule =
+                                                                        val;
+                                                                  });
+                                                                },
+                                                                decoration:
+                                                                    InputDecoration(
+                                                                  border:
+                                                                      OutlineInputBorder(),
+                                                                  enabledBorder:
+                                                                      const OutlineInputBorder(
+                                                                    borderSide: const BorderSide(
+                                                                        color: Colors
+                                                                            .green,
+                                                                        width:
+                                                                            1.0),
+                                                                  ),
+                                                                  hintText:
+                                                                      'Address',
                                                                 ),
                                                               ),
-                                                              child: Material(
-                                                                color: Colors
-                                                                    .transparent,
-                                                                child: InkWell(
-                                                                  onTap: () {
-                                                                    Navigator.pop(
-                                                                        context);
-                                                                  },
-                                                                  child: Center(
+                                                              SizedBox(
+                                                                  height: 10),
+                                                              Padding(
+                                                                padding:
+                                                                    EdgeInsets
+                                                                        .all(
+                                                                            4.0),
+                                                                child: Center(
+                                                                  child:
+                                                                      Container(
+                                                                    width: width(
+                                                                            context) *
+                                                                        0.2375,
+                                                                    height: 35,
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      color: Color(
+                                                                          0xff07febb),
+                                                                      borderRadius:
+                                                                          BorderRadius
+                                                                              .all(
+                                                                        Radius.circular(
+                                                                            4.0),
+                                                                      ),
+                                                                    ),
                                                                     child:
-                                                                        Padding(
-                                                                      padding:
-                                                                          EdgeInsets.all(
-                                                                              4.0),
+                                                                        Material(
+                                                                      color: Colors
+                                                                          .transparent,
                                                                       child:
-                                                                          Text(
-                                                                        'done',
-                                                                        style:
-                                                                            TextStyle(
-                                                                          fontSize:
-                                                                              15,
-                                                                          color:
-                                                                              Colors.black,
+                                                                          InkWell(
+                                                                        onTap:
+                                                                            () {
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                        },
+                                                                        child:
+                                                                            Center(
+                                                                          child:
+                                                                              Padding(
+                                                                            padding:
+                                                                                EdgeInsets.all(4.0),
+                                                                            child:
+                                                                                Text(
+                                                                              'done',
+                                                                              style: TextStyle(
+                                                                                fontSize: 15,
+                                                                                color: Colors.black,
+                                                                              ),
+                                                                            ),
+                                                                          ),
                                                                         ),
                                                                       ),
                                                                     ),
                                                                   ),
                                                                 ),
                                                               ),
-                                                            ),
+                                                            ],
                                                           ),
                                                         ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              );
-                                            },
+                                                      ),
+                                                    );
+                                                  }
+                                                : () {},
                                             child: Container(
                                               width: 100,
                                               height: 40,
@@ -1318,7 +1488,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                         borderRadius: BorderRadius.circular(30.0)),
                     child: Center(
                         child: Text(
-                      status == 'add' ? 'ADD' : 'EDIT',
+                      status == 'add' ? 'ADD' : 'Done Editing',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 25.0,

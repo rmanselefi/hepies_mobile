@@ -88,7 +88,7 @@ class _HeaderState extends State<Header> {
                     border: Border.all(color: Colors.green, width: 2),
                     borderRadius: BorderRadius.circular(35.0)),
                 child: Text(
-                  '${points}Pts',
+                  '${points ?? 0} Pts',
                   style: TextStyle(color: Colors.green, fontSize: 18.0),
                 ),
               ),

@@ -87,7 +87,10 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return Center(
-                    child: CircleAvatar(radius: width(context) * 0.025, backgroundColor: Colors.grey.shade100,),
+                    child: CircleAvatar(
+                      radius: width(context) * 0.025,
+                      backgroundColor: Colors.grey.shade100,
+                    ),
                   );
                 } else {
                   if (snapshot.data == null) {
@@ -785,7 +788,11 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                       builder: (context, snapshot) {
                                         if (!snapshot.hasData) {
                                           return Center(
-                                            child: CircleAvatar(radius: width(context) * 0.025, backgroundColor: Colors.grey.shade100,),
+                                            child: CircleAvatar(
+                                              radius: width(context) * 0.025,
+                                              backgroundColor:
+                                                  Colors.grey.shade100,
+                                            ),
                                           );
                                         } else {
                                           if (snapshot.data == null) {
@@ -830,7 +837,10 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                 builder: (context, snapshot) {
                                   if (!snapshot.hasData) {
                                     return Center(
-                                      child: CircleAvatar(radius: width(context) * 0.025, backgroundColor: Colors.grey.shade100,),
+                                      child: CircleAvatar(
+                                        radius: width(context) * 0.025,
+                                        backgroundColor: Colors.grey.shade100,
+                                      ),
                                     );
                                   } else {
                                     if (snapshot.data == null) {
@@ -857,57 +867,62 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                           thickness: 0.50,
                           color: Colors.black26,
                         ),
-                        _rowButton(e, [
-                          Row(
-                            children: [
-                              Container(
-                                width: 40,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(40))),
-                                child: ClipRRect(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(40)),
-                                    child: Icon(
-                                      Icons.person,
-                                      size: 40,
-                                    )),
-                              ),
-                              SizedBox(
-                                width: 4,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    e['user'],
-                                    style: TextStyle(
-                                        fontSize: 18,),
-                                  ),
-                                  Container(
-                                    width: 100,
-                                    child: Text(
-                                      "Doctor",
+                        _rowButton(
+                          e,
+                          [
+                            Row(
+                              children: [
+                                Container(
+                                  width: 40,
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(40))),
+                                  child: ClipRRect(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(40)),
+                                      child: Icon(
+                                        Icons.person,
+                                        size: 40,
+                                      )),
+                                ),
+                                SizedBox(
+                                  width: 4,
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      e['user'],
                                       style: TextStyle(
-                                          fontSize: 12, color: Colors.black54),
-                                      overflow: TextOverflow.ellipsis,
+                                        fontSize: 18,
+                                      ),
                                     ),
-                                  ),
-                                  Text('$duration',
-                                      style: TextStyle(
-                                          fontSize: 12, color: Colors.black54))
-                                ],
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          // Text(
-                          //   widget.consults[index]['topic'],
-                          //   style: TextStyle(fontSize: 14),
-                          // ),
+                                    Container(
+                                      width: 100,
+                                      child: Text(
+                                        "Doctor",
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.black54),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    Text('$duration',
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.black54))
+                                  ],
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            // Text(
+                            //   widget.consults[index]['topic'],
+                            //   style: TextStyle(fontSize: 14),
+                            // ),
 //                          HashTagText(
 //                            text: "${snapshot.data[index]['topic'] ?? ' '}",
 //                            basicStyle:
@@ -919,38 +934,39 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
 //                              print(text);
 //                            },
 //                          ),
-                          LinkifyText(
-                            "${snapshot.data[index]['topic'] ?? ' '}",
-                            isLinkNavigationEnable: true,
-                            linkColor: Colors.blueAccent,
-                            fontColor: Colors.black,
-                            // linkStyle: TextStyle(color: Colors.blueAccent),
-                            // LinkTypes: [LinkType.url, LinkType.hashtag]
-                            // onTap: (link) {
-                            //   if(link.type == Link.url) launch(link.value);
-                            // },
-                          ),
-                          // Text(
-                          //   _post[index].tags,
-                          //   style: TextStyle(color: blueColor),
-                          // ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          e['image'] != null
-                              ? Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  height: height(context) * 0.4,
-                                  child: Image.network(
-                                    e['image'],
-                                    fit: BoxFit.contain,
+                            LinkifyText(
+                              "${snapshot.data[index]['topic'] ?? ' '}",
+                              isLinkNavigationEnable: true,
+                              linkColor: Colors.blueAccent,
+                              fontColor: Colors.black,
+                              // linkStyle: TextStyle(color: Colors.blueAccent),
+                              // LinkTypes: [LinkType.url, LinkType.hashtag]
+                              // onTap: (link) {
+                              //   if(link.type == Link.url) launch(link.value);
+                              // },
+                            ),
+                            // Text(
+                            //   _post[index].tags,
+                            //   style: TextStyle(color: blueColor),
+                            // ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            e['image'] != null
+                                ? Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: height(context) * 0.4,
+                                    child: Image.network(
+                                      e['image'],
+                                      fit: BoxFit.contain,
+                                    ),
+                                  )
+                                : Container(
+                                    height: 0.0,
+                                    width: 0.0,
                                   ),
-                                )
-                              : Container(
-                                  height: 0.0,
-                                  width: 0.0,
-                                ),
-                        ],),
+                          ],
+                        ),
                         SizedBox(
                           height: 10,
                         ),

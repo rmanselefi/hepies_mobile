@@ -7,12 +7,15 @@ import 'package:hepies/constants.dart';
 import 'package:hepies/providers/auth.dart';
 import 'package:hepies/ui/auth/change_password.dart';
 import 'package:hepies/ui/auth/login.dart';
+import 'package:hepies/ui/doctor/profile/edit_profile.dart';
 import 'package:provider/provider.dart';
 import 'package:mailto/mailto.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DrawerCustom extends StatefulWidget {
-  DrawerCustom();
+  DrawerCustom(this.name, this.profession);
+  final name;
+  final profession;
 
   @override
   _DrawerCustomState createState() => _DrawerCustomState();
@@ -46,12 +49,32 @@ class _DrawerCustomState extends State<DrawerCustom> {
                   backgroundColor: Colors.grey,
                 ),
                 SizedBox(height: 5),
-                Text(
-                  '     User',
-                  textScaleFactor: 1.1,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '     ${widget.name}',
+                          textScaleFactor: 1.1,
+                        ),
+                        Text('      ${widget.profession}',
+                            style: TextStyle(color: Colors.black45)),
+                      ],
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EditProfile()));
+                      },
+                      icon: Icon(Icons.edit),
+                    ),
+                  ],
                 ),
-                Text('      www.qemer.com',
-                    style: TextStyle(color: Colors.black45)),
               ],
             ),
           ),

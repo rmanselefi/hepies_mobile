@@ -35,7 +35,7 @@ class _WelcomeState extends State<Welcome> {
     super.initState();
     UserProvider().getProfile().then((user) {
       setState(() {
-        user_id=user['id'];
+        user_id = user['id'];
         name = user['profession'][0]['name'];
         profession = user['profession'][0]['proffesion'];
         points = user['profession'][0]['points'];
@@ -84,33 +84,6 @@ class _WelcomeState extends State<Welcome> {
                 SizedBox(
                   width: 10.0,
                 ),
-                Container(
-                  height: 100.0,
-                  child: Column(
-                    children: [
-                      IconButton(
-                          icon: Icon(
-                            Icons.person,
-                            size: 23.0,
-                            color: Colors.black45,
-                          ),
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => EditProfile()));
-                          }),
-                      Text(
-                        '$name',
-                        style: TextStyle(color: Colors.black38, fontSize: 12.0),
-                      ),
-                      Text(
-                        '($profession)',
-                        style: TextStyle(color: Colors.grey, fontSize: 12.0),
-                      )
-                    ],
-                  ),
-                ),
                 GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -121,7 +94,7 @@ class _WelcomeState extends State<Welcome> {
                                 )));
                   },
                   child: GradientText(
-                    'WorkenehApp',
+                    'Hepius',
                     gradient: LinearGradient(colors: [
                       Colors.blue.shade400,
                       Colors.blue.shade900,
@@ -165,7 +138,7 @@ class _WelcomeState extends State<Welcome> {
             actions: <Widget>[],
           ),
         ),
-        drawer: DrawerCustom(),
+        drawer: DrawerCustom(name, profession),
         body: ShareConsult(user_id),
       ),
     );

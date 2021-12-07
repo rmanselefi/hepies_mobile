@@ -71,7 +71,7 @@ class _PointsState extends State<Points> {
                                       color: Color(0xff0FF6A0), width: 2),
                                   borderRadius: BorderRadius.circular(150.0)),
                               child: Text(
-                                '$point Pts',
+                                '${point ?? 0} Pts',
                                 style: TextStyle(
                                     color: Color(0xff0FF6A0), fontSize: 40.0),
                               ),
@@ -97,81 +97,81 @@ class _PointsState extends State<Points> {
                   userProvider.pointFiftyStatus == ChangeStatus.Changing
                       ? loading
                       : Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      GestureDetector(
-                        onTap: () async {
-                          if (double.parse(points) > 50) {
-                            var res = await UserProvider().buyCredit(50);
-                            print("resresresres $res");
-                            if (res['status']) {
-                              var voucher = res['result'];
-                              launch("tel://*805*${voucher['code']}#");
-                            } else {
-                              showTopSnackBar(
-                                context,
-                                CustomSnackBar.error(
-                                  message:
-                                  "Something is wrong please contact system admin",
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            GestureDetector(
+                              onTap: () async {
+                                if (double.parse(points) > 50) {
+                                  var res = await UserProvider().buyCredit(50);
+                                  print("resresresres $res");
+                                  if (res['status']) {
+                                    var voucher = res['result'];
+                                    launch("tel://*805*${voucher['code']}#");
+                                  } else {
+                                    showTopSnackBar(
+                                      context,
+                                      CustomSnackBar.error(
+                                        message:
+                                            "Something is wrong please contact system admin",
+                                      ),
+                                    );
+                                  }
+                                } else {
+                                  showTopSnackBar(
+                                    context,
+                                    CustomSnackBar.error(
+                                      message:
+                                          "You don't have enough points to buy 50 birr credit",
+                                    ),
+                                  );
+                                }
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(15.0),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Color(0xff0FF6A0), width: 1),
+                                    borderRadius: BorderRadius.circular(100.0)),
+                                child: Text(
+                                  '50 Birr',
+                                  style: TextStyle(
+                                      color: Color(0xff0FF6A0), fontSize: 18.0),
                                 ),
-                              );
-                            }
-                          } else {
-                            showTopSnackBar(
-                              context,
-                              CustomSnackBar.error(
-                                message:
-                                "You don't have enough points to buy 50 birr credit",
                               ),
-                            );
-                          }
-                        },
-                        child: Container(
-                          padding: EdgeInsets.all(15.0),
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Color(0xff0FF6A0), width: 1),
-                              borderRadius: BorderRadius.circular(100.0)),
-                          child: Text(
-                            '50 Birr',
-                            style: TextStyle(
-                                color: Color(0xff0FF6A0), fontSize: 18.0),
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () async {
-                          if (double.parse(points) > 100) {
-                            var res = await UserProvider().buyCredit(100);
-                            if (res['status']) {
-                              var voucher = res['result'];
-                              launch("tel://*805*${voucher['code']}#");
-                            }
-                          } else {
-                            showTopSnackBar(
-                              context,
-                              CustomSnackBar.error(
-                                message:
-                                "You don't have enough points to buy 50 birr credit",
+                            ),
+                            GestureDetector(
+                              onTap: () async {
+                                if (double.parse(points) > 100) {
+                                  var res = await UserProvider().buyCredit(100);
+                                  if (res['status']) {
+                                    var voucher = res['result'];
+                                    launch("tel://*805*${voucher['code']}#");
+                                  }
+                                } else {
+                                  showTopSnackBar(
+                                    context,
+                                    CustomSnackBar.error(
+                                      message:
+                                          "You don't have enough points to buy 50 birr credit",
+                                    ),
+                                  );
+                                }
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(15.0),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: Color(0xff0FF6A0), width: 1),
+                                    borderRadius: BorderRadius.circular(100.0)),
+                                child: Text(
+                                  '100 Birr',
+                                  style: TextStyle(
+                                      color: Color(0xff0FF6A0), fontSize: 18.0),
+                                ),
                               ),
-                            );
-                          }
-                        },
-                        child: Container(
-                          padding: EdgeInsets.all(15.0),
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Color(0xff0FF6A0), width: 1),
-                              borderRadius: BorderRadius.circular(100.0)),
-                          child: Text(
-                            '100 Birr',
-                            style: TextStyle(
-                                color: Color(0xff0FF6A0), fontSize: 18.0),
-                          ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
                   SizedBox(
                     height: 20.0,
                   ),
@@ -203,36 +203,43 @@ class _PointsState extends State<Points> {
                                 height: 40,
                                 width: 200,
                                 child: TextFormField(
+                                    // Milkessa: Fixed phone input field formatting
                                     textAlign: TextAlign.start,
                                     controller: phoneController,
-                                    maxLength: 10,
+                                    maxLength: 8,
+                                    keyboardType: TextInputType.number,
                                     decoration: InputDecoration(
-                                        counterText: "",
-                                        contentPadding: EdgeInsets.zero,
-                                        prefixIcon: SizedBox(
-                                          width: 35,
-                                          child: CountryCodePicker(
-                                            onChanged: (value) {
-                                              setState(() {
-                                                _countryCode = value.dialCode;
-                                                _countryCode == null
-                                                    ? _countryCode = "+251"
-                                                    : _countryCode =
-                                                    _countryCode;
-                                              });
-                                            },
-                                            backgroundColor: Colors.white,
-                                            initialSelection: 'ET',
-                                            favorite: ['+251', 'ET'],
-                                            showCountryOnly: false,
-                                            showOnlyCountryWhenClosed: false,
-                                            alignLeft: false,
-                                            padding: EdgeInsets.all(0.0),
-                                            showFlag: false,
+                                      counterText: "",
+                                      contentPadding: EdgeInsets.zero,
+                                      prefixIcon: SizedBox(
+                                        width: 35,
+                                        child: Center(
+                                          child: Text(
+                                            '+251 - 9',
+                                            textScaleFactor: 0.9,
                                           ),
                                         ),
-                                        border: OutlineInputBorder(),
-                                        hintText: '90000000')))
+                                        // CountryCodePicker(
+                                        //   onChanged: (value) {
+                                        //     setState(() {
+                                        //       _countryCode = value.dialCode;
+                                        //       _countryCode == null
+                                        //           ? _countryCode = "+251 - 9"
+                                        //           : _countryCode = '+251 - 9';
+                                        //     });
+                                        //   },
+                                        //   backgroundColor: Colors.white,
+                                        //   initialSelection: 'ET',
+                                        //   favorite: ['+251 - 9', 'ET'],
+                                        //   showCountryOnly: false,
+                                        //   showOnlyCountryWhenClosed: false,
+                                        //   alignLeft: false,
+                                        //   padding: EdgeInsets.all(0.0),
+                                        //   showFlag: false,
+                                        // ),
+                                      ),
+                                      border: OutlineInputBorder(),
+                                    )))
                           ],
                         ),
                         SizedBox(
@@ -268,60 +275,60 @@ class _PointsState extends State<Points> {
                         userProvider.pointStatus == ChangeStatus.Changing
                             ? CircularProgressIndicator()
                             : Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Center(
-                            child: GestureDetector(
-                              onTap: () async {
-                                _formKey.currentState.save();
-                                if (_formKey.currentState.validate() &&
-                                    double.parse(points) >
-                                        double.parse(
-                                            pointsController.text)) {
-                                  var res =
-                                  await userProvider.transferPoint(
-                                      pointsController.text,
-                                      phoneController.text);
-                                  if (res['status']) {
-                                    showTopSnackBar(
-                                      context,
-                                      CustomSnackBar.success(
-                                        message:
-                                        "You have successfully transfered ${pointsController.text} point(s) to phone +251${phoneController.text}",
-                                      ),
-                                    );
-                                  }
-                                } else if (double.parse(points) <
-                                    double.parse(pointsController.text)) {
-                                  showTopSnackBar(
-                                    context,
-                                    CustomSnackBar.error(
-                                      message:
-                                      "You dont have enough point to transfer",
-                                    ),
-                                  );
-                                }
-                              },
-                              child: Container(
-                                width: 100,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: Color(0xff0FF6A0),
-                                        width: 2),
-                                    borderRadius:
-                                    BorderRadius.circular(100.0)),
+                                padding: const EdgeInsets.all(8.0),
                                 child: Center(
-                                  child: Text(
-                                    'send',
-                                    style: TextStyle(
-                                        fontSize: 18.0,
-                                        color: Color(0xff0FF6A0)),
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      _formKey.currentState.save();
+                                      if (_formKey.currentState.validate() &&
+                                          double.parse(points) >
+                                              double.parse(
+                                                  pointsController.text)) {
+                                        var res =
+                                            await userProvider.transferPoint(
+                                                pointsController.text,
+                                                phoneController.text);
+                                        if (res['status']) {
+                                          showTopSnackBar(
+                                            context,
+                                            CustomSnackBar.success(
+                                              message:
+                                                  "You have successfully transfered ${pointsController.text} point(s) to phone +251${phoneController.text}",
+                                            ),
+                                          );
+                                        }
+                                      } else if (double.parse(points) <
+                                          double.parse(pointsController.text)) {
+                                        showTopSnackBar(
+                                          context,
+                                          CustomSnackBar.error(
+                                            message:
+                                                "You dont have enough point to transfer",
+                                          ),
+                                        );
+                                      }
+                                    },
+                                    child: Container(
+                                      width: 100,
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: Color(0xff0FF6A0),
+                                              width: 2),
+                                          borderRadius:
+                                              BorderRadius.circular(100.0)),
+                                      child: Center(
+                                        child: Text(
+                                          'send',
+                                          style: TextStyle(
+                                              fontSize: 18.0,
+                                              color: Color(0xff0FF6A0)),
+                                        ),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ),
-                        ),
                       ],
                     ),
                   ),
@@ -333,7 +340,7 @@ class _PointsState extends State<Points> {
                 width: double.maxFinite,
                 decoration: BoxDecoration(
                     borderRadius:
-                    BorderRadius.vertical(top: Radius.circular(20.0))),
+                        BorderRadius.vertical(top: Radius.circular(20.0))),
                 child: Footer()),
           ],
         ),
