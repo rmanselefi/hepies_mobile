@@ -277,6 +277,16 @@ class _PrescribeFormState extends State<PrescribeForm> {
                           onSelected: (String value) {
                             everyController.text = value;
                             prescription.frequency = value;
+                            if (value.isNotEmpty) {
+                              setState(() {
+                                isAmpule = false;
+                              });
+                            }
+                            if (value.isEmpty) {
+                              setState(() {
+                                isAmpule = true;
+                              });
+                            }
                           },
                           itemBuilder: (BuildContext context) {
                             return frequency
@@ -401,26 +411,24 @@ class _PrescribeFormState extends State<PrescribeForm> {
                               keyboardType: TextInputType.number,
                               onSaved: (value) {
                                 setState(() {
-                                  patient.phone = "+251${value}";
+                                  patient.phone = "+2519${value}";
                                 });
                               },
                               onChanged: (String val) async {
-                                if (val.length == 9 || val.length == 10) {
-                                  var phone = "+251${val}";
-                                  var res =
-                                      await patientProvider.getPatient(phone);
-                                  if (res != null) {
-                                    setState(() {
-                                      ageController.text = res['age'];
-                                      _chosenValue = res['sex'];
-                                      nameController.text = res['name'];
-                                      fnameController.text = res['fathername'];
-                                    });
-                                  }
+                                var phone = "+2519${val}";
+                                var res =
+                                    await patientProvider.getPatient(phone);
+                                if (res != null) {
                                   setState(() {
-                                    patient.phone = phone;
+                                    ageController.text = res['age'];
+                                    _chosenValue = res['sex'];
+                                    nameController.text = res['name'];
+                                    fnameController.text = res['fathername'];
                                   });
                                 }
+                                setState(() {
+                                  patient.phone = phone;
+                                });
                               },
                               decoration: InputDecoration(
                                   counterText: "",

@@ -246,114 +246,111 @@ class _WritePrescriptionState extends State<WritePrescription> {
             ],
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              SizedBox(
-                width: 20.0,
-              ),
-              Flexible(
-                child: Container(
-                  margin: EdgeInsets.all(3),
-                  child: MaterialButton(
-                    padding: EdgeInsets.all(2),
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.black45, width: 2),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        pretype = 'general';
-                      });
-                    },
-                    child: Text(
-                      'Normal',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
-                      ),
+              Container(
+                margin: EdgeInsets.all(3),
+                child: MaterialButton(
+                  padding: EdgeInsets.all(2),
+                  color: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Colors.black45, width: 2),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      pretype = 'general';
+                    });
+                  },
+                  child: Text(
+                    'Normal',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
                     ),
                   ),
                 ),
               ),
-              Flexible(
-                child: Container(
-                  margin: EdgeInsets.all(3),
-                  child: MaterialButton(
-                    padding: EdgeInsets.all(2),
-                    color: Colors.blue,
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.black45, width: 2),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        pretype = 'instrument';
-                      });
-                    },
-                    child: Text(
-                      'Instruments',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
-                      ),
+              Container(
+                margin: EdgeInsets.all(3),
+                child: MaterialButton(
+                  padding: EdgeInsets.all(2),
+                  color: Colors.blue,
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Colors.black45, width: 2),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      pretype = 'instrument';
+                    });
+                  },
+                  child: Text(
+                    'Instruments',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
                     ),
                   ),
                 ),
               ),
               isFit == "true"
                   ? Builder(builder: (context) {
-                      return Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Flexible(
-                            child: Container(
-                              margin: EdgeInsets.all(3),
-                              child: MaterialButton(
-                                padding: EdgeInsets.all(2),
-                                color: Colors.redAccent[400],
-                                shape: RoundedRectangleBorder(
-                                  side: BorderSide(
-                                      color: Colors.black45, width: 2),
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    pretype = 'psychotropic';
-                                  });
-                                },
-                                child: Text(
-                                  'Psychotropic',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15,
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Flexible(
+                              child: Container(
+                                margin: EdgeInsets.all(3),
+                                child: MaterialButton(
+                                  padding: EdgeInsets.all(2),
+                                  color: Colors.redAccent[400],
+                                  shape: RoundedRectangleBorder(
+                                    side: BorderSide(
+                                        color: Colors.black45, width: 2),
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      pretype = 'psychotropic';
+                                    });
+                                  },
+                                  child: Text(
+                                    'Psychotropic',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                          Flexible(
-                            child: Container(
-                              margin: EdgeInsets.all(3),
-                              child: MaterialButton(
-                                padding: EdgeInsets.all(2),
-                                color: Colors.purple,
-                                shape: RoundedRectangleBorder(
-                                  side: BorderSide(
-                                      color: Colors.black45, width: 2),
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    pretype = 'narcotic';
-                                  });
-                                },
-                                child: Text(
-                                  'Narcotic',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15,
+                            Flexible(
+                              child: Container(
+                                margin: EdgeInsets.all(3),
+                                child: MaterialButton(
+                                  padding: EdgeInsets.all(2),
+                                  color: Colors.purple,
+                                  shape: RoundedRectangleBorder(
+                                    side: BorderSide(
+                                        color: Colors.black45, width: 2),
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      pretype = 'narcotic';
+                                    });
+                                  },
+                                  child: Text(
+                                    'Narcotic',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       );
                     })
                   : Builder(builder: (context) {

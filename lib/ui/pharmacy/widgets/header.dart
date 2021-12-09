@@ -34,24 +34,6 @@ class _HeaderState extends State<Header> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Column(
-          children: [
-            IconButton(
-                icon: Icon(
-                  Icons.person,
-                  size: 25.0,
-                ),
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => EditProfile()));
-                }),
-            Text('$name'),
-            Text(
-              '($profession)',
-              style: TextStyle(color: Colors.grey),
-            )
-          ],
-        ),
         GestureDetector(
           onTap: () {
             Navigator.push(

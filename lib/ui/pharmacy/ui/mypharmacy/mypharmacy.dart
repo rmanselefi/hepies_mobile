@@ -50,7 +50,9 @@ class _MyPharmacyState extends State<MyPharmacy> {
                                       drug_name, drug_id, priceController.text);
                               if (res['status']) {
                                 setState(() {
-                                  Provider.of<PharmacyProvider>(context,listen: false).getMyPharmacy();
+                                  Provider.of<PharmacyProvider>(context,
+                                          listen: false)
+                                      .getMyPharmacy();
                                 });
                                 Navigator.of(context).pop();
                               }
@@ -69,7 +71,8 @@ class _MyPharmacyState extends State<MyPharmacy> {
   @override
   Widget build(BuildContext context) {
     List<dynamic> drugs = Provider.of<DrugProvider>(context).drugs;
-    var pharmacyProvider = Provider.of<PharmacyProvider>(context,listen: false);
+    var pharmacyProvider =
+        Provider.of<PharmacyProvider>(context, listen: false);
     return SafeArea(
         child: Scaffold(
       body: Column(
@@ -98,14 +101,10 @@ class _MyPharmacyState extends State<MyPharmacy> {
                           // The logic to find out which ones should appear
                           // Milkessa: implemented a search mechanism that is organized and alphabetical
                           return drugs.where((drug) {
-                            return drug['name'].startsWith(
-                                value.text) ||
-                                (drug['name'].contains(value
-                                    .text
-                                    .toLowerCase()) &
-                                !drug['name']
-                                    .startsWith(
-                                    value.text));
+                            return drug['name'].startsWith(value.text) ||
+                                (drug['name']
+                                        .contains(value.text.toLowerCase()) &
+                                    !drug['name'].startsWith(value.text));
                           });
                         },
                         onSelected: (value) {
@@ -123,8 +122,7 @@ class _MyPharmacyState extends State<MyPharmacy> {
                             child: TextFormField(
                               controller: fieldTextEditingController,
                               focusNode: fieldFocusNode,
-                              textCapitalization:
-                              TextCapitalization.words,
+                              textCapitalization: TextCapitalization.words,
                               decoration: InputDecoration(
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(30.0),
