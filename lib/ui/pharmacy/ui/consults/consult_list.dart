@@ -76,6 +76,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
     mainAxisAlignment: MainAxisAlignment.center,
     children: <Widget>[CircularProgressIndicator()],
   );
+
   Widget _rowButton(var e, List<Widget> post) {
     return Container(
       child: Row(
@@ -87,9 +88,10 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return Center(
-                    child: CircleAvatar(
-                      radius: width(context) * 0.025,
-                      backgroundColor: Colors.grey.shade100,
+                    child: Container(
+                      width: width(context) * 0.2,
+                      height: 20,
+                      color: Colors.grey.shade100,
                     ),
                   );
                 } else {
@@ -100,13 +102,26 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                   }
                   return snapshot.data['length'] > 0
                       ? BouncingWidget(
-                          duration: Duration(milliseconds: 100),
                           scaleFactor: 1.5,
                           onPressed: () async {
+                            showTopSnackBar(
+                              context,
+                              CustomSnackBar.success(
+                                message: "Unliking post..........",
+                                backgroundColor: Colors.amber[300],
+                              ),
+                            );
                             var res = await Provider.of<ConsultProvider>(
                                     context,
                                     listen: false)
-                                .unlikeConsult(e['id']);
+                                .unlikeConsult(e['id'])
+                                .whenComplete(() => showTopSnackBar(
+                                      context,
+                                      CustomSnackBar.success(
+                                        message: "Unliking completed!",
+                                        backgroundColor: Colors.amber[300],
+                                      ),
+                                    ));
                             if (res['status']) {
                               setState(() {
                                 Provider.of<ConsultProvider>(context,
@@ -122,13 +137,26 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                               isHover: false),
                         )
                       : BouncingWidget(
-                          duration: Duration(milliseconds: 100),
                           scaleFactor: 1.5,
                           onPressed: () async {
+                            showTopSnackBar(
+                              context,
+                              CustomSnackBar.success(
+                                message: "liking post..........",
+                                backgroundColor: Colors.amber[300],
+                              ),
+                            );
                             var res = await Provider.of<ConsultProvider>(
                                     context,
                                     listen: false)
-                                .likeConsult(e['id']);
+                                .likeConsult(e['id'])
+                                .whenComplete(() => showTopSnackBar(
+                                      context,
+                                      CustomSnackBar.success(
+                                        message: "liking completed!",
+                                        backgroundColor: Colors.amber[300],
+                                      ),
+                                    ));
                             if (res['status']) {
                               setState(() {
                                 Provider.of<ConsultProvider>(context,
@@ -788,10 +816,10 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                       builder: (context, snapshot) {
                                         if (!snapshot.hasData) {
                                           return Center(
-                                            child: CircleAvatar(
-                                              radius: width(context) * 0.025,
-                                              backgroundColor:
-                                                  Colors.grey.shade100,
+                                            child: Container(
+                                              width: width(context) * 0.2,
+                                              height: 20,
+                                              color: Colors.grey.shade100,
                                             ),
                                           );
                                         } else {
@@ -837,9 +865,10 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                 builder: (context, snapshot) {
                                   if (!snapshot.hasData) {
                                     return Center(
-                                      child: CircleAvatar(
-                                        radius: width(context) * 0.025,
-                                        backgroundColor: Colors.grey.shade100,
+                                      child: Container(
+                                        width: width(context) * 0.4,
+                                        height: 20,
+                                        color: Colors.grey.shade100,
                                       ),
                                     );
                                   } else {

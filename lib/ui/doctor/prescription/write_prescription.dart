@@ -510,7 +510,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                         'Save to favorites',
                         maxLines: 2,
                         style: TextStyle(
-                            fontSize: 20.0, fontWeight: FontWeight.bold),
+                            fontSize: 15, fontWeight: FontWeight.bold),
                       )),
                     ),
                   ),
@@ -533,7 +533,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                           child: Text(
                         'Cancel',
                         style: TextStyle(
-                            fontSize: 20.0, fontWeight: FontWeight.bold),
+                            fontSize: 15.0, fontWeight: FontWeight.bold),
                       )),
                     ),
                   ),
@@ -655,7 +655,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                 child: Text(
                               'Send',
                               style: TextStyle(
-                                  fontSize: 20.0, fontWeight: FontWeight.bold),
+                                  fontSize: 15.0, fontWeight: FontWeight.bold),
                             )),
                           ),
                         ),
