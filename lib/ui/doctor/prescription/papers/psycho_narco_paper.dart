@@ -27,8 +27,7 @@ class _PrescriptionPaperState extends State<PsychoNarcoPaper> {
       height: 230.0,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey[200]),
-          color: Colors.lightBlueAccent[100]),
+          border: Border.all(color: Colors.grey[200]), color: Colors.grey[100]),
       child: Column(
         children: [
           Row(
@@ -73,7 +72,7 @@ class _PrescriptionPaperState extends State<PsychoNarcoPaper> {
                                     context,
                                     CustomSnackBar.success(
                                       message:
-                                      "Your prescriptions are saved to favorites successfully",
+                                          "Your prescriptions are saved to favorites successfully",
                                     ),
                                   );
                                 },

@@ -128,6 +128,7 @@ class PrescriptionProvider with ChangeNotifier {
     // String pattern = r'^(?:\+?88|0088)?01[13-9]\d{8}$';
     RegExp regExp = new RegExp(pattern);
     bool isPhone = code.length > 8;
+
     print("isPhoneisPhone $isPhone");
     var url = isPhone ? AppUrl.readprescriptionPhone : AppUrl.readprescription;
     var result;
@@ -162,12 +163,15 @@ class PrescriptionProvider with ChangeNotifier {
         pres_id.where((element) => !id.contains(element)).toList();
     var result;
     print("registrationData $output");
+
     Response response = await post(Uri.parse(AppUrl.accept),
         body: json.encode(output),
         headers: {
           'Content-Type': 'application/json',
           HttpHeaders.authorizationHeader: "Bearer $token"
         });
+
+
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       final bool responseData = json.decode(response.body);

@@ -122,29 +122,27 @@ class _ShareConsultState extends State<ShareConsult> {
                         ),
                       ),
                     ),
-                    Flexible(
-                      child: file != null
-                          ? Container(
-                              width: width(context) * 0.25,
-                              margin: EdgeInsets.all(5),
-                              child: Stack(
-                                children: [
-                                  Image.file(File(file.path),
-                                      fit: BoxFit.contain),
-                                  IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        file = null;
-                                      });
-                                    },
-                                    icon: Icon(Icons.cancel_outlined,
-                                        color: Colors.blue),
-                                  ),
-                                ],
-                              ),
-                            )
-                          : Container(width: 0),
-                    ),
+                    file != null
+                        ? Container(
+                            width: width(context) * 0.25,
+                            margin: EdgeInsets.all(5),
+                            child: Stack(
+                              children: [
+                                Image.file(File(file.path),
+                                    fit: BoxFit.contain),
+                                IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      file = null;
+                                    });
+                                  },
+                                  icon: Icon(Icons.cancel_outlined,
+                                      color: Colors.blue),
+                                ),
+                              ],
+                            ),
+                          )
+                        : Container(width: 0),
                   ],
                 ),
                 Align(
@@ -236,10 +234,11 @@ class _ShareConsultState extends State<ShareConsult> {
                 ),
                 Divider(),
                 PharmacyConsultList(widget.user_id,interest)
+
               ],
             ),
           ),
-          Footer()
+          Footer(),
         ],
       ),
     );

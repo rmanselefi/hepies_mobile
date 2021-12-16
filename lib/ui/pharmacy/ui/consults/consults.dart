@@ -55,7 +55,7 @@ class _PharmacyConsultsState extends State<PharmacyConsults> {
                     borderRadius: BorderRadius.circular(35.0)),
                 child: Text('See Medical Records',
                     style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
+                    TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0)),
               ),
               onTap: () {
                 Navigator.push(

@@ -15,7 +15,6 @@ class PrescriptionPaper extends StatefulWidget {
 }
 
 class _PrescriptionPaperState extends State<PrescriptionPaper> {
-
   String status = 'add';
   int pesIndex = 0;
   @override
@@ -26,8 +25,7 @@ class _PrescriptionPaperState extends State<PrescriptionPaper> {
       height: 250.0,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey[200]),
-          color: Colors.lightBlueAccent[100]),
+          border: Border.all(color: Colors.grey[200]), color: Colors.grey[100]),
       child: Column(
         children: [
           Expanded(
@@ -52,7 +50,8 @@ class _PrescriptionPaperState extends State<PrescriptionPaper> {
 
                               Provider.of<PrescriptionProvider>(context,
                                       listen: false)
-                                  .setPrescriptionForm(pres,finaPrescription.indexOf(pres));
+                                  .setPrescriptionForm(
+                                      pres, finaPrescription.indexOf(pres));
                             },
                             icon: Icon(Icons.edit),
                           ),

@@ -80,6 +80,7 @@ class _HeaderState extends State<Header> {
                         )));
           },
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Container(
                 padding: EdgeInsets.all(8.0),
@@ -87,11 +88,14 @@ class _HeaderState extends State<Header> {
                     border: Border.all(color: Colors.green, width: 2),
                     borderRadius: BorderRadius.circular(35.0)),
                 child: Text(
-                  '${points}Pts',
+                  '${points ?? 0} Pts',
                   style: TextStyle(color: Colors.green, fontSize: 18.0),
                 ),
               ),
-              Text('Overall 1567pts', style: TextStyle(color: Colors.green))
+              Flexible(
+                child: Text('Overall 1567pts',
+                    style: TextStyle(color: Colors.green)),
+              ),
             ],
           ),
         )

@@ -18,6 +18,7 @@ class _PharmacyConsultListState extends State<PharmacyCommentList> {
     super.initState();
     _scrollController = ScrollController();
   }
+
   @override
   Widget build(BuildContext context) {
     return MediaQuery.removePadding(
@@ -35,92 +36,88 @@ class _PharmacyConsultListState extends State<PharmacyCommentList> {
             return Container(
               padding: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
               margin: EdgeInsets.only(bottom: 0.0, top: 8),
-              child: Column(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        width: 5.0,
-                      ),
-                      Icon(
-                        Icons.person,
-                        size: 50,
-                      ),
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15.0),
-                              color: Color(0xffeeeee4)),
-                          child: Column(
+                  SizedBox(
+                    width: 5.0,
+                  ),
+                  Icon(
+                    Icons.person,
+                    size: 50,
+                  ),
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15.0),
+                          color: Color(0xffeeeee4)),
+                      child: Column(
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: Text(
-                                          "${e['author']} ",
-                                          style: TextStyle(
-                                              fontSize: 18.0,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                      Text(duration)
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 10.0, right: 10.0),
-                                    child: Text(
-                                      e['comment'],
-                                      style: TextStyle(
-                                        fontSize: 15.0,
-                                      ),
-                                    ),
-                                  ),
-                                  widget.consults[index]['image'] != null
-                                      ? Container(
-                                          width: MediaQuery.of(context).size.width,
-                                          child: Image.network(
-                                            widget.consults[index]['image'],
-                                            fit: BoxFit.contain,
-                                          ),
-                                        )
-                                      : Container(
-                                          height: 0.0,
-                                          width: 0.0,
-                                        ),
-                                ],
-                              ),
-                              Divider(),
                               Row(
                                 children: [
-                                  SizedBox(
-                                    width: 5.0,
+                                  Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Text(
+                                      "${e['author']} ",
+                                      style: TextStyle(
+                                          fontSize: 18.0,
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                   ),
-                                  Row(
-                                    children: [
-                                      IconButton(
-                                          onPressed: () {},
-                                          icon: Icon(Icons.favorite_border))
-                                    ],
-                                  ),
+                                  Text(duration)
                                 ],
-                              )
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 10.0, right: 10.0),
+                                child: Text(
+                                  e['comment'],
+                                  style: TextStyle(
+                                    fontSize: 15.0,
+                                  ),
+                                ),
+                              ),
+                              widget.consults[index]['image'] != null
+                                  ? Container(
+                                      width:
+                                          MediaQuery.of(context).size.width,
+                                      child: Image.network(
+                                        widget.consults[index]['image'],
+                                        fit: BoxFit.contain,
+                                      ),
+                                    )
+                                  : Container(
+                                      height: 0.0,
+                                      width: 0.0,
+                                    ),
                             ],
                           ),
-                        ),
+                          Divider(),
+                          Row(
+                            children: [
+                              SizedBox(
+                                width: 5.0,
+                              ),
+                              Row(
+                                children: [
+                                  IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(Icons.favorite_border))
+                                ],
+                              ),
+                            ],
+                          )
+                        ],
                       ),
-                      SizedBox(
-                        width: 5.0,
-                      ),
-                    ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: 5.0,
                   ),
                 ],
               ),

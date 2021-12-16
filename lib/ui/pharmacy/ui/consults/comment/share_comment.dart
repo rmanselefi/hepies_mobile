@@ -16,7 +16,8 @@ import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class PharmacyShareComment extends StatefulWidget {
   final consultid;
-  PharmacyShareComment(this.consultid);
+  final List<Widget> post;
+  PharmacyShareComment(this.consultid, this.post);
   @override
   _PharmacyShareConsultState createState() => _PharmacyShareConsultState();
 }
@@ -43,15 +44,25 @@ class _PharmacyShareConsultState extends State<PharmacyShareComment> {
     return SafeArea(
       child: Scaffold(
         body: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Header(),
             SizedBox(
               height: 20.0,
             ),
-            Expanded(
-              child: ListView(
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: widget.post,
+              ),
+            ),
+            SizedBox(
+              height: 10.0,
+            ),
+            Flexible(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Form(
                     key: formKey,
@@ -132,30 +143,30 @@ class _PharmacyShareConsultState extends State<PharmacyShareComment> {
                             ),
                           ),
                         ),
-
                   Divider(),
-                  FutureBuilder<List<dynamic>>(
-                      future: Provider.of<ConsultProvider>(context)
-                          .getCommentByConsultId(consultid),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        } else {
-                          if (snapshot.data == null ||
-                              snapshot.data.length == 0) {
+                  Flexible(
+                    child: FutureBuilder<List<dynamic>>(
+                        future: Provider.of<ConsultProvider>(context)
+                            .getCommentByConsultId(consultid),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
                             return Center(
-                              child: Text('No comment under this consult'),
+                              child: CircularProgressIndicator(),
                             );
+                          } else {
+                            if (snapshot.data == null ||
+                                snapshot.data.length == 0) {
+                              return Center(
+                                child: Text('No comment under this consult'),
+                              );
+                            }
+                            return PharmacyCommentList(snapshot.data);
                           }
-                          return PharmacyCommentList(snapshot.data);
-                        }
-                      }),
+                        }),
+                  ),
                 ],
               ),
             ),
-            PharmacyFooter()
           ],
         ),
       ),

@@ -10,11 +10,14 @@ import 'package:hepies/ui/pharmacy/ui/consults/comment/share_comment.dart';
 import 'package:hepies/util/image_consult.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:linkify_text/linkify_text.dart';
 import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
+
+import 'package:url_launcher/url_launcher.dart';
 
 class PharmacyConsultList extends StatefulWidget {
   final user_id;
@@ -63,7 +66,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
           ),
           Text(
             name,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 16),
           ),
         ],
       ),
@@ -74,7 +77,9 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
     mainAxisAlignment: MainAxisAlignment.center,
     children: <Widget>[CircularProgressIndicator()],
   );
-  Widget _rowButton(var e) {
+
+
+  Widget _rowButton(var e, List<Widget> post) {
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -85,7 +90,11 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return Center(
-                    child: CircularProgressIndicator(),
+                    child: Container(
+                      width: width(context) * 0.2,
+                      height: 20,
+                      color: Colors.grey.shade100,
+                    ),
                   );
                 } else {
                   if (snapshot.data == null) {
@@ -95,13 +104,26 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                   }
                   return snapshot.data['length'] > 0
                       ? BouncingWidget(
-                          duration: Duration(milliseconds: 100),
                           scaleFactor: 1.5,
                           onPressed: () async {
+                            showTopSnackBar(
+                              context,
+                              CustomSnackBar.success(
+                                message: "Unliking post..........",
+                                backgroundColor: Colors.amber[300],
+                              ),
+                            );
                             var res = await Provider.of<ConsultProvider>(
                                     context,
                                     listen: false)
-                                .unlikeConsult(e['id']);
+                                .unlikeConsult(e['id'])
+                                .whenComplete(() => showTopSnackBar(
+                                      context,
+                                      CustomSnackBar.success(
+                                        message: "Unliking completed!",
+                                        backgroundColor: Colors.amber[300],
+                                      ),
+                                    ));
                             if (res['status']) {
                               setState(() {
                                 Provider.of<ConsultProvider>(context,
@@ -117,13 +139,26 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                               isHover: false),
                         )
                       : BouncingWidget(
-                          duration: Duration(milliseconds: 100),
                           scaleFactor: 1.5,
                           onPressed: () async {
+                            showTopSnackBar(
+                              context,
+                              CustomSnackBar.success(
+                                message: "liking post..........",
+                                backgroundColor: Colors.amber[300],
+                              ),
+                            );
                             var res = await Provider.of<ConsultProvider>(
                                     context,
                                     listen: false)
-                                .likeConsult(e['id']);
+                                .likeConsult(e['id'])
+                                .whenComplete(() => showTopSnackBar(
+                                      context,
+                                      CustomSnackBar.success(
+                                        message: "liking completed!",
+                                        backgroundColor: Colors.amber[300],
+                                      ),
+                                    ));
                             if (res['status']) {
                               setState(() {
                                 Provider.of<ConsultProvider>(context,
@@ -145,7 +180,8 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => PharmacyShareComment(e['id'])));
+                      builder: (context) =>
+                          PharmacyShareComment(e['id'], post)));
             },
             child: rowSingleButton(
                 color: Colors.black,
@@ -570,6 +606,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                                       _topic.text,
                                                       photo,
                                                   post['image']);
+
                                               if (res['status']) {
                                                 consult.getConsults();
                                                 showTopSnackBar(
@@ -723,16 +760,28 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                         //   widget.consults[index]['topic'],
                         //   style: TextStyle(fontSize: 14),
                         // ),
-                        HashTagText(
-                          text: "${snapshot.data[index]['topic'] ?? ' '}",
-                          basicStyle:
-                              TextStyle(fontSize: 14, color: Colors.black),
-                          decoratedStyle:
-                              TextStyle(fontSize: 14, color: Colors.blueAccent),
-                          textAlign: TextAlign.start,
-                          onTap: (text) {
-                            print(text);
-                          },
+
+                        // HashTagText(
+                        //   text: "${snapshot.data[index]['topic'] ?? ' '}",
+                        //   basicStyle:
+                        //       TextStyle(fontSize: 14, color: Colors.black),
+                        //   decoratedStyle:
+                        //       TextStyle(fontSize: 14, color: Colors.blueAccent),
+                        //   textAlign: TextAlign.start,
+                        //   onTap: (text) {
+                        //     print(text);
+                        //   },
+                        // ),
+                        LinkifyText(
+                          "${snapshot.data[index]['topic'] ?? ' '}",
+                          isLinkNavigationEnable: true,
+                          linkColor: Colors.blueAccent,
+                          fontColor: Colors.black,
+                          // linkStyle: TextStyle(color: Colors.blueAccent),
+                          // LinkTypes: [LinkType.url, LinkType.hashtag]
+                          // onTap: (link) {
+                          //   if(link.type == Link.url) launch(link.value);
+                          // },
                         ),
                         // Text(
                         //   _post[index].tags,
@@ -744,6 +793,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                         e['image'] != null
                             ? Container(
                                 width: MediaQuery.of(context).size.width,
+                                height: height(context) * 0.5,
                                 child: Image.network(
                                   e['image'],
                                   fit: BoxFit.contain,
@@ -770,7 +820,12 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                       builder: (context, snapshot) {
                                         if (!snapshot.hasData) {
                                           return Center(
-                                            child: CircularProgressIndicator(),
+
+                                            child: Container(
+                                              width: width(context) * 0.2,
+                                              height: 20,
+                                              color: Colors.grey.shade100,
+                                            ),
                                           );
                                         } else {
                                           if (snapshot.data == null) {
@@ -784,9 +839,9 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                                     context,
                                                     MaterialPageRoute(
                                                         builder: (context) =>
-                                                            PharmacyShareComment(
-                                                                e['id'])));
+                                                            PharmacyShareComment(e['id'])));
                                               },
+
                                               icon: Icon(
                                                 Icons.thumb_up_sharp,
                                                 color: Colors.grey,
@@ -850,6 +905,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                           color: Colors.black26,
                         ),
                         _rowButton(e),
+
                       ],
                     ),
                   );
@@ -860,3 +916,5 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
         });
   }
 }
+
+

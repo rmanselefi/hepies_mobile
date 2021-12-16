@@ -71,7 +71,7 @@ class _PointsState extends State<Points> {
                                       color: Color(0xff0FF6A0), width: 2),
                                   borderRadius: BorderRadius.circular(150.0)),
                               child: Text(
-                                '$point Pts',
+                                '${point ?? 0} Pts',
                                 style: TextStyle(
                                     color: Color(0xff0FF6A0), fontSize: 40.0),
                               ),
@@ -84,7 +84,7 @@ class _PointsState extends State<Points> {
                   ),
                   Center(
                     child: Text(
-                      'But Air Time',
+                      'Buy Air Time',
                       style: TextStyle(
                           decoration: TextDecoration.underline,
                           fontSize: 25.0,
@@ -203,36 +203,44 @@ class _PointsState extends State<Points> {
                                 height: 40,
                                 width: 200,
                                 child: TextFormField(
+
+                                    // Milkessa: Fixed phone input field formatting
                                     textAlign: TextAlign.start,
                                     controller: phoneController,
-                                    maxLength: 10,
+                                    maxLength: 8,
+                                    keyboardType: TextInputType.number,
                                     decoration: InputDecoration(
-                                        counterText: "",
-                                        contentPadding: EdgeInsets.zero,
-                                        prefixIcon: SizedBox(
-                                          width: 35,
-                                          child: CountryCodePicker(
-                                            onChanged: (value) {
-                                              setState(() {
-                                                _countryCode = value.dialCode;
-                                                _countryCode == null
-                                                    ? _countryCode = "+251"
-                                                    : _countryCode =
-                                                        _countryCode;
-                                              });
-                                            },
-                                            backgroundColor: Colors.white,
-                                            initialSelection: 'ET',
-                                            favorite: ['+251', 'ET'],
-                                            showCountryOnly: false,
-                                            showOnlyCountryWhenClosed: false,
-                                            alignLeft: false,
-                                            padding: EdgeInsets.all(0.0),
-                                            showFlag: false,
+                                      counterText: "",
+                                      contentPadding: EdgeInsets.zero,
+                                      prefixIcon: SizedBox(
+                                        width: 35,
+                                        child: Center(
+                                          child: Text(
+                                            '+251 - 9',
+                                            textScaleFactor: 0.9,
                                           ),
                                         ),
-                                        border: OutlineInputBorder(),
-                                        hintText: '90000000')))
+                                        // CountryCodePicker(
+                                        //   onChanged: (value) {
+                                        //     setState(() {
+                                        //       _countryCode = value.dialCode;
+                                        //       _countryCode == null
+                                        //           ? _countryCode = "+251 - 9"
+                                        //           : _countryCode = '+251 - 9';
+                                        //     });
+                                        //   },
+                                        //   backgroundColor: Colors.white,
+                                        //   initialSelection: 'ET',
+                                        //   favorite: ['+251 - 9', 'ET'],
+                                        //   showCountryOnly: false,
+                                        //   showOnlyCountryWhenClosed: false,
+                                        //   alignLeft: false,
+                                        //   padding: EdgeInsets.all(0.0),
+                                        //   showFlag: false,
+                                        // ),
+                                      ),
+                                      border: OutlineInputBorder(),
+                                    )))
                           ],
                         ),
                         SizedBox(

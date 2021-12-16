@@ -34,31 +34,17 @@ class _HeaderState extends State<Header> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        Column(
-          children: [
-            IconButton(
-                icon: Icon(
-                  Icons.person,
-                  size: 25.0,
-                ),
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => EditProfile()));
-                }),
-            Text('$name'),
-            Text(
-              '($profession)',
-              style: TextStyle(color: Colors.grey),
-            )
-          ],
-        ),
         GestureDetector(
           onTap: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Welcome(currenIndex: 0,)));
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Welcome(
+                          currenIndex: 0,
+                        )));
           },
           child: GradientText(
-            'WorkenehApp',
+            'Hepius',
             gradient: LinearGradient(colors: [
               Colors.blue.shade400,
               Colors.blue.shade900,
@@ -68,7 +54,11 @@ class _HeaderState extends State<Header> {
         GestureDetector(
           onTap: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Points(points: points,)));
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Points(
+                          points: points,
+                        )));
           },
           child: Column(
             children: [
@@ -78,7 +68,7 @@ class _HeaderState extends State<Header> {
                     border: Border.all(color: Colors.green, width: 2),
                     borderRadius: BorderRadius.circular(35.0)),
                 child: Text(
-                  '${points}Pts',
+                  '${points ?? 0} Pts',
                   style: TextStyle(color: Colors.green, fontSize: 18.0),
                 ),
               ),

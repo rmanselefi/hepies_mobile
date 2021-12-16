@@ -153,11 +153,13 @@ class _WelcomePharmacyState extends State<WelcomePharmacy> {
                 ),
               )
             ],
+
           ),
           actions: <Widget>[],
         ),
       ),
-      drawer: DrawerCustom(),
+
+      drawer: DrawerCustom(name, profession),
       body: PharmacyShareConsult(user_id),
     ));
   }
