@@ -1,3 +1,5 @@
+// ignore_for_file: unrelated_type_equality_checks, unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hepies/constants.dart';
@@ -44,17 +46,26 @@ class _CalculatorState extends State<Calculator> {
     });
   }
 
-// Milkessa: BMI calculator has been added to this page using an enum 'calcState' which controls the type of calculator to display
-// added variables: 'calcState', 'weightInput', 'bmiResult'
-//added method: 'bmiCalc'
+// Milkessa: BMI and GFR calculators have been added to this page using an enum 'calcState' which controls the type of calculator to display
+// added variables: 'calcState', 'weightInput', 'bmiResult', gfrWeight, age, sex
+//added method: 'bmiCalc', gfrCalc
   CalcState calcState = CalcState.normal;
   String weightInput, heightInput;
   String bmiResult = '';
   bool calculated = false;
   String bmiCalc(double weight, double height) {
     double bmi = weight * 10000 / (height * height);
-    print(bmi);
     return bmi.toStringAsFixed(1);
+  }
+
+  double gfrWeight, sCr, gfrResult;
+  int age;
+  String sex = 'm';
+  bool gfrCalculated = false;
+  double gfrCalc(double gfrWeight, double sCr, int age, String sex) {
+    double gfr = (140 - age) * gfrWeight / (72 * sCr);
+    if (sex == 'f') gfr = gfr * 0.85;
+    return gfr;
   }
 
   @override
@@ -152,6 +163,32 @@ class _CalculatorState extends State<Calculator> {
                   margin: EdgeInsets.only(left: 10, top: 30),
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.black45, width: 2),
+                    color: calcState == CalcState.normal
+                        ? Colors.black87
+                        : Colors.white,
+                  ),
+                  child: Center(
+                      child: Text(
+                    'NORMAL',
+                    style: TextStyle(fontSize: 18, color: Color(0xff07febb)),
+                  )),
+                ),
+                onTap: () {
+                  setState(() {
+                    calcState = CalcState.normal;
+                  });
+                },
+              ),
+              GestureDetector(
+                child: Container(
+                  width: 100,
+                  padding: EdgeInsets.all(13.0),
+                  margin: EdgeInsets.only(left: 10, top: 30),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black45, width: 2),
+                    color: calcState == CalcState.bmi
+                        ? Colors.black87
+                        : Colors.white,
                   ),
                   child: Center(
                       child: Text(
@@ -172,6 +209,9 @@ class _CalculatorState extends State<Calculator> {
                   margin: EdgeInsets.only(left: 10, top: 30),
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.black45, width: 2),
+                    color: calcState == CalcState.gfr
+                        ? Colors.black87
+                        : Colors.white,
                   ),
                   child: Center(
                       child: Text(
@@ -181,7 +221,7 @@ class _CalculatorState extends State<Calculator> {
                 ),
                 onTap: () {
                   setState(() {
-                    calcState = CalcState.normal;
+                    calcState = CalcState.gfr;
                   });
                 },
               ),
@@ -347,124 +387,137 @@ class _CalculatorState extends State<Calculator> {
                         ],
                       ),
                     )
-                  : Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: width(context) * 0.125,
-                        vertical: height(context) * 0.125,
-                      ),
-                      child: Align(
-                        alignment: Alignment.bottomCenter,
-                        child: Column(
-                          children: [
-                            calculated == false
-                                ? Container(
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          'Calculate BMI',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 25.0),
+                  : calcState == CalcState.bmi
+                      ? Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: width(context) * 0.125,
+                            vertical: height(context) * 0.125,
+                          ),
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Column(
+                              children: [
+                                !calculated
+                                    ? Container(
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              'Calculate BMI',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 25.0),
+                                            ),
+                                            SizedBox(height: 15),
+                                            TextField(
+                                              autofocus: false,
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              decoration: InputDecoration(
+                                                prefixIcon: Icon(
+                                                    Icons.monitor_weight,
+                                                    color: Color.fromRGBO(
+                                                        50, 62, 72, 1.0)),
+                                                hintText: "Weight (Kg)",
+                                                contentPadding:
+                                                    EdgeInsets.fromLTRB(
+                                                        20.0, 15.0, 20.0, 15.0),
+                                                border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5.0)),
+                                              ),
+                                              onChanged: (input) {
+                                                weightInput = input;
+                                              },
+                                            ),
+                                            SizedBox(height: 20),
+                                            TextField(
+                                              autofocus: false,
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              decoration: InputDecoration(
+                                                prefixIcon: Icon(Icons.height,
+                                                    color: Color.fromRGBO(
+                                                        50, 62, 72, 1.0)),
+                                                hintText: "Height (cm)",
+                                                contentPadding:
+                                                    EdgeInsets.fromLTRB(
+                                                        20.0, 15.0, 20.0, 15.0),
+                                                border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5.0)),
+                                              ),
+                                              onChanged: (input) {
+                                                heightInput = input;
+                                              },
+                                            ),
+                                            SizedBox(height: 20),
+                                          ],
                                         ),
-                                        SizedBox(height: 15),
-                                        TextField(
-                                          autofocus: false,
-                                          keyboardType: TextInputType.number,
-                                          decoration: InputDecoration(
-                                            prefixIcon: Icon(
-                                                Icons.monitor_weight,
-                                                color: Color.fromRGBO(
-                                                    50, 62, 72, 1.0)),
-                                            hintText: "Weight (Kg)",
-                                            contentPadding: EdgeInsets.fromLTRB(
-                                                20.0, 15.0, 20.0, 15.0),
-                                            border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(5.0)),
+                                      )
+                                    : Container(
+                                        height: height(context) * 0.3,
+                                        width: width(context) * 0.3,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: Colors.black,
+                                            width: 5,
                                           ),
-                                          onChanged: (input) {
-                                            weightInput = input;
-                                          },
                                         ),
-                                        SizedBox(height: 20),
-                                        TextField(
-                                          autofocus: false,
-                                          keyboardType: TextInputType.number,
-                                          decoration: InputDecoration(
-                                            prefixIcon: Icon(Icons.height,
-                                                color: Color.fromRGBO(
-                                                    50, 62, 72, 1.0)),
-                                            hintText: "Height (cm)",
-                                            contentPadding: EdgeInsets.fromLTRB(
-                                                20.0, 15.0, 20.0, 15.0),
-                                            border: OutlineInputBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(5.0)),
-                                          ),
-                                          onChanged: (input) {
-                                            heightInput = input;
-                                          },
-                                        ),
-                                        SizedBox(height: 20),
-                                      ],
-                                    ),
-                                  )
-                                : Container(
-                                    height: height(context) * 0.3,
-                                    width: width(context) * 0.3,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                        color: Colors.black,
-                                        width: 5,
-                                      ),
-                                    ),
-                                    padding: EdgeInsets.all(10),
-                                    child: Center(
-                                      child: Text(
-                                        bmiResult,
-                                        textScaleFactor: 2.5,
-                                        style: TextStyle(fontWeight: bold),
-                                      ),
-                                    ),
-                                  ),
-                            Padding(
-                              padding: EdgeInsets.all(4.0),
-                              child: Center(
-                                child: Container(
-                                  width: width(context) * 0.2375,
-                                  height: 35,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xff07febb),
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(4.0),
-                                    ),
-                                  ),
-                                  child: Material(
-                                    color: Colors.transparent,
-                                    child: InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          if (weightInput != null) {
-                                            calculated = !calculated;
-                                            bmiResult = bmiCalc(
-                                              double.parse(weightInput ?? 0),
-                                              double.parse(heightInput ?? 1),
-                                            );
-                                          } else {
-                                            calculated = false;
-                                          }
-                                        });
-                                      },
-                                      child: Center(
-                                        child: Padding(
-                                          padding: EdgeInsets.all(4.0),
+                                        padding: EdgeInsets.all(10),
+                                        child: Center(
                                           child: Text(
-                                            !calculated ? 'calculate' : 'reset',
-                                            style: TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.black,
+                                            bmiResult,
+                                            textScaleFactor: 2.5,
+                                            style: TextStyle(fontWeight: bold),
+                                          ),
+                                        ),
+                                      ),
+                                Padding(
+                                  padding: EdgeInsets.all(4.0),
+                                  child: Center(
+                                    child: Container(
+                                      width: width(context) * 0.2375,
+                                      height: 35,
+                                      decoration: BoxDecoration(
+                                        color: Color(0xff07febb),
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(4.0),
+                                        ),
+                                      ),
+                                      child: Material(
+                                        color: Colors.transparent,
+                                        child: InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              if (weightInput != null) {
+                                                calculated = !calculated;
+                                                bmiResult = bmiCalc(
+                                                  double.parse(
+                                                      weightInput ?? 0),
+                                                  double.parse(
+                                                      heightInput ?? 1),
+                                                );
+                                              } else {
+                                                calculated = false;
+                                              }
+                                            });
+                                          },
+                                          child: Center(
+                                            child: Padding(
+                                              padding: EdgeInsets.all(4.0),
+                                              child: Text(
+                                                !calculated
+                                                    ? 'calculate'
+                                                    : 'reset',
+                                                style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -472,13 +525,213 @@ class _CalculatorState extends State<Calculator> {
                                     ),
                                   ),
                                 ),
-                              ),
+                                SizedBox(height: 5),
+                              ],
                             ),
-                            SizedBox(height: 5),
-                          ],
+                          ),
+                        )
+                      : Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: width(context) * 0.125,
+                            vertical: height(context) * 0.125,
+                          ),
+                          child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Column(
+                              children: [
+                                !gfrCalculated
+                                    ? Container(
+                                        child: Column(
+                                          children: [
+                                            Text(
+                                              'Calculate GFR',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 25.0),
+                                            ),
+                                            SizedBox(height: 15),
+                                            TextField(
+                                              autofocus: false,
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              decoration: InputDecoration(
+                                                prefixIcon: Icon(
+                                                    Icons.monitor_weight,
+                                                    color: Color.fromRGBO(
+                                                        50, 62, 72, 1.0)),
+                                                hintText: "Weight (Kg)",
+                                                contentPadding:
+                                                    EdgeInsets.fromLTRB(
+                                                        20.0, 15.0, 20.0, 15.0),
+                                                border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5.0)),
+                                              ),
+                                              onChanged: (input) {
+                                                gfrWeight = double.parse(input);
+                                              },
+                                            ),
+                                            SizedBox(height: 20),
+                                            Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Flexible(
+                                                  child: TextField(
+                                                    autofocus: false,
+                                                    keyboardType:
+                                                        TextInputType.number,
+                                                    decoration: InputDecoration(
+                                                      prefixIcon: Icon(
+                                                          Icons.timelapse,
+                                                          color: Color.fromRGBO(
+                                                              50, 62, 72, 1.0)),
+                                                      hintText: "Age",
+                                                      contentPadding:
+                                                          EdgeInsets.fromLTRB(
+                                                              20.0,
+                                                              15.0,
+                                                              20.0,
+                                                              15.0),
+                                                      border:
+                                                          OutlineInputBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          5.0)),
+                                                    ),
+                                                    onChanged: (input) {
+                                                      age = int.parse(input);
+                                                    },
+                                                  ),
+                                                ),
+                                                SizedBox(width: 20),
+                                                DropdownButton(
+                                                  items: [
+                                                    DropdownMenuItem(
+                                                      child: Text('Male'),
+                                                      value: 'm',
+                                                      enabled: true,
+                                                    ),
+                                                    DropdownMenuItem(
+                                                      child: Text('Female'),
+                                                      value: 'f',
+                                                      enabled: true,
+                                                    ),
+                                                  ],
+                                                  value: sex,
+                                                  onChanged: (input) {
+                                                    setState(() {
+                                                      sex = input;
+                                                    });
+                                                  },
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: Colors.black,
+                                                  ),
+                                                  hint: Text('Sex'),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 20),
+                                            TextField(
+                                              autofocus: false,
+                                              keyboardType:
+                                                  TextInputType.number,
+                                              decoration: InputDecoration(
+                                                prefixIcon: Icon(Icons.input,
+                                                    color: Color.fromRGBO(
+                                                        50, 62, 72, 1.0)),
+                                                hintText: "sRc (mg/dl)",
+                                                contentPadding:
+                                                    EdgeInsets.fromLTRB(
+                                                        20.0, 15.0, 20.0, 15.0),
+                                                border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5.0)),
+                                              ),
+                                              onChanged: (input) {
+                                                sCr = double.parse(input);
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    : Container(
+                                        height: height(context) * 0.3,
+                                        width: width(context) * 0.3,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          border: Border.all(
+                                            color: Colors.black,
+                                            width: 5,
+                                          ),
+                                        ),
+                                        padding: EdgeInsets.all(10),
+                                        child: Center(
+                                          child: Text(
+                                            gfrResult.toStringAsFixed(2),
+                                            textScaleFactor: 2.5,
+                                            style: TextStyle(fontWeight: bold),
+                                          ),
+                                        ),
+                                      ),
+                                SizedBox(height: 25),
+                                Padding(
+                                  padding: EdgeInsets.all(4.0),
+                                  child: Center(
+                                    child: Container(
+                                      width: width(context) * 0.2375,
+                                      height: 35,
+                                      decoration: BoxDecoration(
+                                        color: Color(0xff07febb),
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(4.0),
+                                        ),
+                                      ),
+                                      child: Material(
+                                        color: Colors.transparent,
+                                        child: InkWell(
+                                          onTap: () {
+                                            setState(() {
+                                              if (gfrWeight != null &&
+                                                  sCr != null &&
+                                                  age != null) {
+                                                gfrCalculated = !gfrCalculated;
+                                                gfrResult = gfrCalc(
+                                                    gfrWeight, sCr, age, sex);
+                                              } else {
+                                                gfrCalculated = false;
+                                              }
+                                            });
+                                          },
+                                          child: Center(
+                                            child: Padding(
+                                              padding: EdgeInsets.all(4.0),
+                                              child: Text(
+                                                !gfrCalculated
+                                                    ? 'calculate'
+                                                    : 'reset',
+                                                style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: 5),
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
             ],
           ),
         ),
