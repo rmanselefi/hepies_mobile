@@ -121,12 +121,13 @@ class PrescriptionProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<dynamic> readPrescription(var code) async {
+  Future<dynamic> readPrescription(String code) async {
     _fetchStatus = ReadStatus.Fetching;
     notifyListeners();
-    String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
-    RegExp regExp = new RegExp(patttern);
-    bool isPhone = regExp.hasMatch(code);
+    String pattern = r'(^(?:[+251]9)?[0-9]{10,12}$)';
+    // String pattern = r'^(?:\+?88|0088)?01[13-9]\d{8}$';
+    RegExp regExp = new RegExp(pattern);
+    bool isPhone = code.length > 8;
     print("isPhoneisPhone $isPhone");
     var url = isPhone ? AppUrl.readprescriptionPhone : AppUrl.readprescription;
     var result;
@@ -140,7 +141,6 @@ class PrescriptionProvider with ChangeNotifier {
       print("consultconsultconsultconsultconsult ${medical.length}");
       // notifyListeners();
       result = {'status': true, 'isPhone': isPhone, 'data': medical};
-
     } else {
       _fetchStatus = ReadStatus.NotFetch;
       notifyListeners();
@@ -153,20 +153,21 @@ class PrescriptionProvider with ChangeNotifier {
     // return json.decode(response.body);
   }
 
-  Future<Map<String, dynamic>> acceptPrescription(List id,List pres_id) async {
+  Future<Map<String, dynamic>> acceptPrescription(List id, List pres_id) async {
     _sentStatus = PrescriptionStatus.Sending;
     notifyListeners();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
-    List<dynamic> output = pres_id.where((element) => !id.contains(element)).toList();
+    List<dynamic> output =
+        pres_id.where((element) => !id.contains(element)).toList();
     var result;
     print("registrationData $output");
-    Response response =
-        await post(Uri.parse(AppUrl.accept), body: json.encode(output), headers: {
-      'Content-Type': 'application/json',
-      HttpHeaders.authorizationHeader: "Bearer $token"
-    });
-
+    Response response = await post(Uri.parse(AppUrl.accept),
+        body: json.encode(output),
+        headers: {
+          'Content-Type': 'application/json',
+          HttpHeaders.authorizationHeader: "Bearer $token"
+        });
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       final bool responseData = json.decode(response.body);

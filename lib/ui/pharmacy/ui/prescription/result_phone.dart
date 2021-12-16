@@ -29,7 +29,7 @@ class _PrescriptionResultState extends State<PrescriptionResultPhone> {
 
     List<dynamic> result = widget.result;
     var patient = result[0];
-    var prescription=result[0]['prescription'];
+    var prescription=result[0]['prescription_item'];
     List<dynamic> notReadPrescription = prescription.where((i) => i['status']=="NotRead").toList();
     List<dynamic> list_id=[];
     notReadPrescription.forEach((element) {

@@ -487,9 +487,9 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                               color: !rememberMe
                                                   ? Colors.redAccent
                                                   : Colors.black26)),
-                                      onChanged: (String newValue) {
-                                        patient.age = newValue;
-                                      },
+                                      // onChanged: (String newValue) {
+                                      //   patient.age = newValue;
+                                      // },
                                     )),
                                 Flexible(
                                   flex: 1,
@@ -1079,11 +1079,12 @@ class _PrescribeFormState extends State<PrescribeForm> {
                       var profession =
                           "${user.profession} ${user.name} ${user.fathername}";
 
-                      print("statusstatusstatus ===> ${user.professionid}");
+
                       if (status == 'add') {
+                        print("statusstatusstatus ===> ${user.professionid}");
                         final Map<String, dynamic> patientData = {
                           "name": patient.name,
-                          "age": patient.age,
+                          "age": ageController.text,
                           "age_label": _labelController,
                           "fathername": patient.fathername,
                           "grandfathername": "kebede",
