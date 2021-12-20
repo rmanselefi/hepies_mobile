@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hepies/constants.dart';
 import 'package:hepies/models/user.dart';
 import 'package:hepies/providers/consult.dart';
 import 'package:hepies/providers/drug_provider.dart';
@@ -78,62 +79,65 @@ class _WelcomeState extends State<Welcome> {
                 );
               },
             ),
-            flexibleSpace: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                SizedBox(
-                  width: 10.0,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Welcome(
-                                  currenIndex: 0,
-                                )));
-                  },
-                  child: GradientText(
-                    'Hepius',
-                    gradient: LinearGradient(colors: [
-                      Colors.blue.shade400,
-                      Colors.blue.shade900,
-                    ]),
+            flexibleSpace: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Flexible(child: SizedBox(width: width(context) * 0.225)),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Welcome(
+                                    currenIndex: 0,
+                                  )));
+                    },
+                    child: GradientText(
+                      'Hepius',
+                      gradient: LinearGradient(colors: [
+                        Colors.blue.shade400,
+                        Colors.blue.shade900,
+                      ]),
+                    ),
                   ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Points(
-                                  points: points,
-                                )));
-                  },
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(8.0),
-                        decoration: BoxDecoration(
-                            border: Border.all(color: Colors.green, width: 2),
-                            borderRadius: BorderRadius.circular(35.0)),
-                        child: Text(
-                          '${points ?? 0} Pts',
-                          style: TextStyle(color: Colors.green, fontSize: 18.0),
+                  Flexible(child: SizedBox(width: width(context) * 0.2)),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Points(
+                                    points: points,
+                                  )));
+                    },
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.green, width: 2),
+                              borderRadius: BorderRadius.circular(35.0)),
+                          child: Text(
+                            '${points ?? 0} Pts',
+                            style: TextStyle(color: Colors.green, fontSize: 18.0),
+                          ),
                         ),
-                      ),
-                      Flexible(
-                        child: Text('Overall 1567pts',
-                            style: TextStyle(color: Colors.green)),
-                      )
-                    ],
-                  ),
-                )
-              ],
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        Flexible(
+                          child: Text('Overall 1567pts',
+                              style: TextStyle(color: Colors.green)),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
             actions: <Widget>[],
           ),

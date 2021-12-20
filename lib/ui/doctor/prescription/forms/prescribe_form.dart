@@ -658,16 +658,32 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                             }
                                             // The logic to find out which ones should appear
                                             // Milkessa: implemented a search mechanism that is organized and alphabetical
+                                            List<dynamic> drugRes;
+                                            for (int i = 0; i < 2; i++) {
+                                              if (i == 0)
+                                                drugRes = drugs
+                                                    .where((element) =>
+                                                    element['name'].startsWith(value.text))
+                                                    .toList();
+                                              else
+                                                drugs.addAll(drugs
+                                                    .where((element) =>
+                                                element['name']
+                                                    .contains(value.text) &
+                                                !element['name'].startsWith(value.text))
+                                                    .toList());
+                                            }
+                                            return drugRes;
 
-                                            return drugs.where((drug) {
-                                              return drug['name']
-                                                      .startsWith(value.text) ||
-                                                  (drug['name'].contains(value
-                                                          .text
-                                                          .toLowerCase()) &
-                                                      !drug['name'].startsWith(
-                                                          value.text));
-                                            });
+//                                            return drugs.where((drug) {
+//                                              return drug['name']
+//                                                      .startsWith(value.text) ||
+//                                                  (drug['name'].contains(value
+//                                                          .text
+//                                                          .toLowerCase()) &
+//                                                      !drug['name'].startsWith(
+//                                                          value.text));
+//                                            });
                                           },
                                           onSelected: (value) {
                                             strengthController.text =

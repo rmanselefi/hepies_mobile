@@ -13,6 +13,8 @@ import 'package:hepies/util/shared_preference.dart';
 import 'package:hepies/widgets/drawer.dart';
 import 'package:provider/provider.dart';
 
+import '../../constants.dart';
+
 class WelcomePharmacy extends StatefulWidget {
   final User user;
   final int currenIndex;
@@ -53,15 +55,15 @@ class _WelcomePharmacyState extends State<WelcomePharmacy> {
 
     return SafeArea(
         child: Scaffold(
-      key: _scaffoldKey,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(100.0),
-        child: AppBar(
-          automaticallyImplyLeading: false,
-          titleSpacing: 0.0,
-          elevation: 0.0,
-          backgroundColor: Colors.white,
-          leading: Builder(
+          key: _scaffoldKey,
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(100.0),
+            child: AppBar(
+              automaticallyImplyLeading: false,
+              titleSpacing: 0.0,
+              elevation: 0.0,
+              backgroundColor: Colors.white,
+              leading: Builder(
             builder: (BuildContext context) {
               return IconButton(
                 icon: const Icon(
@@ -75,12 +77,13 @@ class _WelcomePharmacyState extends State<WelcomePharmacy> {
               );
             },
           ),
-          flexibleSpace: Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(),
-                GestureDetector(
+              flexibleSpace: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Flexible(child: SizedBox(width: width(context) * 0.225)),
+                    GestureDetector(
                   onTap: () {
                     Navigator.push(
                         context,
@@ -97,7 +100,8 @@ class _WelcomePharmacyState extends State<WelcomePharmacy> {
                     ]),
                   ),
                 ),
-                GestureDetector(
+                    Flexible(child: SizedBox(width: width(context) * 0.2)),
+                    GestureDetector(
                   onTap: () {
                     Navigator.push(
                         context,
@@ -126,14 +130,14 @@ class _WelcomePharmacyState extends State<WelcomePharmacy> {
                     ],
                   ),
                 )
-              ],
+                  ],
+                ),
+              ),
+              actions: <Widget>[],
             ),
           ),
-          actions: <Widget>[],
-        ),
-      ),
-      drawer: DrawerCustom(name, profession),
-      body: PharmacyShareConsult(user_id),
+          drawer: DrawerCustom(name, profession),
+          body: PharmacyShareConsult(user_id),
     ));
   }
 }
