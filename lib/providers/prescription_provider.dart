@@ -171,8 +171,6 @@ class PrescriptionProvider with ChangeNotifier {
           HttpHeaders.authorizationHeader: "Bearer $token"
         });
 
-
-
     if (response.statusCode == 200 || response.statusCode == 201) {
       final bool responseData = json.decode(response.body);
       _sentStatus = PrescriptionStatus.Sent;

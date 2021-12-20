@@ -13,6 +13,8 @@ import 'package:hepies/util/shared_preference.dart';
 import 'package:hepies/widgets/drawer.dart';
 import 'package:provider/provider.dart';
 
+import '../../constants.dart';
+
 class WelcomePharmacy extends StatefulWidget {
   final User user;
   final int currenIndex;
@@ -76,89 +78,117 @@ class _WelcomePharmacyState extends State<WelcomePharmacy> {
               );
             },
           ),
-          flexibleSpace: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Container(
-                height: 100.0,
-                child: Column(
-                  children: [
-                    IconButton(
-                        icon: Icon(
-                          Icons.person,
-                          size: 23.0,
-                          color: Colors.black45,
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => EditProfile()));
-                        }),
-                    Text(
-                      '$name',
-                      style: TextStyle(color: Colors.black38, fontSize: 12.0),
-                    ),
-                    Text(
-                      '($profession)',
-                      style: TextStyle(color: Colors.grey, fontSize: 12.0),
-                    )
-                  ],
+          flexibleSpace: Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Flexible(child: SizedBox(width: width(context) * 0.225)),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => WelcomePharmacy(
+                                  currenIndex: 0,
+                                )));
+                  },
+                  child: GradientText(
+                    'Hepius',
+                    gradient: LinearGradient(colors: [
+                      Colors.blue.shade400,
+                      Colors.blue.shade900,
+                    ]),
+                  ),
                 ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => WelcomePharmacy(
-                                currenIndex: 0,
-                              )));
-                },
-                child: GradientText(
-                  'Hepius',
-                  gradient: LinearGradient(colors: [
-                    Colors.blue.shade400,
-                    Colors.blue.shade900,
-                  ]),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Points(
-                                points: points,
-                              )));
-                },
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 10.0,
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(8.0),
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.green, width: 2),
-                          borderRadius: BorderRadius.circular(35.0)),
-                      child: Text(
-                        '${points}Pts',
-                        style: TextStyle(color: Colors.green, fontSize: 18.0),
+                Flexible(child: SizedBox(width: width(context) * 0.2)),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Points(
+                                  points: points,
+                                )));
+                  },
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 10.0,
                       ),
-                    ),
-                    Text('Overall 1567pts',
-                        style: TextStyle(color: Colors.green))
-                  ],
+                      Container(
+                        padding: EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.green, width: 2),
+                            borderRadius: BorderRadius.circular(35.0)),
+                        child: Text(
+                          '${points ?? 0} Pts',
+                          style: TextStyle(color: Colors.green, fontSize: 18.0),
+                        ),
+                      ),
+                      Text(
+                        '$name',
+                        style: TextStyle(color: Colors.black38, fontSize: 12.0),
+                      ),
+                      Text(
+                        '($profession)',
+                        style: TextStyle(color: Colors.grey, fontSize: 12.0),
+                      )
+                    ],
+                  ),
                 ),
-              )
-            ],
-
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => WelcomePharmacy(
+                                  currenIndex: 0,
+                                )));
+                  },
+                  child: GradientText(
+                    'Hepius',
+                    gradient: LinearGradient(colors: [
+                      Colors.blue.shade400,
+                      Colors.blue.shade900,
+                    ]),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Points(
+                                  points: points,
+                                )));
+                  },
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.green, width: 2),
+                            borderRadius: BorderRadius.circular(35.0)),
+                        child: Text(
+                          '${points}Pts',
+                          style: TextStyle(color: Colors.green, fontSize: 18.0),
+                        ),
+                      ),
+                      Text('Overall 1567pts',
+                          style: TextStyle(color: Colors.green))
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
           actions: <Widget>[],
         ),
       ),
-
       drawer: DrawerCustom(name, profession),
       body: PharmacyShareConsult(user_id),
     ));

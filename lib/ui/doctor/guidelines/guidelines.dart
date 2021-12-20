@@ -34,7 +34,7 @@ class _GuidelinesState extends State<Guidelines> {
       Completer<PDFViewController>();
 
   // Milkessa: using hive as a local database and implementing checkStatus and changeStatus methods
-  Future<void> initHive() async {
+  Future<List> initHive() async {
     Directory dir = await getApplicationDocumentsDirectory();
     await Hive.init(dir.path);
     Hive.openBox('Status');

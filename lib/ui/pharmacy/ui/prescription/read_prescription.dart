@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hepies/constants.dart';
 import 'package:hepies/providers/patient_provider.dart';
 import 'package:hepies/providers/prescription_provider.dart';
 import 'package:hepies/ui/pharmacy/ui/prescription/prescription_result.dart';
@@ -22,8 +23,8 @@ class _ReadPrescriptionState extends State<ReadPrescription> {
     return SafeArea(
       child: Scaffold(
         body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Header(),
             Expanded(
               child: ListView(
                 children: [
@@ -33,7 +34,7 @@ class _ReadPrescriptionState extends State<ReadPrescription> {
                   Container(
                     child: Center(
                       child: Text(
-                        'Enter Code',
+                        'Enter phone number',
                         style: TextStyle(
                             fontSize: 20.0, fontWeight: FontWeight.bold),
                       ),
@@ -43,15 +44,29 @@ class _ReadPrescriptionState extends State<ReadPrescription> {
                     height: 15.0,
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: TextFormField(
                       controller: codeController,
+                      maxLength: 8,
+                      enabled: true,
+                      keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.read_more,
-                            color: Color.fromRGBO(50, 62, 72, 1.0)),
+                        prefixIcon: Padding(
+                          padding: EdgeInsets.only(right: 5, left: 10, top: 5, bottom: 5),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '+251 - 9',
+                                textScaleFactor: 0.9,
+                              ),
+                            ],
+                          ),
+                        ),
                         // hintText: hintText,
-                        contentPadding:
-                            EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                        counterText: "",
+                        contentPadding: EdgeInsets.all(5),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(5.0)),
                       ),
@@ -68,6 +83,7 @@ class _ReadPrescriptionState extends State<ReadPrescription> {
                             onTap: () async {
                               var res = await prescriptionProvider
                                   .readPrescription(codeController.text);
+
                               if (res['status']) {
                                 if (res['isPhone']) {
                                   Navigator.push(
