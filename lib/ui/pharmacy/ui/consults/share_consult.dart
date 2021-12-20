@@ -26,13 +26,13 @@ class PharmacyShareConsult extends StatefulWidget {
 class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
   final formKey = new GlobalKey<FormState>();
   var _topic = new TextEditingController();
-  XFile file;
+  File file;
 
   String name = '';
 
   List<dynamic> interests = [];
   List<dynamic> subList = [];
-  void _setImage(XFile image) {
+  void _setImage(File image) {
     setState(() {
       file = image;
     });

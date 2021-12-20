@@ -31,7 +31,7 @@ class _WelcomePharmacyState extends State<WelcomePharmacy> {
     // TODO: implement initState
     super.initState();
     UserProvider().getProfile().then((user) {
-      // if (!mounted) return;
+      if (!mounted) return;
       setState(() {
         user_id = user['id'];
         name = user['profession'][0]['name'];

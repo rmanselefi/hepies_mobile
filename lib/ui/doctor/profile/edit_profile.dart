@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hepies/models/user.dart';
 import 'package:hepies/providers/auth.dart';
@@ -28,9 +29,9 @@ class _EditProfileState extends State<EditProfile>
   bool _status = true;
   final FocusNode myFocusNode = FocusNode();
 
-  XFile file;
+  File file;
 
-  void _setImage(XFile image) {
+  void _setImage(File image) {
     file = image;
     print("_formData_formData_formData${file}");
   }
@@ -353,7 +354,7 @@ class _EditProfileState extends State<EditProfile>
                                 children: <Widget>[
                                   new Flexible(
                                       child: new MultiSelectFormField(
-                                    autovalidate: false,
+                                    autovalidate: AutovalidateMode.disabled,
                                     chipBackGroundColor: Colors.red,
                                     chipLabelStyle:
                                         TextStyle(fontWeight: FontWeight.bold),

@@ -33,7 +33,7 @@ dependencies:
   http:
 #  flushbar:
   firebase_storage:
-  image_picker:
+  image_picker: ^0.8.4+3
   intl:
   multiselect_formfield:
   expandable:

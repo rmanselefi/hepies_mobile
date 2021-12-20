@@ -27,12 +27,12 @@ class ShareConsult extends StatefulWidget {
 class _ShareConsultState extends State<ShareConsult> {
   final formKey = new GlobalKey<FormState>();
   var _topic = new TextEditingController();
-  XFile file;
+  File file;
   List<dynamic> interests = [];
   List<dynamic> subList = [];
 
   var name = '';
-  void _setImage(XFile image) {
+  void _setImage(File image) {
     setState(() {
       file = image;
     });

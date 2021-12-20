@@ -25,8 +25,8 @@ class PharmacyShareComment extends StatefulWidget {
 class _PharmacyShareConsultState extends State<PharmacyShareComment> {
   final formKey = new GlobalKey<FormState>();
   String _topic;
-  XFile file;
-  void _setImage(XFile image) {
+  File file;
+  void _setImage(File image) {
     file = image;
     print("_formData_formData_formData${file}");
   }

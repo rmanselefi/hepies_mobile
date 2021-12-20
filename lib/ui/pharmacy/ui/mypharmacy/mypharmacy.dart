@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hepies/models/drug.dart';
 import 'package:hepies/providers/drug_provider.dart';
 import 'package:hepies/providers/pharmacy_provider.dart';
 import 'package:hepies/ui/pharmacy/widgets/footer.dart';
@@ -14,6 +15,9 @@ class _MyPharmacyState extends State<MyPharmacy> {
   var drug_id = "";
   var drug_name = "";
   var priceController = new TextEditingController();
+  var drugnameController = new TextEditingController();
+
+  List<dynamic> drugs = [];
 
   void _openPriceForm(BuildContext context) {
     showModalBottomSheet(
@@ -53,7 +57,9 @@ class _MyPharmacyState extends State<MyPharmacy> {
                                   Provider.of<PharmacyProvider>(context,
                                           listen: false)
                                       .getMyPharmacy();
+                                  drugnameController.text = "";
                                 });
+
                                 Navigator.of(context).pop();
                               }
                             },
@@ -69,8 +75,20 @@ class _MyPharmacyState extends State<MyPharmacy> {
   }
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    DrugProvider().getDrugs().then((value) {
+      setState(() {
+        drugs = value;
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    List<dynamic> drugs = Provider.of<DrugProvider>(context).drugs;
+    // List<dynamic> drugs = Provider.of<DrugProvider>(context).drugs;
+    print("drugsdrugsdrugsdrugsdrugs $drugs");
     var pharmacyProvider =
         Provider.of<PharmacyProvider>(context, listen: false);
     return SafeArea(
@@ -118,6 +136,7 @@ class _MyPharmacyState extends State<MyPharmacy> {
                             TextEditingController fieldTextEditingController,
                             FocusNode fieldFocusNode,
                             VoidCallback onFieldSubmitted) {
+                          drugnameController = fieldTextEditingController;
                           return Container(
                             child: TextFormField(
                               controller: fieldTextEditingController,

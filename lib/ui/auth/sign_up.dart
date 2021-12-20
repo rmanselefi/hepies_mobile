@@ -125,11 +125,11 @@ class _RegisterState extends State<Register> {
       _fathername,
       _phone,
       _interest;
-  XFile file;
+  File file;
   var _professionController;
 
   List<dynamic> _myInterests = [];
-  void _setImage(XFile image) {
+  void _setImage(File image) {
     file = image;
     print("_formData_formData_formData${file}");
   }
@@ -178,7 +178,7 @@ class _RegisterState extends State<Register> {
     );
 
     final interestField = MultiSelectFormField(
-      autovalidate: false,
+      autovalidate: AutovalidateMode.disabled,
       chipBackGroundColor: Colors.red,
       chipLabelStyle: TextStyle(fontWeight: FontWeight.bold),
       dialogTextStyle: TextStyle(fontWeight: FontWeight.bold),

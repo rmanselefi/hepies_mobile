@@ -16,7 +16,6 @@ import 'package:readmore/readmore.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
-
 import 'package:url_launcher/url_launcher.dart';
 
 class PharmacyConsultList extends StatefulWidget {
@@ -77,7 +76,6 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
     mainAxisAlignment: MainAxisAlignment.center,
     children: <Widget>[CircularProgressIndicator()],
   );
-
 
   Widget _rowButton(var e, List<Widget> post) {
     return Container(
@@ -605,8 +603,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                                       post['id'],
                                                       _topic.text,
                                                       photo,
-                                                  post['image']);
-
+                                                      post['image']);
                                               if (res['status']) {
                                                 consult.getConsults();
                                                 showTopSnackBar(
@@ -760,7 +757,6 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                         //   widget.consults[index]['topic'],
                         //   style: TextStyle(fontSize: 14),
                         // ),
-
                         // HashTagText(
                         //   text: "${snapshot.data[index]['topic'] ?? ' '}",
                         //   basicStyle:
@@ -820,7 +816,6 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                       builder: (context, snapshot) {
                                         if (!snapshot.hasData) {
                                           return Center(
-
                                             child: Container(
                                               width: width(context) * 0.2,
                                               height: 20,
@@ -834,14 +829,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                             );
                                           }
                                           return TextButton.icon(
-                                              onPressed: () async {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            PharmacyShareComment(e['id'])));
-                                              },
-
+                                              onPressed: () {},
                                               icon: Icon(
                                                 Icons.thumb_up_sharp,
                                                 color: Colors.grey,
@@ -877,7 +865,11 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                 builder: (context, snapshot) {
                                   if (!snapshot.hasData) {
                                     return Center(
-                                      child: CircularProgressIndicator(),
+                                      child: Container(
+                                        width: width(context) * 0.4,
+                                        height: 20,
+                                        color: Colors.grey.shade100,
+                                      ),
                                     );
                                   } else {
                                     if (snapshot.data == null) {
@@ -904,8 +896,109 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                           thickness: 0.50,
                           color: Colors.black26,
                         ),
-                        _rowButton(e),
-
+                        _rowButton(
+                          e,
+                          [
+                            Row(
+                              children: [
+                                Container(
+                                  width: 40,
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(40))),
+                                  child: ClipRRect(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(40)),
+                                      child: Icon(
+                                        Icons.person,
+                                        size: 40,
+                                      )),
+                                ),
+                                SizedBox(
+                                  width: 4,
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      e['user'],
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                    Container(
+                                      width: 100,
+                                      child: Text(
+                                        "Doctor",
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.black54),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    Text('$duration',
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.black54))
+                                  ],
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            // Text(
+                            //   widget.consults[index]['topic'],
+                            //   style: TextStyle(fontSize: 14),
+                            // ),
+//                          HashTagText(
+//                            text: "${snapshot.data[index]['topic'] ?? ' '}",
+//                            basicStyle:
+//                                TextStyle(fontSize: 14, color: Colors.black),
+//                            decoratedStyle: TextStyle(
+//                                fontSize: 14, color: Colors.blueAccent),
+//                            textAlign: TextAlign.start,
+//                            onTap: (text) {
+//                              print(text);
+//                            },
+//                          ),
+                            LinkifyText(
+                              "${snapshot.data[index]['topic'] ?? ' '}",
+                              isLinkNavigationEnable: true,
+                              linkColor: Colors.blueAccent,
+                              fontColor: Colors.black,
+                              // linkStyle: TextStyle(color: Colors.blueAccent),
+                              // LinkTypes: [LinkType.url, LinkType.hashtag]
+                              // onTap: (link) {
+                              //   if(link.type == Link.url) launch(link.value);
+                              // },
+                            ),
+                            // Text(
+                            //   _post[index].tags,
+                            //   style: TextStyle(color: blueColor),
+                            // ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            e['image'] != null
+                                ? Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: height(context) * 0.4,
+                                    child: Image.network(
+                                      e['image'],
+                                      fit: BoxFit.contain,
+                                    ),
+                                  )
+                                : Container(
+                                    height: 0.0,
+                                    width: 0.0,
+                                  ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
                       ],
                     ),
                   );
@@ -916,5 +1009,3 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
         });
   }
 }
-
-

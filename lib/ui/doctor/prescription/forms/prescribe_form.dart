@@ -1386,7 +1386,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
                       var profession =
                           "${user.profession} ${user.name} ${user.fathername}";
 
-
                       if (status == 'add') {
                         print("statusstatusstatus ===> ${user.professionid}");
                         final Map<String, dynamic> patientData = {
