@@ -55,22 +55,12 @@ class UserProvider with ChangeNotifier {
     var result;
     final Map<String, dynamic> registrationData = {
       'id': user.professionid,
-      'name': user.name,
-      'fathername': user.fathername,
       'phone': user.phone,
       'email': user.email,
       'profile': profile,
-      'proffesion': user.profession,
       'speciality': user.speciality,
       'workplace': user.workplace,
-      'profile': profile,
-      'dob': user.dob,
-      'sex': user.sex,
       'interests': user.interests,
-      'user': {
-        'id': user.userId,
-        'username': user.username,
-      },
     };
     Response response = await put(
         Uri.parse(AppUrl.profile + '/${user.professionid}'),
@@ -78,7 +68,7 @@ class UserProvider with ChangeNotifier {
         headers: {'Content-Type': 'application/json'});
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      final Map<String, dynamic> responseData = json.decode(response.body);
+       var responseData = json.encode(response.body);
 
       _registeredInStatus = Status.LoggedIn;
       notifyListeners();
@@ -207,7 +197,11 @@ class UserProvider with ChangeNotifier {
     if (response.statusCode == 200 || response.statusCode == 201) {
       _pointFiftyStatus = ChangeStatus.Changed;
       notifyListeners();
-      result = {'status': true, 'message': 'Successful', 'result': json.decode(response.body)};
+      result = {
+        'status': true,
+        'message': 'Successful',
+        'result': json.decode(response.body)
+      };
     } else {
       _pointFiftyStatus = ChangeStatus.NotChanged;
       notifyListeners();

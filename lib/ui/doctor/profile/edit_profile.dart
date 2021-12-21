@@ -47,7 +47,7 @@ class _EditProfileState extends State<EditProfile>
   List interestList = [];
 
   String profile = '';
-  var interest;
+  List<dynamic> interest;
   int userId = 0;
   int professionid = 0;
   String profession = '';
@@ -70,21 +70,24 @@ class _EditProfileState extends State<EditProfile>
   getUser() async {
     var user = await UserProvider().getProfile();
     print("object ${user}");
+
     setState(() {
-      _nameController.text = user['profession'][0]['name'];
-      _fatherNameController.text = user['profession'][0]['fathername'];
+      var inters = user['profession'][0]['interests'].split(",");
+      List interew = [];
+      inters.forEach((element) {
+        var property = {
+          'display': "#$element",
+          'value': element,
+        };
+        interew.add(property);
+      });
+      interest = interew;
       _emailController.text = user['profession'][0]['email'];
       _phoneController.text = user['profession'][0]['phone'];
       _specialityController.text = user['profession'][0]['speciality'];
       _workplaceController.text = user['profession'][0]['workplace'];
       profile = user['profession'][0]['profile'];
-      interest = user['profession'][0]['interests'].split(",");
       userId = user['id'];
-      profession = user['profession'][0]['proffesion'];
-      username = user['username'];
-      grandfathername = user['profession'][0]['grandfathername'];
-      points = user['profession'][0]['points'];
-      license = user['profession'][0]['license'];
       professionid = user['profession'][0]['id'];
     });
   }
@@ -145,25 +148,6 @@ class _EditProfileState extends State<EditProfile>
       });
     }
 
-    final dobField = SfDateRangePicker(
-      onSelectionChanged: _onSelectionChanged,
-      selectionMode: DateRangePickerSelectionMode.single,
-    );
-    final sexField = DropdownButtonFormField(
-      value: _sexController,
-      items: ["Male", "Female"]
-          .map((label) => DropdownMenuItem(
-                child: Text(label.toString()),
-                value: label,
-              ))
-          .toList(),
-      hint: Text('Choose Sex'),
-      onChanged: (value) {
-        setState(() {
-          _sexController = value;
-        });
-      },
-    );
     var loading = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
