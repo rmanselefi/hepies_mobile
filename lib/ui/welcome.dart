@@ -123,7 +123,8 @@ class _WelcomeState extends State<Welcome> {
                               borderRadius: BorderRadius.circular(35.0)),
                           child: Text(
                             '${points ?? 0} Pts',
-                            style: TextStyle(color: Colors.green, fontSize: 18.0),
+                            style:
+                                TextStyle(color: Colors.green, fontSize: 18.0),
                           ),
                         ),
                         SizedBox(
