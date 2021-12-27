@@ -92,7 +92,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
   var from = "";
 
   var _labelController = "Y";
-
+  var _forController = "W";
   String _countryCode;
   @override
   void initState() {
@@ -350,6 +350,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
   @override
   Widget build(BuildContext context) {
     drugs = Provider.of<DrugProvider>(context).drugs;
+    var pres = Provider.of<PrescriptionProvider>(context);
     var patientProvider = Provider.of<PatientProvider>(context);
     final professionField = DropdownButtonFormField(
       decoration: InputDecoration(contentPadding: EdgeInsets.all(0.0)),
@@ -365,6 +366,23 @@ class _PrescribeFormState extends State<PrescribeForm> {
       onChanged: (value) {
         setState(() {
           _labelController = value;
+        });
+      },
+    );
+    final forField = DropdownButtonFormField(
+      decoration: InputDecoration(contentPadding: EdgeInsets.all(0.0)),
+      icon: Visibility(visible: false, child: Icon(Icons.arrow_downward)),
+      value: _forController,
+      items: ["D", "W", "M"]
+          .map((label) => DropdownMenuItem(
+        child: Text(label.toString()),
+        value: label,
+      ))
+          .toList(),
+      hint: Text(''),
+      onChanged: (value) {
+        setState(() {
+          _forController = value;
         });
       },
     );
@@ -387,6 +405,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                       setState(() {
                         rememberMe = newValue;
                       });
+                      pres.changeFavStatus(newValue);
                     },
                     controlAffinity: ListTileControlAffinity
                         .leading, //  <-- leading Checkbox
@@ -403,15 +422,15 @@ class _PrescribeFormState extends State<PrescribeForm> {
                             textAlign: TextAlign.start,
                             controller: phoneController,
                             enabled: !rememberMe,
-                            maxLength: 8,
+                            maxLength: 9,
                             keyboardType: TextInputType.number,
                             onSaved: (value) {
                               setState(() {
-                                patient.phone = "+2519${value}";
+                                patient.phone = "+251${value}";
                               });
                             },
                             onChanged: (String val) async {
-                              var phone = "+2519${val}";
+                              var phone = "+251${val}";
                               var res = await patientProvider.getPatient(phone);
                               if (res != null) {
                                 setState(() {
@@ -432,7 +451,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                   width: 35,
                                   child: Center(
                                     child: Text(
-                                      '+251 - 9',
+                                      '+251 ',
                                       textScaleFactor: 0.9,
                                     ),
                                   ),
@@ -763,168 +782,50 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                           width: 8.0,
                                         ),
                                         _textEvery(),
-                                        GestureDetector(
-                                          onTap: isEvery
-                                              ? () {
-                                                  showDialog(
-                                                    context: context,
-                                                    builder: (context) =>
-                                                        Dialog(
-                                                      shape: OutlineInputBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10),
-                                                      ),
-                                                      elevation: 5,
-                                                      child: Container(
-                                                        width: width(context) *
-                                                            0.8,
-                                                        height:
-                                                            height(context) *
-                                                                0.4,
-                                                        padding:
-                                                            EdgeInsets.all(10),
-                                                        child: Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            TextFormField(
-                                                              controller:
-                                                                  forController,
-                                                              onChanged: (val) {
-                                                                setState(() {
-                                                                  prescription
-                                                                          .takein =
-                                                                      val;
-                                                                });
-                                                                if (val
-                                                                    .isNotEmpty) {
-                                                                  setState(() {
-                                                                    isAmpule =
-                                                                        false;
-                                                                  });
-                                                                }
-                                                                if (val
-                                                                    .isEmpty) {
-                                                                  setState(() {
-                                                                    isAmpule =
-                                                                        true;
-                                                                  });
-                                                                }
-                                                              },
-                                                              enabled: isEvery,
-                                                              decoration: InputDecoration(
-                                                                  border:
-                                                                      OutlineInputBorder(),
-                                                                  hintText:
-                                                                      'For',
-                                                                  hintStyle: TextStyle(
-                                                                      color: isEvery
-                                                                          ? Colors
-                                                                              .redAccent
-                                                                          : Colors
-                                                                              .grey)),
-                                                            ),
-                                                            SizedBox(
-                                                                height: 10),
-                                                            Padding(
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .all(4.0),
-                                                              child: Center(
-                                                                child:
-                                                                    Container(
-                                                                  width: width(
-                                                                          context) *
-                                                                      0.2375,
-                                                                  height: 35,
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    color: Color(
-                                                                        0xff07febb),
-                                                                    borderRadius:
-                                                                        BorderRadius
-                                                                            .all(
-                                                                      Radius.circular(
-                                                                          4.0),
-                                                                    ),
-                                                                  ),
-                                                                  child:
-                                                                      Material(
-                                                                    color: Colors
-                                                                        .transparent,
-                                                                    child:
-                                                                        InkWell(
-                                                                      onTap:
-                                                                          () {
-                                                                        Navigator.pop(
-                                                                            context);
-                                                                      },
-                                                                      child:
-                                                                          Center(
-                                                                        child:
-                                                                            Padding(
-                                                                          padding:
-                                                                              EdgeInsets.all(4.0),
-                                                                          child:
-                                                                              Text(
-                                                                            'done',
-                                                                            style:
-                                                                                TextStyle(
-                                                                              fontSize: 15,
-                                                                              color: Colors.black,
-                                                                            ),
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  );
-                                                }
-                                              : () {},
-                                          child: Container(
+                                        Container(
                                             width: 80,
                                             height: 40,
-                                            child: TextFormField(
-                                              controller: forController,
-                                              onChanged: (val) {
-                                                setState(() {
-                                                  prescription.takein = val;
-                                                });
-                                                if (val.isNotEmpty) {
-                                                  setState(() {
-                                                    isAmpule = false;
-                                                  });
-                                                }
-                                                if (val.isEmpty) {
-                                                  setState(() {
-                                                    isAmpule = true;
-                                                  });
-                                                }
-                                              },
-                                              enabled: false,
-                                              decoration: InputDecoration(
-                                                  border: OutlineInputBorder(),
-                                                  hintText: 'For',
-                                                  hintStyle: TextStyle(
-                                                      color: isEvery
-                                                          ? Colors.redAccent
-                                                          : Colors.grey)),
+                                            child: Row(
+                                              children: [
+                                                SizedBox(width: 5),
+                                                Flexible(
+                                                  flex: 2,
+                                                  child: TextFormField(
+                                                    controller: forController,
+                                                    keyboardType: TextInputType.number,
+                                                    onChanged: (val) {
+                                                      setState(() {
+                                                        prescription.takein = val;
+                                                      });
+                                                      if (val.isNotEmpty) {
+                                                        setState(() {
+                                                          isAmpule = false;
+                                                        });
+                                                      }
+                                                      if (val.isEmpty) {
+                                                        setState(() {
+                                                          isAmpule = true;
+                                                        });
+                                                      }
+                                                    },
+                                                    enabled: isEvery,
+                                                    decoration: InputDecoration(
+                                                        hintText: 'For',
+                                                        hintStyle: TextStyle(
+                                                            color: isEvery
+                                                                ? Colors.redAccent
+                                                                : Colors.grey)),
+                                                  ),
+                                                ),
+                                                SizedBox(width: 5),
+                                                Flexible(child: forField),
+                                              ],
                                             ),
                                           ),
-                                        ),
                                         Text(
                                           'OR',
                                           style: TextStyle(
-                                              fontSize: 18.0,
+                                              fontSize: 16,
                                               fontWeight: FontWeight.bold),
                                         ),
                                         Padding(
@@ -1395,7 +1296,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                         "strength": strengthController.text,
                         "unit": unitController.text,
                         "route": routeController.text,
-                        "takein": prescription.takein,
+                        "takein": prescription.takein + _forController,
                         "frequency": prescription.frequency,
                         "drug": prescription.drug,
                         "professional": profession,
@@ -1427,7 +1328,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                         finaPrescription[presIndex]['route'] =
                             routeController.text;
                         finaPrescription[presIndex]['takein'] =
-                            forController.text;
+                            forController.text + _forController;
                         finaPrescription[presIndex]['frequency'] =
                             everyController.text;
                         finaPrescription[presIndex]['ampule'] =

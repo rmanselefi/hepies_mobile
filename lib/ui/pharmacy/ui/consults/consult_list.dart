@@ -104,24 +104,10 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                       ? BouncingWidget(
                           scaleFactor: 1.5,
                           onPressed: () async {
-                            showTopSnackBar(
-                              context,
-                              CustomSnackBar.success(
-                                message: "Unliking post..........",
-                                backgroundColor: Colors.amber[300],
-                              ),
-                            );
                             var res = await Provider.of<ConsultProvider>(
                                     context,
                                     listen: false)
-                                .unlikeConsult(e['id'])
-                                .whenComplete(() => showTopSnackBar(
-                                      context,
-                                      CustomSnackBar.success(
-                                        message: "Unliking completed!",
-                                        backgroundColor: Colors.amber[300],
-                                      ),
-                                    ));
+                                .unlikeConsult(e['id']);
                             if (res['status']) {
                               setState(() {
                                 Provider.of<ConsultProvider>(context,
@@ -139,24 +125,10 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                       : BouncingWidget(
                           scaleFactor: 1.5,
                           onPressed: () async {
-                            showTopSnackBar(
-                              context,
-                              CustomSnackBar.success(
-                                message: "liking post..........",
-                                backgroundColor: Colors.amber[300],
-                              ),
-                            );
                             var res = await Provider.of<ConsultProvider>(
                                     context,
                                     listen: false)
-                                .likeConsult(e['id'])
-                                .whenComplete(() => showTopSnackBar(
-                                      context,
-                                      CustomSnackBar.success(
-                                        message: "liking completed!",
-                                        backgroundColor: Colors.amber[300],
-                                      ),
-                                    ));
+                                .likeConsult(e['id']);
                             if (res['status']) {
                               setState(() {
                                 Provider.of<ConsultProvider>(context,

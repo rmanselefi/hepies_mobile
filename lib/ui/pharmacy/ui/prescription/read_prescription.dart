@@ -47,7 +47,7 @@ class _ReadPrescriptionState extends State<ReadPrescription> {
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: TextFormField(
                       controller: codeController,
-                      maxLength: 8,
+                      maxLength: 9,
                       enabled: true,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
@@ -58,7 +58,7 @@ class _ReadPrescriptionState extends State<ReadPrescription> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '+251 - 9',
+                                '+251 ',
                                 textScaleFactor: 0.9,
                               ),
                             ],
@@ -82,7 +82,7 @@ class _ReadPrescriptionState extends State<ReadPrescription> {
                           child: GestureDetector(
                             onTap: () async {
                               var res = await prescriptionProvider
-                                  .readPrescription('+2519${codeController.text}');
+                                  .readPrescription('+251${codeController.text}');
                               print("objectobjectobjectobject $res");
                               if (res['status']) {
                                 if (res['isPhone']) {

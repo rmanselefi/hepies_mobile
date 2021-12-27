@@ -454,7 +454,9 @@ class _WritePrescriptionState extends State<WritePrescription> {
         padding: const EdgeInsets.all(8.0),
         height: height(context) * 0.1,
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
+            !prescProvider.isFavourite ? Container() :
             GestureDetector(
               onTap: () {
                 showDialog<String>(
@@ -548,7 +550,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
             ),
             prescProvider.sentStatus == PrescriptionStatus.Sending
                 ? loading
-                : GestureDetector(
+                : prescProvider.isFavourite ? Container() : GestureDetector(
               onTap: () async {
                 try {
                   if (pretype == "general" ||
