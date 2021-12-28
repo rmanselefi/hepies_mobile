@@ -69,7 +69,6 @@ class UserProvider with ChangeNotifier {
 
     if (response.statusCode == 200 || response.statusCode == 201) {
        var responseData = json.encode(response.body);
-
       _registeredInStatus = Status.LoggedIn;
       notifyListeners();
 

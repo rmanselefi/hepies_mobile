@@ -47,18 +47,19 @@ class _ReadPrescriptionState extends State<ReadPrescription> {
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: TextFormField(
                       controller: codeController,
-                      maxLength: 8,
+                      maxLength: 9,
                       enabled: true,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         prefixIcon: Padding(
-                          padding: EdgeInsets.only(right: 5, left: 10, top: 5, bottom: 5),
+                          padding: EdgeInsets.only(
+                              right: 5, left: 10, top: 5, bottom: 5),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '+251 - 9',
+                                '+251 ',
                                 textScaleFactor: 0.9,
                               ),
                             ],
@@ -81,16 +82,18 @@ class _ReadPrescriptionState extends State<ReadPrescription> {
                           padding: const EdgeInsets.all(8.0),
                           child: GestureDetector(
                             onTap: () async {
-                              var res = await prescriptionProvider
-                                  .readPrescription(codeController.text);
-
+                              var res =
+                                  await prescriptionProvider.readPrescription(
+                                      '+251${codeController.text}');
+                              print("objectobjectobjectobject $res");
                               if (res['status']) {
                                 if (res['isPhone']) {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            PrescriptionResultPhone(res['data'])),
+                                            PrescriptionResultPhone(
+                                                res['data'])),
                                   );
                                 } else {
                                   Navigator.push(

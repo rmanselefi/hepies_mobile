@@ -25,12 +25,15 @@ enum ReadStatus {
   Fetching,
 }
 
+
 class PrescriptionProvider with ChangeNotifier {
+
   PrescriptionStatus _sentStatus = PrescriptionStatus.NotSent;
   PrescriptionStatus get sentStatus => _sentStatus;
   ReadStatus _fetchStatus = ReadStatus.NotFetch;
   ReadStatus get readStatus => _fetchStatus;
   int _index = 0;
+  bool isFavourite = false;
   int get prescriptionIndex => _index;
   String _status = 'add';
   String _actionStatus = 'populate';
@@ -42,6 +45,10 @@ class PrescriptionProvider with ChangeNotifier {
 
   Map<String, dynamic> _singlePrescription = {};
   Map<String, dynamic> get singlePrescription => _singlePrescription;
+  void changeFavStatus(bool favStatus) {
+    isFavourite = favStatus;
+    notifyListeners();
+  }
 
   Future<List<dynamic>> getPrescriptions() async {
     var result;
