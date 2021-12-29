@@ -78,73 +78,50 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
   );
 
   Widget _rowButton(var e, List<Widget> post) {
+    var res = e['like'].where((l) => l['user_id'] == widget.user_id).toList();
     return Container(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          FutureBuilder<dynamic>(
-              future: Provider.of<ConsultProvider>(context, listen: false)
-                  .getLikeByConsultIdForUser(e['id']),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(
-                    child: Container(
-                      width: width(context) * 0.2,
-                      height: 20,
-                      color: Colors.grey.shade100,
-                    ),
-                  );
-                } else {
-                  if (snapshot.data == null) {
-                    return Center(
-                      child: Text('No data to show'),
-                    );
-                  }
-                  return snapshot.data['length'] > 0
-                      ? BouncingWidget(
-                          scaleFactor: 1.5,
-                          onPressed: () async {
-                            var res = await Provider.of<ConsultProvider>(
-                                    context,
-                                    listen: false)
-                                .unlikeConsult(e['id']);
-                            if (res['status']) {
-                              setState(() {
-                                Provider.of<ConsultProvider>(context,
-                                        listen: false)
-                                    .getLikeByConsultIdForUser(e['id']);
-                              });
-                            }
-                          },
-                          child: rowSingleButton(
-                              color: Colors.blueAccent,
-                              name: "Like",
-                              iconImage: Icons.thumb_up_sharp,
-                              isHover: false),
-                        )
-                      : BouncingWidget(
-                          scaleFactor: 1.5,
-                          onPressed: () async {
-                            var res = await Provider.of<ConsultProvider>(
-                                    context,
-                                    listen: false)
-                                .likeConsult(e['id']);
-                            if (res['status']) {
-                              setState(() {
-                                Provider.of<ConsultProvider>(context,
-                                        listen: false)
-                                    .getLikeByConsultIdForUser(e['id']);
-                              });
-                            }
-                          },
-                          child: rowSingleButton(
-                              color: Colors.black,
-                              name: "Like",
-                              iconImage: Icons.thumb_up_outlined,
-                              isHover: false),
-                        );
-                }
-              }),
+          res.length > 0
+              ? BouncingWidget(
+                  scaleFactor: 1.5,
+                  onPressed: () async {
+                    var res = await Provider.of<ConsultProvider>(context,
+                            listen: false)
+                        .unlikeConsult(e['id']);
+                    if (res['status']) {
+                      setState(() {
+                        Provider.of<ConsultProvider>(context, listen: false)
+                            .getLikeByConsultIdForUser(e['id']);
+                      });
+                    }
+                  },
+                  child: rowSingleButton(
+                      color: Colors.blueAccent,
+                      name: "Like",
+                      iconImage: Icons.thumb_up_sharp,
+                      isHover: false),
+                )
+              : BouncingWidget(
+                  scaleFactor: 1.5,
+                  onPressed: () async {
+                    var res = await Provider.of<ConsultProvider>(context,
+                            listen: false)
+                        .likeConsult(e['id']);
+                    if (res['status']) {
+                      setState(() {
+                        Provider.of<ConsultProvider>(context, listen: false)
+                            .getLikeByConsultIdForUser(e['id']);
+                      });
+                    }
+                  },
+                  child: rowSingleButton(
+                      color: Colors.black,
+                      name: "Like",
+                      iconImage: Icons.thumb_up_outlined,
+                      isHover: false),
+                ),
           InkWell(
             onTap: () {
               Navigator.push(
@@ -780,208 +757,8 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                             Container(
                               child: Row(
                                 children: [
-                                  FutureBuilder<dynamic>(
-                                      future: Provider.of<ConsultProvider>(
-                                              context,
-                                              listen: false)
-                                          .getLikeByConsultIdForUser(e['id']),
-                                      builder: (context, snapshot) {
-                                        if (!snapshot.hasData) {
-                                          return Center(
-                                            child: Container(
-                                              width: width(context) * 0.2,
-                                              height: 20,
-                                              color: Colors.grey.shade100,
-                                            ),
-                                          );
-                                        } else {
-                                          if (snapshot.data == null) {
-                                            return Center(
-                                              child: Text('No data to show'),
-                                            );
-                                          }
-                                          return TextButton.icon(
-                                              onPressed: () {
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            PharmacyShareComment(
-                                                                e['id'],
-                                                                [
-                                                                  Row(
-                                                                    children: [
-                                                                      Container(
-                                                                        width:
-                                                                            40,
-                                                                        height:
-                                                                            40,
-                                                                        decoration:
-                                                                            BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(40))),
-                                                                        child: ClipRRect(
-                                                                            borderRadius: BorderRadius.all(Radius.circular(40)),
-                                                                            child: Icon(
-                                                                              Icons.person,
-                                                                              size: 40,
-                                                                            )),
-                                                                      ),
-                                                                      SizedBox(
-                                                                        width:
-                                                                            4,
-                                                                      ),
-                                                                      Column(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.start,
-                                                                        children: [
-                                                                          Text(
-                                                                            e['user'],
-                                                                            style:
-                                                                                TextStyle(
-                                                                              fontSize: 18,
-                                                                            ),
-                                                                          ),
-                                                                          Container(
-                                                                            width:
-                                                                                100,
-                                                                            child:
-                                                                                Text(
-                                                                              "Doctor",
-                                                                              style: TextStyle(fontSize: 12, color: Colors.black54),
-                                                                              overflow: TextOverflow.ellipsis,
-                                                                            ),
-                                                                          ),
-                                                                          Text(
-                                                                              '$duration',
-                                                                              style: TextStyle(fontSize: 12, color: Colors.black54))
-                                                                        ],
-                                                                      ),
-                                                                    ],
-                                                                  ),
-                                                                  SizedBox(
-                                                                    height: 5,
-                                                                  ),
-                                                                  // Text(
-                                                                  //   widget.consults[index]['topic'],
-                                                                  //   style: TextStyle(fontSize: 14),
-                                                                  // ),
-//                          HashTagText(
-//                            text: "${snapshot.data[index]['topic'] ?? ' '}",
-//                            basicStyle:
-//                                TextStyle(fontSize: 14, color: Colors.black),
-//                            decoratedStyle: TextStyle(
-//                                fontSize: 14, color: Colors.blueAccent),
-//                            textAlign: TextAlign.start,
-//                            onTap: (text) {
-//                              print(text);
-//                            },
-//                          ),
-                                                                  LinkifyText(
-                                                                    "${e['topic'] ?? ' '}",
-                                                                    isLinkNavigationEnable:
-                                                                        true,
-                                                                    linkColor:
-                                                                        Colors
-                                                                            .blueAccent,
-                                                                    fontColor:
-                                                                        Colors
-                                                                            .black,
-                                                                    // linkStyle: TextStyle(color: Colors.blueAccent),
-                                                                    // LinkTypes: [LinkType.url, LinkType.hashtag]
-                                                                    // onTap: (link) {
-                                                                    //   if(link.type == Link.url) launch(link.value);
-                                                                    // },
-                                                                  ),
-                                                                  // Text(
-                                                                  //   _post[index].tags,
-                                                                  //   style: TextStyle(color: blueColor),
-                                                                  // ),
-                                                                  SizedBox(
-                                                                    height: 10,
-                                                                  ),
-                                                                  e['image'] !=
-                                                                          null
-                                                                      ? Container(
-                                                                          width: MediaQuery.of(context)
-                                                                              .size
-                                                                              .width,
-                                                                          height:
-                                                                              height(context) * 0.4,
-                                                                          child:
-                                                                              Image.network(
-                                                                            e['image'],
-                                                                            fit:
-                                                                                BoxFit.contain,
-                                                                          ),
-                                                                        )
-                                                                      : Container(
-                                                                          height:
-                                                                              0.0,
-                                                                          width:
-                                                                              0.0,
-                                                                        ),
-                                                                ])));
-                                              },
-                                              icon: Icon(
-                                                Icons.thumb_up_sharp,
-                                                color: Colors.grey,
-                                                size: 15,
-                                              ),
-                                              label: Text(
-                                                "${snapshot.data['likes'].toString()} likes",
-                                                style: TextStyle(
-                                                    color: Colors.grey),
-                                              ));
-                                        }
-                                      }),
-
-                                  // Container(
-                                  //     width: 25,
-                                  //     height: 25,
-                                  //     child: Icon(Icons.favorite)),
-
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  // Text(
-                                  //   _post[index].likes,
-                                  //   style: TextStyle(fontSize: 14),
-                                  // )
-                                ],
-                              ),
-                            ),
-                            FutureBuilder<int>(
-                                future: Provider.of<ConsultProvider>(context,
-                                        listen: false)
-                                    .getCommentsByConsultId(e['id']),
-                                builder: (context, snapshot) {
-                                  if (!snapshot.hasData) {
-                                    return Center(
-                                      child: Container(
-                                        width: width(context) * 0.4,
-                                        height: 20,
-                                        color: Colors.grey.shade100,
-                                      ),
-                                    );
-                                  } else {
-                                    if (snapshot.data == null) {
-                                      return Center(
-                                        child: Text('No data to show'),
-                                      );
-                                    }
-                                    return GestureDetector(
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            snapshot.data.toString(),
-                                            style:
-                                                TextStyle(color: Colors.grey),
-                                          ),
-                                          Text(" comments",
-                                              style:
-                                                  TextStyle(color: Colors.grey))
-                                        ],
-                                      ),
-                                      onTap: () {
+                                  TextButton.icon(
+                                      onPressed: () {
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
@@ -1109,9 +886,154 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                                                     ),
                                                             ])));
                                       },
-                                    );
-                                  }
-                                })
+                                      icon: Icon(
+                                        Icons.thumb_up_sharp,
+                                        color: Colors.grey,
+                                        size: 15,
+                                      ),
+                                      label: Text(
+                                        "${e['like'].length} likes",
+                                        style: TextStyle(color: Colors.grey),
+                                      )),
+
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  // Text(
+                                  //   _post[index].likes,
+                                  //   style: TextStyle(fontSize: 14),
+                                  // )
+                                ],
+                              ),
+                            ),
+                            GestureDetector(
+                              child: Row(
+                                children: [
+                                  Text(
+                                    e['comment'].length.toString(),
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                  Text(" comments",
+                                      style: TextStyle(color: Colors.grey))
+                                ],
+                              ),
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            PharmacyShareComment(e['id'], [
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                    width: 40,
+                                                    height: 40,
+                                                    decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    40))),
+                                                    child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                                Radius.circular(
+                                                                    40)),
+                                                        child: Icon(
+                                                          Icons.person,
+                                                          size: 40,
+                                                        )),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 4,
+                                                  ),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        e['user'],
+                                                        style: TextStyle(
+                                                          fontSize: 18,
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        width: 100,
+                                                        child: Text(
+                                                          "Doctor",
+                                                          style: TextStyle(
+                                                              fontSize: 12,
+                                                              color: Colors
+                                                                  .black54),
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                      ),
+                                                      Text('$duration',
+                                                          style: TextStyle(
+                                                              fontSize: 12,
+                                                              color: Colors
+                                                                  .black54))
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(
+                                                height: 5,
+                                              ),
+                                              // Text(
+                                              //   widget.consults[index]['topic'],
+                                              //   style: TextStyle(fontSize: 14),
+                                              // ),
+//                          HashTagText(
+//                            text: "${snapshot.data[index]['topic'] ?? ' '}",
+//                            basicStyle:
+//                                TextStyle(fontSize: 14, color: Colors.black),
+//                            decoratedStyle: TextStyle(
+//                                fontSize: 14, color: Colors.blueAccent),
+//                            textAlign: TextAlign.start,
+//                            onTap: (text) {
+//                              print(text);
+//                            },
+//                          ),
+                                              LinkifyText(
+                                                "${e['topic'] ?? ' '}",
+                                                isLinkNavigationEnable: true,
+                                                linkColor: Colors.blueAccent,
+                                                fontColor: Colors.black,
+                                                // linkStyle: TextStyle(color: Colors.blueAccent),
+                                                // LinkTypes: [LinkType.url, LinkType.hashtag]
+                                                // onTap: (link) {
+                                                //   if(link.type == Link.url) launch(link.value);
+                                                // },
+                                              ),
+                                              // Text(
+                                              //   _post[index].tags,
+                                              //   style: TextStyle(color: blueColor),
+                                              // ),
+                                              SizedBox(
+                                                height: 10,
+                                              ),
+                                              e['image'] != null
+                                                  ? Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                              .size
+                                                              .width,
+                                                      height:
+                                                          height(context) * 0.4,
+                                                      child: Image.network(
+                                                        e['image'],
+                                                        fit: BoxFit.contain,
+                                                      ),
+                                                    )
+                                                  : Container(
+                                                      height: 0.0,
+                                                      width: 0.0,
+                                                    ),
+                                            ])));
+                              },
+                            )
                           ],
                         ),
                         Divider(
