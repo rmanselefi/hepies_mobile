@@ -375,9 +375,9 @@ class _PrescribeFormState extends State<PrescribeForm> {
       value: _forController,
       items: ["D", "W", "M"]
           .map((label) => DropdownMenuItem(
-        child: Text(label.toString()),
-        value: label,
-      ))
+                child: Text(label.toString()),
+                value: label,
+              ))
           .toList(),
       hint: Text(''),
       onChanged: (value) {
@@ -682,14 +682,19 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                               if (i == 0)
                                                 drugRes = drugs
                                                     .where((element) =>
-                                                    element['name'].startsWith(value.text))
+                                                        element['name']
+                                                            .startsWith(
+                                                                value.text))
                                                     .toList();
                                               else
                                                 drugs.addAll(drugs
                                                     .where((element) =>
-                                                element['name']
-                                                    .contains(value.text) &
-                                                !element['name'].startsWith(value.text))
+                                                        element['name']
+                                                            .contains(
+                                                                value.text) &
+                                                        !element['name']
+                                                            .startsWith(
+                                                                value.text))
                                                     .toList());
                                             }
                                             return drugRes;
@@ -783,45 +788,46 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                         ),
                                         _textEvery(),
                                         Container(
-                                            width: 80,
-                                            height: 40,
-                                            child: Row(
-                                              children: [
-                                                SizedBox(width: 5),
-                                                Flexible(
-                                                  flex: 2,
-                                                  child: TextFormField(
-                                                    controller: forController,
-                                                    keyboardType: TextInputType.number,
-                                                    onChanged: (val) {
+                                          width: 80,
+                                          height: 40,
+                                          child: Row(
+                                            children: [
+                                              SizedBox(width: 5),
+                                              Flexible(
+                                                flex: 2,
+                                                child: TextFormField(
+                                                  controller: forController,
+                                                  keyboardType:
+                                                      TextInputType.number,
+                                                  onChanged: (val) {
+                                                    setState(() {
+                                                      prescription.takein = val;
+                                                    });
+                                                    if (val.isNotEmpty) {
                                                       setState(() {
-                                                        prescription.takein = val;
+                                                        isAmpule = false;
                                                       });
-                                                      if (val.isNotEmpty) {
-                                                        setState(() {
-                                                          isAmpule = false;
-                                                        });
-                                                      }
-                                                      if (val.isEmpty) {
-                                                        setState(() {
-                                                          isAmpule = true;
-                                                        });
-                                                      }
-                                                    },
-                                                    enabled: isEvery,
-                                                    decoration: InputDecoration(
-                                                        hintText: 'For',
-                                                        hintStyle: TextStyle(
-                                                            color: isEvery
-                                                                ? Colors.redAccent
-                                                                : Colors.grey)),
-                                                  ),
+                                                    }
+                                                    if (val.isEmpty) {
+                                                      setState(() {
+                                                        isAmpule = true;
+                                                      });
+                                                    }
+                                                  },
+                                                  enabled: isEvery,
+                                                  decoration: InputDecoration(
+                                                      hintText: 'For',
+                                                      hintStyle: TextStyle(
+                                                          color: isEvery
+                                                              ? Colors.redAccent
+                                                              : Colors.grey)),
                                                 ),
-                                                SizedBox(width: 5),
-                                                Flexible(child: forField),
-                                              ],
-                                            ),
+                                              ),
+                                              SizedBox(width: 5),
+                                              Flexible(child: forField),
+                                            ],
                                           ),
+                                        ),
                                         Text(
                                           'OR',
                                           style: TextStyle(

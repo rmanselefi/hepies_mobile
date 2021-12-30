@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:hepies/models/consult.dart';
+import 'package:hepies/models/drug.dart';
 import 'package:hepies/util/app_url.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ class DrugProvider with ChangeNotifier {
       drugs = json.decode(response.body);
       print("consultconsultconsultconsultconsult ${drugs}");
       // notifyListeners();
-      return drugs;
+      return drugs.where((element) => element['type'] != 'instrument').toList();
     } else {
       notifyListeners();
       result = {
