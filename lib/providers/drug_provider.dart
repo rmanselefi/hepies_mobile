@@ -18,7 +18,7 @@ class DrugProvider with ChangeNotifier {
       drugs = json.decode(response.body);
       print("consultconsultconsultconsultconsult ${drugs}");
       // notifyListeners();
-      return drugs;
+      return drugs.where((element) => element['type'] != 'instrument').toList();
     } else {
       notifyListeners();
       result = {
