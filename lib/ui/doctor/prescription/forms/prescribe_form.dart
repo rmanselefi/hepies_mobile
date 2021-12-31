@@ -73,16 +73,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
   List<dynamic> drugs;
   String _selectedAnimal;
 
-  var history = new History();
-  var physical = new Physical();
-  var tumor = new Tumor();
-  var diagnosis = new Diagnosis();
-  var hematology = new Hematology();
-  var serology = new Serology();
-  var chemistry = new Chemistry();
-  var endocrinology = new Endocrinology();
-  var urine = new Urine();
-  var ix = new Investigation();
   final TextEditingController _controller = new TextEditingController();
   int presIndex = 0;
   bool isAmpule = true;
@@ -90,6 +80,8 @@ class _PrescribeFormState extends State<PrescribeForm> {
   var _currentSelectedValue;
   bool rememberMe = false;
   var from = "";
+  List<dynamic> generalDrugs = [];
+  List<dynamic> instruments = [];
 
   var _labelController = "Y";
   var _forController = "W";
@@ -99,6 +91,8 @@ class _PrescribeFormState extends State<PrescribeForm> {
     // TODO: implement initState
     super.initState();
     // Provider.of<PrescriptionProvider>(context).resetStatus();
+    getGeneralDrugs();
+    getInstruments();
     from = widget.from;
   }
 
@@ -151,6 +145,22 @@ class _PrescribeFormState extends State<PrescribeForm> {
       ampuleController.text = selectedPrescription['ampule'];
       diagnosisController.text = selectedPrescription['dx']['diagnosis'];
     }
+  }
+
+  void getGeneralDrugs() {
+    PrescriptionProvider().getGeneralDrugs().then((value) {
+      setState(() {
+        generalDrugs = value;
+      });
+    });
+  }
+
+  void getInstruments() {
+    PrescriptionProvider().getInstruments().then((value) {
+      setState(() {
+        instruments = value;
+      });
+    });
   }
 
   void setFromFavorites(List<dynamic> fav) async {
@@ -375,9 +385,9 @@ class _PrescribeFormState extends State<PrescribeForm> {
       value: _forController,
       items: ["D", "W", "M"]
           .map((label) => DropdownMenuItem(
-        child: Text(label.toString()),
-        value: label,
-      ))
+                child: Text(label.toString()),
+                value: label,
+              ))
           .toList(),
       hint: Text(''),
       onChanged: (value) {
@@ -389,7 +399,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
     return Form(
         // autovalidateMode: AutovalidateMode.onUserInteraction,
         key: _formKey,
-
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -676,21 +685,26 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                             if (value.text.isEmpty) {
                                               return [];
                                             }
+                                            print(
+                                                "generalDrugsgeneralDrugs $generalDrugs");
                                             // The logic to find out which ones should appear
                                             // Milkessa: implemented a search mechanism that is organized and alphabetical
                                             List<dynamic> drugRes;
                                             for (int i = 0; i < 2; i++) {
                                               if (i == 0)
-                                                drugRes = drugs
-                                                    .where((element) =>
-                                                    element['name'].startsWith(value.text))
+                                                drugRes = generalDrugs
+                                                    .where((element) => element
+                                                        ['name']
+                                                        .startsWith(value.text))
                                                     .toList();
                                               else
-                                                drugs.addAll(drugs
+                                                drugs.addAll(generalDrugs
                                                     .where((element) =>
-                                                element['name']
-                                                    .contains(value.text) &
-                                                !element['name'].startsWith(value.text))
+                                                        element['name'].contains(
+                                                            value.text) &
+                                                        !element['name']
+                                                            .startsWith(
+                                                                value.text))
                                                     .toList());
                                             }
                                             return drugRes;
@@ -730,7 +744,8 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                             return Container(
                                               height: 42.0,
                                               child: TextFormField(
-                                                controller: drugnameController,
+                                                controller:
+                                                    fieldTextEditingController,
                                                 focusNode: fieldFocusNode,
                                                 textCapitalization:
                                                     TextCapitalization.words,
@@ -784,45 +799,46 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                         ),
                                         _textEvery(),
                                         Container(
-                                            width: 80,
-                                            height: 40,
-                                            child: Row(
-                                              children: [
-                                                SizedBox(width: 5),
-                                                Flexible(
-                                                  flex: 2,
-                                                  child: TextFormField(
-                                                    controller: forController,
-                                                    keyboardType: TextInputType.number,
-                                                    onChanged: (val) {
+                                          width: 80,
+                                          height: 40,
+                                          child: Row(
+                                            children: [
+                                              SizedBox(width: 5),
+                                              Flexible(
+                                                flex: 2,
+                                                child: TextFormField(
+                                                  controller: forController,
+                                                  keyboardType:
+                                                      TextInputType.number,
+                                                  onChanged: (val) {
+                                                    setState(() {
+                                                      prescription.takein = val;
+                                                    });
+                                                    if (val.isNotEmpty) {
                                                       setState(() {
-                                                        prescription.takein = val;
+                                                        isAmpule = false;
                                                       });
-                                                      if (val.isNotEmpty) {
-                                                        setState(() {
-                                                          isAmpule = false;
-                                                        });
-                                                      }
-                                                      if (val.isEmpty) {
-                                                        setState(() {
-                                                          isAmpule = true;
-                                                        });
-                                                      }
-                                                    },
-                                                    enabled: isEvery,
-                                                    decoration: InputDecoration(
-                                                        hintText: 'For',
-                                                        hintStyle: TextStyle(
-                                                            color: isEvery
-                                                                ? Colors.redAccent
-                                                                : Colors.grey)),
-                                                  ),
+                                                    }
+                                                    if (val.isEmpty) {
+                                                      setState(() {
+                                                        isAmpule = true;
+                                                      });
+                                                    }
+                                                  },
+                                                  enabled: isEvery,
+                                                  decoration: InputDecoration(
+                                                      hintText: 'For',
+                                                      hintStyle: TextStyle(
+                                                          color: isEvery
+                                                              ? Colors.redAccent
+                                                              : Colors.grey)),
                                                 ),
-                                                SizedBox(width: 5),
-                                                Flexible(child: forField),
-                                              ],
-                                            ),
+                                              ),
+                                              SizedBox(width: 5),
+                                              Flexible(child: forField),
+                                            ],
                                           ),
+                                        ),
                                         Text(
                                           'OR',
                                           style: TextStyle(
@@ -1276,7 +1292,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
                     User user = await UserPreferences().getUser();
                     var profession =
                         "${user.profession} ${user.name} ${user.fathername}";
-
 
                     if (status == 'add') {
                       print("statusstatusstatus ===> ${user.professionid}");

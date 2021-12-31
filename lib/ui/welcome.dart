@@ -34,6 +34,7 @@ class _WelcomeState extends State<Welcome> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    if (mounted) return;
     UserProvider().getProfile().then((user) {
       setState(() {
         user_id = user['id'];

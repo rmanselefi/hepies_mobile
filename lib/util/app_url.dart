@@ -18,6 +18,10 @@ class AppUrl {
   static const String accept = baseURL + "/prescription/accept";
   static const String pharmacy = baseURL + "/pharmacy";
   static const String drugs = baseURL + "/drugs";
+  static const String generaldrugs = baseURL + "/drugs/general";
+  static const String narcoticsdrugs = baseURL + "/drugs/narcotics";
+  static const String psychodrugs = baseURL + "/drugs/psychotropic";
+  static const String instrument = baseURL + "/drugs/instrument";
   static const String guidelines = baseURL + "/guidelines";
   static const String guidelinestatus = baseURL + "/guidelines/status";
 

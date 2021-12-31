@@ -6,6 +6,7 @@ import 'package:hepies/models/favorites.dart';
 import 'package:hepies/models/hx.dart';
 import 'package:hepies/models/px.dart';
 import 'package:hepies/providers/prescription_provider.dart';
+import 'package:hepies/providers/user_provider.dart';
 import 'package:hepies/ui/doctor/calculator/calculator.dart';
 import 'package:hepies/ui/doctor/favorites/favorites.dart';
 import 'package:hepies/ui/doctor/guidelines/guidelines.dart';
@@ -26,6 +27,7 @@ import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/tap_bounce_container.dart';
 import 'package:hepies/constants.dart';
+
 enum type { general, narcotic, psychotropic, instrument }
 
 class WritePrescription extends StatefulWidget {
@@ -85,9 +87,10 @@ class _WritePrescriptionState extends State<WritePrescription> {
   }
 
   void setIsFit() async {
-    var user = await UserPreferences().getUser();
+    var user = await UserProvider().getProfile();
+    print("isFitisFitisFit ${user['isFit']}");
     setState(() {
-      isFit = user.isFit;
+      isFit = user['isFit'];
     });
   }
 
@@ -169,7 +172,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
     return Scaffold(
       body: SafeArea(
         child: Container(
-          height: height(context) * 0.85,
+          height: height(context) * 0.9,
           child: Column(
             children: [
               Row(
@@ -187,8 +190,10 @@ class _WritePrescriptionState extends State<WritePrescription> {
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Guidelines()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Guidelines()));
                       },
                       child: Container(
                         height: 30,
@@ -208,8 +213,10 @@ class _WritePrescriptionState extends State<WritePrescription> {
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Calculator()));
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Calculator()));
                       },
                       child: Container(
                         height: 30,
@@ -302,52 +309,48 @@ class _WritePrescriptionState extends State<WritePrescription> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                Flexible(
-                                  child: Container(
-                                    margin: EdgeInsets.all(3),
-                                    child: MaterialButton(
-                                      padding: EdgeInsets.all(2),
-                                      color: Colors.redAccent[400],
-                                      shape: RoundedRectangleBorder(
-                                        side: BorderSide(
-                                            color: Colors.black45, width: 2),
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          pretype = 'psychotropic';
-                                        });
-                                      },
-                                      child: Text(
-                                        'Psychotropic',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 15,
-                                        ),
+                                Container(
+                                  margin: EdgeInsets.all(3),
+                                  child: MaterialButton(
+                                    padding: EdgeInsets.all(2),
+                                    color: Colors.redAccent[400],
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                          color: Colors.black45, width: 2),
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        pretype = 'psychotropic';
+                                      });
+                                    },
+                                    child: Text(
+                                      'Psychotropic',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15,
                                       ),
                                     ),
                                   ),
                                 ),
-                                Flexible(
-                                  child: Container(
-                                    margin: EdgeInsets.all(3),
-                                    child: MaterialButton(
-                                      padding: EdgeInsets.all(2),
-                                      color: Colors.purple,
-                                      shape: RoundedRectangleBorder(
-                                        side: BorderSide(
-                                            color: Colors.black45, width: 2),
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          pretype = 'narcotic';
-                                        });
-                                      },
-                                      child: Text(
-                                        'Narcotic',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 15,
-                                        ),
+                                Container(
+                                  margin: EdgeInsets.all(3),
+                                  child: MaterialButton(
+                                    padding: EdgeInsets.all(2),
+                                    color: Colors.purple,
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                          color: Colors.black45, width: 2),
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        pretype = 'narcotic';
+                                      });
+                                    },
+                                    child: Text(
+                                      'Narcotic',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15,
                                       ),
                                     ),
                                   ),
@@ -360,60 +363,56 @@ class _WritePrescriptionState extends State<WritePrescription> {
                           return Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Flexible(
-                                child: Container(
-                                  margin: EdgeInsets.all(3),
-                                  child: MaterialButton(
-                                    padding: EdgeInsets.all(2),
-                                    color: Colors.redAccent[400],
-                                    shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                          color: Colors.black45, width: 2),
-                                    ),
-                                    onPressed: () {
-                                      showTopSnackBar(
-                                        context,
-                                        CustomSnackBar.error(
-                                          message:
-                                              "Please contact your workplace to be authorized for writing psychotropic/narcotic medications",
-                                        ),
-                                      );
-                                    },
-                                    child: Text(
-                                      'Psychotropic',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 15,
+                              Container(
+                                margin: EdgeInsets.all(3),
+                                child: MaterialButton(
+                                  padding: EdgeInsets.all(2),
+                                  color: Colors.redAccent[400],
+                                  shape: RoundedRectangleBorder(
+                                    side: BorderSide(
+                                        color: Colors.black45, width: 2),
+                                  ),
+                                  onPressed: () {
+                                    showTopSnackBar(
+                                      context,
+                                      CustomSnackBar.error(
+                                        message:
+                                            "Please contact your workplace to be authorized for writing psychotropic/narcotic medications",
                                       ),
+                                    );
+                                  },
+                                  child: Text(
+                                    'Psychotropic',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15,
                                     ),
                                   ),
                                 ),
                               ),
-                              Flexible(
-                                child: Container(
-                                  margin: EdgeInsets.all(3),
-                                  child: MaterialButton(
-                                    padding: EdgeInsets.all(2),
-                                    color: Colors.purple,
-                                    shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                          color: Colors.black45, width: 2),
-                                    ),
-                                    onPressed: () {
-                                      showTopSnackBar(
-                                        context,
-                                        CustomSnackBar.error(
-                                          message:
-                                              "Please contact your workplace to be authorized for writing psychotropic/narcotic medications",
-                                        ),
-                                      );
-                                    },
-                                    child: Text(
-                                      'Narcotic',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 15,
+                              Container(
+                                margin: EdgeInsets.all(3),
+                                child: MaterialButton(
+                                  padding: EdgeInsets.all(2),
+                                  color: Colors.purple,
+                                  shape: RoundedRectangleBorder(
+                                    side: BorderSide(
+                                        color: Colors.black45, width: 2),
+                                  ),
+                                  onPressed: () {
+                                    showTopSnackBar(
+                                      context,
+                                      CustomSnackBar.error(
+                                        message:
+                                            "Please contact your workplace to be authorized for writing psychotropic/narcotic medications",
                                       ),
+                                    );
+                                  },
+                                  child: Text(
+                                    'Narcotic',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 15,
                                     ),
                                   ),
                                 ),
@@ -431,8 +430,8 @@ class _WritePrescriptionState extends State<WritePrescription> {
                   return PrescribeForm(_setPrescription, 'instrument',
                       Color(0xff0BE9E2), widget.from);
                 } else if (pretype == "narcotic") {
-                  return PrescribeNarcoForm(
-                      _setPrescription, 'narcotic', Color(0xffF211C5), widget.from);
+                  return PrescribeNarcoForm(_setPrescription, 'narcotic',
+                      Color(0xffF211C5), widget.from);
                 } else if (pretype == "psychotropic") {
                   return PrescribeNarcoForm(_setPrescription, 'psychotropic',
                       Color(0xffD24F95), widget.from);
@@ -443,9 +442,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
               pretype == "general" || pretype == "instrument"
                   ? PrescriptionPaper(prescription, pretype)
                   : PsychoNarcoPaper(psycoPrescription),
-              SizedBox(
-                height: 5.0
-              ),
+              SizedBox(height: 5.0),
             ],
           ),
         ),
@@ -456,75 +453,76 @@ class _WritePrescriptionState extends State<WritePrescription> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            !prescProvider.isFavourite ? Container() :
-            GestureDetector(
-              onTap: () {
-                showDialog<String>(
-                  context: context,
-                  builder: (BuildContext context) => AlertDialog(
-                    title: const Text('AlertDialog Title'),
-                    content: TextFormField(
-                      controller: favoriteController,
-                      decoration: InputDecoration(hintText: 'Group name'),
-                    ),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () => Navigator.pop(context, 'Cancel'),
-                        child: const Text('Cancel'),
-                      ),
-                      TextButton(
-                        onPressed: () async {
-                          var user = await UserPreferences().getUser();
-                          prescription.forEach((element) async {
-                            Favorites favorites = new Favorites(
-                                drug_name: element['drug_name'],
-                                drug: int.parse(element['drug']),
-                                name: favoriteController.text,
-                                profession_id: user.professionid,
-                                route: element['route'],
-                                strength: element['strength'],
-                                unit: element['unit'],
-                                type: element['type'],
-                                frequency: element['frequency'],
-                                takein: element['takein']);
-
-                            var db = new DatabaseHelper();
-                            var res = await db.saveFavorites(favorites);
-                          });
-                          Navigator.pop(context, 'OK');
-                          showTopSnackBar(
-                            context,
-                            CustomSnackBar.success(
-                              message:
-                              "Your prescriptions are saved to favorites successfully",
+            !prescProvider.isFavourite
+                ? Container()
+                : GestureDetector(
+                    onTap: () {
+                      showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: const Text('AlertDialog Title'),
+                          content: TextFormField(
+                            controller: favoriteController,
+                            decoration: InputDecoration(hintText: 'Group name'),
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, 'Cancel'),
+                              child: const Text('Cancel'),
                             ),
-                          );
-                        },
-                        child: const Text('OK'),
+                            TextButton(
+                              onPressed: () async {
+                                var user = await UserPreferences().getUser();
+                                prescription.forEach((element) async {
+                                  Favorites favorites = new Favorites(
+                                      drug_name: element['drug_name'],
+                                      drug: int.parse(element['drug']),
+                                      name: favoriteController.text,
+                                      profession_id: user.professionid,
+                                      route: element['route'],
+                                      strength: element['strength'],
+                                      unit: element['unit'],
+                                      type: element['type'],
+                                      frequency: element['frequency'],
+                                      takein: element['takein']);
+
+                                  var db = new DatabaseHelper();
+                                  var res = await db.saveFavorites(favorites);
+                                });
+                                Navigator.pop(context, 'OK');
+                                showTopSnackBar(
+                                  context,
+                                  CustomSnackBar.success(
+                                    message:
+                                        "Your prescriptions are saved to favorites successfully",
+                                  ),
+                                );
+                              },
+                              child: const Text('OK'),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: Container(
+                        width: 150,
+                        height: 40,
+                        margin: EdgeInsets.only(right: 20.0, top: 0.0),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black45),
+                            borderRadius: BorderRadius.circular(10.0)),
+                        child: Center(
+                            child: Text(
+                          'Save to favorites',
+                          maxLines: 2,
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
+                        )),
                       ),
-                    ],
+                    ),
                   ),
-                );
-              },
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: Container(
-                  width: 150,
-                  height: 40,
-                  margin: EdgeInsets.only(right: 20.0, top: 0.0),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black45),
-                      borderRadius: BorderRadius.circular(10.0)),
-                  child: Center(
-                      child: Text(
-                        'Save to favorites',
-                        maxLines: 2,
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      )),
-                ),
-              ),
-            ),
             GestureDetector(
               onTap: () {
                 Navigator.push(context,
@@ -541,135 +539,137 @@ class _WritePrescriptionState extends State<WritePrescription> {
                       borderRadius: BorderRadius.circular(10.0)),
                   child: Center(
                       child: Text(
-                        'Cancel',
-                        style: TextStyle(
-                            fontSize: 15.0, fontWeight: FontWeight.bold),
-                      )),
+                    'Cancel',
+                    style:
+                        TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold),
+                  )),
                 ),
               ),
             ),
             prescProvider.sentStatus == PrescriptionStatus.Sending
                 ? loading
-                : prescProvider.isFavourite ? Container() : GestureDetector(
-              onTap: () async {
-                try {
-                  if (pretype == "general" ||
-                      pretype == "instrument") {
-                    print("prescriptionprescription $patient");
-                    if (prescription.length != 0 &&
-                        patient.length != 0) {
-                      for (var i = 0; i < patient.length; i++) {
-                        var phone = patient[i]['phone'];
-                        var name = patient[i]['name'];
-                        var age = patient[i]['age'];
-                        var sex = patient[i]['sex'];
-                        if (phone == "" ||
-                            phone == null ||
-                            sex == "" ||
-                            sex == null ||
-                            name == "" ||
-                            name == null ||
-                            age == "" ||
-                            age == null) {
-                          showTopSnackBar(
-                            context,
-                            CustomSnackBar.error(
-                              message:
-                              "Please make sure all patient information is provided before sending prescription",
-                            ),
-                          );
+                : prescProvider.isFavourite
+                    ? Container()
+                    : GestureDetector(
+                        onTap: () async {
+                          try {
+                            if (pretype == "general" ||
+                                pretype == "instrument") {
+                              print("prescriptionprescription $patient");
+                              if (prescription.length != 0 &&
+                                  patient.length != 0) {
+                                for (var i = 0; i < patient.length; i++) {
+                                  var phone = patient[i]['phone'];
+                                  var name = patient[i]['name'];
+                                  var age = patient[i]['age'];
+                                  var sex = patient[i]['sex'];
+                                  if (phone == "" ||
+                                      phone == null ||
+                                      sex == "" ||
+                                      sex == null ||
+                                      name == "" ||
+                                      name == null ||
+                                      age == "" ||
+                                      age == null) {
+                                    showTopSnackBar(
+                                      context,
+                                      CustomSnackBar.error(
+                                        message:
+                                            "Please make sure all patient information is provided before sending prescription",
+                                      ),
+                                    );
 
-                          return;
-                        }
-                      }
-                      var res = await prescProvider.writePrescription(
-                          prescription, patient);
-                      if (res['status']) {
-                        Provider.of<PrescriptionProvider>(context,
-                            listen: false)
-                            .resetStatus();
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    WritePrescription(
-                                      from: 'sent',
-                                    )));
-                      } else {
-                        showTopSnackBar(
-                          context,
-                          CustomSnackBar.error(
-                            message:
-                            "Unable to send your prescriptions",
+                                    return;
+                                  }
+                                }
+                                var res = await prescProvider.writePrescription(
+                                    prescription, patient);
+                                if (res['status']) {
+                                  Provider.of<PrescriptionProvider>(context,
+                                          listen: false)
+                                      .resetStatus();
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              WritePrescription(
+                                                from: 'sent',
+                                              )));
+                                } else {
+                                  showTopSnackBar(
+                                    context,
+                                    CustomSnackBar.error(
+                                      message:
+                                          "Unable to send your prescriptions",
+                                    ),
+                                  );
+                                }
+                              } else {
+                                showTopSnackBar(
+                                  context,
+                                  CustomSnackBar.error(
+                                    message:
+                                        'Please fill at least one prescription.',
+                                  ),
+                                );
+                              }
+                            } else {
+                              if (psycoPrescription.length != 0) {
+                                var res = await prescProvider.writePrescription(
+                                    psycoPrescription, patient);
+                                if (res['status']) {
+                                  Provider.of<PrescriptionProvider>(context,
+                                          listen: false)
+                                      .resetStatus();
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              WritePrescription(
+                                                from: 'sent',
+                                              )));
+                                } else {
+                                  showTopSnackBar(
+                                    context,
+                                    CustomSnackBar.error(
+                                      message:
+                                          'Unable to send your prescriptions',
+                                    ),
+                                  );
+                                }
+                              } else {
+                                showTopSnackBar(
+                                  context,
+                                  CustomSnackBar.error(
+                                    message:
+                                        'Please fill at least one prescription.',
+                                  ),
+                                );
+                              }
+                            }
+                          } catch (e) {
+                            print("object $e");
+                          }
+                        },
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Container(
+                            width: 100,
+                            height: 40,
+                            margin: EdgeInsets.only(right: 10.0, top: 0.0),
+                            decoration: BoxDecoration(
+                                color: Color(0xff07febb),
+                                border: Border.all(color: Colors.black45),
+                                borderRadius: BorderRadius.circular(10.0)),
+                            child: Center(
+                                child: Text(
+                              'Send',
+                              style: TextStyle(
+                                  fontSize: 15.0, fontWeight: FontWeight.bold),
+                            )),
                           ),
-                        );
-                      }
-                    } else {
-                      showTopSnackBar(
-                        context,
-                        CustomSnackBar.error(
-                          message:
-                          'Please fill at least one prescription.',
                         ),
-                      );
-                    }
-                  } else {
-                    if (psycoPrescription.length != 0) {
-                      var res = await prescProvider.writePrescription(
-                          psycoPrescription, patient);
-                      if (res['status']) {
-                        Provider.of<PrescriptionProvider>(context,
-                            listen: false)
-                            .resetStatus();
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    WritePrescription(
-                                      from: 'sent',
-                                    )));
-                      } else {
-                        showTopSnackBar(
-                          context,
-                          CustomSnackBar.error(
-                            message:
-                            'Unable to send your prescriptions',
-                          ),
-                        );
-                      }
-                    } else {
-                      showTopSnackBar(
-                        context,
-                        CustomSnackBar.error(
-                          message:
-                          'Please fill at least one prescription.',
-                        ),
-                      );
-                    }
-                  }
-                } catch (e) {
-                  print("object $e");
-                }
-              },
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: Container(
-                  width: 100,
-                  height: 40,
-                  margin: EdgeInsets.only(right: 10.0, top: 0.0),
-                  decoration: BoxDecoration(
-                      color: Color(0xff07febb),
-                      border: Border.all(color: Colors.black45),
-                      borderRadius: BorderRadius.circular(10.0)),
-                  child: Center(
-                      child: Text(
-                        'Send',
-                        style: TextStyle(
-                            fontSize: 15.0, fontWeight: FontWeight.bold),
-                      )),
-                ),
-              ),
-            )
+                      )
           ],
         ),
       ),

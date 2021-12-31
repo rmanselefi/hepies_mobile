@@ -25,9 +25,7 @@ enum ReadStatus {
   Fetching,
 }
 
-
 class PrescriptionProvider with ChangeNotifier {
-
   PrescriptionStatus _sentStatus = PrescriptionStatus.NotSent;
   PrescriptionStatus get sentStatus => _sentStatus;
   ReadStatus _fetchStatus = ReadStatus.NotFetch;
@@ -42,6 +40,11 @@ class PrescriptionProvider with ChangeNotifier {
   List<dynamic> _prescription = [];
   List<dynamic> get prescription => _prescription;
   List<dynamic> medical = [];
+
+  List<dynamic> generalDrugs = [];
+  List<dynamic> psychoDrugs = [];
+  List<dynamic> narcoticsDrugs = [];
+  List<dynamic> instruments = [];
 
   Map<String, dynamic> _singlePrescription = {};
   Map<String, dynamic> get singlePrescription => _singlePrescription;
@@ -65,6 +68,74 @@ class PrescriptionProvider with ChangeNotifier {
       };
     }
     return json.decode(response.body);
+  }
+
+  Future<List<dynamic>> getGeneralDrugs() async {
+    var result;
+    Response response = await get(Uri.parse(AppUrl.generaldrugs));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      generalDrugs = json.decode(response.body);
+      return generalDrugs;
+    } else {
+      notifyListeners();
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return generalDrugs;
+  }
+
+  Future<List<dynamic>> getPsychotropicDrugs() async {
+    var result;
+    Response response = await get(Uri.parse(AppUrl.generaldrugs));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      psychoDrugs = json.decode(response.body);
+      return psychoDrugs;
+    } else {
+      notifyListeners();
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return psychoDrugs;
+  }
+
+  Future<List<dynamic>> getNarcoticDrugs() async {
+    var result;
+    Response response = await get(Uri.parse(AppUrl.narcoticsdrugs));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      narcoticsDrugs = json.decode(response.body);
+      return narcoticsDrugs;
+    } else {
+      notifyListeners();
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return narcoticsDrugs;
+  }
+
+  Future<List<dynamic>> getInstruments() async {
+    var result;
+    Response response = await get(Uri.parse(AppUrl.instrument));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      instruments = json.decode(response.body);
+      return instruments;
+    } else {
+      notifyListeners();
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return instruments;
   }
 
   Future<Map<String, dynamic>> writePrescription(

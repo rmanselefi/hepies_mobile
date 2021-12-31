@@ -86,6 +86,8 @@ class _PrescribeFormState extends State<PrescribeNarcoForm> {
   var _currentSelectedValue;
   bool rememberMe = false;
   var from = "";
+  List<dynamic> psychoDrugs = [];
+  List<dynamic> narcoDrugs = [];
 
   @override
   void initState() {
@@ -144,6 +146,22 @@ class _PrescribeFormState extends State<PrescribeNarcoForm> {
       ampuleController.text = selectedPrescription['ampule'];
       diagnosisController.text = selectedPrescription['dx']['diagnosis'];
     }
+  }
+
+  void getGeneralDrugs() {
+    PrescriptionProvider().getPsychotropicDrugs().then((value) {
+      setState(() {
+        psychoDrugs = value;
+      });
+    });
+  }
+
+  void getInstruments() {
+    PrescriptionProvider().getInstruments().then((value) {
+      setState(() {
+        narcoDrugs = value;
+      });
+    });
   }
 
   void setFromFavorites(List<dynamic> fav) async {
@@ -550,7 +568,7 @@ class _PrescribeFormState extends State<PrescribeNarcoForm> {
                                         }
 
                                         // The logic to find out which ones should appear
-                                        return drugs.where((drug) {
+                                        return psychoDrugs.where((drug) {
                                           return drug['name']
                                               .toLowerCase()
                                               .contains(value.text
