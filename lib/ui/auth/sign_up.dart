@@ -178,7 +178,6 @@ class _RegisterState extends State<Register> {
     );
 
     final interestField = MultiSelectFormField(
-      autovalidate: false,
       chipBackGroundColor: Colors.red,
       chipLabelStyle: TextStyle(fontWeight: FontWeight.bold),
       dialogTextStyle: TextStyle(fontWeight: FontWeight.bold),
