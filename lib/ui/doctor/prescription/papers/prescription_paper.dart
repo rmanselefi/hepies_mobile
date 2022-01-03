@@ -26,7 +26,8 @@ class _PrescriptionPaperState extends State<PrescriptionPaper> {
       child: Container(
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey[200]), color: Colors.grey[100]),
+            border: Border.all(color: Colors.grey[200]),
+            color: Colors.grey[100]),
         child: ListView(
           children: finaPrescription.map<Widget>((pres) {
             return Row(
@@ -55,8 +56,7 @@ class _PrescriptionPaperState extends State<PrescriptionPaper> {
                       ),
                       IconButton(
                         onPressed: () {
-                          var index =
-                              pesIndex = finaPrescription.indexOf(pres);
+                          var index = pesIndex = finaPrescription.indexOf(pres);
                           setState(() {
                             finaPrescription.removeAt(index);
                           });

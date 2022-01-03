@@ -693,15 +693,17 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                             for (int i = 0; i < 2; i++) {
                                               if (i == 0)
                                                 drugRes = generalDrugs
-                                                    .where((element) => element
-                                                        ['name']
-                                                        .startsWith(value.text))
+                                                    .where((element) =>
+                                                        element['name']
+                                                            .startsWith(
+                                                                value.text))
                                                     .toList();
                                               else
                                                 drugs.addAll(generalDrugs
                                                     .where((element) =>
-                                                        element['name'].contains(
-                                                            value.text) &
+                                                        element['name']
+                                                            .contains(
+                                                                value.text) &
                                                         !element['name']
                                                             .startsWith(
                                                                 value.text))

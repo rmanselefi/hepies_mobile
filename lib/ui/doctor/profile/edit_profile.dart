@@ -338,7 +338,6 @@ class _EditProfileState extends State<EditProfile>
                                 children: <Widget>[
                                   new Flexible(
                                       child: new MultiSelectFormField(
-                                    autovalidate: AutovalidateMode.disabled,
                                     chipBackGroundColor: Colors.red,
                                     chipLabelStyle:
                                         TextStyle(fontWeight: FontWeight.bold),
