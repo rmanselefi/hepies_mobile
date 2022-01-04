@@ -66,6 +66,12 @@ class _WritePrescriptionState extends State<WritePrescription> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
   void didUpdateWidget(covariant WritePrescription oldWidget) {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
@@ -448,13 +454,13 @@ class _WritePrescriptionState extends State<WritePrescription> {
         ),
       ),
       bottomSheet: Container(
-        padding: const EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(8.0),
         height: height(context) * 0.1,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             !prescProvider.isFavourite
-                ? Container()
+                ? SizedBox(width: 0)
                 : GestureDetector(
                     onTap: () {
                       showDialog<String>(
@@ -523,6 +529,9 @@ class _WritePrescriptionState extends State<WritePrescription> {
                       ),
                     ),
                   ),
+            !prescProvider.isFavourite
+                ? SizedBox(width: 0)
+                : SizedBox(width: width(context) * 0.15),
             GestureDetector(
               onTap: () {
                 Navigator.push(context,
@@ -546,10 +555,13 @@ class _WritePrescriptionState extends State<WritePrescription> {
                 ),
               ),
             ),
+            prescProvider.isFavourite
+                ? SizedBox(width: 0)
+                : SizedBox(width: width(context) * 0.15),
             prescProvider.sentStatus == PrescriptionStatus.Sending
                 ? loading
                 : prescProvider.isFavourite
-                    ? Container()
+                    ? SizedBox(width: 0)
                     : GestureDetector(
                         onTap: () async {
                           try {

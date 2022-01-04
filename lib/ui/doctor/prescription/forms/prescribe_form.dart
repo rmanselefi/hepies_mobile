@@ -99,8 +99,9 @@ class _PrescribeFormState extends State<PrescribeForm> {
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
+    if (rememberMe != Provider.of<PrescriptionProvider>(context).isFavourite)
+      Provider.of<PrescriptionProvider>(context).isFavourite = false;
     super.didChangeDependencies();
-
     if (from == "favorites" && status != "edit") {
       List<dynamic> favorites =
           Provider.of<PrescriptionProvider>(context).prescription;
@@ -207,7 +208,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
     ];
     return Container(
       height: 40.0,
-      width: 100.0,
+      width: width(context) * 0.225,
       child: new Row(
         children: <Widget>[
           new Expanded(
@@ -250,7 +251,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
     var frequency = ["Qd", "BID", "TID", "QID", "PRN"];
     return Container(
       height: 40.0,
-      width: 100.0,
+      width: width(context) * 0.225,
       child: new Row(
         children: <Widget>[
           new Expanded(
@@ -318,7 +319,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
     var frequency = ["Mg", "Ml", "Gm", "L", "IU", "Tab", "Sachet"];
     return Container(
       height: 40.0,
-      width: 100.0,
+      width: width(context) * 0.2125,
       child: new Row(
         children: <Widget>[
           new Expanded(
@@ -421,6 +422,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                         .leading, //  <-- leading Checkbox
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -499,43 +501,40 @@ class _PrescribeFormState extends State<PrescribeForm> {
                           ),
                         ),
                       ),
-                      Expanded(
-                        child: Container(
-                          width: 80,
-                          height: 40,
-                          child: Row(
-                            children: [
-                              Flexible(
-                                  flex: 1,
-                                  child: TextFormField(
-                                    controller: ageController,
-                                    keyboardType: TextInputType.number,
-                                    enabled: !rememberMe,
-                                    inputFormatters: <TextInputFormatter>[],
-                                    decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.all(0.0),
-                                        // border: OutlineInputBorder(),
-                                        hintText: rememberMe
-                                            ? 'Age'
-                                            : 'Age (Required)',
-                                        hintStyle: TextStyle(
-                                            color: !rememberMe
-                                                ? Colors.redAccent
-                                                : Colors.black26)),
-                                    onChanged: (String newValue) {
-                                      patient.age = newValue;
-                                    },
-                                  )),
-                              Flexible(
-                                flex: 1,
-                                child: professionField,
-                              )
-                            ],
-                          ),
+                      Container(
+                        width: 80,
+                        height: 40,
+                        child: Row(
+                          children: [
+                            Flexible(
+                                flex: 2,
+                                child: TextFormField(
+                                  controller: ageController,
+                                  keyboardType: TextInputType.number,
+                                  enabled: !rememberMe,
+                                  inputFormatters: <TextInputFormatter>[],
+                                  decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.all(0.0),
+                                      // border: OutlineInputBorder(),
+                                      hintText:
+                                          rememberMe ? 'Age' : 'Age (Required)',
+                                      hintStyle: TextStyle(
+                                          color: !rememberMe
+                                              ? Colors.redAccent
+                                              : Colors.black26)),
+                                  onChanged: (String newValue) {
+                                    patient.age = newValue;
+                                  },
+                                )),
+                            Flexible(
+                              flex: 1,
+                              child: professionField,
+                            )
+                          ],
                         ),
                       ),
                       SizedBox(
-                        width: 10.0,
+                        width: 5.0,
                       ),
                       Container(
                         width: 80,
@@ -578,15 +577,19 @@ class _PrescribeFormState extends State<PrescribeForm> {
                           },
                         ),
                       ),
+                      SizedBox(
+                        width: 5.0,
+                      ),
                     ],
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(
-                        width: 8.0,
+                        width: 0.0,
                       ),
                       Container(
-                        width: 150,
+                        width: width(context) * 0.325,
                         height: 40.0,
                         child: TextFormField(
                           controller: nameController,
@@ -608,11 +611,8 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                       : Colors.black26)),
                         ),
                       ),
-                      SizedBox(
-                        width: 10.0,
-                      ),
                       Container(
-                        width: 150,
+                        width: width(context) * 0.375,
                         height: 40.0,
                         child: TextFormField(
                           controller: fnameController,
@@ -634,11 +634,8 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                       : Colors.black26)),
                         ),
                       ),
-                      SizedBox(
-                        width: 10.0,
-                      ),
                       Container(
-                        width: 80,
+                        width: width(context) * 0.2,
                         height: 40.0,
                         decoration: BoxDecoration(
                             // border: Border.all(
@@ -661,6 +658,9 @@ class _PrescribeFormState extends State<PrescribeForm> {
                               hintText: 'Kg'),
                         ),
                       ),
+                      SizedBox(
+                        width: 0.0,
+                      ),
                     ],
                   ),
                   Row(
@@ -668,6 +668,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                       widget.type == 'instrument'
                           ? _instrumentForm()
                           : Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Column(
                                   mainAxisAlignment: MainAxisAlignment.start,
@@ -676,7 +677,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Container(
-                                        width: 290,
+                                        width: width(context) * 0.7,
                                         height: 40,
                                         child: Autocomplete(
                                           optionsBuilder:
@@ -699,7 +700,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                                                 value.text))
                                                     .toList();
                                               else
-                                                drugs.addAll(generalDrugs
+                                                drugRes.addAll(generalDrugs
                                                     .where((element) =>
                                                         element['name']
                                                             .contains(
@@ -766,12 +767,14 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                       ),
                                     ),
                                     Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         SizedBox(
                                           width: 8.0,
                                         ),
                                         Container(
-                                          width: 100,
+                                          width: width(context) * 0.2125,
                                           height: 40.0,
                                           child: TextFormField(
                                             controller: strengthController,
@@ -787,9 +790,12 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                                     color: Colors.redAccent)),
                                           ),
                                         ),
+                                        SizedBox(
+                                          width: 8.0,
+                                        ),
                                         _textUnit(),
                                         SizedBox(
-                                          width: 0.0,
+                                          width: 8.0,
                                         ),
                                         _textRoute()
                                       ],
@@ -801,7 +807,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                         ),
                                         _textEvery(),
                                         Container(
-                                          width: 80,
+                                          width: width(context) * 0.2125,
                                           height: 40,
                                           child: Row(
                                             children: [
@@ -850,7 +856,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                         Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Container(
-                                            width: 80,
+                                            width: width(context) * 0.2,
                                             height: 40,
                                             child: TextFormField(
                                               controller: ampuleController,
@@ -1007,7 +1013,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                                 }
                                               : () {},
                                           child: Container(
-                                            width: 100,
+                                            width: width(context) * 0.225,
                                             height: 40,
                                             child: TextFormField(
                                               enabled: false,
@@ -1087,8 +1093,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                                                       width:
                                                                           1.0),
                                                                 ),
-                                                                hintText:
-                                                                    'Address',
+                                                                hintText: 'MRN',
                                                               ),
                                                             ),
                                                             SizedBox(
@@ -1156,7 +1161,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                                 }
                                               : () {},
                                           child: Container(
-                                            width: 100,
+                                            width: width(context) * 0.225,
                                             height: 40,
                                             child: TextFormField(
                                               enabled: false,
@@ -1174,7 +1179,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                                       color: Colors.green,
                                                       width: 1.0),
                                                 ),
-                                                hintText: 'Address',
+                                                hintText: 'MRN',
                                               ),
                                             ),
                                           ),
@@ -1191,7 +1196,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
                       width: MediaQuery.of(context).size.width,
-                      height: 40,
+                      height: 45,
                       child: TextFormField(
                         controller: remarkController,
                         decoration: InputDecoration(
@@ -1395,7 +1400,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                   }
                 },
                 child: Container(
-                  width: 150,
+                  width: width(context) * 0.33,
                   height: 50,
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey, width: 1),
