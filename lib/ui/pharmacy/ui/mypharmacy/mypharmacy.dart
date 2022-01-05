@@ -83,14 +83,8 @@ class _MyPharmacyState extends State<MyPharmacy> {
         });
   }
 
-  getDrugs() async {
-    drugs = await Provider.of<DrugProvider>(context).getDrugs();
-  }
-
-  List<dynamic> drugs;
   @override
   Widget build(BuildContext context) {
-    getDrugs();
     var pharmacyProvider =
         Provider.of<PharmacyProvider>(context, listen: false);
     return SafeArea(

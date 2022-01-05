@@ -30,6 +30,12 @@ class _WelcomeState extends State<Welcome> {
   var name;
   var profession;
   var points;
+  void prepareDrugList() async {
+    Provider.of<DrugProvider>(context).drugs =
+        await Provider.of<DrugProvider>(context).getDrugs();
+    print('Drug List prepared. ------------>');
+  }
+
   @override
   void initState() {
     // TODO: implement initState

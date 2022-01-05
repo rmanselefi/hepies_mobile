@@ -674,98 +674,131 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        width: width(context) * 0.7,
-                                        height: 40,
-                                        child: Autocomplete(
-                                          optionsBuilder:
-                                              (TextEditingValue value) {
-                                            // When the field is empty
-                                            if (value.text.isEmpty) {
-                                              return [];
-                                            }
-                                            print(
-                                                "generalDrugsgeneralDrugs $generalDrugs");
-                                            // The logic to find out which ones should appear
-                                            // Milkessa: implemented a search mechanism that is organized and alphabetical
-                                            List<dynamic> drugRes;
-                                            for (int i = 0; i < 2; i++) {
-                                              if (i == 0)
-                                                drugRes = generalDrugs
-                                                    .where((element) =>
-                                                        element['name']
-                                                            .startsWith(
-                                                                value.text))
-                                                    .toList();
-                                              else
-                                                drugRes.addAll(generalDrugs
-                                                    .where((element) =>
-                                                        element['name']
-                                                            .contains(
-                                                                value.text) &
-                                                        !element['name']
-                                                            .startsWith(
-                                                                value.text))
-                                                    .toList());
-                                            }
-                                            return drugRes;
-
-//                                            return drugs.where((drug) {
-//                                              return drug['name']
-//                                                      .startsWith(value.text) ||
-//                                                  (drug['name'].contains(value
-//                                                          .text
-//                                                          .toLowerCase()) &
-//                                                      !drug['name'].startsWith(
-//                                                          value.text));
-//                                            });
-                                          },
-                                          onSelected: (value) {
-                                            strengthController.text =
-                                                value['strength'];
-                                            unitController.text = value['unit'];
-                                            routeController.text =
-                                                value['route'];
-                                            setState(() {
-                                              prescription.drug =
-                                                  value['id'].toString();
-                                              _selectedAnimal = value['name'];
-                                            });
-                                          },
-                                          displayStringForOption: (option) =>
-                                              option['name'],
-                                          fieldViewBuilder: (BuildContext
-                                                  context,
-                                              TextEditingController
-                                                  fieldTextEditingController,
-                                              FocusNode fieldFocusNode,
-                                              VoidCallback onFieldSubmitted) {
-                                            drugnameController =
-                                                fieldTextEditingController;
-                                            return Container(
-                                              height: 42.0,
-                                              child: TextFormField(
-                                                controller:
-                                                    fieldTextEditingController,
-                                                focusNode: fieldFocusNode,
-                                                textCapitalization:
-                                                    TextCapitalization.words,
-                                                decoration: InputDecoration(
-                                                    border:
-                                                        OutlineInputBorder(),
-                                                    isDense: true,
-                                                    hintText: 'Name of Drug',
-                                                    hintStyle: TextStyle(
-                                                        color:
-                                                            Colors.redAccent)),
+                                    FutureBuilder<List<dynamic>>(
+                                        future:
+                                            Provider.of<DrugProvider>(context)
+                                                .getDrugs(),
+                                        builder: (context, snapshot) {
+                                          if (!snapshot.hasData) {
+                                            return Center(
+                                              child: Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                  vertical: 5,
+                                                  horizontal: 20,
+                                                ),
+                                                child: Text(
+                                                  'Loading drug list...',
+                                                  style: TextStyle(
+                                                    fontStyle: FontStyle.italic,
+                                                    color: Colors.blue,
+                                                  ),
+                                                ),
                                               ),
                                             );
-                                          },
-                                        ),
-                                      ),
-                                    ),
+                                          } else {
+                                            if (snapshot.data == null) {
+                                              return Center(
+                                                child: Text('No drug to show'),
+                                              );
+                                            }
+                                            return Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Container(
+                                                width: width(context) * 0.7,
+                                                height: 40,
+                                                child: Autocomplete(
+                                                  optionsBuilder:
+                                                      (TextEditingValue value) {
+                                                    // When the field is empty
+                                                    if (value.text.isEmpty) {
+                                                      return [];
+                                                    }
+                                                    print(
+                                                        "generalDrugsgeneralDrugs $generalDrugs");
+                                                    // The logic to find out which ones should appear
+                                                    // Milkessa: implemented a search mechanism that is organized and alphabetical
+                                                    List<dynamic> drugRes;
+                                                    for (int i = 0;
+                                                        i < 2;
+                                                        i++) {
+                                                      if (i == 0)
+                                                        drugRes = snapshot.data
+                                                            .where((element) =>
+                                                                element['name']
+                                                                    .startsWith(
+                                                                        value
+                                                                            .text))
+                                                            .toList();
+                                                      else
+                                                        drugRes.addAll(snapshot
+                                                            .data
+                                                            .where((element) =>
+                                                                element['name']
+                                                                    .contains(value
+                                                                        .text) &
+                                                                !element['name']
+                                                                    .startsWith(
+                                                                        value
+                                                                            .text))
+                                                            .toList());
+                                                    }
+                                                    return drugRes;
+                                                  },
+                                                  onSelected: (value) {
+                                                    strengthController.text =
+                                                        value['strength'];
+                                                    unitController.text =
+                                                        value['unit'];
+                                                    routeController.text =
+                                                        value['route'];
+                                                    setState(() {
+                                                      prescription.drug =
+                                                          value['id']
+                                                              .toString();
+                                                      _selectedAnimal =
+                                                          value['name'];
+                                                    });
+                                                  },
+                                                  displayStringForOption:
+                                                      (option) =>
+                                                          option['name'],
+                                                  fieldViewBuilder: (BuildContext
+                                                          context,
+                                                      TextEditingController
+                                                          fieldTextEditingController,
+                                                      FocusNode fieldFocusNode,
+                                                      VoidCallback
+                                                          onFieldSubmitted) {
+                                                    drugnameController =
+                                                        fieldTextEditingController;
+                                                    return Container(
+                                                      height: 42.0,
+                                                      child: TextFormField(
+                                                        controller:
+                                                            fieldTextEditingController,
+                                                        focusNode:
+                                                            fieldFocusNode,
+                                                        textCapitalization:
+                                                            TextCapitalization
+                                                                .words,
+                                                        decoration: InputDecoration(
+                                                            border:
+                                                                OutlineInputBorder(),
+                                                            isDense: true,
+                                                            hintText:
+                                                                'Name of Drug',
+                                                            hintStyle: TextStyle(
+                                                                color: Colors
+                                                                    .redAccent)),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                        }),
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
