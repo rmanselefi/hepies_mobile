@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:hepies/models/user.dart';
 import 'package:hepies/providers/drug_provider.dart';
@@ -11,6 +13,8 @@ import 'package:hepies/ui/pharmacy/ui/consults/share_consult.dart';
 import 'package:hepies/util/gradient_text.dart';
 import 'package:hepies/util/shared_preference.dart';
 import 'package:hepies/widgets/drawer.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants.dart';
@@ -42,11 +46,18 @@ class _WelcomePharmacyState extends State<WelcomePharmacy> {
     });
   }
 
+  Future<void> initLocalDrugList() async {
+    Directory dir = await getApplicationDocumentsDirectory();
+    Hive.init(dir.path);
+    Hive.openBox('drugList');
+    await Provider.of<DrugProvider>(context, listen: false).putDrugsLocal();
+  }
+
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-    Provider.of<DrugProvider>(context).getDrugs();
+    initLocalDrugList();
   }
 
   @override
@@ -55,15 +66,15 @@ class _WelcomePharmacyState extends State<WelcomePharmacy> {
 
     return SafeArea(
         child: Scaffold(
-          key: _scaffoldKey,
-          appBar: PreferredSize(
-            preferredSize: Size.fromHeight(100.0),
-            child: AppBar(
-              automaticallyImplyLeading: false,
-              titleSpacing: 0.0,
-              elevation: 0.0,
-              backgroundColor: Colors.white,
-              leading: Builder(
+      key: _scaffoldKey,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(100.0),
+        child: AppBar(
+          automaticallyImplyLeading: false,
+          titleSpacing: 0.0,
+          elevation: 0.0,
+          backgroundColor: Colors.white,
+          leading: Builder(
             builder: (BuildContext context) {
               return IconButton(
                 icon: const Icon(
@@ -77,13 +88,13 @@ class _WelcomePharmacyState extends State<WelcomePharmacy> {
               );
             },
           ),
-              flexibleSpace: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Flexible(child: SizedBox(width: width(context) * 0.225)),
-                    GestureDetector(
+          flexibleSpace: Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Flexible(child: SizedBox(width: width(context) * 0.225)),
+                GestureDetector(
                   onTap: () {
                     Navigator.push(
                         context,
@@ -100,8 +111,8 @@ class _WelcomePharmacyState extends State<WelcomePharmacy> {
                     ]),
                   ),
                 ),
-                    Flexible(child: SizedBox(width: width(context) * 0.2)),
-                    GestureDetector(
+                Flexible(child: SizedBox(width: width(context) * 0.2)),
+                GestureDetector(
                   onTap: () {
                     Navigator.push(
                         context,
@@ -130,14 +141,14 @@ class _WelcomePharmacyState extends State<WelcomePharmacy> {
                     ],
                   ),
                 )
-                  ],
-                ),
-              ),
-              actions: <Widget>[],
+              ],
             ),
           ),
-          drawer: DrawerCustom(name, profession),
-          body: PharmacyShareConsult(user_id),
+          actions: <Widget>[],
+        ),
+      ),
+      drawer: DrawerCustom(name, profession),
+      body: PharmacyShareConsult(user_id),
     ));
   }
 }

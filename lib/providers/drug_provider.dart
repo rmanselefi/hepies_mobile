@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:hepies/models/consult.dart';
 import 'package:hepies/models/drug.dart';
 import 'package:hepies/util/app_url.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -27,6 +28,17 @@ class DrugProvider with ChangeNotifier {
       };
     }
     return drugs;
+  }
+
+  Future<List<dynamic>> getDrugsLocal() async {
+    Box hive = Hive.box('drugList');
+    return await hive.get('drugs');
+  }
+
+  Future<void> putDrugsLocal() async {
+    Box hive = Hive.box('drugList');
+    hive.put('drugs', await getDrugs());
+    print('Local Database updated.');
   }
 
   Future<List<dynamic>> getDrugsByType(var type) async {

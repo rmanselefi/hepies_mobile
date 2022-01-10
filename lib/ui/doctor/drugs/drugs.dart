@@ -63,7 +63,8 @@ class _DrugsState extends State<Drugs> {
                     height: 20.0,
                   ),
                   FutureBuilder<List<dynamic>>(
-                      future: Provider.of<DrugProvider>(context).getDrugs(),
+                      future:
+                          Provider.of<DrugProvider>(context).getDrugsLocal(),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) {
                           return Center(

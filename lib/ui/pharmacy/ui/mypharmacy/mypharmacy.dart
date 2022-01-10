@@ -102,7 +102,7 @@ class _MyPharmacyState extends State<MyPharmacy> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   FutureBuilder<List<dynamic>>(
-                    future: Provider.of<DrugProvider>(context).getDrugs(),
+                    future: Provider.of<DrugProvider>(context).getDrugsLocal(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
                         return Center(

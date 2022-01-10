@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:hepies/constants.dart';
 import 'package:hepies/models/user.dart';
@@ -15,6 +17,8 @@ import 'package:hepies/util/gradient_text.dart';
 import 'package:hepies/util/shared_preference.dart';
 import 'package:hepies/widgets/drawer.dart';
 import 'package:hepies/widgets/footer.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 class Welcome extends StatefulWidget {
@@ -30,10 +34,12 @@ class _WelcomeState extends State<Welcome> {
   var name;
   var profession;
   var points;
-  void prepareDrugList() async {
-    Provider.of<DrugProvider>(context).drugs =
-        await Provider.of<DrugProvider>(context).getDrugs();
-    print('Drug List prepared. ------------>');
+
+  Future<void> initLocalDrugList() async {
+    Directory dir = await getApplicationDocumentsDirectory();
+    Hive.init(dir.path);
+    Hive.openBox('drugList');
+    await Provider.of<DrugProvider>(context, listen: false).putDrugsLocal();
   }
 
   @override
@@ -54,8 +60,8 @@ class _WelcomeState extends State<Welcome> {
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
+    initLocalDrugList();
     super.didChangeDependencies();
-    Provider.of<DrugProvider>(context).getDrugs();
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
