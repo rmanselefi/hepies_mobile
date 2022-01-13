@@ -197,139 +197,196 @@ class _WritePrescriptionState extends State<WritePrescription> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  margin: EdgeInsets.only(right: 0.0),
-                  child: IconButton(
-                      icon: Icon(Icons.arrow_back),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      }),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Guidelines()));
-                    },
-                    child: Container(
-                      height: 30,
-                      width: width(context) * 0.25,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black45, width: 2),
+            Flexible(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(right: 0.0),
+                    child: IconButton(
+                        icon: Icon(Icons.arrow_back),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        }),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Guidelines()));
+                      },
+                      child: Container(
+                        height: 30,
+                        width: width(context) * 0.25,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black45, width: 2),
+                        ),
+                        child: Center(
+                            child: Text(
+                          'Guidelines',
+                          style: TextStyle(fontSize: 16.0),
+                        )),
                       ),
-                      child: Center(
-                          child: Text(
-                        'Guidelines',
-                        style: TextStyle(fontSize: 16.0),
-                      )),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Calculator()));
-                    },
-                    child: Container(
-                      height: 30,
-                      width: width(context) * 0.25,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black45, width: 2),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Calculator()));
+                      },
+                      child: Container(
+                        height: 30,
+                        width: width(context) * 0.25,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black45, width: 2),
+                        ),
+                        child: Center(
+                            child: Text('Calculator',
+                                style: TextStyle(fontSize: 16.0))),
                       ),
-                      child: Center(
-                          child: Text('Calculator',
-                              style: TextStyle(fontSize: 16.0))),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: GestureDetector(
-                    onTap: () async {
-                      var user = await UserPreferences().getUser();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  FavoritesPage(user.professionid)));
-                    },
-                    child: Container(
-                      height: 30,
-                      width: width(context) * 0.25,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black45, width: 2),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                      onTap: () async {
+                        var user = await UserPreferences().getUser();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    FavoritesPage(user.professionid)));
+                      },
+                      child: Container(
+                        height: 30,
+                        width: width(context) * 0.25,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.black45, width: 2),
+                        ),
+                        child: Center(
+                            child: Text('Favorites',
+                                style: TextStyle(fontSize: 16.0))),
                       ),
-                      child: Center(
-                          child: Text('Favorites',
-                              style: TextStyle(fontSize: 16.0))),
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Container(
-                  margin: EdgeInsets.all(3),
-                  child: MaterialButton(
-                    padding: EdgeInsets.all(2),
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.black45, width: 2),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        pretype = 'general';
-                      });
-                    },
-                    child: Text(
-                      'Normal',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
+            Flexible(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Container(
+                    margin: EdgeInsets.all(3),
+                    child: MaterialButton(
+                      padding: EdgeInsets.all(2),
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(color: Colors.black45, width: 2),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          pretype = 'general';
+                        });
+                      },
+                      child: Text(
+                        'Normal',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 15,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.all(3),
-                  child: MaterialButton(
-                    padding: EdgeInsets.all(2),
-                    color: Colors.blue,
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.black45, width: 2),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        pretype = 'instrument';
-                      });
-                    },
-                    child: Text(
-                      'Instruments',
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
+                  Container(
+                    margin: EdgeInsets.all(3),
+                    child: MaterialButton(
+                      padding: EdgeInsets.all(2),
+                      color: Colors.blue,
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(color: Colors.black45, width: 2),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          pretype = 'instrument';
+                        });
+                      },
+                      child: Text(
+                        'Instruments',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 15,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                isFit == "true"
-                    ? Builder(builder: (context) {
-                        return SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  isFit == "true"
+                      ? Builder(builder: (context) {
+                          return SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.all(3),
+                                  child: MaterialButton(
+                                    padding: EdgeInsets.all(2),
+                                    color: Colors.redAccent[400],
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                          color: Colors.black45, width: 2),
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        pretype = 'psychotropic';
+                                      });
+                                    },
+                                    child: Text(
+                                      'Psychotropic',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.all(3),
+                                  child: MaterialButton(
+                                    padding: EdgeInsets.all(2),
+                                    color: Colors.purple,
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                          color: Colors.black45, width: 2),
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        pretype = 'narcotic';
+                                      });
+                                    },
+                                    child: Text(
+                                      'Narcotic',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        })
+                      : Builder(builder: (context) {
+                          return Row(
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               Container(
                                 margin: EdgeInsets.all(3),
@@ -341,9 +398,13 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                         color: Colors.black45, width: 2),
                                   ),
                                   onPressed: () {
-                                    setState(() {
-                                      pretype = 'psychotropic';
-                                    });
+                                    showTopSnackBar(
+                                      context,
+                                      CustomSnackBar.error(
+                                        message:
+                                            "Please contact your workplace to be authorized for writing psychotropic/narcotic medications",
+                                      ),
+                                    );
                                   },
                                   child: Text(
                                     'Psychotropic',
@@ -364,9 +425,13 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                         color: Colors.black45, width: 2),
                                   ),
                                   onPressed: () {
-                                    setState(() {
-                                      pretype = 'narcotic';
-                                    });
+                                    showTopSnackBar(
+                                      context,
+                                      CustomSnackBar.error(
+                                        message:
+                                            "Please contact your workplace to be authorized for writing psychotropic/narcotic medications",
+                                      ),
+                                    );
                                   },
                                   child: Text(
                                     'Narcotic',
@@ -378,71 +443,10 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                 ),
                               ),
                             ],
-                          ),
-                        );
-                      })
-                    : Builder(builder: (context) {
-                        return Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              margin: EdgeInsets.all(3),
-                              child: MaterialButton(
-                                padding: EdgeInsets.all(2),
-                                color: Colors.redAccent[400],
-                                shape: RoundedRectangleBorder(
-                                  side: BorderSide(
-                                      color: Colors.black45, width: 2),
-                                ),
-                                onPressed: () {
-                                  showTopSnackBar(
-                                    context,
-                                    CustomSnackBar.error(
-                                      message:
-                                          "Please contact your workplace to be authorized for writing psychotropic/narcotic medications",
-                                    ),
-                                  );
-                                },
-                                child: Text(
-                                  'Psychotropic',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.all(3),
-                              child: MaterialButton(
-                                padding: EdgeInsets.all(2),
-                                color: Colors.purple,
-                                shape: RoundedRectangleBorder(
-                                  side: BorderSide(
-                                      color: Colors.black45, width: 2),
-                                ),
-                                onPressed: () {
-                                  showTopSnackBar(
-                                    context,
-                                    CustomSnackBar.error(
-                                      message:
-                                          "Please contact your workplace to be authorized for writing psychotropic/narcotic medications",
-                                    ),
-                                  );
-                                },
-                                child: Text(
-                                  'Narcotic',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        );
-                      })
-              ],
+                          );
+                        })
+                ],
+              ),
             ),
             Builder(builder: (context) {
               if (pretype == "general") {

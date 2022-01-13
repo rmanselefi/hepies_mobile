@@ -564,6 +564,10 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                                         "Your consult is updated succesfully",
                                                   ),
                                                 );
+                                                setState(() {
+                                                  _topic.text = null;
+                                                  file = null;
+                                                });
                                                 Navigator.of(context).pop();
                                               }
                                             } else {
