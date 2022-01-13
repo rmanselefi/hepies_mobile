@@ -28,10 +28,16 @@ class _PrescriptionResultState extends State<PrescriptionResultPhone> {
     var prescProvider = Provider.of<PrescriptionProvider>(context);
 
     List<dynamic> result = widget.result;
+    print("resultresultresult ${result[0]['prescription']}");
     var patient = result[0];
+    // var diagnosis=result[0]['prescription']['diagnosis'];
     var prescription = result[0]['prescription_item'];
-    List<dynamic> notReadPrescription =
-        prescription.where((i) => i['status'] == "NotRead").toList();
+    List<dynamic> notReadPrescription = prescription
+        .where((i) =>
+            i['status'] == "NotRead" &&
+            DateTime.now().difference(DateTime.parse(i['createdAt'])).inDays <=
+                15)
+        .toList();
     List<dynamic> list_id = [];
     notReadPrescription.forEach((element) {
       list_id.add(element['id']);
@@ -42,7 +48,9 @@ class _PrescriptionResultState extends State<PrescriptionResultPhone> {
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: PersonalInfo(patient),
+              child: PersonalInfo(
+                patient: patient,
+              ),
             ),
             Expanded(
                 child: ListView(
@@ -169,37 +177,28 @@ class _PrescriptionResultState extends State<PrescriptionResultPhone> {
                           ),
                           GestureDetector(
                             onTap: () async {
-                              if (selectedList.length == 0) {
+                              var res = await prescProvider.acceptPrescription(
+                                  selectedList, list_id);
+                              if (res['status']) {
+                                showTopSnackBar(
+                                  context,
+                                  CustomSnackBar.success(
+                                    message:
+                                        'Your have accepted prescriptions successfully',
+                                  ),
+                                );
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            WelcomePharmacy()));
+                              } else {
                                 showTopSnackBar(
                                   context,
                                   CustomSnackBar.error(
                                       message:
-                                          'Please select at least one prescription'),
+                                          'Unable to accept prescriptions'),
                                 );
-                              } else {
-                                var res = await prescProvider
-                                    .acceptPrescription(selectedList, list_id);
-                                if (res['status']) {
-                                  showTopSnackBar(
-                                    context,
-                                    CustomSnackBar.success(
-                                      message:
-                                          'Your have accepted prescriptions successfully',
-                                    ),
-                                  );
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              WelcomePharmacy()));
-                                } else {
-                                  showTopSnackBar(
-                                    context,
-                                    CustomSnackBar.error(
-                                        message:
-                                            'Unable to accept prescriptions'),
-                                  );
-                                }
                               }
                             },
                             child: Align(

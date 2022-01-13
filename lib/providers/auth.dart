@@ -43,11 +43,9 @@ class AuthProvider with ChangeNotifier {
       body: json.encode(loginData),
       headers: {'Content-Type': 'application/json'},
     );
-    print("ResponseResponseResponse ${response.body}");
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Map<String, dynamic> responseData = json.decode(response.body);
 
-      print("authUserauthUserauthUser ${responseData}");
       User authUser = User.fromJson(responseData);
       UserPreferences().saveUser(authUser);
       var role = responseData['role']['name'];
@@ -78,6 +76,8 @@ class AuthProvider with ChangeNotifier {
       String phone,
       String password,
       String profession,
+      String sex,
+      String dob,
       interests,
       File file) async {
     _loggedInStatus = Status.Authenticating;
@@ -109,6 +109,8 @@ class AuthProvider with ChangeNotifier {
       'license': license,
       'interests': interests,
       'proffesion': profession,
+      'dob': dob,
+      'sex': sex,
       'user': {'username': username, 'password': password, 'role': role},
     };
     Response response = await post(Uri.parse(AppUrl.register),

@@ -29,9 +29,9 @@ class _EditProfileState extends State<EditProfile>
   bool _status = true;
   final FocusNode myFocusNode = FocusNode();
 
-  File file;
+  XFile file;
 
-  void _setImage(File image) {
+  void _setImage(XFile image) {
     file = image;
     print("_formData_formData_formData${file}");
   }

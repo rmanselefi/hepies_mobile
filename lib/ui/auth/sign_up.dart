@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:hepies/constants.dart';
 import 'package:hepies/models/user.dart';
 import 'package:hepies/providers/auth.dart';
+import 'package:hepies/providers/consult.dart';
 import 'package:hepies/providers/user_provider.dart';
 import 'package:hepies/ui/auth/login.dart';
 import 'package:hepies/ui/welcome.dart';
@@ -13,8 +14,10 @@ import 'package:hepies/util/image.dart';
 import 'package:hepies/util/validators.dart';
 import 'package:hepies/util/widgets.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
 import 'package:provider/provider.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
@@ -27,11 +30,16 @@ class _RegisterState extends State<Register> {
   final formKey = new GlobalKey<FormState>();
   bool rememberMe = false;
   TapGestureRecognizer _tapRecognizer;
+  String _selectedDate = '';
+  String _range = '';
+
+  List interestList = [];
 
   @override
   void initState() {
     super.initState();
     _tapRecognizer = TapGestureRecognizer()..onTap = _handlePress;
+    getInterests();
   }
 
   @override
@@ -118,6 +126,20 @@ class _RegisterState extends State<Register> {
     );
   }
 
+  getInterests() async {
+    List interests = await ConsultProvider().getInterests();
+
+    setState(() {
+      interests.forEach((element) {
+        var property = {
+          'display': "#${element['interest']}",
+          'value': element['interest'],
+        };
+        interestList.add(property);
+      });
+    });
+  }
+
   String _username,
       _password,
       _confirmPassword,
@@ -127,6 +149,7 @@ class _RegisterState extends State<Register> {
       _interest;
   XFile file;
   var _professionController;
+  var _sexController;
 
   List<dynamic> _myInterests = [];
   void _setImage(XFile image) {
@@ -177,7 +200,43 @@ class _RegisterState extends State<Register> {
       },
     );
 
-    final interestField = MultiSelectFormField(
+    void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
+      setState(() {
+        if (args.value is PickerDateRange) {
+          _range =
+              DateFormat('dd/MM/yyyy').format(args.value.startDate).toString() +
+                  ' - ' +
+                  DateFormat('dd/MM/yyyy')
+                      .format(args.value.endDate ?? args.value.startDate)
+                      .toString();
+        } else if (args.value is DateTime) {
+          _selectedDate = args.value.toString();
+        }
+      });
+    }
+
+    final dateField = SfDateRangePicker(
+      onSelectionChanged: _onSelectionChanged,
+      selectionMode: DateRangePickerSelectionMode.single,
+    );
+
+    final sexField = DropdownButtonFormField(
+      value: _sexController,
+      items: ["Male", "Female"]
+          .map((label) => DropdownMenuItem(
+                child: Text(label.toString()),
+                value: label,
+              ))
+          .toList(),
+      hint: Text('Choose Sex'),
+      onChanged: (value) {
+        setState(() {
+          _sexController = value;
+        });
+      },
+    );
+
+    final interestField = new MultiSelectFormField(
       chipBackGroundColor: Colors.red,
       chipLabelStyle: TextStyle(fontWeight: FontWeight.bold),
       dialogTextStyle: TextStyle(fontWeight: FontWeight.bold),
@@ -186,35 +245,10 @@ class _RegisterState extends State<Register> {
       dialogShapeBorder: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0))),
       title: Text(
-        "Choose your Interests",
+        "Select Your interests",
         style: TextStyle(fontSize: 16),
       ),
-      dataSource: [
-        {
-          "display": "#Dermatology",
-          "value": "Dermatology",
-        },
-        {
-          "display": "#ENT",
-          "value": "ENT",
-        },
-        {
-          "display": "#Gastroenterology",
-          "value": "Gastroenterology",
-        },
-        {
-          "display": "#General",
-          "value": "General",
-        },
-        {
-          "display": "#Gynacology",
-          "value": "Gynacology",
-        },
-        {
-          "display": "#InfectiousDisease",
-          "value": "InfectiousDisease",
-        },
-      ],
+      dataSource: interestList,
       textField: 'display',
       valueField: 'value',
       okButtonLabel: 'OK',
@@ -223,6 +257,8 @@ class _RegisterState extends State<Register> {
       initialValue: _myInterests,
       onSaved: (value) {
         if (value == null) return;
+        // print("_interests_interests_interests ${value.join(",")}");
+
         setState(() {
           _myInterests = value;
         });
@@ -262,13 +298,21 @@ class _RegisterState extends State<Register> {
 
     var doRegister = () {
       var interests = _myInterests.join(",");
-      print("interestsinterests $interests");
       final form = formKey.currentState;
       if (form.validate() && file != null) {
         form.save();
         auth
-            .register(_name, _fathername, _username, _phone, _password,
-                _professionController, interests, File(file.path))
+            .register(
+                _name,
+                _fathername,
+                _username,
+                _phone,
+                _password,
+                _professionController,
+                _sexController,
+                _selectedDate,
+                interests,
+                File(file.path))
             .then((response) {
           if (response['status']) {
             showTopSnackBar(
@@ -330,6 +374,14 @@ class _RegisterState extends State<Register> {
                     label("Profession"),
                     SizedBox(height: 5.0),
                     professionField,
+                    SizedBox(height: 5.0),
+                    label("Sex"),
+                    SizedBox(height: 5.0),
+                    sexField,
+                    SizedBox(height: 5.0),
+                    label("Date of Birth"),
+                    SizedBox(height: 5.0),
+                    dateField,
                     SizedBox(height: 15.0),
                     label("Select your interests"),
                     SizedBox(height: 5.0),

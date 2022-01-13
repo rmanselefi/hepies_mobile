@@ -12,10 +12,11 @@ class Switcher extends StatefulWidget {
 class _SwitcherState extends State<Switcher> {
   @override
   Widget build(BuildContext context) {
-    return widget.user.role == 'doctor'
+    var role = widget.user.role;
+    return role == 'doctor' || role == 'healthofficer' || role == 'nurse'
         ? Welcome(
-      user: widget.user,
-    )
+            user: widget.user,
+          )
         : WelcomePharmacy(user: widget.user);
   }
 }

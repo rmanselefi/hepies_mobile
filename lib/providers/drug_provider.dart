@@ -10,6 +10,7 @@ import 'package:http/http.dart';
 
 class DrugProvider with ChangeNotifier {
   List<dynamic> drugs = [];
+  List<dynamic> instruments=[];
   Future<List<dynamic>> getDrugs() async {
     var result;
     List<Consult> consults = [];
@@ -59,6 +60,37 @@ class DrugProvider with ChangeNotifier {
       };
     }
     return json.decode(response.body);
+  }
+
+  Future<List<dynamic>> getInstruments() async {
+    var result;
+    List<Consult> consults = [];
+    Response response = await get(Uri.parse(AppUrl.instrument));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      instruments = json.decode(response.body);
+      print("instrumentsinstrumentsinstrumentsinstruments ${instruments}");
+      // notifyListeners();
+      return instruments;
+    } else {
+      notifyListeners();
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return instruments;
+  }
+
+  Future<List<dynamic>> getLocalInstruments() async {
+    Box hive = Hive.box('instrumentList');
+    return await hive.get('instruments');
+  }
+
+  Future<void> putLocalInstruments() async {
+    Box hive = Hive.box('instrumentList');
+    hive.put('instruments', await getDrugs());
+    print('Local Database updated.');
   }
 
   get getDrug {

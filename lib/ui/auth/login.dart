@@ -108,7 +108,9 @@ class _LoginState extends State<Login> {
             var role = response['role'];
 
             Provider.of<UserProvider>(context, listen: false).setUser(user);
-            if (role == "doctor") {
+            if (role == "doctor" ||
+                role == "healthofficer" ||
+                role == "nurse") {
               Navigator.push(
                   context,
                   MaterialPageRoute(

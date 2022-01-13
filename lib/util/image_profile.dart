@@ -80,17 +80,7 @@ class _ImageInputState extends State<ImageInputProfile> {
                     height: 140.0,
                     decoration: new BoxDecoration(
                       shape: BoxShape.circle,
-                      image: !_validURL
-                          ? new DecorationImage(
-                              image: _image == null
-                                  ? new ExactAssetImage(
-                                      'assets/an.png') // Milkessa: changed profile place holder for a gender neutral place holder image
-                                  : new FileImage(
-                                      File(_image.path.toString()),
-                                    ),
-                              fit: BoxFit.cover,
-                            )
-                          : new DecorationImage(
+                      image:  new DecorationImage(
                               image: _image == null
                                   ? new NetworkImage(widget.profile)
                                   : new FileImage(
