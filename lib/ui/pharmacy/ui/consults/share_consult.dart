@@ -30,6 +30,8 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
 
   String name = '';
 
+  String interestStatus = "hide";
+
   List<dynamic> interests = [];
   List<dynamic> subList = [];
   void _setImage(XFile image) {
@@ -86,6 +88,18 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
                       child: Padding(
                         padding: const EdgeInsets.all(3),
                         child: HashTagTextField(
+                          onChanged: (value) {
+                            if (value.length > 0) {
+                              setState(() {
+                                interestStatus = "show";
+                              });
+                            }
+                            if (value.length == 0) {
+                              setState(() {
+                                interestStatus = "hide";
+                              });
+                            }
+                          },
                           decoration: InputDecoration(
                               hintText: 'Share, consult, promote, inform..',
                               border: OutlineInputBorder(
@@ -149,29 +163,32 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          width: 250,
-                          child: Wrap(
-                            alignment: WrapAlignment.start,
-                            direction: Axis.horizontal,
-                            children: interest.map<Widget>((e) {
-                              return GestureDetector(
-                                onTap: () {
-                                  if (name == "") {
-                                    setState(() {
-                                      _topic.text =
-                                          "${_topic.text} #${e['interest']}";
-                                    });
-                                  }
-                                },
-                                child: Text(
-                                  "#${e['interest']} ",
-                                  style: TextStyle(color: Colors.blueAccent),
+                        interestStatus == "show"
+                            ? Container(
+                                width: 250,
+                                child: Wrap(
+                                  alignment: WrapAlignment.start,
+                                  direction: Axis.horizontal,
+                                  children: interest.map<Widget>((e) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        if (name == "") {
+                                          setState(() {
+                                            _topic.text =
+                                                "${_topic.text} #${e['interest']}";
+                                          });
+                                        }
+                                      },
+                                      child: Text(
+                                        "#${e['interest']} ",
+                                        style:
+                                            TextStyle(color: Colors.blueAccent),
+                                      ),
+                                    );
+                                  }).toList(),
                                 ),
-                              );
-                            }).toList(),
-                          ),
-                        ),
+                              )
+                            : Container(),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [

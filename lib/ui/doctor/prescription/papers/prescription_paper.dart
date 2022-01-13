@@ -40,7 +40,7 @@ class _PrescriptionPaperState extends State<PrescriptionPaper> {
                           '${finaPrescription.indexOf(pres) + 1}. ${pres['drug_name']} ${pres['strength']} '
                           '${pres['unit']} ${pres['route']} Every ${pres['frequency']} For ${pres['takein']}')
                       : Text(
-                          '${finaPrescription.indexOf(pres) + 1}. ${pres['material_name']} ${pres['size']}'),
+                          '${finaPrescription.indexOf(pres) + 1}. ${pres['material_name']} ${pres['size']} ${pres['amount']}'),
                 ),
                 Expanded(
                   child: Row(

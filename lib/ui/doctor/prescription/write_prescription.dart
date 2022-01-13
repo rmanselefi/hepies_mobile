@@ -13,8 +13,10 @@ import 'package:hepies/ui/doctor/guidelines/guidelines.dart';
 import 'package:hepies/ui/doctor/medicalrecords/add_history.dart';
 import 'package:hepies/ui/doctor/prescription/forms/prescribe_form.dart';
 import 'package:hepies/ui/doctor/prescription/forms/prescribe_narco_form.dart';
+import 'package:hepies/ui/doctor/prescription/forms/prescribe_psyco_form.dart';
 import 'package:hepies/ui/doctor/prescription/papers/prescription_paper.dart';
 import 'package:hepies/ui/doctor/prescription/papers/psycho_narco_paper.dart';
+import 'package:hepies/ui/doctor/prescription/papers/psycho_paper.dart';
 import 'package:hepies/ui/doctor/prescription/prescription_types/general_prescription.dart';
 import 'package:hepies/ui/doctor/prescription/prescription_types/instrument_prescription.dart';
 import 'package:hepies/ui/doctor/prescription/prescription_types/narcotic_prescription.dart';
@@ -47,6 +49,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
   List<dynamic> prescription = [];
   List<dynamic> patient = [];
   List<dynamic> psycoPrescription = [];
+  List<dynamic> narcoPrescription = [];
   String phoneNumber = "";
   String age = "";
   String name = "";
@@ -54,6 +57,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
   String sex = "";
   String weight = "";
   String isFit = "";
+
   @override
   void initState() {
     // TODO: implement initState
@@ -81,14 +85,18 @@ class _WritePrescriptionState extends State<WritePrescription> {
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
+    String from = widget.from;
     print("widget.from ===== > ${widget.from}");
-    if (widget.from == "sent") {
+    if (from == "sent") {
       showTopSnackBar(
         context,
         CustomSnackBar.success(
           message: "Your prescriptions are sent successfully",
         ),
       );
+      setState(() {
+        from = "not";
+      });
     }
   }
 
@@ -161,9 +169,17 @@ class _WritePrescriptionState extends State<WritePrescription> {
     });
   }
 
-  void _setPsycoPrescription(List<dynamic> pres) {
+  void _setPsycoPrescription(List<dynamic> pres, List<dynamic> pat) {
     setState(() {
       psycoPrescription = pres;
+      patient = pat;
+    });
+  }
+
+  void _setNarcoPrescription(List<dynamic> pres, List<dynamic> pat) {
+    setState(() {
+      narcoPrescription = pres;
+      patient = pat;
     });
   }
 
@@ -436,18 +452,20 @@ class _WritePrescriptionState extends State<WritePrescription> {
                 return PrescribeForm(_setPrescription, 'instrument',
                     Color(0xff0BE9E2), widget.from);
               } else if (pretype == "narcotic") {
-                return PrescribeNarcoForm(_setPrescription, 'narcotic',
+                return PrescribeNarcoForm(_setNarcoPrescription, 'narcotic',
                     Color(0xffF211C5), widget.from);
               } else if (pretype == "psychotropic") {
-                return PrescribeNarcoForm(_setPrescription, 'psychotropic',
-                    Color(0xffD24F95), widget.from);
+                return PrescribePsychoForm(_setPsycoPrescription,
+                    'psychotropic', Color(0xffD24F95), widget.from);
               } else {
                 return Container();
               }
             }),
             pretype == "general" || pretype == "instrument"
                 ? PrescriptionPaper(prescription, pretype)
-                : PsychoNarcoPaper(psycoPrescription),
+                : pretype == 'narcotics'
+                    ? PsychoNarcoPaper(narcoPrescription)
+                    : PsychoPaper(psycoPrescription),
             SizedBox(height: 5.0),
             Flexible(
               child: Container(

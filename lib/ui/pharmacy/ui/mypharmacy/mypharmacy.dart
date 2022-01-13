@@ -13,9 +13,10 @@ class MyPharmacy extends StatefulWidget {
 }
 
 class _MyPharmacyState extends State<MyPharmacy> {
-  var drug_id = "";
+  var drug_id = null;
   var drug_name = "";
   var priceController = new TextEditingController();
+  var drugController = new TextEditingController();
 
   void _openPriceForm(BuildContext context) {
     bool adding = false;
@@ -54,7 +55,7 @@ class _MyPharmacyState extends State<MyPharmacy> {
                                 var res = await Provider.of<PharmacyProvider>(
                                         context,
                                         listen: false)
-                                    .addDrugToPharmacy(drug_name, drug_id,
+                                    .addDrugToPharmacy(drugController.text, drug_id,
                                         priceController.text)
                                     .whenComplete(() {
                                   setState(() {
@@ -169,9 +170,10 @@ class _MyPharmacyState extends State<MyPharmacy> {
                                       fieldTextEditingController,
                                   FocusNode fieldFocusNode,
                                   VoidCallback onFieldSubmitted) {
+                                drugController = fieldTextEditingController;
                                 return Container(
                                   child: TextFormField(
-                                    controller: fieldTextEditingController,
+                                    controller: drugController,
                                     focusNode: fieldFocusNode,
                                     textCapitalization:
                                         TextCapitalization.words,

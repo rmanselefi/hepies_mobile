@@ -34,6 +34,22 @@ class _WelcomeState extends State<Welcome> {
   var name;
   var profession;
   var points;
+
+  Future<void> initLocalDrugList() async {
+    Directory dir = await getApplicationDocumentsDirectory();
+    Hive.init(dir.path);
+    Hive.openBox('drugList');
+    await Provider.of<DrugProvider>(context, listen: false).putDrugsLocal();
+  }
+
+  Future<void> initLocalInstrumentList() async {
+    Directory dir = await getApplicationDocumentsDirectory();
+    Hive.init(dir.path);
+    Hive.openBox('instrumentList');
+    await Provider.of<DrugProvider>(context, listen: false)
+        .putLocalInstruments();
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -48,17 +64,11 @@ class _WelcomeState extends State<Welcome> {
     });
   }
 
-  Future<void> initLocalDrugList() async {
-    Directory dir = await getApplicationDocumentsDirectory();
-    Hive.init(dir.path);
-    await Hive.openBox('drugList');
-    await Provider.of<DrugProvider>(context, listen: false).putDrugsLocal();
-  }
-
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     initLocalDrugList();
+    initLocalInstrumentList();
     super.didChangeDependencies();
   }
 

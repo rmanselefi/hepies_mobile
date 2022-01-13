@@ -41,7 +41,7 @@ class _MedicalResultState extends State<MedicalResult> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        PersonalInfo(patient),
+                        PersonalInfo(patient:patient),
                         Expanded(
                           child: MaterialButton(
                             onPressed: () {

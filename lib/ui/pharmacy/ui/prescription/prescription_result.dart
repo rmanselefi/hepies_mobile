@@ -30,8 +30,8 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
     var prescProvider = Provider.of<PrescriptionProvider>(context);
     print("readreadread ${widget.result}");
     List<dynamic> result = widget.result['data'];
-    List<dynamic> notReadPrescription =
-        result.where((i) => i['status'] == "NotRead").toList();
+    List<dynamic> notReadPrescription = result.where((i) => i['status']=="NotRead").toList();
+    var diagnosis=result[0]['diagnosis'];
     var patient = result[0]['patient'];
     List<dynamic> list_id = [];
     notReadPrescription.forEach((element) {
@@ -44,7 +44,7 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: PersonalInfo(patient),
+              child: PersonalInfo(patient:patient,diagnosis:diagnosis),
             ),
             Expanded(
                 child: ListView(

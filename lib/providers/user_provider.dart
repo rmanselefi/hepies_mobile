@@ -37,6 +37,7 @@ class UserProvider with ChangeNotifier {
 
   Future<Map<String, dynamic>> updateProfile(
       User user, File file, var old_profile) async {
+    print("filefilefilefile $file");
     _loggedInStatus = Status.Authenticating;
     notifyListeners();
     _registeredInStatus = Status.Authenticating;
@@ -223,6 +224,7 @@ class UserProvider with ChangeNotifier {
     });
     if (response.statusCode == 200 || response.statusCode == 201) {
       var result = json.decode(response.body);
+      print("resultresultresult ===> $result");
       points = result['profession'][0]['points'];
       return json.decode(response.body);
     } else {

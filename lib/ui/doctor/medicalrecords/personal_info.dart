@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 class PersonalInfo extends StatefulWidget {
   final patient;
-  PersonalInfo(this.patient);
+  final diagnosis;
+  PersonalInfo({this.patient,this.diagnosis});
   @override
   _PersonalInfoState createState() => _PersonalInfoState();
 }
@@ -55,6 +56,29 @@ class _PersonalInfoState extends State<PersonalInfo> {
             ),
             Text(
               '${patient['weight']}Kg',
+              style: TextStyle(fontSize: 18.0),
+            )
+          ],
+        ),
+        Row(
+          children: [
+            Text(
+              'MRN -- ',
+              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              '${patient['address']}',
+              style: TextStyle(fontSize: 18.0),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(
+              'Dx -- ',
+              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              '${widget.diagnosis}',
               style: TextStyle(fontSize: 18.0),
             )
           ],

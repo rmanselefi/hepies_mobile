@@ -86,7 +86,7 @@ print("ixixixix $ix");
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    PersonalInfo(patient),
+                    PersonalInfo(patient:patient),
                     Expanded(
                       child: MaterialButton(
                         onPressed: () {

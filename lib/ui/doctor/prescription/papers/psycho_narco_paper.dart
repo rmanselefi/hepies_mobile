@@ -33,66 +33,6 @@ class _PrescriptionPaperState extends State<PsychoNarcoPaper> {
             color: Colors.grey[100]),
         child: Column(
           children: [
-            Row(
-              children: [
-                finaPrescription.length != 0
-                    ? MaterialButton(
-                        color: Colors.green[400],
-                        onPressed: () {
-                          showDialog<String>(
-                            context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                              title: const Text('AlertDialog Title'),
-                              content: TextFormField(
-                                controller: favoriteController,
-                                decoration:
-                                    InputDecoration(hintText: 'Group name'),
-                              ),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () =>
-                                      Navigator.pop(context, 'Cancel'),
-                                  child: const Text('Cancel'),
-                                ),
-                                TextButton(
-                                  onPressed: () async {
-                                    var user =
-                                        await UserPreferences().getUser();
-
-                                    finaPrescription.forEach((element) async {
-                                      Favorites favorites = new Favorites(
-                                          drug_name: element['drug_name'],
-                                          name: favoriteController.text,
-                                          profession_id: user.professionid,
-                                          route: element['route'],
-                                          strength: element['strength']);
-
-                                      var db = new DatabaseHelper();
-                                      var res =
-                                          await db.saveFavorites(favorites);
-                                    });
-                                    Navigator.pop(context, 'OK');
-
-                                    showTopSnackBar(
-                                      context,
-                                      CustomSnackBar.success(
-                                        message:
-                                            "Your prescriptions are saved to favorites successfully",
-                                      ),
-                                    );
-                                  },
-                                  child: const Text('OK'),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                        child: Text('Add to favorites'),
-                      )
-                    : Container()
-              ],
-              mainAxisAlignment: MainAxisAlignment.end,
-            ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: finaPrescription.map<Widget>((pres) {
