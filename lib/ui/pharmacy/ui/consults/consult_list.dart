@@ -568,7 +568,6 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                                   _topic.text = null;
                                                   file = null;
                                                 });
-                                                Navigator.of(context).pop();
                                               }
                                             } else {
                                               showTopSnackBar(
@@ -710,7 +709,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                           _topic.text = e['topic'] ?? '';
                                           showEdit(context, e);
                                         },
-                                        icon: Icon(Icons.more_horiz_outlined))
+                                        icon: Icon(Icons.more_vert_outlined))
                                     : Container(),
                               ],
                             ),
