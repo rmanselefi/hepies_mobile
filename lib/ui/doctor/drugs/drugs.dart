@@ -127,7 +127,6 @@ class _DrugsState extends State<Drugs> {
             ),
             Container(
                 height: 50,
-                width: double.maxFinite,
                 decoration: BoxDecoration(
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(20.0))),

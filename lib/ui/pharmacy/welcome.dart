@@ -49,7 +49,7 @@ class _WelcomePharmacyState extends State<WelcomePharmacy> {
   Future<void> initLocalDrugList() async {
     Directory dir = await getApplicationDocumentsDirectory();
     Hive.init(dir.path);
-    Hive.openBox('drugList');
+    await Hive.openBox('drugList');
     await Provider.of<DrugProvider>(context, listen: false).putDrugsLocal();
   }
 

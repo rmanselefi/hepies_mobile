@@ -34,7 +34,7 @@ class _ReadPrescriptionState extends State<ReadPrescription> {
                   Container(
                     child: Center(
                       child: Text(
-                        'Enter phone number',
+                        'Enter prescription code',
                         style: TextStyle(
                             fontSize: 20.0, fontWeight: FontWeight.bold),
                       ),
@@ -52,7 +52,8 @@ class _ReadPrescriptionState extends State<ReadPrescription> {
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         prefixIcon: Padding(
-                          padding: EdgeInsets.only(right: 5, left: 10, top: 5, bottom: 5),
+                          padding: EdgeInsets.only(
+                              right: 5, left: 10, top: 5, bottom: 5),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,8 +82,9 @@ class _ReadPrescriptionState extends State<ReadPrescription> {
                           padding: const EdgeInsets.all(8.0),
                           child: GestureDetector(
                             onTap: () async {
-                              var res = await prescriptionProvider
-                                  .readPrescription('+251${codeController.text}');
+                              var res =
+                                  await prescriptionProvider.readPrescription(
+                                      '+251${codeController.text}');
                               print("objectobjectobjectobject $res");
                               if (res['status']) {
                                 if (res['isPhone']) {
@@ -90,7 +92,8 @@ class _ReadPrescriptionState extends State<ReadPrescription> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            PrescriptionResultPhone(res['data'])),
+                                            PrescriptionResultPhone(
+                                                res['data'])),
                                   );
                                 } else {
                                   Navigator.push(
@@ -133,7 +136,7 @@ class _ReadPrescriptionState extends State<ReadPrescription> {
                 ],
               ),
             ),
-            PharmacyFooter()
+            Center(child: PharmacyFooter())
           ],
         ),
       ),

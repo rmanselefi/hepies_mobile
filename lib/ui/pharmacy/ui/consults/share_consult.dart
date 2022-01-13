@@ -251,7 +251,7 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
               ],
             ),
           ),
-          PharmacyFooter()
+          Center(child: PharmacyFooter()),
         ],
       ),
     );

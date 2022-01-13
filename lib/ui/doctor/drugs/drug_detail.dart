@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_decorated_text/flutter_decorated_text.dart';
 import 'package:hepies/widgets/footer.dart';
 import 'package:hepies/widgets/header.dart';
 
@@ -92,9 +93,28 @@ class _DrugDetailState extends State<DrugDetail> {
                         child: Wrap(
                           alignment: WrapAlignment.start,
                           direction: Axis.horizontal,
-                          children: bolded.map<Widget>((e) {
-                            return e;
-                          }).toList(),
+                          children: [
+                            DecoratedText(
+                              text: about,
+                              style: TextStyle(fontSize: 16),
+                              rules: [
+                                DecoratorRule.words(
+                                  words: [
+                                    "Indications",
+                                    "Contraindications",
+                                    "Cautions",
+                                    "Interactions",
+                                    "Side effects",
+                                    "Storage",
+                                  ],
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
                         ),
                       ),
                     ],
@@ -104,7 +124,6 @@ class _DrugDetailState extends State<DrugDetail> {
             )),
             Container(
                 height: 50,
-                width: double.maxFinite,
                 decoration: BoxDecoration(
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(20.0))),

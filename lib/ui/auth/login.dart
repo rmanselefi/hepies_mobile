@@ -144,7 +144,7 @@ class _LoginState extends State<Login> {
             child: ListView(
               children: [
                 Text(
-                  'WorkenehApp',
+                  'Hepius',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
                 ),

@@ -22,9 +22,11 @@ class _PrescriptionPaperState extends State<PrescriptionPaper> {
   Widget build(BuildContext context) {
     var finaPrescription = widget.finaPrescription;
     var presType = widget.prescriptionType;
-    return Flexible(
+    return Expanded(
+      flex: 5,
       child: Container(
         width: MediaQuery.of(context).size.width,
+        height: double.infinity,
         decoration: BoxDecoration(
             border: Border.all(color: Colors.grey[200]),
             color: Colors.grey[100]),

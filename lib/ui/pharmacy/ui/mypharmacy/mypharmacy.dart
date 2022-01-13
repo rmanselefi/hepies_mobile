@@ -23,59 +23,69 @@ class _MyPharmacyState extends State<MyPharmacy> {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
-          return SingleChildScrollView(
-            child: SafeArea(
-              child: Container(
-                height: MediaQuery.of(context).size.height - 40,
-                child: Form(
-                  child: Column(
-                    children: [
-                      SizedBox(height: 10.0),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextFormField(
-                          controller: priceController,
-                          keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            hintText: 'Price',
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5.0)),
+          return StatefulBuilder(
+            builder: (context, setState) => SingleChildScrollView(
+              child: SafeArea(
+                child: Container(
+                  height: MediaQuery.of(context).size.height - 40,
+                  child: Form(
+                    child: Column(
+                      children: [
+                        SizedBox(height: 10.0),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            controller: priceController,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              hintText: 'Price',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5.0)),
+                            ),
                           ),
                         ),
-                      ),
-                      adding ? CircularProgressIndicator() : Container(),
-                      Container(
-                        width: 100.0,
-                        child: OutlinedButton(
-                            onPressed: () async {
-                              setState(() {
-                                adding = true;
-                              });
-                              var res = await Provider.of<PharmacyProvider>(
-                                      context,
-                                      listen: false)
-                                  .addDrugToPharmacy(
-                                  drugController.text, drug_id, priceController.text)
-                                  .whenComplete(() {
+                        adding ? CircularProgressIndicator() : Container(),
+                        Container(
+                          width: 100.0,
+                          child: OutlinedButton(
+                              onPressed: () async {
                                 setState(() {
                                   adding = true;
                                 });
-                                CustomSnackBar.success(
-                                    message: 'Item successfully added');
-                              });
-                              if (res['status']) {
-                                setState(() {
-                                  Provider.of<PharmacyProvider>(context,
-                                          listen: false)
-                                      .getMyPharmacy();
+                                var res = await Provider.of<PharmacyProvider>(
+                                        context,
+                                        listen: false)
+                                    .addDrugToPharmacy(drugController.text, drug_id,
+                                        priceController.text)
+                                    .whenComplete(() {
+                                  setState(() {
+                                    adding = false;
+                                  });
+                                  CustomSnackBar.success(
+                                      message: 'Item successfully added');
                                 });
+                                if (res['status']) {
+                                  setState(() {
+                                    Provider.of<PharmacyProvider>(context,
+                                            listen: false)
+                                        .getMyPharmacy();
+                                  });
 
-                                Navigator.of(context).pop();
-                              }
-                            },
-                            child: Text('Add')),
-                      )
-                    ],
+                                  Navigator.pushAndRemoveUntil<void>(
+                                    context,
+                                    MaterialPageRoute<void>(
+                                      builder: (BuildContext context) =>
+                                          MyPharmacy(),
+                                    ),
+                                    ModalRoute.withName('/'),
+                                  );
+                                  ;
+                                }
+                              },
+                              child: Text('Add')),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -242,7 +252,7 @@ class _MyPharmacyState extends State<MyPharmacy> {
                   }),
             ],
           )),
-          PharmacyFooter()
+          Center(child: PharmacyFooter())
         ],
       ),
     ));

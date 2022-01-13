@@ -103,7 +103,7 @@ class _PharmacyHistoryState extends State<PharmacyHistory> {
                   }),
             ],
           )),
-          PharmacyFooter()
+          Center(child: PharmacyFooter())
         ],
       ),
     ));
