@@ -34,19 +34,10 @@ class _WelcomeState extends State<Welcome> {
   var name;
   var profession;
   var points;
-
-  Future<void> initLocalDrugList() async {
-    Directory dir = await getApplicationDocumentsDirectory();
-    Hive.init(dir.path);
-    Hive.openBox('drugList');
-    await Provider.of<DrugProvider>(context, listen: false).putDrugsLocal();
-  }
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    if (mounted) return;
     UserProvider().getProfile().then((user) {
       setState(() {
         user_id = user['id'];
@@ -55,6 +46,13 @@ class _WelcomeState extends State<Welcome> {
         points = user['profession'][0]['points'];
       });
     });
+  }
+
+  Future<void> initLocalDrugList() async {
+    Directory dir = await getApplicationDocumentsDirectory();
+    Hive.init(dir.path);
+    await Hive.openBox('drugList');
+    await Provider.of<DrugProvider>(context, listen: false).putDrugsLocal();
   }
 
   @override
@@ -69,6 +67,7 @@ class _WelcomeState extends State<Welcome> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: true,
         key: _scaffoldKey,
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(100.0),

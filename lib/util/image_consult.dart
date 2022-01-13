@@ -69,7 +69,7 @@ class _ImageInputState extends State<ImageInputConsult> {
           },
           label: Text(
             '',
-            style: TextStyle(color: Theme.of(context).accentColor),
+            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
           ),
           icon: Icon(Icons.attach_file_outlined),
         ),

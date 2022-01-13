@@ -17,7 +17,6 @@ class PharmacyFooter extends StatefulWidget {
 }
 
 class _PharmacyFooterState extends State<PharmacyFooter> {
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -25,20 +24,31 @@ class _PharmacyFooterState extends State<PharmacyFooter> {
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            GestureDetector(
-              child: Container(
-                width: width(context) * 0.30,
-                padding: EdgeInsets.all(7.5),
-                child: Center(child: Text('Home', textScaleFactor: 1.05)),
-                decoration: BoxDecoration(
-                  color: Color(0xff0FF6A0),
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(5),
-                ),
+            OutlinedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateColor.resolveWith(
+                    (states) => Color(0xff0FF6A0)),
               ),
-              onTap: () {
+              child: Column(
+                children: [
+                  Icon(
+                    Icons.home_outlined,
+                    color: Colors.black,
+                    size: 16,
+                  ),
+                  Text(
+                    'Home',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                ],
+              ),
+              onPressed: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => WelcomePharmacy()));
               },
@@ -59,103 +69,95 @@ class _PharmacyFooterState extends State<PharmacyFooter> {
             SizedBox(
               width: 5.0,
             ),
-            GestureDetector(
-              child: Container(
-                width: width(context) * 0.30,
-                padding: EdgeInsets.all(7.5),
-                child: Center(child: Text('Prescription', textScaleFactor: 1.05)),
-                decoration: BoxDecoration(
-                  color: Color(0xff0FF6A0),
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(5),
-                ),
+            OutlinedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateColor.resolveWith(
+                    (states) => Color(0xff0FF6A0)),
               ),
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ReadPrescription()));
+              child: Column(
+                children: [
+                  Icon(
+                    Icons.format_list_numbered_outlined,
+                    color: Colors.black,
+                    size: 16,
+                  ),
+                  Text(
+                    'Prescription',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                ],
+              ),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ReadPrescription()));
               },
             ),
-//          MaterialButton(
-//            minWidth: 50.0,
-//            elevation: 0.0,
-//            color: Color(0xff0FF6A0),
-//            shape: RoundedRectangleBorder(
-//              borderRadius: BorderRadius.circular(12), // <-- Radius
-//            ),
-//            onPressed: () {
-//              Navigator.push(context,
-//                  MaterialPageRoute(builder: (context) => ReadPrescription()));
-//            },
-//            child: Text('Read Prescription'),
-//          ),
             SizedBox(
               width: 5.0,
             ),
-            GestureDetector(
-              child: Container(
-                width: width(context) * 0.30,
-                padding: EdgeInsets.all(7.5),
-                child: Center(child: Text('My Pharmacy', textScaleFactor: 1.05)),
-                decoration: BoxDecoration(
-                  color: Color(0xff0FF6A0),
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(5),
-                ),
+            OutlinedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateColor.resolveWith(
+                    (states) => Color(0xff0FF6A0)),
               ),
-              onTap: () {
+              child: Column(
+                children: [
+                  Icon(
+                    Icons.local_pharmacy_outlined,
+                    color: Colors.black,
+                    size: 16,
+                  ),
+                  Text(
+                    'My Pharmacy',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                ],
+              ),
+              onPressed: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => MyPharmacy()));
               },
             ),
-//          MaterialButton(
-//            minWidth: 50.0,
-//            elevation: 0.0,
-//            color: Color(0xff0FF6A0),
-//            shape: RoundedRectangleBorder(
-//              borderRadius: BorderRadius.circular(12), // <-- Radius
-//            ),
-//            onPressed: () {
-//              Navigator.push(
-//                  context, MaterialPageRoute(builder: (context) => MyPharmacy()));
-//            },
-//            child: Text('My Pharmacy'),
-//          ),
             SizedBox(
               width: 5.0,
             ),
-            GestureDetector(
-              child: Container(
-                width: width(context) * 0.30,
-                padding: EdgeInsets.all(7.5),
-                child: Center(child: Text('History', textScaleFactor: 1.05)),
-                decoration: BoxDecoration(
-                  color: Color(0xff0FF6A0),
-                  shape: BoxShape.rectangle,
-                  borderRadius: BorderRadius.circular(5),
-                ),
+            OutlinedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateColor.resolveWith(
+                    (states) => Color(0xff0FF6A0)),
               ),
-              onTap: () {
+              child: Column(
+                children: [
+                  Icon(
+                    Icons.history_outlined,
+                    color: Colors.black,
+                    size: 16,
+                  ),
+                  Text(
+                    'History',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                ],
+              ),
+              onPressed: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => PharmacyHistory()));
               },
             ),
-//          MaterialButton(
-//            minWidth: 50.0,
-//            elevation: 0.0,
-//            color: Color(0xff0FF6A0),
-//            shape: RoundedRectangleBorder(
-//              borderRadius: BorderRadius.circular(12), // <-- Radius
-//            ),
-//            onPressed: () {
-//              Navigator.push(context,
-//                  MaterialPageRoute(builder: (context) => PharmacyHistory()));
-//            },
-//            child: Text('History'),
-//          )
           ],
         ),
       ),
     );
   }
 }
-

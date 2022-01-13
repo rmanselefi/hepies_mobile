@@ -84,7 +84,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
   List<dynamic> instruments = [];
 
   var _labelController = "Y";
-  var _forController = "W";
+  var _forController = "D";
   String _countryCode;
   @override
   void initState() {
@@ -428,7 +428,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
                           width: 200,
-                          height: 40.0,
+                          height: 50.0,
                           child: TextFormField(
                             // Milkessa: Fixed phone input field formatting
                             textAlign: TextAlign.start,
@@ -503,7 +503,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                       ),
                       Container(
                         width: 80,
-                        height: 40,
+                        height: 50,
                         child: Row(
                           children: [
                             Flexible(
@@ -590,7 +590,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                       ),
                       Container(
                         width: width(context) * 0.325,
-                        height: 40.0,
+                        height: 50.0,
                         child: TextFormField(
                           controller: nameController,
                           enabled: !rememberMe,
@@ -613,7 +613,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                       ),
                       Container(
                         width: width(context) * 0.375,
-                        height: 40.0,
+                        height: 50.0,
                         child: TextFormField(
                           controller: fnameController,
                           enabled: !rememberMe,
@@ -636,7 +636,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                       ),
                       Container(
                         width: width(context) * 0.2,
-                        height: 40.0,
+                        height: 50.0,
                         decoration: BoxDecoration(
                             // border: Border.all(
                             //     color: Colors.green[400], width: 1.5),
@@ -706,7 +706,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                                   const EdgeInsets.all(8.0),
                                               child: Container(
                                                 width: width(context) * 0.7,
-                                                height: 40,
+                                                height: 60,
                                                 child: Autocomplete(
                                                   optionsBuilder:
                                                       (TextEditingValue value) {
@@ -773,7 +773,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                                     drugnameController =
                                                         fieldTextEditingController;
                                                     return Container(
-                                                      height: 42.0,
+                                                      height: 60,
                                                       child: TextFormField(
                                                         controller:
                                                             fieldTextEditingController,
@@ -1047,7 +1047,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                               : () {},
                                           child: Container(
                                             width: width(context) * 0.225,
-                                            height: 40,
+                                            height: 50,
                                             child: TextFormField(
                                               enabled: false,
                                               controller: diagnosisController,
@@ -1065,6 +1065,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                                       width: 1.0),
                                                 ),
                                                 hintText: 'DX/Diagnosis',
+                                                isDense: true,
                                               ),
                                             ),
                                           ),
@@ -1195,7 +1196,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                               : () {},
                                           child: Container(
                                             width: width(context) * 0.225,
-                                            height: 40,
+                                            height: 50,
                                             child: TextFormField(
                                               enabled: false,
                                               controller: addressController,
@@ -1213,6 +1214,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                                       width: 1.0),
                                                 ),
                                                 hintText: 'MRN',
+                                                isDense: true,
                                               ),
                                             ),
                                           ),
@@ -1229,7 +1231,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
                       width: MediaQuery.of(context).size.width,
-                      height: 45,
+                      height: 50,
                       child: TextFormField(
                         controller: remarkController,
                         decoration: InputDecoration(
@@ -1353,7 +1355,11 @@ class _PrescribeFormState extends State<PrescribeForm> {
                         "strength": strengthController.text,
                         "unit": unitController.text,
                         "route": routeController.text,
-                        "takein": prescription.takein + _forController,
+                        "takein": prescription.takein + _forController == 'D'
+                            ? ' Days'
+                            : _forController == 'W'
+                                ? ' Weeks'
+                                : ' Months',
                         "frequency": prescription.frequency,
                         "drug": prescription.drug,
                         "professional": profession,
@@ -1385,7 +1391,11 @@ class _PrescribeFormState extends State<PrescribeForm> {
                         finaPrescription[presIndex]['route'] =
                             routeController.text;
                         finaPrescription[presIndex]['takein'] =
-                            forController.text + _forController;
+                            forController.text + _forController == 'D'
+                                ? ' Days'
+                                : _forController == 'W'
+                                    ? ' Weeks'
+                                    : ' Months';
                         finaPrescription[presIndex]['frequency'] =
                             everyController.text;
                         finaPrescription[presIndex]['ampule'] =
