@@ -91,8 +91,10 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
                               border: OutlineInputBorder(
                                   borderSide: BorderSide(
                                       color: Colors.grey.shade50, width: 0.5))),
-                          basicStyle: TextStyle(fontSize: 15, color: Colors.black),
-                          decoratedStyle: TextStyle(fontSize: 15, color: Colors.blue),
+                          basicStyle:
+                              TextStyle(fontSize: 15, color: Colors.black),
+                          decoratedStyle:
+                              TextStyle(fontSize: 15, color: Colors.blue),
                           keyboardType: TextInputType.multiline,
                           controller: _topic,
 
@@ -119,24 +121,24 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
                     ),
                     file != null
                         ? Container(
-                      width: width(context) * 0.25,
-                      margin: EdgeInsets.all(5),
-                      child: Stack(
-                        children: [
-                          Image.file(File(file.path),
-                              fit: BoxFit.contain),
-                          IconButton(
-                            onPressed: () {
-                              setState(() {
-                                file = null;
-                              });
-                            },
-                            icon: Icon(Icons.cancel_outlined,
-                                color: Colors.blue),
-                          ),
-                        ],
-                      ),
-                    )
+                            width: width(context) * 0.25,
+                            margin: EdgeInsets.all(5),
+                            child: Stack(
+                              children: [
+                                Image.file(File(file.path),
+                                    fit: BoxFit.contain),
+                                IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      file = null;
+                                    });
+                                  },
+                                  icon: Icon(Icons.cancel_outlined,
+                                      color: Colors.blue),
+                                ),
+                              ],
+                            ),
+                          )
                         : Container(width: 0),
                   ],
                 ),
@@ -158,7 +160,7 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
                                   if (name == "") {
                                     setState(() {
                                       _topic.text =
-                                      "${_topic.text} #${e['interest']}";
+                                          "${_topic.text} #${e['interest']}";
                                     });
                                   }
                                 },
@@ -177,49 +179,50 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
                             consult.shareStatus == ConsultStatus.Sharing
                                 ? loading
                                 : Align(
-                                alignment: Alignment.topRight,
-                                child: OutlinedButton(
-                                  onPressed: () async {
-                                    try {
-                                      var photo = file != null
-                                          ? File(file.path)
-                                          : null;
-                                      if (_topic.text != "" || //Milkessa: added posting capability with either text or image
-                                          file != null) {
-                                        var res = await consult.share(
-                                            _topic.text, photo);
-                                        if (res['status']) {
-                                          consult.getConsults();
+                                    alignment: Alignment.topRight,
+                                    child: OutlinedButton(
+                                      onPressed: () async {
+                                        try {
+                                          var photo = file != null
+                                              ? File(file.path)
+                                              : null;
+                                          if (_topic.text !=
+                                                  "" || //Milkessa: added posting capability with either text or image
+                                              file != null) {
+                                            var res = await consult.share(
+                                                _topic.text, photo);
+                                            if (res['status']) {
+                                              consult.getConsults();
+                                              showTopSnackBar(
+                                                context,
+                                                CustomSnackBar.success(
+                                                  message:
+                                                      "Your consult is uploaded succesfully",
+                                                ),
+                                              );
+                                            }
+                                          } else {
+                                            showTopSnackBar(
+                                              context,
+                                              CustomSnackBar.error(
+                                                message:
+                                                    "Invalid Data! Make sure you have inserted image or text",
+                                              ),
+                                            );
+                                          }
+                                        } catch (e) {
+                                          print("eeeee ${e}");
                                           showTopSnackBar(
                                             context,
-                                            CustomSnackBar.success(
+                                            CustomSnackBar.error(
                                               message:
-                                              "Your consult is uploaded succesfully",
+                                                  "Unable to share your consult",
                                             ),
                                           );
                                         }
-                                      } else {
-                                        showTopSnackBar(
-                                          context,
-                                          CustomSnackBar.error(
-                                            message:
-                                            "Invalid Data! Make sure you have inserted image or text",
-                                          ),
-                                        );
-                                      }
-                                    } catch (e) {
-                                      print("eeeee ${e}");
-                                      showTopSnackBar(
-                                        context,
-                                        CustomSnackBar.error(
-                                          message:
-                                          "Unable to share your consult",
-                                        ),
-                                      );
-                                    }
-                                  },
-                                  child: Text('Consult'),
-                                )),
+                                      },
+                                      child: Text('Consult'),
+                                    )),
                           ],
                         ),
                       ],
@@ -227,11 +230,11 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
                   ),
                 ),
                 Divider(),
-                PharmacyConsultList(widget.user_id,interest)
+                PharmacyConsultList(widget.user_id, interest)
               ],
             ),
           ),
-          PharmacyFooter()
+          Center(child: PharmacyFooter()),
         ],
       ),
     );

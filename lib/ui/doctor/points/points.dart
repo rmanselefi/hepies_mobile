@@ -1,5 +1,6 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:hepies/constants.dart';
 import 'package:hepies/providers/user_provider.dart';
 import 'package:hepies/widgets/footer.dart';
 import 'package:hepies/widgets/header.dart';
@@ -36,12 +37,12 @@ class _PointsState extends State<Points> {
   Widget build(BuildContext context) {
     var userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Column(
           children: [
-            Header(),
             SizedBox(
-              height: 20.0,
+              height: height(context) * 0.1,
             ),
             Expanded(
               child: ListView(
@@ -206,7 +207,7 @@ class _PointsState extends State<Points> {
                                     // Milkessa: Fixed phone input field formatting
                                     textAlign: TextAlign.start,
                                     controller: phoneController,
-                                    maxLength: 8,
+                                    maxLength: 9,
                                     keyboardType: TextInputType.number,
                                     decoration: InputDecoration(
                                       counterText: "",
@@ -215,7 +216,7 @@ class _PointsState extends State<Points> {
                                         width: 35,
                                         child: Center(
                                           child: Text(
-                                            '+251 - 9',
+                                            '+251',
                                             textScaleFactor: 0.9,
                                           ),
                                         ),
@@ -335,13 +336,6 @@ class _PointsState extends State<Points> {
                 ],
               ),
             ),
-            Container(
-                height: 50,
-                width: double.maxFinite,
-                decoration: BoxDecoration(
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(20.0))),
-                child: Footer()),
           ],
         ),
       ),

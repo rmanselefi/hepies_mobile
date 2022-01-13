@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hepies/constants.dart';
 import 'package:hepies/providers/prescription_provider.dart';
 import 'package:hepies/ui/doctor/medicalrecords/personal_info.dart';
 import 'package:hepies/ui/pharmacy/welcome.dart';
@@ -29,9 +30,10 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
     var prescProvider = Provider.of<PrescriptionProvider>(context);
     print("readreadread ${widget.result}");
     List<dynamic> result = widget.result['data'];
-    List<dynamic> notReadPrescription = result.where((i) => i['status']=="NotRead").toList();
+    List<dynamic> notReadPrescription =
+        result.where((i) => i['status'] == "NotRead").toList();
     var patient = result[0]['patient'];
-    List<dynamic> list_id=[];
+    List<dynamic> list_id = [];
     notReadPrescription.forEach((element) {
       list_id.add(element['id']);
     });
@@ -50,7 +52,7 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    height: 600.0,
+                    height: height(context) * 0.75,
                     decoration: BoxDecoration(
                         border:
                             Border.all(width: 2.0, color: Color(0xff707070))),
@@ -67,73 +69,76 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
                           ),
                         ),
                         Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: result.map<Widget>((e) {
-                          return Row(
-                            children: [
-                              Text(
-                                '${result.indexOf(e) + 1}',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20.0),
-                              ),
-                              SizedBox(
-                                width: 5.0,
-                              ),
-                              Expanded(
-                                child: Text(
-                                  ' ${e['drug_name']} ${e['strength']} '
-                                  '${e['unit']} ${e['route']} Every ${e['frequency']} For ${e['takein']}',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20.0),
+                              return Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      '${result.indexOf(e) + 1}',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20.0),
+                                    ),
+                                    SizedBox(
+                                      width: 5.0,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        ' ${e['drug_name']} ${e['strength']} '
+                                        '${e['unit']} ${e['route']} Every ${e['frequency']} For ${e['takein']}',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20.0),
+                                        maxLines: 2,
+                                      ),
+                                    ),
+                                    InkWell(
+                                      child: Container(
+                                        width: 20,
+                                        height: 20,
+                                        margin: EdgeInsets.only(right: 10.0),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: Colors.black26,
+                                                width: 1.5)),
+                                        child: selectedList.contains(e['id'])
+                                            ? FittedBox(
+                                                child: Icon(
+                                                Icons.cancel,
+                                                size: 10,
+                                              ))
+                                            : Container(),
+                                      ),
+                                      onTap: () {
+                                        setState(() {
+                                          var selected =
+                                              selectedList.contains(e['id']);
+                                          if (!selected) {
+                                            selectedList.add(e['id']);
+                                          } else {
+                                            selectedList.remove(e['id']);
+                                          }
+                                        });
+                                      },
+                                    ),
+                                    // Checkbox(
+                                    //   value: selectedList.contains(e['id']),
+                                    //   onChanged: (bool value) {
+                                    //     setState(() {
+                                    //       if (value) {
+                                    //         selectedList.add(e['id']);
+                                    //       } else {
+                                    //         selectedList.remove(e['id']);
+                                    //       }
+                                    //     });
+                                    //   },
+                                    // ),
+                                  ],
                                 ),
-                              ),
-                              InkWell(
-                                child: Container(
-                                  width: 20,
-                                  height: 20,
-                                  margin:EdgeInsets.only(right: 10.0),
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: Colors.black26, width: 1.5)),
-                                  child: selectedList.contains(e['id'])
-                                      ? FittedBox(
-                                          child: Icon(
-                                          Icons.cancel,
-                                          size: 10,
-                                        ))
-                                      : Container(),
-                                ),
-                                onTap: () {
-                                  setState(() {
-                                    var selected =
-                                        selectedList.contains(e['id']);
-                                    if (!selected) {
-                                      selectedList.add(e['id']);
-                                    } else {
-                                      selectedList.remove(e['id']);
-                                    }
-                                  });
-
-                                },
-                              ),
-                              // Checkbox(
-                              //   value: selectedList.contains(e['id']),
-                              //   onChanged: (bool value) {
-                              //     setState(() {
-                              //       if (value) {
-                              //         selectedList.add(e['id']);
-                              //       } else {
-                              //         selectedList.remove(e['id']);
-                              //       }
-                              //     });
-                              //   },
-                              // ),
-                            ],
-                          );
-                        }).toList())
+                              );
+                            }).toList())
                       ],
                     ),
                   ),
@@ -172,8 +177,8 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
                           GestureDetector(
                             onTap: () async {
                               print("object $selectedList");
-                              var res = await prescProvider
-                                  .acceptPrescription(selectedList,list_id);
+                              var res = await prescProvider.acceptPrescription(
+                                  selectedList, list_id);
                               if (res['status']) {
                                 showTopSnackBar(
                                   context,
@@ -182,7 +187,11 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
                                         'Your prescriptions are sent succesfully',
                                   ),
                                 );
-                                Navigator.push(context, MaterialPageRoute(builder: (context)=>WelcomePharmacy()));
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            WelcomePharmacy()));
                               } else {
                                 showTopSnackBar(
                                   context,

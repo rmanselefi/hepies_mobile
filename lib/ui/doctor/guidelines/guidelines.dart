@@ -249,13 +249,14 @@ class _GuidelinesState extends State<Guidelines> {
                         return Padding(
                           padding: EdgeInsets.all(10),
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               // Milkessa: Implemented download and delete functions
                               Flexible(
-                                flex: 4,
+                                flex: 3,
                                 child: Container(
-                                    width: 370,
+                                    width: width(context) * 0.7,
                                     padding:
                                         EdgeInsets.only(left: 10.0, top: 10.0),
                                     child: Text(
@@ -271,17 +272,23 @@ class _GuidelinesState extends State<Guidelines> {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     checkStatus(e['id'].toString())
-                                        ? IconButton(
-                                            padding: EdgeInsets.zero,
-                                            constraints: BoxConstraints(),
-                                            onPressed: () async {
-                                              print("object ${e['url']}");
-                                              await viewFile(e['url'],
-                                                  e['id'].toString(), context);
-                                            },
-                                            icon: Icon(
-                                              Icons.folder_open_outlined,
-                                              color: Colors.greenAccent[400],
+                                        ? Flexible(
+                                            child: TextButton(
+                                              onPressed: () async {
+                                                print("object ${e['url']}");
+                                                await viewFile(
+                                                    e['url'],
+                                                    e['id'].toString(),
+                                                    context);
+                                              },
+                                              child: Text(
+                                                'Open',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.w900,
+                                                  color: Colors.blue,
+                                                  fontSize: 16,
+                                                ),
+                                              ),
                                             ),
                                           )
                                         : Container(),

@@ -130,7 +130,9 @@ class _RegisterState extends State<Register> {
 
   List<dynamic> _myInterests = [];
   void _setImage(XFile image) {
-    file = image;
+    setState(() {
+      file = image;
+    });
     print("_formData_formData_formData${file}");
   }
 
@@ -273,7 +275,7 @@ class _RegisterState extends State<Register> {
           if (response['status']) {
             showTopSnackBar(
               context,
-              CustomSnackBar.error(
+              CustomSnackBar.success(
                 message: "Registration Successful. Please login",
               ),
             );

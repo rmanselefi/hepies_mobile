@@ -428,10 +428,12 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
               height: 500.0,
               child: Column(
                 children: <Widget>[
+                  SizedBox(height: 5),
                   Text(
                     'Edit your consult',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
+                  SizedBox(height: 5),
                   Divider(),
                   Row(
                     // Milkesa: Added mini image display next to consult text field
@@ -636,67 +638,78 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(40))),
-                              child: ClipRRect(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(40)),
-                                  child: Icon(
-                                    Icons.person,
-                                    size: 40,
-                                  )),
-                            ),
-                            SizedBox(
-                              width: 4,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            Row(
                               children: [
-                                Text(
-                                  e['user'],
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold),
-                                ),
                                 Container(
-                                  width: 100,
-                                  child: Text(
-                                    "Doctor",
-                                    style: TextStyle(
-                                        fontSize: 12, color: Colors.black54),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
+                                  width: 40,
+                                  height: 40,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(40))),
+                                  child: ClipRRect(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(40)),
+                                      child: Icon(
+                                        Icons.person,
+                                        size: 40,
+                                      )),
                                 ),
-                                Text('$duration',
-                                    style: TextStyle(
-                                        fontSize: 12, color: Colors.black54))
+                                SizedBox(
+                                  width: 4,
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      e['user'],
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Container(
+                                      width: 100,
+                                      child: Text(
+                                        "Doctor",
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.black54),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    Text('$duration',
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.black54))
+                                  ],
+                                ),
                               ],
                             ),
-                            SizedBox(
-                              width: 94,
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: 94,
+                                ),
+                                e['author'] != null &&
+                                        e['author']['id'] == widget.user_id
+                                    ? IconButton(
+                                        onPressed: () {
+                                          showAlertDialog(context, e['id']);
+                                        },
+                                        icon: Icon(Icons.cancel))
+                                    : Container(),
+                                e['author'] != null &&
+                                        e['author']['id'] == widget.user_id
+                                    ? IconButton(
+                                        onPressed: () {
+                                          _topic.text = e['topic'] ?? '';
+                                          showEdit(context, e);
+                                        },
+                                        icon: Icon(Icons.more_horiz_outlined))
+                                    : Container(),
+                              ],
                             ),
-                            e['author'] != null &&
-                                    e['author']['id'] == widget.user_id
-                                ? IconButton(
-                                    onPressed: () {
-                                      showAlertDialog(context, e['id']);
-                                    },
-                                    icon: Icon(Icons.cancel))
-                                : Container(),
-                            e['author'] != null &&
-                                    e['author']['id'] == widget.user_id
-                                ? IconButton(
-                                    onPressed: () {
-                                      _topic.text = e['topic'] ?? '';
-                                      showEdit(context, e);
-                                    },
-                                    icon: Icon(Icons.edit))
-                                : Container(),
                           ],
                         ),
                         SizedBox(
@@ -738,7 +751,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                         e['image'] != null
                             ? Container(
                                 width: MediaQuery.of(context).size.width,
-                                height: height(context) * 0.5,
+                                height: height(context) * 0.375,
                                 child: Image.network(
                                   e['image'],
                                   fit: BoxFit.contain,
