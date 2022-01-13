@@ -89,18 +89,6 @@ class _ShareConsultState extends State<ShareConsult> {
                       child: Padding(
                         padding: EdgeInsets.all(3),
                         child: HashTagTextField(
-                          // onChanged: (value) {
-                          //   if (value.length > 0) {
-                          //     setState(() {
-                          //       interestStatus = "show";
-                          //     });
-                          //   }
-                          //   // if (value.length == 0) {
-                          //   //   setState(() {
-                          //   //     interestStatus = "hide";
-                          //   //   });
-                          //   // }
-                          // },
                           decoration: InputDecoration(
                               hintText: 'Share, consult, promote, inform..',
                               border: OutlineInputBorder(
@@ -164,32 +152,29 @@ class _ShareConsultState extends State<ShareConsult> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        interestStatus == "show"
-                            ? Container(
-                                width: 250,
-                                child: Wrap(
-                                  alignment: WrapAlignment.start,
-                                  direction: Axis.horizontal,
-                                  children: interest.map<Widget>((e) {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        if (name == "") {
-                                          setState(() {
-                                            _topic.text =
-                                                "${_topic.text} #${e['interest']}";
-                                          });
-                                        }
-                                      },
-                                      child: Text(
-                                        "#${e['interest']} ",
-                                        style:
-                                            TextStyle(color: Colors.blueAccent),
-                                      ),
-                                    );
-                                  }).toList(),
+                        Container(
+                          width: 250,
+                          child: Wrap(
+                            alignment: WrapAlignment.start,
+                            direction: Axis.horizontal,
+                            children: interest.map<Widget>((e) {
+                              return GestureDetector(
+                                onTap: () {
+                                  if (name == "") {
+                                    setState(() {
+                                      _topic.text =
+                                          "${_topic.text} #${e['interest']}";
+                                    });
+                                  }
+                                },
+                                child: Text(
+                                  "#${e['interest']} ",
+                                  style: TextStyle(color: Colors.blueAccent),
                                 ),
-                              )
-                            : Container(),
+                              );
+                            }).toList(),
+                          ),
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
