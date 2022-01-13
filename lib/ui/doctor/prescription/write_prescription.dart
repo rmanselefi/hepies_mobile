@@ -57,6 +57,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
   String sex = "";
   String weight = "";
   String isFit = "";
+
   @override
   void initState() {
     // TODO: implement initState
@@ -84,14 +85,18 @@ class _WritePrescriptionState extends State<WritePrescription> {
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
+    String from = widget.from;
     print("widget.from ===== > ${widget.from}");
-    if (widget.from == "sent") {
+    if (from == "sent") {
       showTopSnackBar(
         context,
         CustomSnackBar.success(
           message: "Your prescriptions are sent successfully",
         ),
       );
+      setState(() {
+        from = "not";
+      });
     }
   }
 
@@ -458,7 +463,9 @@ class _WritePrescriptionState extends State<WritePrescription> {
             }),
             pretype == "general" || pretype == "instrument"
                 ? PrescriptionPaper(prescription, pretype)
-                : PsychoNarcoPaper(psycoPrescription),
+                : pretype == 'narcotics'
+                    ? PsychoNarcoPaper(narcoPrescription)
+                    : PsychoPaper(psycoPrescription),
             SizedBox(height: 5.0),
             Flexible(
               child: Container(

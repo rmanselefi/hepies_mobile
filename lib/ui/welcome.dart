@@ -64,13 +64,6 @@ class _WelcomeState extends State<Welcome> {
     });
   }
 
-  Future<void> initLocalDrugList() async {
-    Directory dir = await getApplicationDocumentsDirectory();
-    Hive.init(dir.path);
-    await Hive.openBox('drugList');
-    await Provider.of<DrugProvider>(context, listen: false).putDrugsLocal();
-  }
-
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
