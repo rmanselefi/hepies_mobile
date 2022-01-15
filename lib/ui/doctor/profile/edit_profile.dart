@@ -58,6 +58,7 @@ class _EditProfileState extends State<EditProfile>
   String points = '';
   String license = '';
   String _profession = 'Medical Doctor';
+  var loadingProfile;
   List<dynamic> _interests = [];
   @override
   void initState() {
@@ -68,6 +69,9 @@ class _EditProfileState extends State<EditProfile>
   }
 
   getUser() async {
+    setState(() {
+      loadingProfile = true;
+    });
     var user = await UserProvider().getProfile();
     print("object ${user}");
 
@@ -89,6 +93,7 @@ class _EditProfileState extends State<EditProfile>
       profile = user['profession'][0]['profile'];
       userId = user['id'];
       professionid = user['profession'][0]['id'];
+      loadingProfile = false;
     });
   }
 
@@ -217,6 +222,7 @@ class _EditProfileState extends State<EditProfile>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
+                          loadingProfile ? loadingPro : Container(),
                           Padding(
                               padding: EdgeInsets.only(
                                   left: 25.0, right: 25.0, top: 25.0),
@@ -453,11 +459,11 @@ class _EditProfileState extends State<EditProfile>
     super.dispose();
   }
 
-  var loading = Row(
+  var loadingPro = Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: <Widget>[
       CircularProgressIndicator(),
-      Text(" Authenticating ... Please wait")
+      Text("Loading Profile ... Please wait")
     ],
   );
 

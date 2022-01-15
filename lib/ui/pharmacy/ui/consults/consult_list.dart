@@ -625,6 +625,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
                   var e = snapshot.data[index];
+                  var profile = e['author']['profession'][0]['profile'];
 
                   DateTime time = DateTime.parse(e['createdAt']);
                   var duration = timeago.format(time);
@@ -654,10 +655,12 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                   child: ClipRRect(
                                       borderRadius:
                                           BorderRadius.all(Radius.circular(40)),
-                                      child: Icon(
-                                        Icons.person,
-                                        size: 40,
-                                      )),
+                                      child: profile != null
+                                          ? Image.network(profile)
+                                          : Icon(
+                                              Icons.person,
+                                              size: 40,
+                                            )),
                                 ),
                                 SizedBox(
                                   width: 4,

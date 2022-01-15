@@ -13,9 +13,10 @@ import 'package:mailto/mailto.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DrawerCustom extends StatefulWidget {
-  DrawerCustom(this.name, this.profession);
   final name;
   final profession;
+  final profile;
+  DrawerCustom(this.name, this.profession, this.profile);
 
   @override
   _DrawerCustomState createState() => _DrawerCustomState();
@@ -47,6 +48,9 @@ class _DrawerCustomState extends State<DrawerCustom> {
                 CircleAvatar(
                   radius: width(context) * 0.15,
                   backgroundColor: Colors.grey,
+                  backgroundImage: widget.profile != null
+                      ? NetworkImage(widget.profile)
+                      : null,
                 ),
                 SizedBox(height: 5),
                 Row(

@@ -31,6 +31,7 @@ class _WelcomePharmacyState extends State<WelcomePharmacy> {
   var user_id;
   var name;
   var profession;
+  var profile;
   var points;
   @override
   void initState() {
@@ -42,6 +43,7 @@ class _WelcomePharmacyState extends State<WelcomePharmacy> {
         name = user['profession'][0]['name'];
         profession = user['profession'][0]['proffesion'];
         points = user['profession'][0]['points'];
+        profile = user['profession'][0]['profile'];
       });
     });
   }
@@ -147,7 +149,7 @@ class _WelcomePharmacyState extends State<WelcomePharmacy> {
           actions: <Widget>[],
         ),
       ),
-      drawer: DrawerCustom(name, profession),
+      drawer: DrawerCustom(name, profession,profile),
       body: PharmacyShareConsult(user_id),
     ));
   }
