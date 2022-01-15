@@ -30,7 +30,6 @@ class _ShareConsultState extends State<ShareConsult> {
   XFile file;
   List<dynamic> interests = [];
   List<dynamic> subList = [];
-  String interestStatus = "hide";
   var name = '';
   void _setImage(XFile image) {
     setState(() {

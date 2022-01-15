@@ -62,12 +62,12 @@ class _WelcomePharmacyState extends State<WelcomePharmacy> {
     initLocalDrugList();
   }
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
-
     return SafeArea(
         child: Scaffold(
+      resizeToAvoidBottomInset: true,
       key: _scaffoldKey,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(100.0),
@@ -149,7 +149,7 @@ class _WelcomePharmacyState extends State<WelcomePharmacy> {
           actions: <Widget>[],
         ),
       ),
-      drawer: DrawerCustom(name, profession,profile),
+      drawer: DrawerCustom(name, profession, profile),
       body: PharmacyShareConsult(user_id),
     ));
   }
