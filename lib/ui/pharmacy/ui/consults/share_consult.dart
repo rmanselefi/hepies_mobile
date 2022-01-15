@@ -30,7 +30,6 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
 
   String name = '';
 
-  String interestStatus = "hide";
 
   List<dynamic> interests = [];
   List<dynamic> subList = [];
@@ -94,9 +93,9 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
                                   borderSide: BorderSide(
                                       color: Colors.grey.shade50, width: 0.5))),
                           basicStyle:
-                              TextStyle(fontSize: 15, color: Colors.black),
+                          TextStyle(fontSize: 15, color: Colors.black),
                           decoratedStyle:
-                              TextStyle(fontSize: 15, color: Colors.blue),
+                          TextStyle(fontSize: 15, color: Colors.blue),
                           keyboardType: TextInputType.multiline,
                           controller: _topic,
 
