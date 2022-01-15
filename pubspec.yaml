@@ -93,7 +93,7 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: MyFlutterApp
+    - family:  MyFlutterApp
       fonts:
         - asset: assets/fonts/MyFlutterApp.ttf
   #   - family: Trajan Pro
