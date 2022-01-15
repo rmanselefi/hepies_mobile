@@ -33,6 +33,7 @@ class _WelcomeState extends State<Welcome> {
   var user_id;
   var name;
   var profession;
+  var profile;
   var points;
 
   Future<void> initLocalDrugList() async {
@@ -60,6 +61,7 @@ class _WelcomeState extends State<Welcome> {
         name = user['profession'][0]['name'];
         profession = user['profession'][0]['proffesion'];
         points = user['profession'][0]['points'];
+        profile = user['profession'][0]['profile'];
       });
     });
   }
@@ -165,7 +167,7 @@ class _WelcomeState extends State<Welcome> {
             actions: <Widget>[],
           ),
         ),
-        drawer: DrawerCustom(name, profession),
+        drawer: DrawerCustom(name, profession,profile),
         body: ShareConsult(user_id),
       ),
     );
