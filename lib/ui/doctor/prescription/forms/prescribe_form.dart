@@ -1409,13 +1409,13 @@ class _PrescribeFormState extends State<PrescribeForm> {
                         "unit": unitController.text,
                         "route": routeController.text,
                         "takein": widget.type != "instrument"
-                            ? prescription.takein + _forController == 'D'
-                            ? ' Days'
-                            : _forController == 'W'
-                                ? ' Weeks'
-                                : ' Months'
+                            ? prescription.takein +
+                                (_forController == 'D'
+                                    ? ' Days'
+                                    : _forController == 'W'
+                                        ? ' Weeks'
+                                        : ' Months')
                             : "",
-                      
                         "frequency": prescription.frequency,
                         "drug": prescription.drug,
                         "professional": profession,
@@ -1448,11 +1448,12 @@ class _PrescribeFormState extends State<PrescribeForm> {
                         finaPrescription[presIndex]['route'] =
                             routeController.text;
                         finaPrescription[presIndex]['takein'] =
-                            forController.text + _forController == 'D'
-                                ? ' Days'
-                                : _forController == 'W'
-                                    ? ' Weeks'
-                                    : ' Months';
+                            forController.text +
+                                (_forController == 'D'
+                                    ? ' Days'
+                                    : _forController == 'W'
+                                        ? ' Weeks'
+                                        : ' Months');
                         finaPrescription[presIndex]['frequency'] =
                             everyController.text;
                         finaPrescription[presIndex]['ampule'] =
@@ -1512,7 +1513,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                     status == 'add' ? 'ADD' : 'Done Editing',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 25.0,
+                      fontSize: 20,
                       color: Colors.green[400],
                     ),
                   )),

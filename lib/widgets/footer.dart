@@ -87,58 +87,55 @@ class _FooterState extends State<Footer> {
           //     'Drugs',
           //   ),
           // ),
-          GestureDetector(
-            child: Container(
-              width: width(context) * 0.20,
-              padding: EdgeInsets.all(7.5),
-              child: Center(child: Text('Home', textScaleFactor: 1.05)),
-              decoration: BoxDecoration(
-                color: Color(0xff0FF6A0),
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.circular(5),
-              ),
+          OutlinedButton(
+            style: ButtonStyle(
+              backgroundColor:
+                  MaterialStateColor.resolveWith((states) => Color(0xff0FF6A0)),
             ),
-            onTap: () {
-                   Navigator.push(
-                       context,
-                       MaterialPageRoute(
-                           builder: (context) => Welcome(
-                                 currenIndex: 0,
-                               )));
+            child: Icon(
+              Icons.home_outlined,
+              color: Colors.black,
+              size: width(context) * 0.1,
+            ),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Welcome(
+                            currenIndex: 0,
+                          )));
             },
           ),
           SizedBox(width: 10),
-          GestureDetector(
-            child: Container(
-              width: width(context) * 0.30,
-              padding: EdgeInsets.all(7.5),
-              child: Center(child: Text('Prescription', textScaleFactor: 1.05)),
-              decoration: BoxDecoration(
-                color: Color(0xff0FF6A0),
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.circular(5),
-              ),
+          OutlinedButton(
+            style: ButtonStyle(
+              backgroundColor:
+                  MaterialStateColor.resolveWith((states) => Color(0xff0FF6A0)),
             ),
-            onTap: () {
+            child: Icon(
+              IconData(0xe800, fontFamily: 'MyFlutterApp', fontPackage: null),
+              color: Colors.black,
+              size: width(context) * 0.1,
+            ),
+            onPressed: () {
               Navigator.push(context,
-                       MaterialPageRoute(builder: (context) => WritePrescription()));
+                  MaterialPageRoute(builder: (context) => WritePrescription()));
             },
           ),
           SizedBox(width: 10),
-          GestureDetector(
-            child: Container(
-              width: width(context) * 0.20,
-              padding: EdgeInsets.all(7.5),
-              child: Center(child: Text('Drugs', textScaleFactor: 1.05)),
-              decoration: BoxDecoration(
-                color: Color(0xff0FF6A0),
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.circular(5),
-              ),
+          OutlinedButton(
+            style: ButtonStyle(
+              backgroundColor:
+                  MaterialStateColor.resolveWith((states) => Color(0xff0FF6A0)),
             ),
-            onTap: () {
-                   Navigator.push(
-                       context, MaterialPageRoute(builder: (context) => Drugs()));
+            child: Icon(
+              Icons.medical_services_outlined,
+              color: Colors.black,
+              size: width(context) * 0.1,
+            ),
+            onPressed: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => Drugs()));
             },
           ),
         ],
