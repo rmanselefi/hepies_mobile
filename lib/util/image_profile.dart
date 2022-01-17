@@ -71,16 +71,17 @@ class _ImageInputState extends State<ImageInputProfile> {
         Padding(
           padding: EdgeInsets.only(top: 20.0),
           child: new Stack(fit: StackFit.loose, children: <Widget>[
-            new Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                new Container(
-                    width: 140.0,
-                    height: 140.0,
-                    decoration: new BoxDecoration(
-                      shape: BoxShape.circle,
-                      image:  new DecorationImage(
+            widget.profile != null || _image != null
+                ? new Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      new Container(
+                          width: 140.0,
+                          height: 140.0,
+                          decoration: new BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: new DecorationImage(
                               image: _image == null
                                   ? new NetworkImage(widget.profile)
                                   : new FileImage(
@@ -88,9 +89,10 @@ class _ImageInputState extends State<ImageInputProfile> {
                                     ),
                               fit: BoxFit.cover,
                             ),
-                    )),
-              ],
-            ),
+                          )),
+                    ],
+                  )
+                : Container(),
             Padding(
                 padding: EdgeInsets.only(top: 90.0, right: 100.0),
                 child: new Row(
