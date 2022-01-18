@@ -645,6 +645,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Container(
                                   width: 40,
@@ -671,11 +672,10 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                     Text(
                                       e['user'],
                                       style: TextStyle(
-                                          fontSize: 18,
+                                          fontSize: 16,
                                           fontWeight: FontWeight.bold),
                                     ),
                                     Container(
-                                      width: 100,
                                       child: Text(
                                         "Doctor",
                                         style: TextStyle(
@@ -693,9 +693,10 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                               ],
                             ),
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 SizedBox(
-                                  width: 94,
+                                  width: width(context) * 0.05,
                                 ),
                                 e['author'] != null &&
                                         e['author']['id'] == widget.user_id
@@ -703,7 +704,9 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                         onPressed: () {
                                           showAlertDialog(context, e['id']);
                                         },
-                                        icon: Icon(Icons.cancel))
+                                        icon:
+                                            Icon(Icons.delete_outline_rounded),
+                                      )
                                     : Container(),
                                 e['author'] != null &&
                                         e['author']['id'] == widget.user_id

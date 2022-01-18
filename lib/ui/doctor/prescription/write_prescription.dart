@@ -219,7 +219,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                     },
                     child: Container(
                       height: 30,
-                      width: width(context) * 0.25,
+                      width: width(context) * 0.225,
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.black45, width: 2),
                       ),
@@ -242,7 +242,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                     },
                     child: Container(
                       height: 30,
-                      width: width(context) * 0.25,
+                      width: width(context) * 0.225,
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.black45, width: 2),
                       ),
@@ -265,7 +265,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                     },
                     child: Container(
                       height: 30,
-                      width: width(context) * 0.25,
+                      width: width(context) * 0.225,
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.black45, width: 2),
                       ),
@@ -281,6 +281,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Container(
+                  width: width(context) * 0.2,
                   margin: EdgeInsets.all(3),
                   child: MaterialButton(
                     padding: EdgeInsets.all(2),
@@ -297,12 +298,13 @@ class _WritePrescriptionState extends State<WritePrescription> {
                       'Normal',
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 15,
+                        fontSize: 13,
                       ),
                     ),
                   ),
                 ),
                 Container(
+                  width: width(context) * 0.2,
                   margin: EdgeInsets.all(3),
                   child: MaterialButton(
                     padding: EdgeInsets.all(2),
@@ -319,7 +321,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                       'Instruments',
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 15,
+                        fontSize: 13,
                       ),
                     ),
                   ),
@@ -332,6 +334,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Container(
+                                width: width(context) * 0.2,
                                 margin: EdgeInsets.all(3),
                                 child: MaterialButton(
                                   padding: EdgeInsets.all(2),
@@ -349,12 +352,13 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                     'Psychotropic',
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: 15,
+                                      fontSize: 13,
                                     ),
                                   ),
                                 ),
                               ),
                               Container(
+                                width: width(context) * 0.2,
                                 margin: EdgeInsets.all(3),
                                 child: MaterialButton(
                                   padding: EdgeInsets.all(2),
@@ -372,7 +376,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                     'Narcotic',
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: 15,
+                                      fontSize: 13,
                                     ),
                                   ),
                                 ),
@@ -386,6 +390,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Container(
+                              width: width(context) * 0.2,
                               margin: EdgeInsets.all(3),
                               child: MaterialButton(
                                 padding: EdgeInsets.all(2),
@@ -407,12 +412,13 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                   'Psychotropic',
                                   style: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 15,
+                                    fontSize: 13,
                                   ),
                                 ),
                               ),
                             ),
                             Container(
+                              width: width(context) * 0.2,
                               margin: EdgeInsets.all(3),
                               child: MaterialButton(
                                 padding: EdgeInsets.all(2),
@@ -434,7 +440,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                   'Narcotic',
                                   style: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 15,
+                                    fontSize: 13,
                                   ),
                                 ),
                               ),

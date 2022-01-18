@@ -155,7 +155,7 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
                       children: [
                         interestStatus == "show"
                             ? Container(
-                                width: 250,
+                                width: width(context) * 0.7,
                                 child: Wrap(
                                   alignment: WrapAlignment.start,
                                   direction: Axis.horizontal,
@@ -229,7 +229,23 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
                                           );
                                         }
                                       },
-                                      child: Text('Consult'),
+                                      child: Container(
+                                        margin: EdgeInsets.zero,
+                                        padding: EdgeInsets.all(3.0),
+                                        decoration: BoxDecoration(
+                                          boxShadow: [buttonShadow],
+                                          borderRadius:
+                                              BorderRadius.circular(3),
+                                        ),
+                                        child: Text(
+                                          'Consult',
+                                          textScaleFactor: 0.775,
+                                          style: TextStyle(
+                                            color: Colors.blue,
+                                            fontWeight: FontWeight.w900,
+                                          ),
+                                        ),
+                                      ),
                                     )),
                           ],
                         ),

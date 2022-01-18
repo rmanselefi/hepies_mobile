@@ -39,7 +39,7 @@ class _DrawerCustomState extends State<DrawerCustom> {
         shrinkWrap: true,
         children: <Widget>[
           Container(
-            height: height(context) * 0.25,
+            height: height(context) * 0.275,
             padding: EdgeInsets.all(5),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
