@@ -36,7 +36,7 @@ class _PharmacyFooterState extends State<PharmacyFooter> {
                 home_circled,
                 color: nav.selectedNav == NavSelection.home
                     ? Color(0xff0FF6A0)
-                    : Colors.black.withOpacity(0.75),
+                    : Colors.black54,
                 size: nav.selectedNav == NavSelection.home
                     ? width(context) * 0.1
                     : width(context) * 0.075,
@@ -55,7 +55,7 @@ class _PharmacyFooterState extends State<PharmacyFooter> {
                 file_signature,
                 color: nav.selectedNav == NavSelection.prescription
                     ? Color(0xff0FF6A0)
-                    : Colors.black.withOpacity(0.75),
+                    : Colors.black54,
                 size: nav.selectedNav == NavSelection.prescription
                     ? width(context) * 0.1
                     : width(context) * 0.075,
@@ -76,7 +76,7 @@ class _PharmacyFooterState extends State<PharmacyFooter> {
                 pharmacy,
                 color: nav.selectedNav == NavSelection.pharmacy
                     ? Color(0xff0FF6A0)
-                    : Colors.black.withOpacity(0.75),
+                    : Colors.black54,
                 size: nav.selectedNav == NavSelection.pharmacy
                     ? width(context) * 0.1
                     : width(context) * 0.075,
@@ -95,7 +95,7 @@ class _PharmacyFooterState extends State<PharmacyFooter> {
                 history,
                 color: nav.selectedNav == NavSelection.history
                     ? Color(0xff0FF6A0)
-                    : Colors.black.withOpacity(0.75),
+                    : Colors.black54,
                 size: nav.selectedNav == NavSelection.history
                     ? width(context) * 0.1
                     : width(context) * 0.075,
