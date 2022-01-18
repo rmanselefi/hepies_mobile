@@ -29,7 +29,7 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
   XFile file;
 
   String name = '';
-
+  String interestStatus = "hide";
 
   List<dynamic> interests = [];
   List<dynamic> subList = [];
@@ -58,7 +58,7 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
 
   var loading = Row(
     mainAxisAlignment: MainAxisAlignment.center,
-    children: <Widget>[CircularProgressIndicator(), Text("Sharing....")],
+    children: <Widget>[CircularProgressIndicator()],
   );
   @override
   Widget build(BuildContext context) {
@@ -93,14 +93,17 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
                                   borderSide: BorderSide(
                                       color: Colors.grey.shade50, width: 0.5))),
                           basicStyle:
-                          TextStyle(fontSize: 15, color: Colors.black),
+                              TextStyle(fontSize: 15, color: Colors.black),
                           decoratedStyle:
-                          TextStyle(fontSize: 15, color: Colors.blue),
+                              TextStyle(fontSize: 15, color: Colors.blue),
                           keyboardType: TextInputType.multiline,
                           controller: _topic,
 
                           /// Called when detection (word starts with #, or # and @) is being typed
                           onDetectionTyped: (text) {
+                            setState(() {
+                              interestStatus = "show";
+                            });
                             if (text.length > 1) {
                               text.substring(2);
                               print("text ${text.substring(2)}");
@@ -150,29 +153,32 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          width: 250,
-                          child: Wrap(
-                            alignment: WrapAlignment.start,
-                            direction: Axis.horizontal,
-                            children: interest.map<Widget>((e) {
-                              return GestureDetector(
-                                onTap: () {
-                                  if (name == "") {
-                                    setState(() {
-                                      _topic.text =
-                                          "${_topic.text} #${e['interest']}";
-                                    });
-                                  }
-                                },
-                                child: Text(
-                                  "#${e['interest']} ",
-                                  style: TextStyle(color: Colors.blueAccent),
+                        interestStatus == "show"
+                            ? Container(
+                                width: 250,
+                                child: Wrap(
+                                  alignment: WrapAlignment.start,
+                                  direction: Axis.horizontal,
+                                  children: interest.map<Widget>((e) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        if (name == "") {
+                                          setState(() {
+                                            _topic.text =
+                                                "${_topic.text} #${e['interest']}";
+                                          });
+                                        }
+                                      },
+                                      child: Text(
+                                        "#${e['interest']} ",
+                                        style:
+                                            TextStyle(color: Colors.blueAccent),
+                                      ),
+                                    );
+                                  }).toList(),
                                 ),
-                              );
-                            }).toList(),
-                          ),
-                        ),
+                              )
+                            : Container(),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -201,6 +207,7 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
                                                       "Your consult is uploaded succesfully",
                                                 ),
                                               );
+                                              _topic.text = "";
                                             }
                                           } else {
                                             showTopSnackBar(
