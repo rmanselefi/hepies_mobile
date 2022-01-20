@@ -68,7 +68,7 @@ class _ImageInputState extends State<ImageInputConsult> {
             _openImagePicker(context);
           },
           icon: Icon(Icons.attach_file_outlined, color: Colors.blue),
-          iconSize: 18,
+          iconSize: 22,
         ),
       ],
     );

@@ -25,7 +25,7 @@ class _FooterState extends State<Footer> {
             IconButton(
               icon: Icon(
                 home_circled,
-                color: Colors.black87,
+                color: Colors.black38,
                 size: width(context) * 0.075,
               ),
               onPressed: () {
@@ -41,7 +41,7 @@ class _FooterState extends State<Footer> {
             IconButton(
               icon: Icon(
                 file_signature,
-                color: Colors.black87,
+                color: Colors.black38,
                 size: width(context) * 0.075,
               ),
               onPressed: () {
@@ -55,7 +55,7 @@ class _FooterState extends State<Footer> {
             IconButton(
               icon: Icon(
                 pills,
-                color: Colors.black87,
+                color: Colors.black38,
                 size: width(context) * 0.075,
               ),
               onPressed: () {

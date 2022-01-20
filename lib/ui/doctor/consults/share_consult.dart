@@ -177,68 +177,75 @@ class _ShareConsultState extends State<ShareConsult> {
                             }).toList(),
                           ),
                         ),
-                        ImageInputConsult(_setImage),
-                        consult.shareStatus == ConsultStatus.Sharing
-                            ? loading
-                            : Align(
-                                alignment: Alignment.topRight,
-                                child: GestureDetector(
-                                  onTap: () async {
-                                    try {
-                                      var photo =
-                                          file != null ? File(file.path) : null;
-                                      if (_topic.text !=
-                                              "" || //Milkessa: added posting capability with either text or image
-                                          file != null) {
-                                        var res = await consult.share(
-                                            _topic.text, photo);
-                                        if (res['status']) {
-                                          consult.getConsults();
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            ImageInputConsult(_setImage),
+                            consult.shareStatus == ConsultStatus.Sharing
+                                ? loading
+                                : Align(
+                                    alignment: Alignment.topRight,
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        try {
+                                          var photo = file != null
+                                              ? File(file.path)
+                                              : null;
+                                          if (_topic.text !=
+                                                  "" || //Milkessa: added posting capability with either text or image
+                                              file != null) {
+                                            var res = await consult.share(
+                                                _topic.text, photo);
+                                            if (res['status']) {
+                                              consult.getConsults();
+                                              showTopSnackBar(
+                                                context,
+                                                CustomSnackBar.success(
+                                                  message:
+                                                      "Your consult is uploaded succesfully",
+                                                ),
+                                              );
+                                            }
+                                          } else {
+                                            showTopSnackBar(
+                                              context,
+                                              CustomSnackBar.error(
+                                                message:
+                                                    "Invalid Data! Make sure you have inserted image or text",
+                                              ),
+                                            );
+                                          }
+                                        } catch (e) {
+                                          print("eeeee ${e}");
                                           showTopSnackBar(
                                             context,
-                                            CustomSnackBar.success(
+                                            CustomSnackBar.error(
                                               message:
-                                                  "Your consult is uploaded succesfully",
+                                                  "Unable to share your consult",
                                             ),
                                           );
                                         }
-                                      } else {
-                                        showTopSnackBar(
-                                          context,
-                                          CustomSnackBar.error(
-                                            message:
-                                                "Invalid Data! Make sure you have inserted image or text",
-                                          ),
-                                        );
-                                      }
-                                    } catch (e) {
-                                      print("eeeee ${e}");
-                                      showTopSnackBar(
-                                        context,
-                                        CustomSnackBar.error(
-                                          message:
-                                              "Unable to share your consult",
+                                      },
+                                      child: Container(
+                                        margin: EdgeInsets.zero,
+                                        padding: EdgeInsets.all(3.0),
+                                        decoration: BoxDecoration(
+                                          boxShadow: [buttonShadow],
+                                          borderRadius:
+                                              BorderRadius.circular(3),
                                         ),
-                                      );
-                                    }
-                                  },
-                                  child: Container(
-                                    margin: EdgeInsets.zero,
-                                    padding: EdgeInsets.all(3.0),
-                                    decoration: BoxDecoration(
-                                      boxShadow: [buttonShadow],
-                                      borderRadius: BorderRadius.circular(3),
-                                    ),
-                                    child: Text(
-                                      'Consult',
-                                      textScaleFactor: 0.775,
-                                      style: TextStyle(
-                                        color: Colors.blue,
-                                        fontWeight: FontWeight.w900,
+                                        child: Text(
+                                          'Consult',
+                                          style: TextStyle(
+                                            color: Colors.blue,
+                                            fontWeight: FontWeight.w900,
+                                            fontSize: 16,
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                )),
+                                    )),
+                          ],
+                        ),
                       ],
                     ),
                   ),
