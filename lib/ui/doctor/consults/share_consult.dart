@@ -184,7 +184,7 @@ class _ShareConsultState extends State<ShareConsult> {
                                 ),
                               )
                             : Container(),
-                        Column(
+                        Row(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             ImageInputConsult(_setImage),

@@ -38,16 +38,12 @@ class _WelcomeState extends State<Welcome> {
   var overallPoints;
 
   Future<void> initLocalDrugList() async {
-    Directory dir = await getApplicationDocumentsDirectory();
-    Hive.init(dir.path);
     await Hive.openBox('drugList');
     await Provider.of<DrugProvider>(context, listen: false).putDrugsLocal();
   }
 
   Future<void> initLocalInstrumentList() async {
-    Directory dir = await getApplicationDocumentsDirectory();
-    Hive.init(dir.path);
-    Hive.openBox('instrumentList');
+    await Hive.openBox('instrumentList');
     await Provider.of<DrugProvider>(context, listen: false)
         .putLocalInstruments();
   }
