@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hepies/models/user.dart';
@@ -15,6 +17,8 @@ import 'package:hepies/ui/auth/sign_up.dart';
 import 'package:hepies/ui/dashboard.dart';
 import 'package:hepies/ui/welcome.dart';
 import 'package:hepies/util/shared_preference.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'providers/user_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -23,6 +27,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  Directory dir = await getApplicationDocumentsDirectory();
+  Hive.init(dir.path);
   runApp(MyApp());
 }
 
