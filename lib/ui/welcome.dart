@@ -35,6 +35,7 @@ class _WelcomeState extends State<Welcome> {
   var profession;
   var profile;
   var points;
+  var overallPoints;
 
   Future<void> initLocalDrugList() async {
     Directory dir = await getApplicationDocumentsDirectory();
@@ -62,6 +63,7 @@ class _WelcomeState extends State<Welcome> {
         profession = user['profession'][0]['proffesion'];
         points = user['profession'][0]['points'];
         profile = user['profession'][0]['profile'];
+        overallPoints = user['profession'][0]['overall_points'];
       });
     });
   }
@@ -155,7 +157,7 @@ class _WelcomeState extends State<Welcome> {
                           height: 10.0,
                         ),
                         Flexible(
-                          child: Text('Overall 1567pts',
+                          child: Text('Overall ${overallPoints}pts',
                               style: TextStyle(color: Colors.green)),
                         )
                       ],
@@ -167,7 +169,7 @@ class _WelcomeState extends State<Welcome> {
             actions: <Widget>[],
           ),
         ),
-        drawer: DrawerCustom(name, profession,profile),
+        drawer: DrawerCustom(name, profession, profile),
         body: ShareConsult(user_id),
       ),
     );

@@ -30,6 +30,8 @@ class _ShareConsultState extends State<ShareConsult> {
   XFile file;
   List<dynamic> interests = [];
   List<dynamic> subList = [];
+  String interestStatus = "hide";
+
   var name = '';
   void _setImage(XFile image) {
     setState(() {
@@ -102,6 +104,9 @@ class _ShareConsultState extends State<ShareConsult> {
 
                           /// Called when detection (word starts with #, or # and @) is being typed
                           onDetectionTyped: (text) {
+                            setState(() {
+                              interestStatus = "show";
+                            });
                             if (text.length > 1) {
                               text.substring(2);
                               print("text ${text.substring(2)}");
@@ -151,32 +156,34 @@ class _ShareConsultState extends State<ShareConsult> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          width: width(context) * 0.7,
-                          child: Wrap(
-                            alignment: WrapAlignment.start,
-                            direction: Axis.horizontal,
-                            children: interest.map<Widget>((e) {
-                              return GestureDetector(
-                                onTap: () {
-                                  if (name == "") {
-                                    setState(() {
-                                      _topic.text =
-                                          "${_topic.text} #${e['interest']}";
-                                    });
-                                  }
-                                },
-                                child: Text(
-                                  "#${e['interest']} ",
-                                  style: TextStyle(
-                                    color: Colors.blueAccent,
-                                    fontSize: 12,
-                                  ),
+                        interestStatus == "show"
+                            ? Container(
+                                width: width(context) * 0.7,
+                                child: Wrap(
+                                  alignment: WrapAlignment.start,
+                                  direction: Axis.horizontal,
+                                  children: interest.map<Widget>((e) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        if (name == "") {
+                                          setState(() {
+                                            _topic.text =
+                                                "${_topic.text} #${e['interest']}";
+                                          });
+                                        }
+                                      },
+                                      child: Text(
+                                        "#${e['interest']} ",
+                                        style: TextStyle(
+                                          color: Colors.blueAccent,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    );
+                                  }).toList(),
                                 ),
-                              );
-                            }).toList(),
-                          ),
-                        ),
+                              )
+                            : Container(),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
