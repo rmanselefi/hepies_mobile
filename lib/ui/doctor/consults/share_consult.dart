@@ -185,8 +185,8 @@ class _ShareConsultState extends State<ShareConsult> {
                                 ? loading
                                 : Align(
                                     alignment: Alignment.topRight,
-                                    child: GestureDetector(
-                                      onTap: () async {
+                                    child: OutlinedButton(
+                                      onPressed: () async {
                                         try {
                                           var photo = file != null
                                               ? File(file.path)
@@ -234,16 +234,26 @@ class _ShareConsultState extends State<ShareConsult> {
                                           borderRadius:
                                               BorderRadius.circular(3),
                                         ),
-                                        child: Text(
-                                          'Consult',
-                                          style: TextStyle(
-                                            color: Colors.blue,
-                                            fontWeight: FontWeight.w900,
-                                            fontSize: 16,
+                                        child: Container(
+                                          margin: EdgeInsets.zero,
+                                          padding: EdgeInsets.all(3.0),
+                                          decoration: BoxDecoration(
+                                            boxShadow: [buttonShadow],
+                                            borderRadius:
+                                                BorderRadius.circular(3),
+                                          ),
+                                          child: Text(
+                                            'Consult',
+                                            textScaleFactor: 0.775,
+                                            style: TextStyle(
+                                              color: Colors.blue,
+                                              fontWeight: FontWeight.w900,
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    )),
+                                    ),
+                                  ),
                           ],
                         ),
                       ],

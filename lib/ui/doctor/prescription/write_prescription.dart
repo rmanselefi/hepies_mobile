@@ -298,7 +298,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                       'Normal',
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 16,
+                        fontSize: 14,
                       ),
                     ),
                   ),
@@ -321,7 +321,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                       'Instruments',
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 16,
+                        fontSize: 12,
                       ),
                     ),
                   ),
@@ -352,7 +352,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                     'Psychotropic',
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: 16,
+                                      fontSize: 12,
                                     ),
                                   ),
                                 ),
@@ -376,7 +376,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                     'Narcotic',
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: 16,
+                                      fontSize: 14,
                                     ),
                                   ),
                                 ),
@@ -414,7 +414,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                     'Psychotropic',
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: 16,
+                                      fontSize: 12,
                                     ),
                                   ),
                                 ),
@@ -442,7 +442,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                     'Narcotic',
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: 16,
+                                      fontSize: 14,
                                     ),
                                   ),
                                 ),

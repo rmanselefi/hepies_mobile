@@ -242,7 +242,7 @@ class _GuidelinesState extends State<Guidelines> {
                       .where((element) => element['name'].contains(drugName))
                       .toList();
                   return Container(
-                    height: 2 * MediaQuery.of(context).size.height / 3,
+                    height: 3 * MediaQuery.of(context).size.height / 4,
                     child: ListView(
                       shrinkWrap: true,
                       children: guidlines.map<Widget>((e) {
