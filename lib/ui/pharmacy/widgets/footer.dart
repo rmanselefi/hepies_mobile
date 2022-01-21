@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hepies/providers/user_provider.dart';
 import 'package:hepies/ui/doctor/drugs/drugs.dart';
 import 'package:hepies/ui/doctor/medicalrecords/medical_records.dart';
 import 'package:hepies/ui/doctor/prescription/write_prescription.dart';
@@ -8,6 +9,7 @@ import 'package:hepies/ui/pharmacy/ui/mypharmacy/mypharmacy.dart';
 import 'package:hepies/ui/pharmacy/ui/prescription/read_prescription.dart';
 import 'package:hepies/ui/pharmacy/welcome.dart';
 import 'package:hepies/ui/welcome.dart';
+import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
 
@@ -19,96 +21,96 @@ class PharmacyFooter extends StatefulWidget {
 class _PharmacyFooterState extends State<PharmacyFooter> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          OutlinedButton(
-            style: ButtonStyle(
-              backgroundColor:
-                  MaterialStateColor.resolveWith((states) => Color(0xff0FF6A0)),
+    UserProvider nav = Provider.of<UserProvider>(context);
+    return Container(
+      width: double.infinity,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: Icon(
+                home_circled,
+                color: nav.selectedNav == NavSelection.home
+                    ? Color(0xff0FF6A0)
+                    : Colors.grey,
+                size: nav.selectedNav == NavSelection.home
+                    ? width(context) * 0.1
+                    : width(context) * 0.075,
+              ),
+              onPressed: () {
+                nav.changeNavSelection(NavSelection.home);
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => WelcomePharmacy()));
+              },
             ),
-            child: Icon(
-              Icons.home_outlined,
-              color: Colors.black,
-              size: width(context) * 0.1,
+            SizedBox(
+              width: 5.0,
             ),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => WelcomePharmacy()));
-            },
-          ),
-//          MaterialButton(
-//            color: Color(0xff0FF6A0),
-//            minWidth: 50.0,
-//            elevation: 0.0,
-//            shape: RoundedRectangleBorder(
-//              borderRadius: BorderRadius.circular(12), // <-- Radius
-//            ),
-//            onPressed: () {
-//              Navigator.push(context,
-//                  MaterialPageRoute(builder: (context) => WelcomePharmacy()));
-//            },
-//            child: Text('Home'),
-//          ),
-          SizedBox(
-            width: 5.0,
-          ),
-          OutlinedButton(
-            style: ButtonStyle(
-              backgroundColor:
-                  MaterialStateColor.resolveWith((states) => Color(0xff0FF6A0)),
+            IconButton(
+              icon: Icon(
+                file_signature,
+                color: nav.selectedNav == NavSelection.prescription
+                    ? Color(0xff0FF6A0)
+                    : Colors.grey,
+                size: nav.selectedNav == NavSelection.prescription
+                    ? width(context) * 0.1
+                    : width(context) * 0.075,
+              ),
+              onPressed: () {
+                nav.changeNavSelection(NavSelection.prescription);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ReadPrescription()));
+              },
             ),
-            child: Icon(
-              IconData(0xe800, fontFamily: 'MyFlutterApp', fontPackage: null),
-              color: Colors.black,
-              size: width(context) * 0.1,
+            SizedBox(
+              width: 5.0,
             ),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => ReadPrescription()));
-            },
-          ),
-          SizedBox(
-            width: 5.0,
-          ),
-          OutlinedButton(
-            style: ButtonStyle(
-              backgroundColor:
-                  MaterialStateColor.resolveWith((states) => Color(0xff0FF6A0)),
+            IconButton(
+              icon: Icon(
+                pharmacy,
+                color: nav.selectedNav == NavSelection.pharmacy
+                    ? Color(0xff0FF6A0)
+                    : Colors.grey,
+                size: nav.selectedNav == NavSelection.pharmacy
+                    ? width(context) * 0.1
+                    : width(context) * 0.075,
+              ),
+              onPressed: () {
+                nav.changeNavSelection(NavSelection.pharmacy);
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => MyPharmacy()));
+              },
             ),
-            child: Icon(
-              Icons.local_pharmacy_outlined,
-              color: Colors.black,
-              size: width(context) * 0.1,
+            SizedBox(
+              width: 5.0,
             ),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => MyPharmacy()));
-            },
-          ),
-          SizedBox(
-            width: 5.0,
-          ),
-          OutlinedButton(
-            style: ButtonStyle(
-              backgroundColor:
-                  MaterialStateColor.resolveWith((states) => Color(0xff0FF6A0)),
+            IconButton(
+              icon: Icon(
+                history,
+                color: nav.selectedNav == NavSelection.history
+                    ? Color(0xff0FF6A0)
+                    : Colors.grey,
+                size: nav.selectedNav == NavSelection.history
+                    ? width(context) * 0.1
+                    : width(context) * 0.075,
+              ),
+              onPressed: () {
+                nav.changeNavSelection(NavSelection.history);
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => PharmacyHistory()));
+              },
             ),
-            child: Icon(
-              Icons.history_outlined,
-              color: Colors.black,
-              size: width(context) * 0.1,
-            ),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => PharmacyHistory()));
-            },
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
+
+enum NavSelection { home, prescription, pharmacy, history }

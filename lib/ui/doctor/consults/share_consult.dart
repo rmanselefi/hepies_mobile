@@ -147,12 +147,12 @@ class _ShareConsultState extends State<ShareConsult> {
                 Align(
                   alignment: Alignment.topRight,
                   child: Container(
-                    padding: EdgeInsets.only(right: 15.0),
+                    padding: EdgeInsets.only(right: 10.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          width: 250,
+                          width: width(context) * 0.7,
                           child: Wrap(
                             alignment: WrapAlignment.start,
                             direction: Axis.horizontal,
@@ -168,14 +168,17 @@ class _ShareConsultState extends State<ShareConsult> {
                                 },
                                 child: Text(
                                   "#${e['interest']} ",
-                                  style: TextStyle(color: Colors.blueAccent),
+                                  style: TextStyle(
+                                    color: Colors.blueAccent,
+                                    fontSize: 12,
+                                  ),
                                 ),
                               );
                             }).toList(),
                           ),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             ImageInputConsult(_setImage),
                             consult.shareStatus == ConsultStatus.Sharing
@@ -223,8 +226,34 @@ class _ShareConsultState extends State<ShareConsult> {
                                           );
                                         }
                                       },
-                                      child: Text('Consult'),
-                                    )),
+                                      child: Container(
+                                        margin: EdgeInsets.zero,
+                                        padding: EdgeInsets.all(3.0),
+                                        decoration: BoxDecoration(
+                                          boxShadow: [buttonShadow],
+                                          borderRadius:
+                                              BorderRadius.circular(3),
+                                        ),
+                                        child: Container(
+                                          margin: EdgeInsets.zero,
+                                          padding: EdgeInsets.all(3.0),
+                                          decoration: BoxDecoration(
+                                            boxShadow: [buttonShadow],
+                                            borderRadius:
+                                                BorderRadius.circular(3),
+                                          ),
+                                          child: Text(
+                                            'Consult',
+                                            textScaleFactor: 0.775,
+                                            style: TextStyle(
+                                              color: Colors.blue,
+                                              fontWeight: FontWeight.w900,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                           ],
                         ),
                       ],

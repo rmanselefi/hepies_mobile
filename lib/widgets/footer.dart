@@ -14,132 +14,116 @@ class Footer extends StatefulWidget {
 class _FooterState extends State<Footer> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // MaterialButton(
-          //   color: Color(0xff0FF6A0),
-          //   elevation: 0.0,
-          //   shape: RoundedRectangleBorder(
-          //     borderRadius: BorderRadius.circular(12), // <-- Radius
-          //   ),
-          //   onPressed: () {
-          //     Navigator.push(
-          //         context,
-          //         MaterialPageRoute(
-          //             builder: (context) => Welcome(
-          //                   currenIndex: 0,
-          //                 )));
-          //   },
-          //   child: Text(
-          //     'Home',
-          //   ),
-          // ),
-          // SizedBox(
-          //   width: 5.0,
-          // ),
-          // MaterialButton(
-          //   minWidth: 50.0,
-          //   elevation: 0.0,
-          //   color: Color(0xff0FF6A0),
-          //   shape: RoundedRectangleBorder(
-          //     borderRadius: BorderRadius.circular(12), // <-- Radius
-          //   ),
-          //   onPressed: () {
-          //     Navigator.push(context,
-          //         MaterialPageRoute(builder: (context) => WritePrescription()));
-          //   },
-          //   child: Text(
-          //     'Prescription',
-          //   ),
-          // ),
-          // SizedBox(
-          //   width: 5.0,
-          // ),
-          // // MaterialButton(
-          // //   minWidth: 50.0,
-          // //   elevation: 0.0,
-          // //   color: Color(0xff0FF6A0),
-          // //   shape: RoundedRectangleBorder(
-          // //     borderRadius: BorderRadius.circular(12), // <-- Radius
-          // //   ),
-          // //   onPressed: () {
-          // //     Navigator.push(
-          // //         context, MaterialPageRoute(builder: (context) => MedicalRecord()));
-          // //   },
-          // //   child: Text('Medical Records'),
-          // // ),
-          // MaterialButton(
-          //   minWidth: 50.0,
-          //   elevation: 0.0,
-          //   color: Color(0xff0FF6A0),
-          //   shape: RoundedRectangleBorder(
-          //     borderRadius: BorderRadius.circular(12), // <-- Radius
-          //   ),
-          //   onPressed: () {
-          //     Navigator.push(
-          //         context, MaterialPageRoute(builder: (context) => Drugs()));
-          //   },
-          //   child: Text(
-          //     'Drugs',
-          //   ),
-          // ),
-          OutlinedButton(
-            style: ButtonStyle(
-              backgroundColor:
-                  MaterialStateColor.resolveWith((states) => Color(0xff0FF6A0)),
+    return Container(
+      width: double.infinity,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: Icon(
+                home_circled,
+                color: Colors.black38,
+                size: width(context) * 0.075,
+              ),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => Welcome(
+                              currenIndex: 0,
+                            )));
+              },
             ),
-            child: Icon(
-              Icons.home_outlined,
-              color: Colors.black,
-              size: width(context) * 0.1,
+            SizedBox(width: 10),
+            IconButton(
+              icon: Icon(
+                file_signature,
+                color: Colors.black38,
+                size: width(context) * 0.075,
+              ),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => WritePrescription()));
+              },
             ),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Welcome(
-                            currenIndex: 0,
-                          )));
-            },
-          ),
-          SizedBox(width: 10),
-          OutlinedButton(
-            style: ButtonStyle(
-              backgroundColor:
-                  MaterialStateColor.resolveWith((states) => Color(0xff0FF6A0)),
+            SizedBox(width: 10),
+            IconButton(
+              icon: Icon(
+                pills,
+                color: Colors.black38,
+                size: width(context) * 0.075,
+              ),
+              onPressed: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Drugs()));
+              },
             ),
-            child: Icon(
-              IconData(0xe800, fontFamily: 'MyFlutterApp', fontPackage: null),
-              color: Colors.black,
-              size: width(context) * 0.1,
-            ),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => WritePrescription()));
-            },
-          ),
-          SizedBox(width: 10),
-          OutlinedButton(
-            style: ButtonStyle(
-              backgroundColor:
-                  MaterialStateColor.resolveWith((states) => Color(0xff0FF6A0)),
-            ),
-            child: Icon(
-              Icons.medical_services_outlined,
-              color: Colors.black,
-              size: width(context) * 0.1,
-            ),
-            onPressed: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Drugs()));
-            },
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
+
+
+
+// GestureDetector(
+//             child: Container(
+//               width: width(context) * 0.20,
+//               padding: EdgeInsets.all(7.5),
+//               child: Center(child: Text('Home', textScaleFactor: 1.05)),
+//               decoration: BoxDecoration(
+//                 color: Color(0xff0FF6A0),
+//                 shape: BoxShape.rectangle,
+//                 borderRadius: BorderRadius.circular(5),
+//               ),
+//             ),
+//             onTap: () {
+//               Navigator.push(
+//                   context,
+//                   MaterialPageRoute(
+//                       builder: (context) => Welcome(
+//                             currenIndex: 0,
+//                           )));
+//             },
+//           ),
+//           SizedBox(width: 10),
+//           GestureDetector(
+//             child: Container(
+//               width: width(context) * 0.30,
+//               padding: EdgeInsets.all(7.5),
+//               child: Center(child: Text('Prescription', textScaleFactor: 1.05)),
+//               decoration: BoxDecoration(
+//                 color: Color(0xff0FF6A0),
+//                 shape: BoxShape.rectangle,
+//                 borderRadius: BorderRadius.circular(5),
+//               ),
+//             ),
+//             onTap: () {
+//               Navigator.push(context,
+//                   MaterialPageRoute(builder: (context) => WritePrescription()));
+//             },
+//           ),
+//           SizedBox(width: 10),
+//           GestureDetector(
+//             child: Container(
+//               width: width(context) * 0.20,
+//               padding: EdgeInsets.all(7.5),
+//               child: Center(child: Text('Drugs', textScaleFactor: 1.05)),
+//               decoration: BoxDecoration(
+//                 color: Color(0xff0FF6A0),
+//                 shape: BoxShape.rectangle,
+//                 borderRadius: BorderRadius.circular(5),
+//               ),
+//             ),
+//             onTap: () {
+//               Navigator.push(
+//                   context, MaterialPageRoute(builder: (context) => Drugs()));
+//             },
+//           ),
+        

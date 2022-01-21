@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:hepies/models/user.dart';
 import 'package:hepies/providers/auth.dart';
+import 'package:hepies/ui/pharmacy/widgets/footer.dart';
 import 'package:hepies/util/app_url.dart';
 import 'package:hepies/util/shared_preference.dart';
 import 'package:http/http.dart';
@@ -33,6 +34,13 @@ class UserProvider with ChangeNotifier {
 
   void setUser(User user) {
     _user = user;
+  }
+
+  NavSelection selectedNav = NavSelection.home;
+
+  changeNavSelection(NavSelection selection) {
+    selectedNav = selection;
+    notifyListeners();
   }
 
   Future<Map<String, dynamic>> updateProfile(

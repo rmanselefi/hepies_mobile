@@ -158,7 +158,7 @@ class _CalculatorState extends State<Calculator> {
               ),
               GestureDetector(
                 child: Container(
-                  width: 100,
+                  width: width(context) * 0.4,
                   padding: EdgeInsets.all(13.0),
                   margin: EdgeInsets.only(left: 10, top: 30),
                   decoration: BoxDecoration(
@@ -181,7 +181,7 @@ class _CalculatorState extends State<Calculator> {
               ),
               GestureDetector(
                 child: Container(
-                  width: 100,
+                  width: width(context) * 0.4,
                   padding: EdgeInsets.all(13.0),
                   margin: EdgeInsets.only(left: 10, top: 30),
                   decoration: BoxDecoration(
@@ -204,7 +204,7 @@ class _CalculatorState extends State<Calculator> {
               ),
               GestureDetector(
                 child: Container(
-                  width: 100,
+                  width: width(context) * 0.4,
                   padding: EdgeInsets.all(13.0),
                   margin: EdgeInsets.only(left: 10, top: 30),
                   decoration: BoxDecoration(

@@ -219,7 +219,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                     },
                     child: Container(
                       height: 30,
-                      width: width(context) * 0.25,
+                      width: width(context) * 0.225,
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.black45, width: 2),
                       ),
@@ -242,7 +242,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                     },
                     child: Container(
                       height: 30,
-                      width: width(context) * 0.25,
+                      width: width(context) * 0.225,
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.black45, width: 2),
                       ),
@@ -265,7 +265,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                     },
                     child: Container(
                       height: 30,
-                      width: width(context) * 0.25,
+                      width: width(context) * 0.225,
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.black45, width: 2),
                       ),
@@ -281,6 +281,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Container(
+                  width: width(context) * 0.225,
                   margin: EdgeInsets.all(3),
                   child: MaterialButton(
                     padding: EdgeInsets.all(2),
@@ -297,12 +298,13 @@ class _WritePrescriptionState extends State<WritePrescription> {
                       'Normal',
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 15,
+                        fontSize: 14,
                       ),
                     ),
                   ),
                 ),
                 Container(
+                  width: width(context) * 0.225,
                   margin: EdgeInsets.all(3),
                   child: MaterialButton(
                     padding: EdgeInsets.all(2),
@@ -319,7 +321,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                       'Instruments',
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 15,
+                        fontSize: 12,
                       ),
                     ),
                   ),
@@ -332,6 +334,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Container(
+                                width: width(context) * 0.225,
                                 margin: EdgeInsets.all(3),
                                 child: MaterialButton(
                                   padding: EdgeInsets.all(2),
@@ -349,12 +352,13 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                     'Psychotropic',
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: 15,
+                                      fontSize: 12,
                                     ),
                                   ),
                                 ),
                               ),
                               Container(
+                                width: width(context) * 0.225,
                                 margin: EdgeInsets.all(3),
                                 child: MaterialButton(
                                   padding: EdgeInsets.all(2),
@@ -372,7 +376,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                     'Narcotic',
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: 15,
+                                      fontSize: 14,
                                     ),
                                   ),
                                 ),
@@ -382,64 +386,69 @@ class _WritePrescriptionState extends State<WritePrescription> {
                         );
                       })
                     : Builder(builder: (context) {
-                        return Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              margin: EdgeInsets.all(3),
-                              child: MaterialButton(
-                                padding: EdgeInsets.all(2),
-                                color: Colors.redAccent[400],
-                                shape: RoundedRectangleBorder(
-                                  side: BorderSide(
-                                      color: Colors.black45, width: 2),
-                                ),
-                                onPressed: () {
-                                  showTopSnackBar(
-                                    context,
-                                    CustomSnackBar.error(
-                                      message:
-                                          "Please contact your workplace to be authorized for writing psychotropic/narcotic medications",
+                        return SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                width: width(context) * 0.225,
+                                margin: EdgeInsets.all(3),
+                                child: MaterialButton(
+                                  padding: EdgeInsets.all(2),
+                                  color: Colors.redAccent[400],
+                                  shape: RoundedRectangleBorder(
+                                    side: BorderSide(
+                                        color: Colors.black45, width: 2),
+                                  ),
+                                  onPressed: () {
+                                    showTopSnackBar(
+                                      context,
+                                      CustomSnackBar.error(
+                                        message:
+                                            "Please contact your workplace to be authorized for writing psychotropic/narcotic medications",
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    'Psychotropic',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 12,
                                     ),
-                                  );
-                                },
-                                child: Text(
-                                  'Psychotropic',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15,
                                   ),
                                 ),
                               ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.all(3),
-                              child: MaterialButton(
-                                padding: EdgeInsets.all(2),
-                                color: Colors.purple,
-                                shape: RoundedRectangleBorder(
-                                  side: BorderSide(
-                                      color: Colors.black45, width: 2),
-                                ),
-                                onPressed: () {
-                                  showTopSnackBar(
-                                    context,
-                                    CustomSnackBar.error(
-                                      message:
-                                          "Please contact your workplace to be authorized for writing psychotropic/narcotic medications",
+                              Container(
+                                width: width(context) * 0.225,
+                                margin: EdgeInsets.all(3),
+                                child: MaterialButton(
+                                  padding: EdgeInsets.all(2),
+                                  color: Colors.purple,
+                                  shape: RoundedRectangleBorder(
+                                    side: BorderSide(
+                                        color: Colors.black45, width: 2),
+                                  ),
+                                  onPressed: () {
+                                    showTopSnackBar(
+                                      context,
+                                      CustomSnackBar.error(
+                                        message:
+                                            "Please contact your workplace to be authorized for writing psychotropic/narcotic medications",
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    'Narcotic',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 14,
                                     ),
-                                  );
-                                },
-                                child: Text(
-                                  'Narcotic',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 15,
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         );
                       })
               ],

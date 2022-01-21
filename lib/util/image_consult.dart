@@ -63,15 +63,12 @@ class _ImageInputState extends State<ImageInputConsult> {
     // TODO: implement build
     return Column(
       children: <Widget>[
-        TextButton.icon(
+        IconButton(
           onPressed: () {
             _openImagePicker(context);
           },
-          label: Text(
-            '',
-            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
-          ),
-          icon: Icon(Icons.attach_file_outlined),
+          icon: Icon(Icons.attach_file_outlined, color: Colors.blue),
+          iconSize: 22,
         ),
       ],
     );

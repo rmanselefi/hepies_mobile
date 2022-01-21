@@ -10,6 +10,13 @@ const Color fadeBlack = Color(0xffafadad);
 const Color transparent = Colors.transparent;
 const Color red = Colors.red;
 
+const _kFontFam = 'MyFlutterApp';
+
+const IconData home_circled = IconData(0xe801, fontFamily: _kFontFam);
+const IconData pharmacy = IconData(0xe829, fontFamily: _kFontFam);
+const IconData pills = IconData(0xea61, fontFamily: _kFontFam);
+const IconData history = IconData(0xf1da, fontFamily: _kFontFam);
+const IconData file_signature = IconData(0xf573, fontFamily: _kFontFam);
 // const String customFont = 'varta';
 // const String dir = 'assets/images/';
 

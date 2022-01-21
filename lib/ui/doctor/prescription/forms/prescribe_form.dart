@@ -474,8 +474,8 @@ class _PrescribeFormState extends State<PrescribeForm> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
-                          width: 200,
-                          height: 50.0,
+                          width: width(context) * 0.575,
+                          height: 40.0,
                           child: TextFormField(
                             // Milkessa: Fixed phone input field formatting
                             textAlign: TextAlign.start,
@@ -553,8 +553,8 @@ class _PrescribeFormState extends State<PrescribeForm> {
                         ),
                       ),
                       Container(
-                        width: 80,
-                        height: 50,
+                        width: width(context) * 0.15,
+                        height: 40,
                         child: Row(
                           children: [
                             Flexible(
@@ -588,8 +588,8 @@ class _PrescribeFormState extends State<PrescribeForm> {
                         width: 5.0,
                       ),
                       Container(
-                        width: 80,
-                        height: 50.0,
+                        width: width(context) * 0.15,
+                        height: 40.0,
                         padding: const EdgeInsets.only(left: 5.0),
                         child: DropdownButton<String>(
                           // decoration:
@@ -641,7 +641,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                       ),
                       Container(
                         width: width(context) * 0.325,
-                        height: 50.0,
+                        height: 40.0,
                         child: TextFormField(
                           controller: nameController,
                           enabled: !rememberMe,
@@ -664,7 +664,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                       ),
                       Container(
                         width: width(context) * 0.375,
-                        height: 50.0,
+                        height: 40.0,
                         child: TextFormField(
                           controller: fnameController,
                           enabled: !rememberMe,
@@ -687,7 +687,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                       ),
                       Container(
                         width: width(context) * 0.2,
-                        height: 50.0,
+                        height: 40.0,
                         decoration: BoxDecoration(
                             // border: Border.all(
                             //     color: Colors.green[400], width: 1.5),
