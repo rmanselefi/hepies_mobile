@@ -33,6 +33,7 @@ class _WelcomePharmacyState extends State<WelcomePharmacy> {
   var profession;
   var profile;
   var points;
+  var overallPoints;
   @override
   void initState() {
     // TODO: implement initState
@@ -44,6 +45,7 @@ class _WelcomePharmacyState extends State<WelcomePharmacy> {
         profession = user['profession'][0]['proffesion'];
         points = user['profession'][0]['points'];
         profile = user['profession'][0]['profile'];
+        overallPoints = user['profession'][0]['overall_points'];
       });
     });
   }
@@ -138,7 +140,7 @@ class _WelcomePharmacyState extends State<WelcomePharmacy> {
                           style: TextStyle(color: Colors.green, fontSize: 18.0),
                         ),
                       ),
-                      Text('Overall 1567pts',
+                      Text('Overall ${overallPoints}pts',
                           style: TextStyle(color: Colors.green))
                     ],
                   ),
