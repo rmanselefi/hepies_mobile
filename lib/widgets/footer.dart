@@ -22,46 +22,67 @@ class _FooterState extends State<Footer> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           mainAxisSize: MainAxisSize.min,
           children: [
-            IconButton(
-              icon: Icon(
-                home_circled,
-                color: Colors.black38,
-                size: width(context) * 0.075,
-              ),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => Welcome(
-                              currenIndex: 0,
-                            )));
-              },
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: Icon(
+                    home_circled,
+                    color: Colors.black38,
+                    size: width(context) * 0.075,
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Welcome(
+                                  currenIndex: 0,
+                                )));
+                  },
+                ),
+                Text('  Home', style: TextStyle(fontSize: 13)),
+              ],
             ),
             SizedBox(width: 10),
-            IconButton(
-              icon: Icon(
-                file_signature,
-                color: Colors.black38,
-                size: width(context) * 0.075,
-              ),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => WritePrescription()));
-              },
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: Icon(
+                    file_signature,
+                    color: Colors.black38,
+                    size: width(context) * 0.075,
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => WritePrescription()));
+                  },
+                ),
+                Text('prescription', style: TextStyle(fontSize: 13)),
+              ],
             ),
             SizedBox(width: 10),
-            IconButton(
-              icon: Icon(
-                pills,
-                color: Colors.black38,
-                size: width(context) * 0.075,
-              ),
-              onPressed: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Drugs()));
-              },
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: Icon(
+                    pills,
+                    color: Colors.black38,
+                    size: width(context) * 0.075,
+                  ),
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Drugs()));
+                  },
+                ),
+                Text('Drugs', style: TextStyle(fontSize: 13)),
+              ],
             ),
           ],
         ),

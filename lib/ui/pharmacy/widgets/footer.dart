@@ -31,80 +31,144 @@ class _PharmacyFooterState extends State<PharmacyFooter> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            IconButton(
-              icon: Icon(
-                home_circled,
-                color: nav.selectedNav == NavSelection.home
-                    ? Color(0xff0FF6A0)
-                    : Colors.grey,
-                size: nav.selectedNav == NavSelection.home
-                    ? width(context) * 0.1
-                    : width(context) * 0.075,
-              ),
-              onPressed: () {
-                nav.changeNavSelection(NavSelection.home);
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => WelcomePharmacy()));
-              },
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: Icon(
+                    home_circled,
+                    color: nav.selectedNav == NavSelection.home
+                        ? Color(0xff0FF6A0)
+                        : Colors.grey,
+                    size: nav.selectedNav == NavSelection.home
+                        ? width(context) * 0.1
+                        : width(context) * 0.075,
+                  ),
+                  onPressed: () {
+                    nav.changeNavSelection(NavSelection.home);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => WelcomePharmacy()));
+                  },
+                ),
+                Text(
+                  'Home',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: nav.selectedNav == NavSelection.home
+                        ? Color(0xff0FF6A0)
+                        : Colors.grey,
+                  ),
+                ),
+              ],
             ),
             SizedBox(
               width: 5.0,
             ),
-            IconButton(
-              icon: Icon(
-                file_signature,
-                color: nav.selectedNav == NavSelection.prescription
-                    ? Color(0xff0FF6A0)
-                    : Colors.grey,
-                size: nav.selectedNav == NavSelection.prescription
-                    ? width(context) * 0.1
-                    : width(context) * 0.075,
-              ),
-              onPressed: () {
-                nav.changeNavSelection(NavSelection.prescription);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ReadPrescription()));
-              },
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: Icon(
+                    file_signature,
+                    color: nav.selectedNav == NavSelection.prescription
+                        ? Color(0xff0FF6A0)
+                        : Colors.grey,
+                    size: nav.selectedNav == NavSelection.prescription
+                        ? width(context) * 0.1
+                        : width(context) * 0.075,
+                  ),
+                  onPressed: () {
+                    nav.changeNavSelection(NavSelection.prescription);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ReadPrescription()));
+                  },
+                ),
+                Text(
+                  'prescription',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: nav.selectedNav == NavSelection.prescription
+                        ? Color(0xff0FF6A0)
+                        : Colors.grey,
+                  ),
+                ),
+              ],
             ),
             SizedBox(
               width: 5.0,
             ),
-            IconButton(
-              icon: Icon(
-                pharmacy,
-                color: nav.selectedNav == NavSelection.pharmacy
-                    ? Color(0xff0FF6A0)
-                    : Colors.grey,
-                size: nav.selectedNav == NavSelection.pharmacy
-                    ? width(context) * 0.1
-                    : width(context) * 0.075,
-              ),
-              onPressed: () {
-                nav.changeNavSelection(NavSelection.pharmacy);
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => MyPharmacy()));
-              },
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: Icon(
+                    pharmacy,
+                    color: nav.selectedNav == NavSelection.pharmacy
+                        ? Color(0xff0FF6A0)
+                        : Colors.grey,
+                    size: nav.selectedNav == NavSelection.pharmacy
+                        ? width(context) * 0.1
+                        : width(context) * 0.075,
+                  ),
+                  onPressed: () {
+                    nav.changeNavSelection(NavSelection.pharmacy);
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => MyPharmacy()));
+                  },
+                ),
+                Text(
+                  'My Pharmacy',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: nav.selectedNav == NavSelection.pharmacy
+                        ? Color(0xff0FF6A0)
+                        : Colors.grey,
+                  ),
+                ),
+              ],
             ),
             SizedBox(
               width: 5.0,
             ),
-            IconButton(
-              icon: Icon(
-                history,
-                color: nav.selectedNav == NavSelection.history
-                    ? Color(0xff0FF6A0)
-                    : Colors.grey,
-                size: nav.selectedNav == NavSelection.history
-                    ? width(context) * 0.1
-                    : width(context) * 0.075,
-              ),
-              onPressed: () {
-                nav.changeNavSelection(NavSelection.history);
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => PharmacyHistory()));
-              },
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: Icon(
+                    history,
+                    color: nav.selectedNav == NavSelection.history
+                        ? Color(0xff0FF6A0)
+                        : Colors.grey,
+                    size: nav.selectedNav == NavSelection.history
+                        ? width(context) * 0.1
+                        : width(context) * 0.075,
+                  ),
+                  onPressed: () {
+                    nav.changeNavSelection(NavSelection.history);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PharmacyHistory()));
+                  },
+                ),
+                Text(
+                  'History',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: nav.selectedNav == NavSelection.history
+                        ? Color(0xff0FF6A0)
+                        : Colors.grey,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
