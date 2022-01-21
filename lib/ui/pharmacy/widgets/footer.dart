@@ -33,7 +33,6 @@ class _PharmacyFooterState extends State<PharmacyFooter> {
           children: [
             Column(
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 IconButton(
                   icon: Icon(
@@ -55,6 +54,7 @@ class _PharmacyFooterState extends State<PharmacyFooter> {
                 ),
                 Text(
                   'Home',
+                  textAlign: TextAlign.end,
                   style: TextStyle(
                     fontSize: 13,
                     color: nav.selectedNav == NavSelection.home

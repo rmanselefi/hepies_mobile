@@ -24,7 +24,6 @@ class _FooterState extends State<Footer> {
           children: [
             Column(
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 IconButton(
                   icon: Icon(
@@ -41,7 +40,11 @@ class _FooterState extends State<Footer> {
                                 )));
                   },
                 ),
-                Text('  Home', style: TextStyle(fontSize: 13)),
+                Text(
+                  '  Home',
+                  style: TextStyle(fontSize: 13),
+                  textAlign: TextAlign.end,
+                ),
               ],
             ),
             SizedBox(width: 10),
