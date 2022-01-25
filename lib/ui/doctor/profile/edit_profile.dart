@@ -16,7 +16,6 @@ import 'package:multiselect_formfield/multiselect_formfield.dart';
 import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class EditProfile extends StatefulWidget {
   @override
@@ -134,25 +133,6 @@ class _EditProfileState extends State<EditProfile>
         });
       },
     );
-    void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
-      setState(() {
-        if (args.value is PickerDateRange) {
-          _range =
-              DateFormat('dd/MM/yyyy').format(args.value.startDate).toString() +
-                  ' - ' +
-                  DateFormat('dd/MM/yyyy')
-                      .format(args.value.endDate ?? args.value.startDate)
-                      .toString();
-        } else if (args.value is DateTime) {
-          _selectedDate = args.value.toString();
-        } else if (args.value is List<DateTime>) {
-          _dateCount = args.value.length.toString();
-        } else {
-          _rangeCount = args.value.length.toString();
-        }
-      });
-    }
-
     var loading = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
