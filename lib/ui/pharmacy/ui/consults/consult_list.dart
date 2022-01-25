@@ -17,6 +17,7 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
+// import 'package:rich_text_view/rich_text_view.dart';
 
 class PharmacyConsultList extends StatefulWidget {
   final user_id;
@@ -423,183 +424,192 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
       showModalBottomSheet(
           context: context,
           builder: (BuildContext context) {
-            return Container(
-              color: Colors.white,
-              height: 500.0,
-              child: Column(
-                children: <Widget>[
-                  SizedBox(height: 5),
-                  Text(
-                    'Edit your consult',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-                  ),
-                  SizedBox(height: 5),
-                  Divider(),
-                  Row(
-                    // Milkesa: Added mini image display next to consult text field
-                    children: [
-                      Flexible(
-                        flex: 3,
-                        child: Padding(
-                          padding: EdgeInsets.all(3),
-                          child: HashTagTextField(
-                            decoration: InputDecoration(
-                                hintText: 'Share, consult, promote, inform..',
-                                border: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.grey.shade50,
-                                        width: 0.5))),
-                            basicStyle:
-                                TextStyle(fontSize: 15, color: Colors.black),
-                            decoratedStyle:
-                                TextStyle(fontSize: 15, color: Colors.blue),
-                            keyboardType: TextInputType.multiline,
-                            controller: _topic,
-
-                            /// Called when detection (word starts with #, or # and @) is being typed
-                            onDetectionTyped: (text) {
-                              if (text.length > 1) {
-                                text.substring(2);
-                                print("text ${text.substring(2)}");
-                                setState(() {
-                                  name = text.substring(2).toLowerCase();
-                                });
-                              }
-
-                              print("texttexttexttexttext $text");
-                            },
-
-                            /// Called when detection is fully typed
-                            onDetectionFinished: () {
-                              print("detection finished");
-                            },
-                            maxLines: 4,
+            return StatefulBuilder(
+                builder: (context, setState) => Container(
+                      color: Colors.white,
+                      height: 500.0,
+                      child: Column(
+                        children: <Widget>[
+                          SizedBox(height: 5),
+                          Text(
+                            'Edit your consult',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18),
                           ),
-                        ),
-                      ),
-                      Flexible(
-                        child: file != null
-                            ? Container(
-                                width: width(context) * 0.25,
-                                margin: EdgeInsets.all(5),
-                                child: Stack(
-                                  children: [
-                                    Image.file(File(file.path),
-                                        fit: BoxFit.contain),
-                                    IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          file = null;
-                                        });
-                                      },
-                                      icon: Icon(Icons.cancel_outlined,
-                                          color: Colors.blue),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : Container(width: 0),
-                      ),
-                    ],
-                  ),
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: Container(
-                      padding: EdgeInsets.only(right: 15.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            width: 250,
-                            child: Wrap(
-                              alignment: WrapAlignment.start,
-                              direction: Axis.horizontal,
-                              children: widget.interest.map<Widget>((e) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    if (name == "") {
-                                      setState(() {
-                                        _topic.text =
-                                            "${_topic.text} #${e['interest']}";
-                                      });
-                                    }
-                                  },
-                                  child: Text(
-                                    "#${e['interest']} ",
-                                    style: TextStyle(color: Colors.blueAccent),
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                          ),
+                          SizedBox(height: 5),
+                          Divider(),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                            // Milkesa: Added mini image display next to consult text field
                             children: [
-                              ImageInputConsult(_setImage),
-                              consult.editStatus == ConsultStatus.Sharing
-                                  ? loading
-                                  : Align(
-                                      alignment: Alignment.topRight,
-                                      child: OutlinedButton(
-                                        onPressed: () async {
-                                          try {
-                                            var photo = file != null
-                                                ? File(file.path)
-                                                : null;
-                                            if (_topic.text !=
-                                                    "" || //Milkessa: added posting capability with either text or image
-                                                file != null) {
-                                              var res =
-                                                  await consult.updateConsult(
-                                                      post['id'],
-                                                      _topic.text,
-                                                      photo,
-                                                      post['image']);
-                                              if (res['status']) {
-                                                consult.getConsults();
-                                                showTopSnackBar(
-                                                  context,
-                                                  CustomSnackBar.success(
-                                                    message:
-                                                        "Your consult is updated succesfully",
-                                                  ),
-                                                );
+                              Flexible(
+                                flex: 3,
+                                child: Padding(
+                                  padding: EdgeInsets.all(3),
+                                  child: HashTagTextField(
+                                    decoration: InputDecoration(
+                                        hintText:
+                                            'Share, consult, promote, inform..',
+                                        border: OutlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color: Colors.grey.shade50,
+                                                width: 0.5))),
+                                    basicStyle: TextStyle(
+                                        fontSize: 15, color: Colors.black),
+                                    decoratedStyle: TextStyle(
+                                        fontSize: 15, color: Colors.blue),
+                                    keyboardType: TextInputType.multiline,
+                                    controller: _topic,
+
+                                    /// Called when detection (word starts with #, or # and @) is being typed
+                                    onDetectionTyped: (text) {
+                                      if (text.length > 1) {
+                                        text.substring(2);
+                                        print("text ${text.substring(2)}");
+                                        setState(() {
+                                          name =
+                                              text.substring(2).toLowerCase();
+                                        });
+                                      }
+
+                                      print("texttexttexttexttext $text");
+                                    },
+
+                                    /// Called when detection is fully typed
+                                    onDetectionFinished: () {
+                                      print("detection finished");
+                                    },
+                                    maxLines: 4,
+                                  ),
+                                ),
+                              ),
+                              Flexible(
+                                child: file != null
+                                    ? Container(
+                                        width: width(context) * 0.25,
+                                        margin: EdgeInsets.all(5),
+                                        child: Stack(
+                                          children: [
+                                            Image.file(File(file.path),
+                                                fit: BoxFit.contain),
+                                            IconButton(
+                                              onPressed: () {
                                                 setState(() {
-                                                  _topic.text = null;
                                                   file = null;
                                                 });
-                                              }
-                                            } else {
-                                              showTopSnackBar(
-                                                context,
-                                                CustomSnackBar.error(
-                                                  message:
-                                                      "Invalid Data! Make sure you have inserted image or text",
-                                                ),
-                                              );
-                                            }
-                                          } catch (e) {
-                                            print("eeeee ${e}");
-                                            showTopSnackBar(
-                                              context,
-                                              CustomSnackBar.error(
-                                                message:
-                                                    "Unable to share your consult",
-                                              ),
-                                            );
-                                          }
-                                        },
-                                        child: Text('Edit'),
-                                      )),
+                                              },
+                                              icon: Icon(Icons.cancel_outlined,
+                                                  color: Colors.blue),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    : Container(width: 0),
+                              ),
                             ],
+                          ),
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: Container(
+                              padding: EdgeInsets.only(right: 15.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    width: 250,
+                                    child: Wrap(
+                                      alignment: WrapAlignment.start,
+                                      direction: Axis.horizontal,
+                                      children:
+                                          widget.interest.map<Widget>((e) {
+                                        return GestureDetector(
+                                          onTap: () {
+                                            if (name == "") {
+                                              setState(() {
+                                                _topic.text =
+                                                    "${_topic.text} #${e['interest']}";
+                                              });
+                                            }
+                                          },
+                                          child: Text(
+                                            "#${e['interest']} ",
+                                            style: TextStyle(
+                                                color: Colors.blueAccent),
+                                          ),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      ImageInputConsult(_setImage),
+                                      consult.editStatus ==
+                                              ConsultStatus.Sharing
+                                          ? loading
+                                          : Align(
+                                              alignment: Alignment.topRight,
+                                              child: OutlinedButton(
+                                                onPressed: () async {
+                                                  try {
+                                                    var photo = file != null
+                                                        ? File(file.path)
+                                                        : null;
+                                                    if (_topic.text !=
+                                                            "" || //Milkessa: added posting capability with either text or image
+                                                        file != null) {
+                                                      var res = await consult
+                                                          .updateConsult(
+                                                              post['id'],
+                                                              _topic.text,
+                                                              photo,
+                                                              post['image']);
+                                                      if (res['status']) {
+                                                        consult.getConsults();
+                                                        showTopSnackBar(
+                                                          context,
+                                                          CustomSnackBar
+                                                              .success(
+                                                            message:
+                                                                "Your consult is updated succesfully",
+                                                          ),
+                                                        );
+                                                        setState(() {
+                                                          _topic.text = null;
+                                                          file = null;
+                                                        });
+                                                      }
+                                                    } else {
+                                                      showTopSnackBar(
+                                                        context,
+                                                        CustomSnackBar.error(
+                                                          message:
+                                                              "Invalid Data! Make sure you have inserted image or text",
+                                                        ),
+                                                      );
+                                                    }
+                                                  } catch (e) {
+                                                    print("eeeee ${e}");
+                                                    showTopSnackBar(
+                                                      context,
+                                                      CustomSnackBar.error(
+                                                        message:
+                                                            "Unable to share your consult",
+                                                      ),
+                                                    );
+                                                  }
+                                                },
+                                                child: Text('Edit'),
+                                              )),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ],
                       ),
-                    ),
-                  ),
-                ],
-              ),
-            );
+                    ));
           });
     }
 
@@ -744,12 +754,17 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                           isLinkNavigationEnable: true,
                           linkColor: Colors.blueAccent,
                           fontColor: Colors.black,
-                          // linkStyle: TextStyle(color: Colors.blueAccent),
-                          // LinkTypes: [LinkType.url, LinkType.hashtag]
-                          // onTap: (link) {
-                          //   if(link.type == Link.url) launch(link.value);
-                          // },
                         ),
+                        // RichTextView(
+                        //   text: "${snapshot.data[index]['topic'] ?? ' '}",
+                        //   maxLines: 3,
+                        //   align: TextAlign.center,
+                        //   onEmailClicked: (email) => launch(email),
+                        //   onHashTagClicked: (hashtag) =>
+                        //       print('is $hashtag trending?'),
+                        //   onUrlClicked: (url) => launch(url),
+                        //   linkStyle: TextStyle(color: Colors.blue),
+                        // ),
                         // Text(
                         //   _post[index].tags,
                         //   style: TextStyle(color: blueColor),
@@ -1134,12 +1149,17 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                               isLinkNavigationEnable: true,
                               linkColor: Colors.blueAccent,
                               fontColor: Colors.black,
-                              // linkStyle: TextStyle(color: Colors.blueAccent),
-                              // LinkTypes: [LinkType.url, LinkType.hashtag]
-                              // onTap: (link) {
-                              //   if(link.type == Link.url) launch(link.value);
-                              // },
                             ),
+                            // RichTextView(
+                            //   text: "${snapshot.data[index]['topic'] ?? ' '}",
+                            //   maxLines: 3,
+                            //   align: TextAlign.center,
+                            //   onEmailClicked: (email) => launch(email),
+                            //   onHashTagClicked: (hashtag) =>
+                            //       print('is $hashtag trending?'),
+                            //   onUrlClicked: (url) => launch(url),
+                            //   linkStyle: TextStyle(color: Colors.blue),
+                            // ),
                             // Text(
                             //   _post[index].tags,
                             //   style: TextStyle(color: blueColor),

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_linear_datepicker/flutter_datepicker.dart';
 import 'package:hepies/constants.dart';
 import 'package:hepies/models/user.dart';
 import 'package:hepies/providers/auth.dart';
@@ -17,7 +18,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
 import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
@@ -202,25 +202,36 @@ class _RegisterState extends State<Register> {
       },
     );
 
-    void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
-      setState(() {
-        if (args.value is PickerDateRange) {
-          _range =
-              DateFormat('dd/MM/yyyy').format(args.value.startDate).toString() +
-                  ' - ' +
-                  DateFormat('dd/MM/yyyy')
-                      .format(args.value.endDate ?? args.value.startDate)
-                      .toString();
-        } else if (args.value is DateTime) {
-          _selectedDate = args.value.toString();
-        }
-      });
-    }
-
-    final dateField = SfDateRangePicker(
-      onSelectionChanged: _onSelectionChanged,
-      selectionMode: DateRangePickerSelectionMode.single,
-    );
+    final dateField = LinearDatePicker(
+        startDate: "1900/01/01", //yyyy/mm/dd
+        endDate: "2019/01/01",
+        initialDate: "1980/01/01",
+        dateChangeListener: (String selectedDate) {
+          _selectedDate = selectedDate;
+          print(_selectedDate);
+        },
+        showDay: true, //false -> only select year & month
+        labelStyle: TextStyle(
+          fontSize: 17.0,
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+        ),
+        selectedRowStyle: TextStyle(
+          fontSize: 16.0,
+          color: Colors.deepOrange,
+        ),
+        unselectedRowStyle: TextStyle(
+          fontSize: 15.0,
+          color: Colors.blueGrey,
+        ),
+        yearText: "Year",
+        monthText: "Month",
+        dayText: "Day",
+        showLabels: true, // to show column captions, eg. year, month, etc.
+        columnWidth: width(context) * 0.25,
+        showMonthName: true,
+        isJalaali: false // false -> Gregorian
+        );
 
     final sexField = DropdownButtonFormField(
       value: _sexController,
@@ -284,7 +295,8 @@ class _RegisterState extends State<Register> {
 
     final confirmPassword = TextFormField(
       autofocus: false,
-      validator: (value) => value.isEmpty ? "Your password is required" : null,
+      validator: (value) =>
+          value != _password ? "Passwords don't match!" : null,
       onSaved: (value) => _confirmPassword = value,
       obscureText: true,
       decoration: buildInputDecoration("Confirm password", Icons.lock),
