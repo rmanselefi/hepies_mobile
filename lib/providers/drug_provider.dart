@@ -10,11 +10,13 @@ import 'package:http/http.dart';
 
 class DrugProvider with ChangeNotifier {
   List<dynamic> drugs = [];
-  List<dynamic> instruments=[];
+  List<dynamic> psychoDrugs = [];
+  List<dynamic> narcoDrugs = [];
+  List<dynamic> instruments = [];
   Future<List<dynamic>> getDrugs() async {
     var result;
     List<Consult> consults = [];
-    Response response = await get(Uri.parse(AppUrl.drugs));
+    Response response = await get(Uri.parse(AppUrl.generaldrugs));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       drugs = json.decode(response.body);
@@ -39,6 +41,68 @@ class DrugProvider with ChangeNotifier {
   Future<void> putDrugsLocal() async {
     Box hive = Hive.box('drugList');
     hive.put('drugs', await getDrugs());
+    print('Local Database updated.');
+  }
+
+  Future<List<dynamic>> getPsychoDrugs() async {
+    var result;
+    List<Consult> consults = [];
+    Response response = await get(Uri.parse(AppUrl.psychodrugs));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      psychoDrugs = json.decode(response.body);
+      print("consultconsultconsultconsultconsult ${drugs}");
+      // notifyListeners();
+      return drugs.where((element) => element['type'] != 'instrument').toList();
+    } else {
+      notifyListeners();
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return psychoDrugs;
+  }
+
+  Future<List<dynamic>> getPsychoDrugsLocal() async {
+    Box hive = Hive.box('psychoDrugList');
+    return await hive.get('psychodrugs');
+  }
+
+  Future<void> putPsychoDrugsLocal() async {
+    Box hive = Hive.box('psychoDrugList');
+    hive.put('psychodrugs', await getPsychoDrugs());
+    print('Local Database updated.');
+  }
+
+  Future<List<dynamic>> getNarcoDrugs() async {
+    var result;
+    List<Consult> consults = [];
+    Response response = await get(Uri.parse(AppUrl.narcoticsdrugs));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      narcoDrugs = json.decode(response.body);
+      print("consultconsultconsultconsultconsult ${narcoDrugs}");
+      // notifyListeners();
+      return drugs.where((element) => element['type'] != 'instrument').toList();
+    } else {
+      notifyListeners();
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return narcoDrugs;
+  }
+
+  Future<List<dynamic>> getNarcoDrugsLocal() async {
+    Box hive = Hive.box('narcoDrugList');
+    return await hive.get('narcoodrugs');
+  }
+
+  Future<void> putNarcoDrugsLocal() async {
+    Box hive = Hive.box('narcoDrugList');
+    hive.put('narcoodrugs', await getNarcoDrugs());
     print('Local Database updated.');
   }
 

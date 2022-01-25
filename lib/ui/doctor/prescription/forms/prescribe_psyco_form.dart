@@ -728,7 +728,7 @@ class _PrescribeFormState extends State<PrescribePsychoForm> {
                               FutureBuilder<List<dynamic>>(
                                   future:
                                   Provider.of<DrugProvider>(context)
-                                      .getDrugsLocal(),
+                                      .getPsychoDrugsLocal(),
                                   builder: (context, snapshot) {
                                     if (!snapshot.hasData) {
                                       return Center(
