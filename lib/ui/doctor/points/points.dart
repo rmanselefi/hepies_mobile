@@ -121,8 +121,7 @@ class _PointsState extends State<Points> {
                                   showTopSnackBar(
                                     context,
                                     CustomSnackBar.error(
-                                      message:
-                                          "You don't have enough points to buy 50 birr credit",
+                                      message: "You don't have enough points",
                                     ),
                                   );
                                 }
@@ -147,13 +146,20 @@ class _PointsState extends State<Points> {
                                   if (res['status']) {
                                     var voucher = res['result'];
                                     launch("tel://*805*${voucher['code']}#");
+                                  } else {
+                                    showTopSnackBar(
+                                      context,
+                                      CustomSnackBar.error(
+                                        message:
+                                            "Something is wrong please contact system admin",
+                                      ),
+                                    );
                                   }
                                 } else {
                                   showTopSnackBar(
                                     context,
                                     CustomSnackBar.error(
-                                      message:
-                                          "You don't have enough points to buy 50 birr credit",
+                                      message: "You don't have enough points",
                                     ),
                                   );
                                 }
@@ -297,6 +303,18 @@ class _PointsState extends State<Points> {
                                                   "You have successfully transfered ${pointsController.text} point(s) to phone +251${phoneController.text}",
                                             ),
                                           );
+                                        } else {
+                                          if (res['statusCode'] == 404) {
+                                            phoneController.text = "";
+                                            pointsController.text = "";
+                                            showTopSnackBar(
+                                              context,
+                                              CustomSnackBar.error(
+                                                message:
+                                                    "Phone number is not available. please enter available phone to continue with the transfer",
+                                              ),
+                                            );
+                                          }
                                         }
                                       } else if (double.parse(points) <
                                           double.parse(pointsController.text)) {

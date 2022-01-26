@@ -51,9 +51,9 @@ class DrugProvider with ChangeNotifier {
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       psychoDrugs = json.decode(response.body);
-      print("consultconsultconsultconsultconsult ${drugs}");
+      print("consultconsultconsultconsultconsult ${psychoDrugs}");
       // notifyListeners();
-      return drugs.where((element) => element['type'] != 'instrument').toList();
+      return psychoDrugs;
     } else {
       notifyListeners();
       result = {
@@ -84,7 +84,7 @@ class DrugProvider with ChangeNotifier {
       narcoDrugs = json.decode(response.body);
       print("consultconsultconsultconsultconsult ${narcoDrugs}");
       // notifyListeners();
-      return drugs.where((element) => element['type'] != 'instrument').toList();
+      return narcoDrugs;
     } else {
       notifyListeners();
       result = {

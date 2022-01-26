@@ -161,8 +161,6 @@ class UserProvider with ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
     var result;
-    var user = await UserPreferences().getUser();
-    var user_id = user.professionid;
     var registrationData = {'points': point, 'phone': '+251$phone'};
     Response response = await post(Uri.parse(AppUrl.transfer),
         body: json.encode(registrationData),
@@ -175,12 +173,18 @@ class UserProvider with ChangeNotifier {
       _pointStatus = ChangeStatus.Changed;
       notifyListeners();
 
-      result = {'status': true, 'message': 'Successful', 'user': response.body};
+      result = {
+        'status': true,
+        'statusCode': response.statusCode,
+        'message': 'Successful',
+        'user': response.body
+      };
     } else {
       _pointStatus = ChangeStatus.NotChanged;
       notifyListeners();
       result = {
         'status': false,
+        'statusCode': response.statusCode,
         'message': json.decode(response.body)['error']
       };
     }
@@ -193,8 +197,6 @@ class UserProvider with ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
     var result;
-    var user = await UserPreferences().getUser();
-    var user_id = user.professionid;
     var registrationData = {'amount': amount};
     Response response = await post(Uri.parse(AppUrl.fill),
         body: json.encode(registrationData),

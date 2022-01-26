@@ -170,9 +170,19 @@ class _PrescribeFormState extends State<PrescribeForm> {
     });
   }
 
+  void setFormFromFav(var fav) {
+    drugnameController.text = fav['drug_name'];
+    strengthController.text = fav['strength'];
+    unitController.text = fav['unit'];
+    routeController.text = fav['route'];
+    forController.text = fav['takein'];
+    everyController.text = fav['frequency'];
+  }
+
   void setFromFavorites(List<dynamic> fav) async {
     User user = await UserPreferences().getUser();
     var profession = "${user.profession} ${user.name} ${user.fathername}";
+    setFormFromFav(fav[0]);
     for (var i = 0; i < fav.length; i++) {
       final Map<String, dynamic> precriptionData = {
         'drug_name': fav[i]['drug_name'],
