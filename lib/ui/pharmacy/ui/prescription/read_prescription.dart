@@ -47,25 +47,14 @@ class _ReadPrescriptionState extends State<ReadPrescription> {
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: TextFormField(
                       controller: codeController,
-                      maxLength: 9,
                       enabled: true,
-                      keyboardType: TextInputType.number,
+                      keyboardType: TextInputType.phone,
                       decoration: InputDecoration(
                         prefixIcon: Padding(
                           padding: EdgeInsets.only(
                               right: 5, left: 10, top: 5, bottom: 5),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '+251 ',
-                                textScaleFactor: 0.9,
-                              ),
-                            ],
-                          ),
                         ),
-                        // hintText: hintText,
+                        hintText: 'Enter code here...',
                         counterText: "",
                         contentPadding: EdgeInsets.all(5),
                         border: OutlineInputBorder(
@@ -82,12 +71,14 @@ class _ReadPrescriptionState extends State<ReadPrescription> {
                           padding: const EdgeInsets.all(8.0),
                           child: GestureDetector(
                             onTap: () async {
-                              var res =
-                                  await prescriptionProvider.readPrescription(
-                                      '+251${codeController.text}');
+                              var res = await prescriptionProvider
+                                  .readPrescription('${codeController.text}');
                               print("objectobjectobjectobject $res");
                               if (res['status']) {
                                 if (res['isPhone']) {
+                                  res = await prescriptionProvider
+                                      .readPrescription(
+                                          '${codeController.text}');
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
