@@ -139,8 +139,8 @@ class _WelcomeState extends State<Welcome> {
                     child: GradientText(
                       'Hepius',
                       gradient: LinearGradient(colors: [
-                        Colors.blue.shade400,
-                        Colors.blue.shade900,
+                        Colors.blue,
+                        Colors.blue,
                       ]),
                     ),
                   ),
