@@ -17,7 +17,7 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
-// import 'package:rich_text_view/rich_text_view.dart';
+import 'package:rich_text_view/rich_text_view.dart';
 
 class PharmacyConsultList extends StatefulWidget {
   final user_id;
@@ -749,11 +749,20 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                         //     print(text);
                         //   },
                         // ),
-                        LinkifyText(
-                          "${snapshot.data[index]['topic'] ?? ' '}",
-                          isLinkNavigationEnable: true,
-                          linkColor: Colors.blueAccent,
-                          fontColor: Colors.black,
+                        // LinkifyText(
+                        //   "${snapshot.data[index]['topic'] ?? ' '}",
+                        //   isLinkNavigationEnable: true,
+                        //   linkColor: Colors.blueAccent,
+                        //   fontColor: Colors.black,
+                        // ),
+
+                        RichTextView(
+                          text: "${snapshot.data[index]['topic'] ?? ' '}",
+                          maxLines: 3,
+                          align: TextAlign.center,
+                          onHashTagClicked: (hashtag) => print('is $hashtag trending?'),
+                          onMentionClicked: (mention) => print('$mention clicked'),
+                          onUrlClicked: (url) => print('visting $url?'),
                         ),
                         // RichTextView(
                         //   text: "${snapshot.data[index]['topic'] ?? ' '}",

@@ -33,6 +33,7 @@ class _RegisterState extends State<Register> {
   String _selectedDate = '';
   String _range = '';
 
+  var passwordController=new TextEditingController();
   List interestList = [];
 
   @override
@@ -286,6 +287,7 @@ class _RegisterState extends State<Register> {
     );
 
     final passwordField = TextFormField(
+      controller: passwordController,
       autofocus: false,
       obscureText: true,
       validator: (value) => value.isEmpty ? "Please enter password" : null,
@@ -296,7 +298,7 @@ class _RegisterState extends State<Register> {
     final confirmPassword = TextFormField(
       autofocus: false,
       validator: (value) =>
-          value != _password ? "Passwords don't match!" : null,
+          value != passwordController.text ? "Passwords don't match!" : null,
       onSaved: (value) => _confirmPassword = value,
       obscureText: true,
       decoration: buildInputDecoration("Confirm password", Icons.lock),
@@ -341,7 +343,7 @@ class _RegisterState extends State<Register> {
             showTopSnackBar(
               context,
               CustomSnackBar.error(
-                message: response.toString(),
+                message: response['message'],
               ),
             );
           }

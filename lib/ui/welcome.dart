@@ -42,6 +42,18 @@ class _WelcomeState extends State<Welcome> {
     await Provider.of<DrugProvider>(context, listen: false).putDrugsLocal();
   }
 
+  Future<void> initPsychoDrugList() async {
+    await Hive.openBox('psychoDrugList');
+    await Provider.of<DrugProvider>(context, listen: false)
+        .putPsychoDrugsLocal();
+  }
+
+  Future<void> initNarcoDrugList() async {
+    await Hive.openBox('narcoDrugList');
+    await Provider.of<DrugProvider>(context, listen: false)
+        .putNarcoDrugsLocal();
+  }
+
   Future<void> initLocalInstrumentList() async {
     await Hive.openBox('instrumentList');
     await Provider.of<DrugProvider>(context, listen: false)
@@ -52,6 +64,7 @@ class _WelcomeState extends State<Welcome> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    if (!mounted) return;
     UserProvider().getProfile().then((user) {
       setState(() {
         user_id = user['id'];
@@ -67,9 +80,15 @@ class _WelcomeState extends State<Welcome> {
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
-    initLocalDrugList();
-    initLocalInstrumentList();
+
     super.didChangeDependencies();
+    if (!mounted) {
+      return;
+    } else {
+      initLocalDrugList();
+      initPsychoDrugList();
+      initNarcoDrugList();
+    }
   }
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();

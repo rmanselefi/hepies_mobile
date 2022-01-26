@@ -116,7 +116,7 @@ class AuthProvider with ChangeNotifier {
     Response response = await post(Uri.parse(AppUrl.register),
         body: json.encode(registrationData),
         headers: {'Content-Type': 'application/json'});
-
+    print("responseresponseresponse ${json.decode(response.body)}");
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Map<String, dynamic> responseData = json.decode(response.body);
       print("ResponseResponseResponse ${responseData}");
@@ -128,9 +128,20 @@ class AuthProvider with ChangeNotifier {
     } else {
       _loggedInStatus = Status.NotLoggedIn;
       notifyListeners();
+      var res = json.decode(response.body);
+      var message = '';
+      if (res['message'] == 'username') {
+        message = 'Username already exists';
+      }
+      if (res['message'] == 'email') {
+        message = 'Email already exists';
+      }
+      if (res['message'] == 'phone') {
+        message = 'Phone already exists';
+      }
       result = {
         'status': false,
-        'message': json.decode(response.body)['error']
+        'message': message
       };
     }
     return result;

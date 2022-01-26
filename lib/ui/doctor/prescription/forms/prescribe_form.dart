@@ -73,6 +73,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
   List<dynamic> finaPrescription = [];
   List<dynamic> finaPatient = [];
   List<dynamic> drugs;
+
   String _selectedAnimal;
 
   final TextEditingController _controller = new TextEditingController();
@@ -169,9 +170,19 @@ class _PrescribeFormState extends State<PrescribeForm> {
     });
   }
 
+  void setFormFromFav(var fav) {
+    drugnameController.text = fav['drug_name'];
+    strengthController.text = fav['strength'];
+    unitController.text = fav['unit'];
+    routeController.text = fav['route'];
+    forController.text = fav['takein'];
+    everyController.text = fav['frequency'];
+  }
+
   void setFromFavorites(List<dynamic> fav) async {
     User user = await UserPreferences().getUser();
     var profession = "${user.profession} ${user.name} ${user.fathername}";
+    setFormFromFav(fav[0]);
     for (var i = 0; i < fav.length; i++) {
       final Map<String, dynamic> precriptionData = {
         'drug_name': fav[i]['drug_name'],
@@ -1537,96 +1548,66 @@ class _PrescribeFormState extends State<PrescribeForm> {
           child: Container(
             width: MediaQuery.of(context).size.width - 20,
             height: 60,
-            child: FutureBuilder<List<dynamic>>(
-                future: Provider.of<DrugProvider>(context).getInstruments(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 5,
-                          horizontal: 20,
-                        ),
-                        child: Text(
-                          'Loading instrument list...',
-                          style: TextStyle(
-                            fontStyle: FontStyle.italic,
-                            color: Colors.blue,
-                          ),
-                        ),
-                      ),
-                    );
-                  } else {
-                    if (snapshot.data == null) {
-                      return Center(
-                        child: Text('No instrument to show'),
-                      );
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                width: width(context) * 0.7,
+                height: 40,
+                child: Autocomplete(
+                  optionsBuilder: (TextEditingValue value) {
+                    // When the field is empty
+                    if (value.text.isEmpty) {
+                      return [];
                     }
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        width: width(context) * 0.7,
-                        height: 40,
-                        child: Autocomplete(
-                          optionsBuilder: (TextEditingValue value) {
-                            // When the field is empty
-                            if (value.text.isEmpty) {
-                              return [];
-                            }
-                            print("generalDrugsgeneralDrugs $generalDrugs");
-                            // The logic to find out which ones should appear
-                            // Milkessa: implemented a search mechanism that is organized and alphabetical
-                            List<dynamic> instrumentRes;
-                            for (int i = 0; i < 2; i++) {
-                              if (i == 0)
-                                instrumentRes = snapshot.data
-                                    .where((element) => element['material_name']
-                                        .startsWith(value.text))
-                                    .toList();
-                              else
-                                instrumentRes.addAll(snapshot.data
-                                    .where((element) =>
-                                        element['material_name']
-                                            .contains(value.text) &
-                                        !element['material_name']
-                                            .startsWith(value.text))
-                                    .toList());
-                            }
-                            return instrumentRes;
-                          },
-                          onSelected: (value) {
-                            setState(() {
-                              sizes = value['size'].split(',');
-                            });
-                            print("sizessizessizessizes $sizes");
-                          },
-                          displayStringForOption: (option) =>
-                              option['material_name'],
-                          fieldViewBuilder: (BuildContext context,
-                              TextEditingController fieldTextEditingController,
-                              FocusNode fieldFocusNode,
-                              VoidCallback onFieldSubmitted) {
-                            materialController = fieldTextEditingController;
-                            return Container(
-                              height: 50.0,
-                              child: TextFormField(
-                                controller: fieldTextEditingController,
-                                focusNode: fieldFocusNode,
-                                textCapitalization: TextCapitalization.words,
-                                decoration: InputDecoration(
-                                    border: OutlineInputBorder(),
-                                    isDense: true,
-                                    hintText: 'Name of Instrument',
-                                    hintStyle:
-                                        TextStyle(color: Colors.redAccent)),
-                              ),
-                            );
-                          },
-                        ),
+                    print("instrument=========> ${instruments}");
+                    // The logic to find out which ones should appear
+                    // Milkessa: implemented a search mechanism that is organized and alphabetical
+                    List<dynamic> instrumentRes;
+                    for (int i = 0; i < 2; i++) {
+                      if (i == 0)
+                        instrumentRes = instruments
+                            .where((element) =>
+                                element['material_name'].startsWith(value.text))
+                            .toList();
+                      else
+                        instrumentRes.addAll(instruments
+                            .where((element) =>
+                                element['material_name'].contains(value.text) &
+                                !element['material_name']
+                                    .startsWith(value.text))
+                            .toList());
+                    }
+                    return instrumentRes;
+                  },
+                  onSelected: (value) {
+                    setState(() {
+                      sizes = value['size'].split(',');
+                    });
+                    print("sizessizessizessizes $sizes");
+                  },
+                  displayStringForOption: (option) => option['material_name'],
+                  fieldViewBuilder: (BuildContext context,
+                      TextEditingController fieldTextEditingController,
+                      FocusNode fieldFocusNode,
+                      VoidCallback onFieldSubmitted) {
+                    materialController = fieldTextEditingController;
+                    return Container(
+                      height: 50.0,
+                      child: TextFormField(
+                        controller: materialController,
+                        focusNode: fieldFocusNode,
+                        textCapitalization: TextCapitalization.words,
+                        decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            isDense: true,
+                            hintText: 'Name of Instrument',
+                            hintStyle: TextStyle(color: Colors.redAccent)),
                       ),
                     );
-                  }
-                }),
+                  },
+                ),
+              ),
+            ),
           ),
         ),
         Row(
