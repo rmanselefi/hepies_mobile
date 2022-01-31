@@ -377,7 +377,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
     var frequency = ["Mg", "Ml", "Gm", "L", "IU", "Tab", "Sachet"];
     return Container(
       height: 40.0,
-      width: width(context) * 0.2125,
+      width: width(context) * 0.225,
       child: new Row(
         children: <Widget>[
           new Expanded(
@@ -706,6 +706,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                             ),
                         child: TextFormField(
                           controller: weightController,
+                          enabled: !rememberMe,
                           onSaved: (value) => patient.weight = value,
                           onChanged: (val) {
                             setState(() {
@@ -767,7 +768,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                               padding:
                                                   const EdgeInsets.all(8.0),
                                               child: Container(
-                                                width: width(context) * 0.7,
+                                                width: width(context) * 0.8,
                                                 height: 60,
                                                 child: Autocomplete(
                                                   optionsBuilder:
@@ -869,7 +870,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                           width: 8.0,
                                         ),
                                         Container(
-                                          width: width(context) * 0.2125,
+                                          width: width(context) * 0.225,
                                           height: 40.0,
                                           child: TextFormField(
                                             controller: strengthController,
@@ -1108,26 +1109,27 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                                 }
                                               : () {},
                                           child: Container(
-                                            width: width(context) * 0.225,
-                                            height: 50,
-                                            child: TextFormField(
-                                              enabled: false,
-                                              controller: diagnosisController,
-                                              onChanged: (val) {
-                                                setState(() {
-                                                  prescription.diagnosis = val;
-                                                });
-                                              },
-                                              decoration: InputDecoration(
-                                                border: OutlineInputBorder(),
-                                                enabledBorder:
-                                                    const OutlineInputBorder(
-                                                  borderSide: const BorderSide(
-                                                      color: Colors.green,
-                                                      width: 1.0),
+                                            width: width(context) * 0.15,
+                                            margin: EdgeInsets.zero,
+                                            padding: EdgeInsets.all(3.0),
+                                            decoration: BoxDecoration(
+                                              boxShadow: [buttonShadow],
+                                              color: diagnosisController
+                                                      .text.isEmpty
+                                                  ? Colors.white
+                                                  : Colors.green,
+                                              borderRadius:
+                                                  BorderRadius.circular(3),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                'DX/Diagnosis',
+                                                overflow: TextOverflow.clip,
+                                                textScaleFactor: 0.775,
+                                                style: TextStyle(
+                                                  color: Colors.blue,
+                                                  fontWeight: FontWeight.w900,
                                                 ),
-                                                hintText: 'DX/Diagnosis',
-                                                isDense: true,
                                               ),
                                             ),
                                           ),
@@ -1257,26 +1259,27 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                                 }
                                               : () {},
                                           child: Container(
-                                            width: width(context) * 0.225,
-                                            height: 50,
-                                            child: TextFormField(
-                                              enabled: false,
-                                              controller: addressController,
-                                              onChanged: (val) {
-                                                setState(() {
-                                                  prescription.ampule = val;
-                                                });
-                                              },
-                                              decoration: InputDecoration(
-                                                border: OutlineInputBorder(),
-                                                enabledBorder:
-                                                    const OutlineInputBorder(
-                                                  borderSide: const BorderSide(
-                                                      color: Colors.green,
-                                                      width: 1.0),
+                                            width: width(context) * 0.15,
+                                            margin: EdgeInsets.zero,
+                                            padding: EdgeInsets.all(3.0),
+                                            decoration: BoxDecoration(
+                                              boxShadow: [buttonShadow],
+                                              color:
+                                                  addressController.text.isEmpty
+                                                      ? Colors.white
+                                                      : Colors.green,
+                                              borderRadius:
+                                                  BorderRadius.circular(3),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                'MRN',
+                                                overflow: TextOverflow.clip,
+                                                textScaleFactor: 0.775,
+                                                style: TextStyle(
+                                                  color: Colors.blue,
+                                                  fontWeight: FontWeight.w900,
                                                 ),
-                                                hintText: 'MRN',
-                                                isDense: true,
                                               ),
                                             ),
                                           ),
