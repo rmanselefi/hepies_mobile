@@ -33,7 +33,7 @@ class _RegisterState extends State<Register> {
   String _selectedDate = '';
   String _range = '';
 
-  var passwordController=new TextEditingController();
+  var passwordController = new TextEditingController();
   List interestList = [];
 
   @override
@@ -183,7 +183,7 @@ class _RegisterState extends State<Register> {
       autofocus: false,
       validator: (value) =>
           value.isEmpty ? "Please enter your phone number" : null,
-      onSaved: (value) => _phone = value,
+      onSaved: (value) => _phone = '+251' + value,
       decoration: buildInputDecoration("Confirm password", Icons.contact_phone),
     );
 
@@ -337,8 +337,11 @@ class _RegisterState extends State<Register> {
                 message: "Registration Successful. Please login",
               ),
             );
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Login()));
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => Login()),
+              ModalRoute.withName('/'),
+            );
           } else {
             showTopSnackBar(
               context,

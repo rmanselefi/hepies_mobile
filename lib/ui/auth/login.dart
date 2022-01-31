@@ -111,12 +111,14 @@ class _LoginState extends State<Login> {
             if (role == "doctor" ||
                 role == "healthofficer" ||
                 role == "nurse") {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Welcome(
-                            user: user,
-                          )));
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Welcome(
+                          user: user,
+                        )),
+                ModalRoute.withName('/'),
+              );
             } else {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => WelcomePharmacy()));
