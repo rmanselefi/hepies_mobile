@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class PersonalInfo extends StatefulWidget {
   final patient;
   final diagnosis;
-  PersonalInfo({this.patient,this.diagnosis});
+  PersonalInfo({this.patient, this.diagnosis});
   @override
   _PersonalInfoState createState() => _PersonalInfoState();
 }
@@ -21,7 +21,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
               style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
             ),
             Text(
-              '${patient['name']} ${patient['fathername']}',
+              '${patient['name']} ${patient['fathername'] ?? 'empty'}',
               style: TextStyle(fontSize: 18.0),
             )
           ],
@@ -33,7 +33,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
               style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
             ),
             Text(
-              '${patient['age']}',
+              '${patient['age'] ?? 'empty'}',
               style: TextStyle(fontSize: 18.0),
             ),
             SizedBox(
@@ -44,18 +44,18 @@ class _PersonalInfoState extends State<PersonalInfo> {
               style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
             ),
             Text(
-              '${patient['sex']}',
+              '${patient['sex'] ?? 'empty'}',
               style: TextStyle(fontSize: 18.0),
             ),
             SizedBox(
               width: 10.0,
             ),
             Text(
-              'Weight -- ',
+              'Weight -- ' ?? 'empty',
               style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
             ),
             Text(
-              '${patient['weight']}Kg',
+              '${patient['weight'] ?? 'empty'}Kg',
               style: TextStyle(fontSize: 18.0),
             )
           ],
@@ -67,7 +67,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
               style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
             ),
             Text(
-              '${patient['address']}',
+              '${patient['address'] ?? 'empty'}',
               style: TextStyle(fontSize: 18.0),
             ),
             SizedBox(
@@ -78,7 +78,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
               style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
             ),
             Text(
-              '${widget.diagnosis}',
+              '${widget.diagnosis ?? 'empty'}',
               style: TextStyle(fontSize: 18.0),
             )
           ],

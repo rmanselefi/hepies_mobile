@@ -760,9 +760,12 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                           text: "${snapshot.data[index]['topic'] ?? ' '}",
                           maxLines: 3,
                           align: TextAlign.center,
-                          onHashTagClicked: (hashtag) => print('is $hashtag trending?'),
-                          onMentionClicked: (mention) => print('$mention clicked'),
-                          onUrlClicked: (url) => print('visting $url?'),
+                          onHashTagClicked: (hashtag) =>
+                              print('is $hashtag trending?'),
+                          onMentionClicked: (mention) =>
+                              print('$mention clicked'),
+                          onUrlClicked: (url) => launch(url),
+                          linkStyle: TextStyle(color: Colors.blue),
                         ),
                         // RichTextView(
                         //   text: "${snapshot.data[index]['topic'] ?? ' '}",
@@ -886,20 +889,27 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
 //                              print(text);
 //                            },
 //                          ),
-                                                              LinkifyText(
-                                                                "${e['topic'] ?? ' '}",
-                                                                isLinkNavigationEnable:
-                                                                    true,
-                                                                linkColor: Colors
-                                                                    .blueAccent,
-                                                                fontColor:
-                                                                    Colors
-                                                                        .black,
-                                                                // linkStyle: TextStyle(color: Colors.blueAccent),
-                                                                // LinkTypes: [LinkType.url, LinkType.hashtag]
-                                                                // onTap: (link) {
-                                                                //   if(link.type == Link.url) launch(link.value);
-                                                                // },
+                                                              RichTextView(
+                                                                text:
+                                                                    "${snapshot.data[index]['topic'] ?? ' '}",
+                                                                maxLines: 3,
+                                                                align: TextAlign
+                                                                    .center,
+                                                                onHashTagClicked:
+                                                                    (hashtag) =>
+                                                                        print(
+                                                                            'is $hashtag trending?'),
+                                                                onMentionClicked:
+                                                                    (mention) =>
+                                                                        print(
+                                                                            '$mention clicked'),
+                                                                onUrlClicked:
+                                                                    (url) =>
+                                                                        launch(
+                                                                            url),
+                                                                linkStyle: TextStyle(
+                                                                    color: Colors
+                                                                        .blue),
                                                               ),
                                                               // Text(
                                                               //   _post[index].tags,
@@ -1042,16 +1052,20 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
 //                              print(text);
 //                            },
 //                          ),
-                                              LinkifyText(
-                                                "${e['topic'] ?? ' '}",
-                                                isLinkNavigationEnable: true,
-                                                linkColor: Colors.blueAccent,
-                                                fontColor: Colors.black,
-                                                // linkStyle: TextStyle(color: Colors.blueAccent),
-                                                // LinkTypes: [LinkType.url, LinkType.hashtag]
-                                                // onTap: (link) {
-                                                //   if(link.type == Link.url) launch(link.value);
-                                                // },
+                                              RichTextView(
+                                                text:
+                                                    "${snapshot.data[index]['topic'] ?? ' '}",
+                                                maxLines: 3,
+                                                align: TextAlign.center,
+                                                onHashTagClicked: (hashtag) =>
+                                                    print(
+                                                        'is $hashtag trending?'),
+                                                onMentionClicked: (mention) =>
+                                                    print('$mention clicked'),
+                                                onUrlClicked: (url) =>
+                                                    launch(url),
+                                                linkStyle: TextStyle(
+                                                    color: Colors.blue),
                                               ),
                                               // Text(
                                               //   _post[index].tags,

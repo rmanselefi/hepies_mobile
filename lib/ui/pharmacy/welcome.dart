@@ -108,8 +108,8 @@ class _WelcomePharmacyState extends State<WelcomePharmacy> {
                   child: GradientText(
                     'Hepius',
                     gradient: LinearGradient(colors: [
-                      Colors.blue.shade400,
-                      Colors.blue.shade900,
+                      Colors.blue,
+                      Colors.blue,
                     ]),
                   ),
                 ),
