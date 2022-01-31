@@ -6,6 +6,7 @@ import 'package:hepies/ui/pharmacy/widgets/footer.dart';
 import 'package:hepies/ui/pharmacy/widgets/header.dart';
 import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class MyPharmacy extends StatefulWidget {
   @override
@@ -17,6 +18,7 @@ class _MyPharmacyState extends State<MyPharmacy> {
   var drug_name = "";
   var priceController = new TextEditingController();
   var drugController = new TextEditingController();
+  final formKey = new GlobalKey<FormState>();
 
   void _openPriceForm(BuildContext context) {
     bool adding = false;
@@ -29,6 +31,7 @@ class _MyPharmacyState extends State<MyPharmacy> {
                 child: Container(
                   height: MediaQuery.of(context).size.height - 40,
                   child: Form(
+                    key: formKey,
                     child: Column(
                       children: [
                         SizedBox(height: 10.0),
@@ -37,6 +40,8 @@ class _MyPharmacyState extends State<MyPharmacy> {
                           child: TextFormField(
                             controller: priceController,
                             keyboardType: TextInputType.number,
+                            validator: (val) =>
+                                val.isEmpty ? 'Price is required' : null,
                             decoration: InputDecoration(
                               hintText: 'Price',
                               border: OutlineInputBorder(
@@ -49,37 +54,42 @@ class _MyPharmacyState extends State<MyPharmacy> {
                           width: 100.0,
                           child: OutlinedButton(
                               onPressed: () async {
-                                setState(() {
-                                  adding = true;
-                                });
-                                var res = await Provider.of<PharmacyProvider>(
-                                        context,
-                                        listen: false)
-                                    .addDrugToPharmacy(drugController.text, drug_id,
-                                        priceController.text)
-                                    .whenComplete(() {
-                                  setState(() {
-                                    adding = false;
-                                  });
-                                  CustomSnackBar.success(
-                                      message: 'Item successfully added');
-                                });
-                                if (res['status']) {
-                                  setState(() {
-                                    Provider.of<PharmacyProvider>(context,
-                                            listen: false)
-                                        .getMyPharmacy();
-                                  });
 
-                                  Navigator.pushAndRemoveUntil<void>(
-                                    context,
-                                    MaterialPageRoute<void>(
-                                      builder: (BuildContext context) =>
-                                          MyPharmacy(),
-                                    ),
-                                    ModalRoute.withName('/'),
-                                  );
-                                  ;
+                                final form = formKey.currentState;
+                                if (form.validate()) {
+                                  form.save();
+                                  setState(() {
+                                    adding = true;
+                                  });
+                                  var res = await Provider.of<PharmacyProvider>(
+                                          context,
+                                          listen: false)
+                                      .addDrugToPharmacy(drugController.text,
+                                          drug_id, priceController.text)
+                                      .whenComplete(() {
+                                    setState(() {
+                                      adding = false;
+                                    });
+                                    CustomSnackBar.success(
+                                        message: 'Item successfully added');
+                                  });
+                                  if (res['status']) {
+                                    setState(() {
+                                      Provider.of<PharmacyProvider>(context,
+                                              listen: false)
+                                          .getMyPharmacy();
+                                    });
+
+                                    Navigator.pushAndRemoveUntil<void>(
+                                      context,
+                                      MaterialPageRoute<void>(
+                                        builder: (BuildContext context) =>
+                                            MyPharmacy(),
+                                      ),
+                                      ModalRoute.withName('/'),
+                                    );
+                                    ;
+                                  }
                                 }
                               },
                               child: Text('Add')),
@@ -198,7 +208,14 @@ class _MyPharmacyState extends State<MyPharmacy> {
                       onPressed: () {},
                       child: ElevatedButton(
                         onPressed: () {
-                          _openPriceForm(context);
+                          if (drugController.text != '') {
+                            _openPriceForm(context);
+                          } else {
+                            showTopSnackBar(
+                                context,
+                                CustomSnackBar.error(
+                                    message: 'Please enter drug first!'));
+                          }
                         },
                         child: Text('Add'),
                       ),

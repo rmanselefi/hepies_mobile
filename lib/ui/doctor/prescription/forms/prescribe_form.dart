@@ -171,7 +171,9 @@ class _PrescribeFormState extends State<PrescribeForm> {
   }
 
   void setFormFromFav(var fav) {
+
     drugnameController.text = fav['drug_name'];
+    print("drug_namedrug_name ===> ${drugnameController.text}");
     strengthController.text = fav['strength'];
     unitController.text = fav['unit'];
     routeController.text = fav['route'];
@@ -839,7 +841,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                                       height: 60,
                                                       child: TextFormField(
                                                         controller:
-                                                            fieldTextEditingController,
+                                                            drugnameController,
                                                         focusNode:
                                                             fieldFocusNode,
                                                         textCapitalization:
