@@ -102,7 +102,7 @@ class _PointsState extends State<Points> {
                           children: [
                             GestureDetector(
                               onTap: () async {
-                                if (double.parse(points) > 50) {
+                                if (double.parse(points) > 500) {
                                   var res = await UserProvider().buyCredit(50);
                                   print("resresresres $res");
                                   if (res['status']) {
@@ -113,7 +113,7 @@ class _PointsState extends State<Points> {
                                       context,
                                       CustomSnackBar.error(
                                         message:
-                                            "Something is wrong please contact system admin",
+                                            "Service currently not available",
                                       ),
                                     );
                                   }
@@ -121,7 +121,7 @@ class _PointsState extends State<Points> {
                                   showTopSnackBar(
                                     context,
                                     CustomSnackBar.error(
-                                      message: "You don't have enough points",
+                                      message: "You need minimum 500Pts to buy airtime",
                                     ),
                                   );
                                 }
@@ -141,7 +141,7 @@ class _PointsState extends State<Points> {
                             ),
                             GestureDetector(
                               onTap: () async {
-                                if (double.parse(points) > 100) {
+                                if (double.parse(points) > 1000) {
                                   var res = await UserProvider().buyCredit(100);
                                   if (res['status']) {
                                     var voucher = res['result'];
@@ -159,7 +159,7 @@ class _PointsState extends State<Points> {
                                   showTopSnackBar(
                                     context,
                                     CustomSnackBar.error(
-                                      message: "You don't have enough points",
+                                      message: "You need minimum 500Pts to buy airtime",
                                     ),
                                   );
                                 }
@@ -300,7 +300,7 @@ class _PointsState extends State<Points> {
                                             context,
                                             CustomSnackBar.success(
                                               message:
-                                                  "You have successfully transfered ${pointsController.text} point(s) to phone +251${phoneController.text}",
+                                                  "Successfully transferred points to ${pointsController.text}",
                                             ),
                                           );
                                         } else {
@@ -311,7 +311,7 @@ class _PointsState extends State<Points> {
                                               context,
                                               CustomSnackBar.error(
                                                 message:
-                                                    "Phone number is not available. please enter available phone to continue with the transfer",
+                                                    "User not available",
                                               ),
                                             );
                                           }
@@ -322,7 +322,7 @@ class _PointsState extends State<Points> {
                                           context,
                                           CustomSnackBar.error(
                                             message:
-                                                "You dont have enough point to transfer",
+                                                "Cant transfer the requested amount of points",
                                           ),
                                         );
                                       }
