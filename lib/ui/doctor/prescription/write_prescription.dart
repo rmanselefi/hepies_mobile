@@ -562,8 +562,11 @@ class _WritePrescriptionState extends State<WritePrescription> {
                         : SizedBox(width: width(context) * 0.15),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => Welcome()));
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => Welcome()),
+                          ModalRoute.withName('/'),
+                        );
                       },
                       child: Align(
                         alignment: Alignment.centerRight,
@@ -668,13 +671,15 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                                   context,
                                                   listen: false)
                                               .resetStatus();
-                                          Navigator.pushReplacement(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      WritePrescription(
-                                                        from: 'sent',
-                                                      )));
+                                          Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    WritePrescription(
+                                                      from: 'sent',
+                                                    )),
+                                            ModalRoute.withName('/'),
+                                          );
                                         } else {
                                           showTopSnackBar(
                                             context,
