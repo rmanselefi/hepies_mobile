@@ -1110,6 +1110,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                               : () {},
                                           child: Container(
                                             width: width(context) * 0.15,
+                                            height: 40,
                                             margin: EdgeInsets.zero,
                                             padding: EdgeInsets.all(3.0),
                                             decoration: BoxDecoration(
@@ -1260,6 +1261,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                               : () {},
                                           child: Container(
                                             width: width(context) * 0.15,
+                                            height: 40,
                                             margin: EdgeInsets.zero,
                                             padding: EdgeInsets.all(3.0),
                                             decoration: BoxDecoration(
