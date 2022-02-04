@@ -23,6 +23,7 @@ class _PharmacyConsultListState extends State<PharmacyCommentList> {
     List<Widget> comments = [];
     widget.consults.forEach((e) {
       DateTime time = DateTime.parse(e['createdAt']);
+      // var profile = e['author']['profession'][0]['profile'];
       var duration = timeago.format(time);
       print("timeago ${timeago.format(time).substring(0, 4)}");
       comments.add(
@@ -36,9 +37,38 @@ class _PharmacyConsultListState extends State<PharmacyCommentList> {
               SizedBox(
                 width: 5.0,
               ),
+              // GestureDetector(
+              //   onTap: profile != null
+              //       ? () {
+              //           Navigator.push(
+              //             context,
+              //             MaterialPageRoute(
+              //               builder: (context) => Image.network(
+              //                 profile,
+              //                 fit: BoxFit.contain,
+              //               ),
+              //             ),
+              //           );
+              //         }
+              //       : null,
+              //   child: Container(
+              //     width: 40,
+              //     height: 40,
+              //     decoration: BoxDecoration(
+              //         borderRadius: BorderRadius.all(Radius.circular(40))),
+              //     child: ClipRRect(
+              //         borderRadius: BorderRadius.all(Radius.circular(40)),
+              //         child: profile != null
+              //             ? Image.network(profile)
+              //             : Icon(
+              //                 Icons.person,
+              //                 size: 40,
+              //               )),
+              //   ),
+              // ),
               Icon(
                 Icons.person,
-                size: 50,
+                size: 40,
               ),
               Expanded(
                 child: Container(

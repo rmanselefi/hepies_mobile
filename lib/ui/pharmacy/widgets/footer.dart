@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:hepies/providers/user_provider.dart';
 import 'package:hepies/ui/doctor/drugs/drugs.dart';
@@ -36,13 +37,13 @@ class _PharmacyFooterState extends State<PharmacyFooter> {
               children: [
                 IconButton(
                   icon: Icon(
-                    home_circled,
+                    Icons.home,
                     color: nav.selectedNav == NavSelection.home
                         ? Color(0xff0FF6A0)
                         : Colors.grey,
                     size: nav.selectedNav == NavSelection.home
-                        ? width(context) * 0.1
-                        : width(context) * 0.075,
+                        ? width(context) * 0.0875
+                        : width(context) * 0.0625,
                   ),
                   onPressed: () {
                     nav.changeNavSelection(NavSelection.home);
@@ -52,9 +53,10 @@ class _PharmacyFooterState extends State<PharmacyFooter> {
                             builder: (context) => WelcomePharmacy()));
                   },
                 ),
-                Text(
+                AutoSizeText(
                   'Home',
-                  textAlign: TextAlign.end,
+                  maxLines: 1,
+                  presetFontSizes: [13, 11, 9],
                   style: TextStyle(
                     fontSize: 13,
                     color: nav.selectedNav == NavSelection.home
@@ -78,8 +80,8 @@ class _PharmacyFooterState extends State<PharmacyFooter> {
                         ? Color(0xff0FF6A0)
                         : Colors.grey,
                     size: nav.selectedNav == NavSelection.prescription
-                        ? width(context) * 0.1
-                        : width(context) * 0.075,
+                        ? width(context) * 0.0875
+                        : width(context) * 0.0625,
                   ),
                   onPressed: () {
                     nav.changeNavSelection(NavSelection.prescription);
@@ -89,8 +91,10 @@ class _PharmacyFooterState extends State<PharmacyFooter> {
                             builder: (context) => ReadPrescription()));
                   },
                 ),
-                Text(
+                AutoSizeText(
                   'prescription',
+                  maxLines: 1,
+                  presetFontSizes: [13, 11, 9],
                   style: TextStyle(
                     fontSize: 13,
                     color: nav.selectedNav == NavSelection.prescription
@@ -114,8 +118,8 @@ class _PharmacyFooterState extends State<PharmacyFooter> {
                         ? Color(0xff0FF6A0)
                         : Colors.grey,
                     size: nav.selectedNav == NavSelection.pharmacy
-                        ? width(context) * 0.1
-                        : width(context) * 0.075,
+                        ? width(context) * 0.0875
+                        : width(context) * 0.0625,
                   ),
                   onPressed: () {
                     nav.changeNavSelection(NavSelection.pharmacy);
@@ -123,8 +127,10 @@ class _PharmacyFooterState extends State<PharmacyFooter> {
                         MaterialPageRoute(builder: (context) => MyPharmacy()));
                   },
                 ),
-                Text(
+                AutoSizeText(
                   'My Pharmacy',
+                  maxLines: 1,
+                  presetFontSizes: [13, 11, 9],
                   style: TextStyle(
                     fontSize: 13,
                     color: nav.selectedNav == NavSelection.pharmacy
@@ -148,8 +154,8 @@ class _PharmacyFooterState extends State<PharmacyFooter> {
                         ? Color(0xff0FF6A0)
                         : Colors.grey,
                     size: nav.selectedNav == NavSelection.history
-                        ? width(context) * 0.1
-                        : width(context) * 0.075,
+                        ? width(context) * 0.0875
+                        : width(context) * 0.0625,
                   ),
                   onPressed: () {
                     nav.changeNavSelection(NavSelection.history);
@@ -159,8 +165,10 @@ class _PharmacyFooterState extends State<PharmacyFooter> {
                             builder: (context) => PharmacyHistory()));
                   },
                 ),
-                Text(
+                AutoSizeText(
                   'History',
+                  maxLines: 1,
+                  presetFontSizes: [13, 11, 9],
                   style: TextStyle(
                     fontSize: 13,
                     color: nav.selectedNav == NavSelection.history

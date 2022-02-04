@@ -671,15 +671,6 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                                   context,
                                                   listen: false)
                                               .resetStatus();
-                                          Navigator.pushAndRemoveUntil(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    WritePrescription(
-                                                      from: 'sent',
-                                                    )),
-                                            ModalRoute.withName('/'),
-                                          );
                                         } else {
                                           showTopSnackBar(
                                             context,

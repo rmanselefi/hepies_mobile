@@ -657,21 +657,37 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Container(
-                                  width: 40,
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(40))),
-                                  child: ClipRRect(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(40)),
-                                      child: profile != null
-                                          ? Image.network(profile)
-                                          : Icon(
-                                              Icons.person,
-                                              size: 40,
-                                            )),
+                                GestureDetector(
+                                  onTap: profile != null
+                                      ? () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  Image.network(
+                                                profile,
+                                                fit: BoxFit.contain,
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                      : null,
+                                  child: Container(
+                                    width: 40,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(40))),
+                                    child: ClipRRect(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(40)),
+                                        child: profile != null
+                                            ? Image.network(profile)
+                                            : Icon(
+                                                Icons.person,
+                                                size: 40,
+                                              )),
+                                  ),
                                 ),
                                 SizedBox(
                                   width: 4,
@@ -767,30 +783,29 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                           onUrlClicked: (url) => launch(url),
                           linkStyle: TextStyle(color: Colors.blue),
                         ),
-                        // RichTextView(
-                        //   text: "${snapshot.data[index]['topic'] ?? ' '}",
-                        //   maxLines: 3,
-                        //   align: TextAlign.center,
-                        //   onEmailClicked: (email) => launch(email),
-                        //   onHashTagClicked: (hashtag) =>
-                        //       print('is $hashtag trending?'),
-                        //   onUrlClicked: (url) => launch(url),
-                        //   linkStyle: TextStyle(color: Colors.blue),
-                        // ),
-                        // Text(
-                        //   _post[index].tags,
-                        //   style: TextStyle(color: blueColor),
-                        // ),
                         SizedBox(
                           height: 10,
                         ),
                         e['image'] != null
-                            ? Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: height(context) * 0.375,
-                                child: Image.network(
-                                  e['image'],
-                                  fit: BoxFit.contain,
+                            ? GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => Image.network(
+                                        e['image'],
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: height(context) * 0.375,
+                                  child: Image.network(
+                                    e['image'],
+                                    fit: BoxFit.contain,
+                                  ),
                                 ),
                               )
                             : Container(
@@ -818,20 +833,38 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                                             [
                                                               Row(
                                                                 children: [
-                                                                  Container(
-                                                                    width: 40,
-                                                                    height: 40,
-                                                                    decoration: BoxDecoration(
-                                                                        borderRadius:
-                                                                            BorderRadius.all(Radius.circular(40))),
-                                                                    child: ClipRRect(
-                                                                        borderRadius: BorderRadius.all(Radius.circular(40)),
-                                                                        child: Icon(
-                                                                          Icons
-                                                                              .person,
-                                                                          size:
-                                                                              40,
-                                                                        )),
+                                                                  GestureDetector(
+                                                                    onTap: profile !=
+                                                                            null
+                                                                        ? () {
+                                                                            Navigator.push(
+                                                                              context,
+                                                                              MaterialPageRoute(
+                                                                                builder: (context) => Image.network(
+                                                                                  profile,
+                                                                                  fit: BoxFit.contain,
+                                                                                ),
+                                                                              ),
+                                                                            );
+                                                                          }
+                                                                        : null,
+                                                                    child:
+                                                                        Container(
+                                                                      width: 40,
+                                                                      height:
+                                                                          40,
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                              borderRadius: BorderRadius.all(Radius.circular(40))),
+                                                                      child: ClipRRect(
+                                                                          borderRadius: BorderRadius.all(Radius.circular(40)),
+                                                                          child: profile != null
+                                                                              ? Image.network(profile)
+                                                                              : Icon(
+                                                                                  Icons.person,
+                                                                                  size: 40,
+                                                                                )),
+                                                                    ),
                                                                   ),
                                                                   SizedBox(
                                                                     width: 4,
@@ -919,19 +952,34 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                                                 height: 10,
                                                               ),
                                                               e['image'] != null
-                                                                  ? Container(
-                                                                      width: MediaQuery.of(
-                                                                              context)
-                                                                          .size
-                                                                          .width,
-                                                                      height:
-                                                                          height(context) *
-                                                                              0.4,
-                                                                      child: Image
-                                                                          .network(
-                                                                        e['image'],
-                                                                        fit: BoxFit
-                                                                            .contain,
+                                                                  ? GestureDetector(
+                                                                      onTap:
+                                                                          () {
+                                                                        Navigator
+                                                                            .push(
+                                                                          context,
+                                                                          MaterialPageRoute(
+                                                                            builder: (context) =>
+                                                                                Image.network(
+                                                                              e['image'],
+                                                                              fit: BoxFit.contain,
+                                                                            ),
+                                                                          ),
+                                                                        );
+                                                                      },
+                                                                      child:
+                                                                          Container(
+                                                                        width: MediaQuery.of(context)
+                                                                            .size
+                                                                            .width,
+                                                                        height: height(context) *
+                                                                            0.375,
+                                                                        child: Image
+                                                                            .network(
+                                                                          e['image'],
+                                                                          fit: BoxFit
+                                                                              .contain,
+                                                                        ),
                                                                       ),
                                                                     )
                                                                   : Container(
@@ -981,23 +1029,47 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                             PharmacyShareComment(e['id'], [
                                               Row(
                                                 children: [
-                                                  Container(
-                                                    width: 40,
-                                                    height: 40,
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    40))),
-                                                    child: ClipRRect(
-                                                        borderRadius:
-                                                            BorderRadius.all(
-                                                                Radius.circular(
-                                                                    40)),
-                                                        child: Icon(
-                                                          Icons.person,
-                                                          size: 40,
-                                                        )),
+                                                  GestureDetector(
+                                                    onTap: profile != null
+                                                        ? () {
+                                                            Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        Image
+                                                                            .network(
+                                                                  profile,
+                                                                  fit: BoxFit
+                                                                      .contain,
+                                                                ),
+                                                              ),
+                                                            );
+                                                          }
+                                                        : null,
+                                                    child: Container(
+                                                      width: 40,
+                                                      height: 40,
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          40))),
+                                                      child: ClipRRect(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          40)),
+                                                          child: profile != null
+                                                              ? Image.network(
+                                                                  profile)
+                                                              : Icon(
+                                                                  Icons.person,
+                                                                  size: 40,
+                                                                )),
+                                                    ),
                                                   ),
                                                   SizedBox(
                                                     width: 4,
@@ -1075,16 +1147,32 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                                 height: 10,
                                               ),
                                               e['image'] != null
-                                                  ? Container(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                              .size
-                                                              .width,
-                                                      height:
-                                                          height(context) * 0.4,
-                                                      child: Image.network(
-                                                        e['image'],
-                                                        fit: BoxFit.contain,
+                                                  ? GestureDetector(
+                                                      onTap: () {
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                Image.network(
+                                                              e['image'],
+                                                              fit: BoxFit
+                                                                  .contain,
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
+                                                      child: Container(
+                                                        width: MediaQuery.of(
+                                                                context)
+                                                            .size
+                                                            .width,
+                                                        height:
+                                                            height(context) *
+                                                                0.375,
+                                                        child: Image.network(
+                                                          e['image'],
+                                                          fit: BoxFit.contain,
+                                                        ),
                                                       ),
                                                     )
                                                   : Container(
@@ -1105,19 +1193,37 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                           [
                             Row(
                               children: [
-                                Container(
-                                  width: 40,
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(40))),
-                                  child: ClipRRect(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(40)),
-                                      child: Icon(
-                                        Icons.person,
-                                        size: 40,
-                                      )),
+                                GestureDetector(
+                                  onTap: profile != null
+                                      ? () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  Image.network(
+                                                profile,
+                                                fit: BoxFit.contain,
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                      : null,
+                                  child: Container(
+                                    width: 40,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(40))),
+                                    child: ClipRRect(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(40)),
+                                        child: profile != null
+                                            ? Image.network(profile)
+                                            : Icon(
+                                                Icons.person,
+                                                size: 40,
+                                              )),
+                                  ),
                                 ),
                                 SizedBox(
                                   width: 4,
@@ -1191,12 +1297,25 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                               height: 10,
                             ),
                             e['image'] != null
-                                ? Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    height: height(context) * 0.4,
-                                    child: Image.network(
-                                      e['image'],
-                                      fit: BoxFit.contain,
+                                ? GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => Image.network(
+                                            e['image'],
+                                            fit: BoxFit.contain,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      height: height(context) * 0.375,
+                                      child: Image.network(
+                                        e['image'],
+                                        fit: BoxFit.contain,
+                                      ),
                                     ),
                                   )
                                 : Container(

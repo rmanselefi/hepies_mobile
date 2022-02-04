@@ -26,6 +26,8 @@ class _GuidelinesState extends State<Guidelines> {
   bool downloading = false;
   String downloadingStr = "No data";
   var progress = 0.0;
+  int downloadId;
+  CancelToken token = CancelToken();
   int pages = 0;
   int currentPage = 0;
   bool isReady = false;
@@ -71,7 +73,13 @@ class _GuidelinesState extends State<Guidelines> {
   }
 
   Future downloadFile(String imageUrl, int id) async {
+    downloadId = id;
     try {
+      setState(() {
+        downloading = true;
+        // download = (rec / total) * 100;
+        progress = 0.0;
+      });
       Dio dio = Dio();
 
       String fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
@@ -80,14 +88,23 @@ class _GuidelinesState extends State<Guidelines> {
       Random random = new Random();
       var randid = random.nextInt(10000);
       var dirloc = "./download/";
-      await dio.download(imageUrl, savePath + id.toString() + ".pdf",
-          onReceiveProgress: (rec, total) {
-        setState(() {
-          downloading = true;
-          // download = (rec / total) * 100;
-          progress = ((rec / total)).toDouble();
-        });
-      });
+      await dio.download(
+        imageUrl,
+        savePath + id.toString() + ".pdf",
+        onReceiveProgress: (rec, total) {
+          setState(() {
+            // download = (rec / total) * 100;
+            progress = ((rec / total)).toDouble();
+          });
+        },
+        cancelToken: token,
+      )
+          // .onError((DioError error, stackTrace) {
+          //   dio.close();
+          //   print('Dio client is closed');
+          //   return Future.delayed(Duration(microseconds: 1));
+          // })
+          ;
       setState(() {
         downloading = false;
       });
@@ -209,12 +226,32 @@ class _GuidelinesState extends State<Guidelines> {
             height: 20.0,
           ),
           downloading
-              ? LinearPercentIndicator(
-                  width: 250.0,
-                  lineHeight: 14.0,
-                  percent: progress,
-                  backgroundColor: Colors.grey,
-                  progressColor: Colors.blue,
+              ? Row(
+                  children: [
+                    LinearPercentIndicator(
+                      width: 250.0,
+                      lineHeight: 14.0,
+                      percent: progress,
+                      backgroundColor: Colors.grey,
+                      progressColor: Colors.blue,
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          token.cancel('Download canceled!');
+                          showTopSnackBar(
+                            context,
+                            CustomSnackBar.success(
+                              message: 'Download canceled successfully!',
+                            ),
+                          );
+                          downloading = false;
+                          changeStatus(downloadId.toString(), false);
+                        });
+                      },
+                      icon: Icon(Icons.cancel),
+                    ),
+                  ],
                 )
               : Container(),
           downloading
@@ -262,7 +299,7 @@ class _GuidelinesState extends State<Guidelines> {
                                     child: Text(
                                       e['name'] != null ? e['name'] : '',
                                       style: TextStyle(
-                                        fontSize: 20.0,
+                                        fontSize: 16.0,
                                         decoration: TextDecoration.underline,
                                       ),
                                     )),
