@@ -496,11 +496,11 @@ class _PrescribeFormState extends State<PrescribeForm> {
                             keyboardType: TextInputType.number,
                             onSaved: (value) {
                               setState(() {
-                                patient.phone = "+251${value}";
+                                patient.phone = "+251$value";
                               });
                             },
                             onChanged: (String val) async {
-                              var phone = "+251${val}";
+                              var phone = "+251$val";
                               if (val.length == 9) {
                                 var res =
                                     await patientProvider.getPatient(phone);
@@ -510,7 +510,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                     _chosenValue = res['sex'];
                                     nameController.text = res['name'];
                                     fnameController.text = res['fathername'];
-                                    phoneController.text = phone;
+                                    phoneController.text = phone.substring(4);
                                   });
                                 }
                               }
@@ -618,7 +618,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                             return DropdownMenuItem<String>(
                               value: value,
                               child: Text(
-                                value,
+                                value.substring(0, 1),
                                 style: TextStyle(color: Colors.black),
                               ),
                             );
@@ -870,7 +870,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                           width: 8.0,
                                         ),
                                         Container(
-                                          width: width(context) * 0.225,
+                                          width: width(context) * 0.25,
                                           height: 40.0,
                                           child: TextFormField(
                                             controller: strengthController,
@@ -987,7 +987,10 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                   ],
                                 ),
                                 Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
                                   children: [
+                                    SizedBox(height: height(context) * 0.04),
                                     Row(
                                       children: [
                                         GestureDetector(
@@ -1424,14 +1427,16 @@ class _PrescribeFormState extends State<PrescribeForm> {
                         "strength": strengthController.text,
                         "unit": unitController.text,
                         "route": routeController.text,
-                        "takein": widget.type != "instrument"
-                            ? prescription.takein +
-                                (_forController == 'D'
-                                    ? ' Days'
-                                    : _forController == 'W'
-                                        ? ' Weeks'
-                                        : ' Months')
-                            : "",
+                        "takein": prescription.takein != null
+                            ? widget.type != "instrument"
+                                ? prescription.takein +
+                                    (_forController == 'D'
+                                        ? ' Days'
+                                        : _forController == 'W'
+                                            ? ' Weeks'
+                                            : ' Months')
+                                : ""
+                            : '',
                         "frequency": prescription.frequency,
                         "drug": prescription.drug,
                         "professional": profession,
@@ -1564,7 +1569,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                     if (value.text.isEmpty) {
                       return [];
                     }
-                    print("instrument=========> ${instruments}");
+                    print("instrument=========> $instruments");
                     // The logic to find out which ones should appear
                     // Milkessa: implemented a search mechanism that is organized and alphabetical
                     List<dynamic> instrumentRes;

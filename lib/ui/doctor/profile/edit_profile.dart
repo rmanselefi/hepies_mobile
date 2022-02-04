@@ -86,7 +86,8 @@ class _EditProfileState extends State<EditProfile>
       });
       interest = interew;
       _emailController.text = user['profession'][0]['email'];
-      _phoneController.text = user['profession'][0]['phone'];
+      _phoneController.text =
+          user['profession'][0]['phone'].toString().substring(4);
       _specialityController.text = user['profession'][0]['speciality'];
       _workplaceController.text = user['profession'][0]['workplace'];
       profile = user['profession'][0]['profile'];
@@ -289,8 +290,12 @@ class _EditProfileState extends State<EditProfile>
                                   new Flexible(
                                     child: new TextField(
                                       controller: _phoneController,
+                                      maxLength: 9,
+                                      keyboardType: TextInputType.number,
                                       decoration: const InputDecoration(
-                                          hintText: "Enter Mobile Number"),
+                                        hintText: "Enter Mobile Number",
+                                        prefixText: '+251 - ',
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -476,7 +481,7 @@ class _EditProfileState extends State<EditProfile>
                       workplace: _workplaceController.text,
                       speciality: _specialityController.text,
                       email: _emailController.text,
-                      phone: _phoneController.text,
+                      phone: '+251' + _phoneController.text,
                       points: points,
                       interests: interests,
                       license: license,
