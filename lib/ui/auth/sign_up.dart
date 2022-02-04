@@ -9,6 +9,7 @@ import 'package:hepies/models/user.dart';
 import 'package:hepies/providers/auth.dart';
 import 'package:hepies/providers/consult.dart';
 import 'package:hepies/providers/user_provider.dart';
+import 'package:hepies/ui/auth/autorization.dart';
 import 'package:hepies/ui/auth/login.dart';
 import 'package:hepies/ui/welcome.dart';
 import 'package:hepies/util/image.dart';
@@ -339,7 +340,7 @@ class _RegisterState extends State<Register> {
             );
             Navigator.pushAndRemoveUntil(
               context,
-              MaterialPageRoute(builder: (context) => Login()),
+              MaterialPageRoute(builder: (context) => AuthorizationPage(profession: _professionController,fatherName: _fathername,name: _name,)),
               ModalRoute.withName('/'),
             );
           } else {
