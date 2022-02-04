@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hepies/constants.dart';
@@ -40,8 +41,10 @@ class _FooterState extends State<Footer> {
                                 )));
                   },
                 ),
-                Text(
+                AutoSizeText(
                   '  Home',
+                  maxLines: 1,
+                  presetFontSizes: [13, 11, 9],
                   style: TextStyle(fontSize: 13),
                   textAlign: TextAlign.end,
                 ),
@@ -65,7 +68,12 @@ class _FooterState extends State<Footer> {
                             builder: (context) => WritePrescription()));
                   },
                 ),
-                Text('prescription', style: TextStyle(fontSize: 13)),
+                AutoSizeText(
+                  'prescription',
+                  maxLines: 1,
+                  presetFontSizes: [13, 11, 9],
+                  style: TextStyle(fontSize: 13),
+                ),
               ],
             ),
             SizedBox(width: 10),
@@ -84,7 +92,12 @@ class _FooterState extends State<Footer> {
                         MaterialPageRoute(builder: (context) => Drugs()));
                   },
                 ),
-                Text('Drugs', style: TextStyle(fontSize: 13)),
+                AutoSizeText(
+                  'Drugs',
+                  maxLines: 1,
+                  presetFontSizes: [13, 11, 9],
+                  style: TextStyle(fontSize: 13),
+                ),
               ],
             ),
           ],
