@@ -23,7 +23,6 @@ class _FavoritesState extends State<FavoritesPage> {
       body: SafeArea(
         child: Column(
           children: [
-            Header(),
             SizedBox(
               height: 50.0,
             ),
@@ -48,7 +47,8 @@ class _FavoritesState extends State<FavoritesPage> {
                                     child: CircularProgressIndicator(),
                                   );
                                 } else {
-                                  if (snapshot.data == null || snapshot.data.length==0) {
+                                  if (snapshot.data == null ||
+                                      snapshot.data.length == 0) {
                                     return Center(
                                       child: Text('No data to show'),
                                     );
@@ -72,7 +72,10 @@ class _FavoritesState extends State<FavoritesPage> {
                                           // for (var i = 0;
                                           //     i < combinations.length;
                                           //     i++) {}
-                                          Provider.of<PrescriptionProvider>(context,listen: false).resetStatus();
+                                          Provider.of<PrescriptionProvider>(
+                                                  context,
+                                                  listen: false)
+                                              .resetStatus();
                                           presProvider.setFavoriteCombinations(
                                               combinations);
                                           SchedulerBinding.instance

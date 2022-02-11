@@ -127,7 +127,8 @@ class _LoginState extends State<Login> {
             showTopSnackBar(
               context,
               CustomSnackBar.error(
-                message: response['message'].toString(),
+                message: response['message'].toString() ??
+                    'Wrong username or password entered, try again!',
               ),
             );
           }

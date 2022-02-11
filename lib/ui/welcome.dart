@@ -172,8 +172,9 @@ class _WelcomeState extends State<Welcome> {
                           height: 10.0,
                         ),
                         Flexible(
-                          child: Text('Overall ${overallPoints}pts',
-                              style: TextStyle(color: Colors.green)),
+                          child: Text('Overall ${overallPoints ?? ' - '}pts',
+                              style: TextStyle(
+                                  color: Colors.green, fontSize: 12.0)),
                         )
                       ],
                     ),

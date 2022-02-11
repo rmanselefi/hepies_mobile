@@ -8,6 +8,7 @@ import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:hepies/constants.dart';
 import 'package:hepies/providers/drug_provider.dart';
 import 'package:hepies/providers/guidelines.dart';
+import 'package:hepies/widgets/footer.dart';
 import 'package:hepies/widgets/header.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
@@ -368,6 +369,7 @@ class _GuidelinesState extends State<Guidelines> {
                   );
                 }
               }),
+          Footer(),
         ],
       ),
     );

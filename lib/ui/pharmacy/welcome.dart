@@ -138,8 +138,8 @@ class _WelcomePharmacyState extends State<WelcomePharmacy> {
                           style: TextStyle(color: Colors.green, fontSize: 18.0),
                         ),
                       ),
-                      Text('Overall ${overallPoints}pts',
-                          style: TextStyle(color: Colors.green))
+                      Text('Overall ${overallPoints ?? ' - '}pts',
+                          style: TextStyle(color: Colors.green, fontSize: 12.0))
                     ],
                   ),
                 )
