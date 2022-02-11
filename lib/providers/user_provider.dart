@@ -14,6 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 enum ChangeStatus { NotChanged, Changed, Changing }
 
 class UserProvider with ChangeNotifier {
+  String role;
   Status _loggedInStatus = Status.NotLoggedIn;
   Status _registeredInStatus = Status.NotRegistered;
   firebase_storage.UploadTask uploadTask;

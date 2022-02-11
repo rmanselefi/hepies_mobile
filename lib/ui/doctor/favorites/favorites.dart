@@ -76,7 +76,6 @@ class _FavoritesState extends State<FavoritesPage> {
       body: SafeArea(
         child: Column(
           children: [
-            Header(),
             SizedBox(
               height: 50.0,
             ),

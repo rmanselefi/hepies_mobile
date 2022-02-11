@@ -6,7 +6,10 @@ import 'package:hashtagable/widgets/hashtag_text.dart';
 import 'package:hashtagable/widgets/hashtag_text_field.dart';
 import 'package:hepies/constants.dart';
 import 'package:hepies/providers/consult.dart';
+import 'package:hepies/providers/user_provider.dart';
 import 'package:hepies/ui/pharmacy/ui/consults/comment/share_comment.dart';
+import 'package:hepies/ui/pharmacy/welcome.dart';
+import 'package:hepies/ui/welcome.dart';
 import 'package:hepies/util/image_consult.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -370,6 +373,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
     ConsultProvider consult = Provider.of<ConsultProvider>(context);
     Future<dynamic> _myData =
         Provider.of<ConsultProvider>(context, listen: false).getConsults();
+    var userProvider = Provider.of<UserProvider>(context, listen: false);
     showAlertDialog(BuildContext context, var id) {
       // set up the buttons
       Widget cancelButton = TextButton(
@@ -578,6 +582,18 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                                           _topic.text = null;
                                                           file = null;
                                                         });
+                                                        Navigator.pushAndRemoveUntil(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) => userProvider.role == 'doctor' ||
+                                                                        userProvider.role ==
+                                                                            'healthofficer' ||
+                                                                        userProvider.role ==
+                                                                            'nurse'
+                                                                    ? Welcome()
+                                                                    : WelcomePharmacy()),
+                                                            ModalRoute.withName(
+                                                                '/'));
                                                       }
                                                     } else {
                                                       showTopSnackBar(
