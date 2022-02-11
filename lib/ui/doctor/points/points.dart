@@ -93,7 +93,7 @@ class _PointsState extends State<Points> {
                     ),
                   ),
                   SizedBox(
-                    height: 20.0,
+                    height: 30.0,
                   ),
                   userProvider.pointFiftyStatus == ChangeStatus.Changing
                       ? loading
@@ -121,7 +121,8 @@ class _PointsState extends State<Points> {
                                   showTopSnackBar(
                                     context,
                                     CustomSnackBar.error(
-                                      message: "You need minimum 500Pts to buy airtime",
+                                      message:
+                                          "You need minimum 500Pts to buy airtime",
                                     ),
                                   );
                                 }
@@ -159,7 +160,8 @@ class _PointsState extends State<Points> {
                                   showTopSnackBar(
                                     context,
                                     CustomSnackBar.error(
-                                      message: "You need minimum 500Pts to buy airtime",
+                                      message:
+                                          "You need minimum 500Pts to buy airtime",
                                     ),
                                   );
                                 }
@@ -180,7 +182,7 @@ class _PointsState extends State<Points> {
                           ],
                         ),
                   SizedBox(
-                    height: 20.0,
+                    height: 30.0,
                   ),
                   Center(
                     child: Text(
@@ -310,8 +312,7 @@ class _PointsState extends State<Points> {
                                             showTopSnackBar(
                                               context,
                                               CustomSnackBar.error(
-                                                message:
-                                                    "User not available",
+                                                message: "User not available",
                                               ),
                                             );
                                           }

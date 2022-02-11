@@ -25,7 +25,6 @@ class _DrugsState extends State<Drugs> {
       body: SafeArea(
         child: Column(
           children: [
-            Header(),
             SizedBox(
               height: 30.0,
             ),
