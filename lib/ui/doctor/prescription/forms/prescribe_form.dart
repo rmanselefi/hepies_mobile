@@ -2,34 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:hepies/constants.dart';
-import 'package:hepies/models/chemistry.dart';
 import 'package:hepies/models/drug.dart';
-import 'package:hepies/models/dx.dart';
-import 'package:hepies/models/endocrinology.dart';
-import 'package:hepies/models/favorites.dart';
-import 'package:hepies/models/hematology.dart';
 import 'package:hepies/models/hx.dart';
-import 'package:hepies/models/investigation.dart';
 import 'package:hepies/models/patient.dart';
 import 'package:hepies/models/prescription.dart';
-import 'package:hepies/models/px.dart';
-import 'package:hepies/models/serology.dart';
-import 'package:hepies/models/tumor.dart';
-import 'package:hepies/models/urine.dart';
 import 'package:hepies/models/user.dart';
 import 'package:hepies/providers/drug_provider.dart';
-import 'package:hepies/providers/favorites.dart';
 import 'package:hepies/providers/patient_provider.dart';
 import 'package:hepies/providers/prescription_provider.dart';
-import 'package:hepies/ui/doctor/medicalrecords/add_history.dart';
-import 'package:hepies/util/database_helper.dart';
 import 'package:hepies/util/shared_preference.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
-import 'package:country_code_picker/country_code_picker.dart';
 
+// ignore: must_be_immutable
 class PrescribeForm extends StatefulWidget {
   final Function setPrescription;
   final String type;
@@ -151,6 +137,11 @@ class _PrescribeFormState extends State<PrescribeForm> {
       forController.text = selectedPrescription['takein'];
       ampuleController.text = selectedPrescription['ampule'];
       diagnosisController.text = selectedPrescription['dx']['diagnosis'];
+      setState(() {
+        status = "editing";
+        action_status = "editing";
+        presIndex = index;
+      });
     }
   }
 
@@ -171,14 +162,15 @@ class _PrescribeFormState extends State<PrescribeForm> {
   }
 
   void setFormFromFav(var fav) {
-
-    drugnameController.text = fav['drug_name'];
-    print("drug_namedrug_name ===> ${drugnameController.text}");
-    strengthController.text = fav['strength'];
-    unitController.text = fav['unit'];
-    routeController.text = fav['route'];
-    forController.text = fav['takein'];
-    everyController.text = fav['frequency'];
+    setState(() {
+      drugnameController.text = fav['drug_name'];
+      print("drug_namedrug_name ===> ${drugnameController.text}");
+      strengthController.text = fav['strength'];
+      unitController.text = fav['unit'];
+      routeController.text = fav['route'];
+      forController.text = fav['takein'];
+      everyController.text = fav['frequency'];
+    });
   }
 
   void setFromFavorites(List<dynamic> fav) async {

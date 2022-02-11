@@ -131,6 +131,46 @@ class PharmacyProvider with ChangeNotifier {
     return json.decode(response.body);
   }
 
+
+  Future<Map<String, dynamic>> updateMyPharmacy(pharmacy_id,
+      String drug_name, String drug_id, String price) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String professionid = prefs.getInt('professionid').toString();
+    print("professionidprofessionid $professionid");
+    String token = prefs.getString('token');
+
+    var result;
+
+    final Map<String, dynamic> registrationData = {
+      'price': price,
+      'drug_name': drug_name,
+      'drug': drug_id,
+      'profession': professionid
+    };
+    print("registrationData $registrationData");
+    Response response = await put(Uri.parse('${AppUrl.pharmacy}/$pharmacy_id'),
+        body: json.encode(registrationData),
+        headers: {
+          'Content-Type': 'application/json',
+          HttpHeaders.authorizationHeader: "Bearer $token"
+        });
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      result = {
+        'status': true,
+        'message': 'Successful',
+      };
+    } else {
+      notifyListeners();
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return result;
+  }
+
+
   get getDrug {
     notifyListeners();
     return medical;

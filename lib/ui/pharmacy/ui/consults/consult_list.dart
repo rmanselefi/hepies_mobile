@@ -129,7 +129,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                   context,
                   MaterialPageRoute(
                       builder: (context) =>
-                          PharmacyShareComment(e['id'], post)));
+                          PharmacyShareComment(e['id'], post,widget.user_id)));
             },
             child: rowSingleButton(
                 color: Colors.black,
@@ -635,8 +635,12 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                 itemCount: snapshot.data.length,
                 itemBuilder: (BuildContext context, int index) {
                   var e = snapshot.data[index];
-                  var profile = e['author']['profession'][0]['profile'];
-
+                  var profile = e['author'] != null
+                      ? e['author']['profession'][0]['profile']
+                      : "";
+                  bool _validURL = profile != "" && profile != null
+                      ? Uri.parse(profile).isAbsolute
+                      : false;
                   DateTime time = DateTime.parse(e['createdAt']);
                   var duration = timeago.format(time);
                   return Container(
@@ -681,7 +685,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                     child: ClipRRect(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(40)),
-                                        child: profile != null
+                                        child: profile != null && _validURL
                                             ? Image.network(profile)
                                             : Icon(
                                                 Icons.person,
@@ -988,7 +992,10 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                                                       width:
                                                                           0.0,
                                                                     ),
-                                                            ])));
+                                                            ],widget.user_id)
+
+
+                                            ));
                                       },
                                       icon: Icon(
                                         Icons.thumb_up_sharp,
@@ -1179,7 +1186,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                                       height: 0.0,
                                                       width: 0.0,
                                                     ),
-                                            ])));
+                                            ],widget.user_id)));
                               },
                             )
                           ],

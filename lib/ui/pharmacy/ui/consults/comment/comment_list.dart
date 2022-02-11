@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:hepies/providers/consult.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart ' as timeago;
 
 class PharmacyCommentList extends StatefulWidget {
-  final List consults;
-  PharmacyCommentList(this.consults);
+  final user_id;
+  final consultId;
+  PharmacyCommentList(this.user_id, this.consultId);
   @override
   _PharmacyConsultListState createState() => _PharmacyConsultListState();
 }
@@ -19,13 +22,14 @@ class _PharmacyConsultListState extends State<PharmacyCommentList> {
     _scrollController = ScrollController();
   }
 
-  List<Widget> buildCommentSection() {
+  List<Widget> buildCommentSection(consults) {
     List<Widget> comments = [];
-    widget.consults.forEach((e) {
+    consults.forEach((e) {
+      print("widgetwidgetwidget ${e['like']}");
+      var res = e['like'].where((l) => l['user_id'] == widget.user_id).toList();
       DateTime time = DateTime.parse(e['createdAt']);
-      // var profile = e['author']['profession'][0]['profile'];
+      var profile = e['user']['profession'][0]['profile'];
       var duration = timeago.format(time);
-      print("timeago ${timeago.format(time).substring(0, 4)}");
       comments.add(
         Container(
           padding: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
@@ -37,38 +41,19 @@ class _PharmacyConsultListState extends State<PharmacyCommentList> {
               SizedBox(
                 width: 5.0,
               ),
-              // GestureDetector(
-              //   onTap: profile != null
-              //       ? () {
-              //           Navigator.push(
-              //             context,
-              //             MaterialPageRoute(
-              //               builder: (context) => Image.network(
-              //                 profile,
-              //                 fit: BoxFit.contain,
-              //               ),
-              //             ),
-              //           );
-              //         }
-              //       : null,
-              //   child: Container(
-              //     width: 40,
-              //     height: 40,
-              //     decoration: BoxDecoration(
-              //         borderRadius: BorderRadius.all(Radius.circular(40))),
-              //     child: ClipRRect(
-              //         borderRadius: BorderRadius.all(Radius.circular(40)),
-              //         child: profile != null
-              //             ? Image.network(profile)
-              //             : Icon(
-              //                 Icons.person,
-              //                 size: 40,
-              //               )),
-              //   ),
-              // ),
-              Icon(
-                Icons.person,
-                size: 40,
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(40))),
+                child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(40)),
+                    child: profile != null
+                        ? Image.network(profile)
+                        : Icon(
+                            Icons.person,
+                            size: 40,
+                          )),
               ),
               Expanded(
                 child: Container(
@@ -127,9 +112,40 @@ class _PharmacyConsultListState extends State<PharmacyCommentList> {
                           ),
                           Row(
                             children: [
-                              IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(Icons.favorite_border))
+                              res.length > 0
+                                  ? IconButton(
+                                      onPressed: () async {
+                                        var result = await ConsultProvider()
+                                            .unlikeComment(e['id']);
+                                        if (result['status']) {
+                                          setState(() {
+                                            Provider.of<ConsultProvider>(
+                                                    context,listen: false)
+                                                .getCommentByConsultId(
+                                                    widget.consultId);
+                                          });
+                                        }
+                                      },
+                                      icon: Icon(
+                                        Icons.favorite,
+                                        color: Colors.red,
+                                      ))
+                                  : IconButton(
+                                      onPressed: () async {
+                                        var result = await ConsultProvider()
+                                            .likeComment(e['id']);
+                                        if (result['status']) {
+                                          setState(() {
+                                            Provider.of<ConsultProvider>(
+                                                    context,listen: false)
+                                                .getCommentByConsultId(
+                                                    widget.consultId);
+                                          });
+                                        }
+                                      },
+                                      icon: Icon(
+                                        Icons.favorite_border,
+                                      ))
                             ],
                           ),
                         ],
@@ -151,12 +167,29 @@ class _PharmacyConsultListState extends State<PharmacyCommentList> {
 
   @override
   Widget build(BuildContext context) {
-    return MediaQuery.removePadding(
-      context: context,
-      removeTop: true,
-      child: Column(
-        children: buildCommentSection(),
-      ),
-    );
+    return FutureBuilder<List<dynamic>>(
+        future: Provider.of<ConsultProvider>(context)
+            .getCommentByConsultId(widget.consultId),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            if (snapshot.data == null || snapshot.data.length == 0) {
+              return Center(
+                child: Text('No comment under this consult'),
+              );
+            }
+
+            return MediaQuery.removePadding(
+              context: context,
+              removeTop: true,
+              child: Column(
+                children: buildCommentSection(snapshot.data),
+              ),
+            );
+          }
+        });
   }
 }

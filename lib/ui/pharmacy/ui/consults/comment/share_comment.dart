@@ -18,7 +18,8 @@ import 'package:top_snackbar_flutter/top_snack_bar.dart';
 class PharmacyShareComment extends StatefulWidget {
   final consultid;
   final List<Widget> post;
-  PharmacyShareComment(this.consultid, this.post);
+  final user_id;
+  PharmacyShareComment(this.consultid, this.post, this.user_id);
   @override
   _PharmacyShareConsultState createState() => _PharmacyShareConsultState();
 }
@@ -27,16 +28,16 @@ class _PharmacyShareConsultState extends State<PharmacyShareComment> {
   final formKey = new GlobalKey<FormState>();
   String _topic;
   XFile file;
+  var topicController = new TextEditingController();
   void _setImage(XFile image) {
     setState(() {
       file = image;
     });
-    print("_formData_formData_formData${file}");
   }
 
   var loading = Row(
     mainAxisAlignment: MainAxisAlignment.center,
-    children: <Widget>[CircularProgressIndicator(), Text("Sharing....")],
+    children: <Widget>[CircularProgressIndicator(), Text("Commenting....")],
   );
 
   @override
@@ -78,6 +79,7 @@ class _PharmacyShareConsultState extends State<PharmacyShareComment> {
                             child: Container(
                               padding: EdgeInsets.all(10.0),
                               child: TextFormField(
+                                controller: topicController,
                                 onSaved: (value) => _topic = value,
                                 validator: (value) => value.isEmpty
                                     ? "Please enter your comment"
@@ -127,8 +129,6 @@ class _PharmacyShareConsultState extends State<PharmacyShareComment> {
                                   OutlinedButton(
                                     onPressed: () async {
                                       final form = formKey.currentState;
-                                      print(
-                                          "_topic_topic_topic_topic ${_topic}");
                                       if (form.validate()) {
                                         form.save();
                                         try {
@@ -141,6 +141,8 @@ class _PharmacyShareConsultState extends State<PharmacyShareComment> {
                                             setState(() {
                                               consult.getCommentByConsultId(
                                                   consultid);
+                                              file = null;
+                                              topicController.text = "";
                                             });
                                             showTopSnackBar(
                                               context,
@@ -179,25 +181,7 @@ class _PharmacyShareConsultState extends State<PharmacyShareComment> {
                           ),
                     Divider(),
                     Flexible(
-                      child: FutureBuilder<List<dynamic>>(
-                          future: Provider.of<ConsultProvider>(context)
-                              .getCommentByConsultId(consultid),
-                          builder: (context, snapshot) {
-                            if (!snapshot.hasData) {
-                              return Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            } else {
-                              if (snapshot.data == null ||
-                                  snapshot.data.length == 0) {
-                                return Center(
-                                  child: Text('No comment under this consult'),
-                                );
-                              }
-                              return PharmacyCommentList(snapshot.data);
-                            }
-                          }),
-                    ),
+                        child: PharmacyCommentList(widget.user_id, consultid)),
                   ],
                 ),
               ),

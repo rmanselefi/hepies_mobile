@@ -46,6 +46,8 @@ class PrescriptionProvider with ChangeNotifier {
   List<dynamic> narcoticsDrugs = [];
   List<dynamic> instruments = [];
 
+  var professional=null;
+
   Map<String, dynamic> _singlePrescription = {};
   Map<String, dynamic> get singlePrescription => _singlePrescription;
   void changeFavStatus(bool favStatus) {
@@ -194,6 +196,12 @@ class PrescriptionProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void whileEditing() {
+    _actionStatus = "edit";
+    _status = 'editing';
+    notifyListeners();
+  }
+
   void setFavoriteCombinations(List<dynamic> prescriptions) {
     _prescription = prescriptions;
     notifyListeners();
@@ -267,5 +275,23 @@ class PrescriptionProvider with ChangeNotifier {
       };
     }
     return result;
+  }
+
+
+  Future<dynamic> getProfessionalByID(var id) async {
+    var result;
+    Response response = await get(Uri.parse('${AppUrl.professional}/$id'));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      professional = json.decode(response.body);
+      return professional;
+    } else {
+      notifyListeners();
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return professional;
   }
 }

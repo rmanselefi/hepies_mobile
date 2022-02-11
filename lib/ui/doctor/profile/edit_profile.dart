@@ -75,7 +75,9 @@ class _EditProfileState extends State<EditProfile>
     print("object ${user}");
 
     setState(() {
-      var inters = user['profession'][0]['interests'].split(",");
+      var inters = user['profession'][0]['interests'] != null
+          ? user['profession'][0]['interests'].split(",")
+          : [];
       List interew = [];
       inters.forEach((element) {
         var property = {

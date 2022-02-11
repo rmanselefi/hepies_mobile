@@ -36,4 +36,7 @@ class AppUrl {
   static const String readprescriptionPhone = baseURL + "/prescription/phone";
 
   static const String forgotPassword = baseURL + "/forgot-password";
+
+  static const String professional = baseURL + "/users";
+
 }

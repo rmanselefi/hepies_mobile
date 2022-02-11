@@ -7,6 +7,8 @@ import 'package:hepies/util/database_helper.dart';
 import 'package:hepies/widgets/footer.dart';
 import 'package:hepies/widgets/header.dart';
 import 'package:provider/provider.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class FavoritesPage extends StatefulWidget {
   final profession_id;
@@ -16,6 +18,57 @@ class FavoritesPage extends StatefulWidget {
 }
 
 class _FavoritesState extends State<FavoritesPage> {
+  var favoriteController = new TextEditingController();
+  void _openRenameForm(BuildContext context, Favorites favorite) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            contentPadding: const EdgeInsets.all(16.0),
+            content: new Row(
+              children: <Widget>[
+                new Expanded(
+                  child: new TextFormField(
+                    autofocus: true,
+                    initialValue: favorite.name,
+                    decoration: new InputDecoration(labelText: 'Rename'),
+                    onChanged: (val) {
+                      setState(() {
+                        favorite.name = val;
+                      });
+                    },
+                  ),
+                )
+              ],
+            ),
+            actions: <Widget>[
+              new TextButton(
+                  child: const Text('Cancel'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  }),
+              new TextButton(
+                  child: const Text('Rename'),
+                  onPressed: () async {
+                    int res = await DatabaseHelper().updateFavorite(favorite);
+                    if (res >= 1) {
+                      setState(() {
+                        DatabaseHelper().getFavoritesById(widget.profession_id);
+                      });
+                      Navigator.pop(context);
+                      showTopSnackBar(
+                        context,
+                        CustomSnackBar.success(
+                          message: "Favorite Renaming was successful",
+                        ),
+                      );
+                    }
+                  })
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     var presProvider = Provider.of<PrescriptionProvider>(context);
@@ -34,7 +87,7 @@ class _FavoritesState extends State<FavoritesPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
-                          height: 600.0,
+                          height: 500.0,
                           width: 400.0,
                           decoration: BoxDecoration(
                               border: Border.all(
@@ -48,7 +101,8 @@ class _FavoritesState extends State<FavoritesPage> {
                                     child: CircularProgressIndicator(),
                                   );
                                 } else {
-                                  if (snapshot.data == null || snapshot.data.length==0) {
+                                  if (snapshot.data == null ||
+                                      snapshot.data.length == 0) {
                                     return Center(
                                       child: Text('No data to show'),
                                     );
@@ -63,31 +117,35 @@ class _FavoritesState extends State<FavoritesPage> {
                                             const Divider(),
                                     itemBuilder:
                                         (BuildContext context, int index) {
-                                      return GestureDetector(
-                                        onTap: () async {
-                                          List<dynamic> combinations =
-                                              await DatabaseHelper()
-                                                  .getFavoritesByName(
-                                                      data[index].name);
-                                          // for (var i = 0;
-                                          //     i < combinations.length;
-                                          //     i++) {}
-                                          Provider.of<PrescriptionProvider>(context,listen: false).resetStatus();
-                                          presProvider.setFavoriteCombinations(
-                                              combinations);
-                                          SchedulerBinding.instance
-                                              .addPostFrameCallback((_) {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        WritePrescription(
-                                                          from: "favorites",
-                                                        )));
-                                          });
-                                        },
-                                        child: ListTile(
-                                          title: Text(
+                                      return ListTile(
+                                        title: GestureDetector(
+                                          onTap: () async {
+                                            List<dynamic> combinations =
+                                                await DatabaseHelper()
+                                                    .getFavoritesByName(
+                                                        data[index].name);
+                                            // for (var i = 0;
+                                            //     i < combinations.length;
+                                            //     i++) {}
+                                            Provider.of<PrescriptionProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .resetStatus();
+                                            presProvider
+                                                .setFavoriteCombinations(
+                                                    combinations);
+                                            SchedulerBinding.instance
+                                                .addPostFrameCallback((_) {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          WritePrescription(
+                                                            from: "favorites",
+                                                          )));
+                                            });
+                                          },
+                                          child: Text(
                                             '${index + 1} ${data[index].name}',
                                             style: TextStyle(
                                                 decoration:
@@ -95,28 +153,33 @@ class _FavoritesState extends State<FavoritesPage> {
                                                 fontSize: 23.0,
                                                 fontWeight: FontWeight.bold),
                                           ),
-                                          trailing: Container(
-                                            width: 100.0,
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              children: [
-                                                Text('Rename'),
-                                                IconButton(
-                                                    onPressed: () {
-                                                      setState(() {
-                                                        DatabaseHelper()
-                                                            .deleteFavorite(
-                                                                data[index]
-                                                                    .name);
-                                                      });
-                                                    },
-                                                    icon: Icon(
-                                                      Icons.cancel,
-                                                      color: Colors.redAccent,
-                                                    ))
-                                              ],
-                                            ),
+                                        ),
+                                        trailing: Container(
+                                          width: 100.0,
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              GestureDetector(
+                                                child: Text('Rename'),
+                                                onTap: () {
+                                                  _openRenameForm(
+                                                      context, data[index]);
+                                                },
+                                              ),
+                                              IconButton(
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      DatabaseHelper()
+                                                          .deleteFavorite(
+                                                              data[index].name);
+                                                    });
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.cancel,
+                                                    color: Colors.redAccent,
+                                                  ))
+                                            ],
                                           ),
                                         ),
                                       );

@@ -355,4 +355,58 @@ class ConsultProvider with ChangeNotifier {
     }
     return result;
   }
+
+  Future<Map<String, dynamic>> likeComment(var commentId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+
+    var result;
+    Response response =
+    await post(Uri.parse("${AppUrl.consults}/like/comment/$commentId"), headers: {
+      'Content-Type': 'application/json',
+      HttpHeaders.authorizationHeader: "Bearer $token"
+    });
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      result = {
+        'status': true,
+        'message': 'Successful',
+        'consult': responseData
+      };
+    } else {
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return result;
+  }
+
+  Future<Map<String, dynamic>> unlikeComment(var consultid) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+
+    var result;
+    Response response =
+    await post(Uri.parse("${AppUrl.consults}/unlike/comment/$consultid"), headers: {
+      'Content-Type': 'application/json',
+      HttpHeaders.authorizationHeader: "Bearer $token"
+    });
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      result = {
+        'status': true,
+        'message': 'Successful',
+      };
+    } else {
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return result;
+  }
+
+
 }

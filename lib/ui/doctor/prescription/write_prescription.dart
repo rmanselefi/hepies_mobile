@@ -10,36 +10,28 @@ import 'package:hepies/providers/user_provider.dart';
 import 'package:hepies/ui/doctor/calculator/calculator.dart';
 import 'package:hepies/ui/doctor/favorites/favorites.dart';
 import 'package:hepies/ui/doctor/guidelines/guidelines.dart';
-import 'package:hepies/ui/doctor/medicalrecords/add_history.dart';
 import 'package:hepies/ui/doctor/prescription/forms/prescribe_form.dart';
 import 'package:hepies/ui/doctor/prescription/forms/prescribe_narco_form.dart';
 import 'package:hepies/ui/doctor/prescription/forms/prescribe_psyco_form.dart';
 import 'package:hepies/ui/doctor/prescription/papers/prescription_paper.dart';
 import 'package:hepies/ui/doctor/prescription/papers/psycho_narco_paper.dart';
 import 'package:hepies/ui/doctor/prescription/papers/psycho_paper.dart';
-import 'package:hepies/ui/doctor/prescription/prescription_types/general_prescription.dart';
-import 'package:hepies/ui/doctor/prescription/prescription_types/instrument_prescription.dart';
-import 'package:hepies/ui/doctor/prescription/prescription_types/narcotic_prescription.dart';
-import 'package:hepies/ui/doctor/prescription/prescription_types/psychotropic_prescription.dart';
 import 'package:hepies/ui/welcome.dart';
 import 'package:hepies/util/database_helper.dart';
 import 'package:hepies/util/shared_preference.dart';
 import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
-import 'package:top_snackbar_flutter/tap_bounce_container.dart';
 import 'package:hepies/constants.dart';
 
 enum type { general, narcotic, psychotropic, instrument }
 
 class WritePrescription extends StatefulWidget {
-  final History history;
   final Diagnosis diagnosis;
-  final Physical physical;
   final String type;
   final String from;
   WritePrescription(
-      {this.physical, this.diagnosis, this.history, this.type, this.from});
+      {this.diagnosis, this.type, this.from});
   @override
   _WritePrescriptionState createState() => _WritePrescriptionState();
 }
