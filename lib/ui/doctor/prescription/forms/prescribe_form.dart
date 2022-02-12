@@ -224,7 +224,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
     ];
     return Container(
       height: 40.0,
-      width: width(context) * 0.325,
+      width: width(context) * 0.3,
       child: new Row(
         children: <Widget>[
           new Expanded(
@@ -309,7 +309,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
     var frequency = ["Qd", "BID", "TID", "QID", "PRN"];
     return Container(
       height: 40.0,
-      width: width(context) * 0.3375,
+      width: width(context) * 0.3,
       child: new Row(
         children: <Widget>[
           new Expanded(
@@ -377,7 +377,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
     var frequency = ["Mg", "Ml", "Gm", "L", "IU", "Tab", "Sachet"];
     return Container(
       height: 40.0,
-      width: width(context) * 0.3,
+      width: width(context) * 0.25,
       child: new Row(
         children: <Widget>[
           new Expanded(
@@ -468,24 +468,29 @@ class _PrescribeFormState extends State<PrescribeForm> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      CheckboxListTile(
-                        title: Text("Add to favourite"),
-                        value: rememberMe,
-                        onChanged: (newValue) {
-                          setState(() {
-                            rememberMe = newValue;
-                          });
-                          pres.changeFavStatus(newValue);
-                        },
-                        controlAffinity: ListTileControlAffinity
-                            .leading, //  <-- leading Checkbox
+                      Container(
+                        width: width(context) * 0.45,
+                        child: CheckboxListTile(
+                          title: Text(
+                            "Add to favourite",
+                            style: TextStyle(fontSize: 12),
+                          ),
+                          value: rememberMe,
+                          onChanged: (newValue) {
+                            setState(() {
+                              rememberMe = newValue;
+                            });
+                            pres.changeFavStatus(newValue);
+                          },
+                          controlAffinity: ListTileControlAffinity
+                              .leading, //  <-- leading Checkbox
+                        ),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SizedBox(height: height(context) * 0.04),
                           GestureDetector(
                             onTap: !rememberMe
                                 ? () {
@@ -601,7 +606,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                             ),
                           ),
                           SizedBox(
-                            height: 10,
+                            width: 10,
                           ),
                           GestureDetector(
                             onTap: !rememberMe
@@ -716,6 +721,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                               ),
                             ),
                           ),
+                          SizedBox(width: 5),
                         ],
                       ),
                     ],
@@ -1125,9 +1131,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                 ),
                                 Row(
                                   children: [
-                                    SizedBox(
-                                      width: 8.0,
-                                    ),
                                     _textEvery(),
                                     Container(
                                       width: width(context) * 0.2875,
