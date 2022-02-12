@@ -224,7 +224,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
     ];
     return Container(
       height: 40.0,
-      width: width(context) * 0.3375,
+      width: width(context) * 0.325,
       child: new Row(
         children: <Widget>[
           new Expanded(
@@ -1130,7 +1130,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                     ),
                                     _textEvery(),
                                     Container(
-                                      width: width(context) * 0.3,
+                                      width: width(context) * 0.2875,
                                       height: 40,
                                       child: Row(
                                         children: [
