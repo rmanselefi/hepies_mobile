@@ -183,6 +183,7 @@ class _RegisterState extends State<Register> {
     final phoneField = TextFormField(
       autofocus: false,
       maxLength: 9,
+      keyboardType: TextInputType.number,
       validator: (value) =>
           value.isEmpty ? "Please enter your phone number" : null,
       onSaved: (value) => _phone = '+251' + value,
