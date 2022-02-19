@@ -124,12 +124,7 @@ class _DrugsState extends State<Drugs> {
                 ],
               ),
             ),
-            Container(
-                height: 50,
-                decoration: BoxDecoration(
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(20.0))),
-                child: Footer())
+            Footer()
           ],
         ),
       ),

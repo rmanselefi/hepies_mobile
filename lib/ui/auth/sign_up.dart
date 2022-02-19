@@ -183,8 +183,18 @@ class _RegisterState extends State<Register> {
       autofocus: false,
       maxLength: 9,
       keyboardType: TextInputType.number,
-      validator: (value) =>
-          value.isEmpty ? "Please enter your phone number" : null,
+      validator: (value) => value.isEmpty
+          ? "Please enter your phone number"
+          : !value.startsWith('09')
+              ? 'must start with "09"'
+              : value.length != 10
+                  ? 'incomplete phone number'
+                  : value.contains('.') ||
+                          value.contains(',') ||
+                          value.contains('-') ||
+                          value.contains(' ')
+                      ? 'invalid phone number'
+                      : null,
       onSaved: (value) => _phone = '+251' + value,
       decoration: buildInputDecoration("Confirm password", Icons.contact_phone),
     );

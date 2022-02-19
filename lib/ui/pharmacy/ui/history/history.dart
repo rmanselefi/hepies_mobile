@@ -19,7 +19,6 @@ class _PharmacyHistoryState extends State<PharmacyHistory> {
         child: Scaffold(
       body: Column(
         children: [
-          Header(),
           Expanded(
               child: ListView(
             children: [
@@ -33,19 +32,19 @@ class _PharmacyHistoryState extends State<PharmacyHistory> {
                     child: Text(
                       'Drug Name',
                       style: TextStyle(
-                          fontSize: 20.0, fontWeight: FontWeight.bold),
+                          fontSize: 14.0, fontWeight: FontWeight.bold),
                     ),
                     padding: EdgeInsets.only(left: 5.0),
                   ),
                   Text(
                     'Patient Name',
                     style:
-                        TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                        TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold),
                   ),
                   Text(
                     'Date',
                     style:
-                        TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                        TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),

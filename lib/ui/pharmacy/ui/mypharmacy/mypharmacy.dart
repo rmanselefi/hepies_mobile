@@ -55,8 +55,8 @@ class _MyPharmacyState extends State<MyPharmacy> {
                                 var res = await Provider.of<PharmacyProvider>(
                                         context,
                                         listen: false)
-                                    .addDrugToPharmacy(drugController.text, drug_id,
-                                        priceController.text)
+                                    .addDrugToPharmacy(drugController.text,
+                                        drug_id, priceController.text)
                                     .whenComplete(() {
                                   setState(() {
                                     adding = false;
@@ -102,7 +102,6 @@ class _MyPharmacyState extends State<MyPharmacy> {
         child: Scaffold(
       body: Column(
         children: [
-          Header(),
           Expanded(
               child: ListView(
             children: [

@@ -483,10 +483,11 @@ class _EditProfileState extends State<EditProfile>
                 textColor: Colors.white,
                 color: Colors.red,
                 onPressed: () {
-                  setState(() {
-                    _status = true;
-                    FocusScope.of(context).requestFocus(new FocusNode());
-                  });
+                  Navigator.pop(context);
+                  // setState(() {
+                  //   _status = true;
+                  //   FocusScope.of(context).requestFocus(new FocusNode());
+                  // });
                 },
                 shape: new RoundedRectangleBorder(
                     borderRadius: new BorderRadius.circular(20.0)),

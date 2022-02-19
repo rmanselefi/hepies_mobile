@@ -974,6 +974,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                     ],
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       widget.type == 'instrument'
                           ? _instrumentForm()
@@ -1130,6 +1131,8 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                   ],
                                 ),
                                 Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     _textEvery(),
                                     Container(
