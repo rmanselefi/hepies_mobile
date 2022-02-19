@@ -30,8 +30,9 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
     var prescProvider = Provider.of<PrescriptionProvider>(context);
     print("readreadread ${widget.result}");
     List<dynamic> result = widget.result['data'];
-    List<dynamic> notReadPrescription = result.where((i) => i['status']=="NotRead").toList();
-    var diagnosis=result[0]['diagnosis'];
+    List<dynamic> notReadPrescription =
+        result.where((i) => i['status'] == "NotRead").toList();
+    var diagnosis = result[0]['diagnosis'];
     var patient = result[0]['patient'];
     List<dynamic> list_id = [];
     notReadPrescription.forEach((element) {
@@ -44,19 +45,15 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: PersonalInfo(patient:patient,diagnosis:diagnosis),
+              child: PersonalInfo(patient: patient, diagnosis: diagnosis),
             ),
-            Expanded(
+            Container(
+              decoration: BoxDecoration(
+                  border: Border.all(width: 2.0, color: Color(0xff707070))),
+              child: Expanded(
                 child: ListView(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    height: height(context) * 0.75,
-                    decoration: BoxDecoration(
-                        border:
-                            Border.all(width: 2.0, color: Color(0xff707070))),
-                    child: Column(
+                  children: [
+                    Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -72,7 +69,7 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: result.map<Widget>((e) {
                               return Padding(
-                                padding: EdgeInsets.all(8.0),
+                                padding: EdgeInsets.all(4.0),
                                 child: Row(
                                   children: [
                                     Text(
@@ -141,90 +138,87 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
                             }).toList())
                       ],
                     ),
-                  ),
+                  ],
                 ),
-                prescProvider.sentStatus == PrescriptionStatus.Sending
-                    ? loading
-                    : Row(
-                        children: [
-                          SizedBox(
-                            width: 15.0,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Container(
-                                width: 100,
-                                height: 40,
-                                margin: EdgeInsets.only(right: 20.0, top: 0.0),
-                                decoration: BoxDecoration(
-                                    color: Color(0xff88DE91),
-                                    border: Border.all(color: Colors.black45),
-                                    borderRadius: BorderRadius.circular(10.0)),
-                                child: Center(
-                                    child: Text(
-                                  'Cancel',
-                                  style: TextStyle(
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.bold),
-                                )),
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () async {
-                              print("object $selectedList");
-                              var res = await prescProvider.acceptPrescription(
-                                  selectedList, list_id);
-                              if (res['status']) {
-                                showTopSnackBar(
-                                  context,
-                                  CustomSnackBar.success(
-                                    message:
-                                        'Your prescriptions are sent succesfully',
-                                  ),
-                                );
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            WelcomePharmacy()));
-                              } else {
-                                showTopSnackBar(
-                                  context,
-                                  CustomSnackBar.error(
-                                      message:
-                                          'Unable to send your prescriptions'),
-                                );
-                              }
-                            },
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Container(
-                                width: 100,
-                                height: 40,
-                                margin: EdgeInsets.only(right: 20.0, top: 0.0),
-                                decoration: BoxDecoration(
-                                    color: Color(0xff07febb),
-                                    border: Border.all(color: Colors.black45),
-                                    borderRadius: BorderRadius.circular(10.0)),
-                                child: Center(
-                                    child: Text(
-                                  'Accept',
-                                  style: TextStyle(
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.bold),
-                                )),
-                              ),
-                            ),
-                          )
-                        ],
+              ),
+            ),
+            prescProvider.sentStatus == PrescriptionStatus.Sending
+                ? loading
+                : Row(
+                    children: [
+                      SizedBox(
+                        width: 15.0,
                       ),
-              ],
-            ))
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Container(
+                            width: 100,
+                            height: 40,
+                            margin: EdgeInsets.only(right: 20.0, top: 0.0),
+                            decoration: BoxDecoration(
+                                color: Color(0xff88DE91),
+                                border: Border.all(color: Colors.black45),
+                                borderRadius: BorderRadius.circular(10.0)),
+                            child: Center(
+                                child: Text(
+                              'Cancel',
+                              style: TextStyle(
+                                  fontSize: 20.0, fontWeight: FontWeight.bold),
+                            )),
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () async {
+                          print("object $selectedList");
+                          var res = await prescProvider.acceptPrescription(
+                              selectedList, list_id);
+                          if (res['status']) {
+                            showTopSnackBar(
+                              context,
+                              CustomSnackBar.success(
+                                message:
+                                    'Your prescriptions are sent succesfully',
+                              ),
+                            );
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => WelcomePharmacy()));
+                          } else {
+                            showTopSnackBar(
+                              context,
+                              CustomSnackBar.error(
+                                  message: 'Unable to send your prescriptions'),
+                            );
+                          }
+                        },
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: Container(
+                            width: 100,
+                            height: 40,
+                            margin: EdgeInsets.only(right: 20.0, top: 0.0),
+                            decoration: BoxDecoration(
+                                color: Color(0xff07febb),
+                                border: Border.all(color: Colors.black45),
+                                borderRadius: BorderRadius.circular(10.0)),
+                            child: Center(
+                                child: Text(
+                              'Accept',
+                              style: TextStyle(
+                                  fontSize: 20.0, fontWeight: FontWeight.bold),
+                            )),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+            SizedBox(height: 10),
           ],
         ),
       ),

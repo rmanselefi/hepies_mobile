@@ -1010,7 +1010,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                         return Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Container(
-                                            width: width(context) * 0.95,
+                                            width: double.infinity,
                                             height: 60,
                                             child: Autocomplete(
                                               optionsBuilder:
