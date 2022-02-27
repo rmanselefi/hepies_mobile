@@ -141,6 +141,7 @@ class _FavoritesState extends State<FavoritesPage> {
                                                       builder: (context) =>
                                                           WritePrescription(
                                                             from: "favorites",
+                                                            // data: combinations,
                                                           )));
                                             });
                                           },

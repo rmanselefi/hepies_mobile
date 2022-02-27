@@ -4,6 +4,8 @@ class AppUrl {
 
   static const String baseURL = liveBaseURL;
   static const String login = baseURL + "/auth/login";
+  static const String sendCode = baseURL + "/passwordReset/send-code";
+
   static const String getprofile = baseURL + "/auth/me";
   static const String register = baseURL + "/users/register";
   static const String reward = baseURL + "/users/rewardpoint";
@@ -31,6 +33,7 @@ class AppUrl {
   static const String mypharmacy = baseURL + "/pharmacy";
   static const String history = baseURL + "/prescription/readby";
   static const String change_password = baseURL + "/users/change/password";
+  static const String changePassword = baseURL + "/passwordReset/change";
 
   static const String readprescription = baseURL + "/prescription/code";
   static const String readprescriptionPhone = baseURL + "/prescription/phone";

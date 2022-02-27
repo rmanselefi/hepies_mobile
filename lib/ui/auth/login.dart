@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hepies/models/user.dart';
 import 'package:hepies/providers/auth.dart';
 import 'package:hepies/providers/user_provider.dart';
+import 'package:hepies/ui/auth/forgot_password.dart';
 import 'package:hepies/ui/auth/sign_up.dart';
 import 'package:hepies/ui/pharmacy/ui/consults/share_consult.dart';
 import 'package:hepies/ui/pharmacy/welcome.dart';
@@ -79,7 +80,8 @@ class _LoginState extends State<Login> {
           child: Text("Forgot password?",
               style: TextStyle(fontWeight: FontWeight.w300)),
           onPressed: () {
-//            Navigator.pushReplacementNamed(context, '/reset-password');
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ForgotPassword()));
           },
         ),
         TextButton(
@@ -121,7 +123,7 @@ class _LoginState extends State<Login> {
               );
             } else {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => WelcomePharmacy()));
+                  MaterialPageRoute(builder: (context) => WelcomePharmacy(user: user,)));
             }
           } else {
             showTopSnackBar(

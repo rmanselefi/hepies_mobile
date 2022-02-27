@@ -63,7 +63,7 @@ class AuthProvider with ChangeNotifier {
       notifyListeners();
       result = {
         'status': false,
-        'message': json.decode(response.body)['error']
+        // 'message': json.decode(response.body)['error']
       };
     }
     return result;
@@ -213,6 +213,50 @@ class AuthProvider with ChangeNotifier {
       return false;
     }
   }
+
+
+  Future<Map<String, dynamic>> forgotPassword(String email) async {
+    var result;
+
+    final Map<String, dynamic> loginData = {
+      'email': email,
+     
+    };
+
+    _loggedInStatus = Status.Authenticating;
+    notifyListeners();
+
+    Response response = await post(
+      Uri.parse(AppUrl.sendCode),
+      body: json.encode(loginData),
+      headers: {'Content-Type': 'application/json'},
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      User authUser = User.fromJson(responseData);
+      UserPreferences().saveUser(authUser);
+      var role = responseData['role']['name'];
+      _loggedInStatus = Status.LoggedIn;
+      notifyListeners();
+
+      result = {
+        'status': true,
+        'message': 'Successful',
+        'role': role,
+        'user': authUser
+      };
+    } else {
+      _loggedInStatus = Status.NotLoggedIn;
+      notifyListeners();
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return result;
+  }
+
 
   Future logout() async {
     UserPreferences().removeUser();
