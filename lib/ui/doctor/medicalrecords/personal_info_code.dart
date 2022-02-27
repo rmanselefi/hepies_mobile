@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class PersonalInfo extends StatefulWidget {
+class PersonalInfoCode extends StatefulWidget {
   final patient;
   final diagnosis;
-  PersonalInfo({this.patient, this.diagnosis});
+  PersonalInfoCode({this.patient, this.diagnosis});
   @override
   _PersonalInfoState createState() => _PersonalInfoState();
 }
 
-class _PersonalInfoState extends State<PersonalInfo> {
+class _PersonalInfoState extends State<PersonalInfoCode> {
   @override
   Widget build(BuildContext context) {
-    var patient = widget.patient;
-    var remark = patient['prescription'][0]['remark'];
-    var date = patient['prescription_item'][0]['createdAt'];
-    var formattedDate = new DateFormat("mm-dd-yyyy hh:mm a").format(DateTime.parse(date));
+    var prescription = widget.patient;
+
+    var patient = prescription['patient'];
+    var remark = prescription['prescription']['remark'];
+    var date = prescription['prescription']['createdAt'];
+    var formattedDate =
+        new DateFormat("mm-dd-yyyy hh:mm a").format(DateTime.parse(date));
     return Column(
       children: [
         Row(

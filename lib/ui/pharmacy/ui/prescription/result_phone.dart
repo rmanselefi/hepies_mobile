@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hepies/providers/prescription_provider.dart';
 import 'package:hepies/ui/doctor/medicalrecords/personal_info.dart';
+import 'package:hepies/ui/pharmacy/ui/profile/profile.dart';
 import 'package:hepies/ui/pharmacy/welcome.dart';
 import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
@@ -23,12 +24,12 @@ class _PrescriptionResultState extends State<PrescriptionResultPhone> {
       Text("Sending your prescription ... Please wait")
     ],
   );
+
   @override
   Widget build(BuildContext context) {
     var prescProvider = Provider.of<PrescriptionProvider>(context);
 
     List<dynamic> result = widget.result;
-    print("resultresultresult ${result[0]['prescription']}");
     var patient = result[0];
     // var diagnosis=result[0]['prescription']['diagnosis'];
     var prescription = result[0]['prescription_item'];
@@ -123,20 +124,6 @@ class _PrescriptionResultState extends State<PrescriptionResultPhone> {
                                   });
                                 },
                               ),
-                              // Checkbox(
-                              //   value: selectedList.contains(e['id']),
-                              //
-                              //   onChanged: (bool value) {
-                              //     setState(() {
-                              //       if (value) {
-                              //         selectedList.add(e['id']);
-                              //       } else {
-                              //         selectedList.remove(e['id']);
-                              //       }
-                              //     });
-                              //   },
-                              //
-                              // ),
                             ],
                           );
                         }).toList())
@@ -218,6 +205,26 @@ class _PrescriptionResultState extends State<PrescriptionResultPhone> {
                                       fontSize: 20.0,
                                       fontWeight: FontWeight.bold),
                                 )),
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => PrescriberProfile(
+                                          from: 'code',
+                                          patient: patient,
+                                          id: prescription[0]
+                                              ['professionalid'])));
+                            },
+                            child: Container(
+                              child: Text(
+                                '${prescription[0]['professional']}',
+                                style: TextStyle(
+                                    decoration: TextDecoration.underline,
+                                    color: Colors.grey),
                               ),
                             ),
                           )

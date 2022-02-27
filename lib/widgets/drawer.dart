@@ -34,6 +34,7 @@ class _DrawerCustomState extends State<DrawerCustom> {
 
   @override
   Widget build(BuildContext context) {
+    print("widget.profile ====> ${widget.profile}");
     return Drawer(
       child: ListView(
         shrinkWrap: true,
@@ -48,7 +49,7 @@ class _DrawerCustomState extends State<DrawerCustom> {
                 CircleAvatar(
                   radius: width(context) * 0.15,
                   backgroundColor: Colors.grey,
-                  backgroundImage: widget.profile != null
+                  backgroundImage: widget.profile != null && widget.profile != ""
                       ? NetworkImage(widget.profile)
                       : null,
                 ),

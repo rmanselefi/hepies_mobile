@@ -48,7 +48,6 @@ class _PrescriptionPaperState extends State<PrescriptionPaper> {
                       IconButton(
                         onPressed: () {
                           print("object $pres");
-
                           Provider.of<PrescriptionProvider>(context,
                                   listen: false)
                               .setPrescriptionForm(

@@ -6,6 +6,7 @@ import 'package:hepies/ui/pharmacy/widgets/footer.dart';
 import 'package:hepies/ui/pharmacy/widgets/header.dart';
 import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class MyPharmacy extends StatefulWidget {
   @override
@@ -15,8 +16,12 @@ class MyPharmacy extends StatefulWidget {
 class _MyPharmacyState extends State<MyPharmacy> {
   var drug_id = null;
   var drug_name = "";
+  var pharmacy_id;
+  var formStatus = "add";
   var priceController = new TextEditingController();
   var drugController = new TextEditingController();
+  var drugEditController = new TextEditingController();
+  final formKey = new GlobalKey<FormState>();
 
   void _openPriceForm(BuildContext context) {
     bool adding = false;
@@ -29,6 +34,7 @@ class _MyPharmacyState extends State<MyPharmacy> {
                 child: Container(
                   height: MediaQuery.of(context).size.height - 40,
                   child: Form(
+                    key: formKey,
                     child: Column(
                       children: [
                         SizedBox(height: 10.0),
@@ -37,6 +43,8 @@ class _MyPharmacyState extends State<MyPharmacy> {
                           child: TextFormField(
                             controller: priceController,
                             keyboardType: TextInputType.number,
+                            validator: (val) =>
+                                val.isEmpty ? 'Price is required' : null,
                             decoration: InputDecoration(
                               hintText: 'Price',
                               border: OutlineInputBorder(
@@ -49,40 +57,219 @@ class _MyPharmacyState extends State<MyPharmacy> {
                           width: 100.0,
                           child: OutlinedButton(
                               onPressed: () async {
-                                setState(() {
-                                  adding = true;
-                                });
-                                var res = await Provider.of<PharmacyProvider>(
-                                        context,
-                                        listen: false)
-                                    .addDrugToPharmacy(drugController.text, drug_id,
-                                        priceController.text)
-                                    .whenComplete(() {
+                                final form = formKey.currentState;
+                                if (form.validate()) {
+                                  form.save();
                                   setState(() {
-                                    adding = false;
+                                    adding = true;
                                   });
-                                  CustomSnackBar.success(
-                                      message: 'Item successfully added');
-                                });
-                                if (res['status']) {
-                                  setState(() {
-                                    Provider.of<PharmacyProvider>(context,
-                                            listen: false)
-                                        .getMyPharmacy();
+                                  var res = await Provider.of<PharmacyProvider>(
+                                          context,
+                                          listen: false)
+                                      .addDrugToPharmacy(drugController.text,
+                                          drug_id, priceController.text)
+                                      .whenComplete(() {
+                                    setState(() {
+                                      adding = false;
+                                    });
+                                    CustomSnackBar.success(
+                                        message: 'Item successfully added');
                                   });
+                                  if (res['status']) {
+                                    setState(() {
+                                      Provider.of<PharmacyProvider>(context,
+                                              listen: false)
+                                          .getMyPharmacy();
+                                    });
 
-                                  Navigator.pushAndRemoveUntil<void>(
-                                    context,
-                                    MaterialPageRoute<void>(
-                                      builder: (BuildContext context) =>
-                                          MyPharmacy(),
-                                    ),
-                                    ModalRoute.withName('/'),
-                                  );
-                                  ;
+                                    Navigator.pushAndRemoveUntil<void>(
+                                      context,
+                                      MaterialPageRoute<void>(
+                                        builder: (BuildContext context) =>
+                                            MyPharmacy(),
+                                      ),
+                                      ModalRoute.withName('/'),
+                                    );
+                                    ;
+                                  }
                                 }
                               },
                               child: Text('Add')),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  void _openEditForm(BuildContext context, var drug_name) {
+    bool adding = false;
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return StatefulBuilder(
+            builder: (context, setState) => SingleChildScrollView(
+              child: SafeArea(
+                child: Container(
+                  height: MediaQuery.of(context).size.height - 40,
+                  child: Form(
+                    key: formKey,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Center(
+                          child: Text('Edit Pharmacy'),
+                        ),
+                        FutureBuilder<List<dynamic>>(
+                          future: Provider.of<DrugProvider>(context)
+                              .getDrugsLocal(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            } else {
+                              if (snapshot.data == null) {
+                                return Center(
+                                  child: Text('No data to show'),
+                                );
+                              }
+                              return Container(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15.0),
+                                  child: Autocomplete(
+                                    optionsBuilder: (TextEditingValue value) {
+                                      // When the field is empty
+                                      if (value.text.isEmpty) {
+                                        return [];
+                                      }
+
+                                      // The logic to find out which ones should appear
+                                      // Milkessa: implemented a search mechanism that is organized and alphabetical
+                                      List<dynamic> drugRes;
+                                      for (int i = 0; i < 2; i++) {
+                                        if (i == 0)
+                                          drugRes = snapshot.data
+                                              .where((element) =>
+                                                  element['name']
+                                                      .startsWith(value.text))
+                                              .toList();
+                                        else
+                                          drugRes.addAll(snapshot.data
+                                              .where((element) =>
+                                                  element['name']
+                                                      .contains(value.text) &
+                                                  !element['name']
+                                                      .startsWith(value.text))
+                                              .toList());
+                                      }
+                                      return drugRes;
+                                    },
+                                    onSelected: (value) {
+                                      setState(() {
+                                        drug_id = value['id'].toString();
+                                        drug_name = value['name'];
+                                      });
+                                    },
+                                    displayStringForOption: (option) =>
+                                        option['name'],
+                                    fieldViewBuilder: (BuildContext context,
+                                        TextEditingController
+                                            fieldTextEditingController,
+                                        FocusNode fieldFocusNode,
+                                        VoidCallback onFieldSubmitted) {
+                                      drugEditController =
+                                          fieldTextEditingController;
+                                      return Container(
+                                        width: 200,
+                                        child: TextFormField(
+                                          controller: drugEditController,
+                                          focusNode: fieldFocusNode,
+                                          textCapitalization:
+                                              TextCapitalization.words,
+                                          decoration: InputDecoration(
+                                              border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          5.0)),
+                                              hintText: 'Name Of Drug'),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                        SizedBox(height: 10.0),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            controller: priceController,
+                            keyboardType: TextInputType.number,
+                            validator: (val) =>
+                                val.isEmpty ? 'Price is required' : null,
+                            decoration: InputDecoration(
+                              hintText: 'Price',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5.0)),
+                            ),
+                          ),
+                        ),
+                        adding ? CircularProgressIndicator() : Container(),
+                        Container(
+                          width: 100.0,
+                          child: OutlinedButton(
+                              onPressed: () async {
+                                final form = formKey.currentState;
+                                if (form.validate()) {
+                                  form.save();
+                                  setState(() {
+                                    adding = true;
+                                  });
+
+                                  var res = await Provider.of<PharmacyProvider>(
+                                          context,
+                                          listen: false)
+                                      .updateMyPharmacy(
+                                          pharmacy_id,
+                                          drugEditController.text,
+                                          drug_id,
+                                          priceController.text)
+                                      .whenComplete(() {
+                                    setState(() {
+                                      adding = false;
+                                    });
+                                    CustomSnackBar.success(
+                                        message: 'Item successfully added');
+                                  });
+                                  if (res['status']) {
+                                    setState(() {
+                                      Provider.of<PharmacyProvider>(context,
+                                              listen: false)
+                                          .getMyPharmacy();
+                                    });
+
+                                    Navigator.pushAndRemoveUntil<void>(
+                                      context,
+                                      MaterialPageRoute<void>(
+                                        builder: (BuildContext context) =>
+                                            MyPharmacy(),
+                                      ),
+                                      ModalRoute.withName('/'),
+                                    );
+                                  }
+                                }
+                              },
+                              child: Text('Update')),
                         )
                       ],
                     ),
@@ -198,7 +385,14 @@ class _MyPharmacyState extends State<MyPharmacy> {
                       onPressed: () {},
                       child: ElevatedButton(
                         onPressed: () {
-                          _openPriceForm(context);
+                          if (drugController.text != '') {
+                            _openPriceForm(context);
+                          } else {
+                            showTopSnackBar(
+                                context,
+                                CustomSnackBar.error(
+                                    message: 'Please enter drug first!'));
+                          }
                         },
                         child: Text('Add'),
                       ),
@@ -240,11 +434,27 @@ class _MyPharmacyState extends State<MyPharmacy> {
                                   fontSize: 20.0,
                                 ),
                               ),
-                              trailing: Text(
-                                '${e['price']} Br',
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                ),
+                              trailing: Column(
+                                children: [
+                                  TextButton.icon(
+                                    onPressed: () {
+                                      setState(() {
+                                        priceController.text = e['price'];
+                                        drugEditController.text =
+                                            e['drug_name'];
+                                        pharmacy_id = e['id'];
+                                      });
+                                      _openEditForm(context, e['drug_name']);
+                                    },
+                                    label: Text(
+                                      '${e['price']} Br',
+                                      style: TextStyle(
+                                        fontSize: 20.0,
+                                      ),
+                                    ),
+                                    icon: Icon(Icons.edit, color: Colors.blue),
+                                  ),
+                                ],
                               ),
                             );
                           }).toList());

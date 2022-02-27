@@ -48,7 +48,6 @@ class _ReadPrescriptionState extends State<ReadPrescription> {
                     child: TextFormField(
                       controller: codeController,
                       enabled: true,
-                      keyboardType: TextInputType.phone,
                       decoration: InputDecoration(
                         prefixIcon: Padding(
                           padding: EdgeInsets.only(

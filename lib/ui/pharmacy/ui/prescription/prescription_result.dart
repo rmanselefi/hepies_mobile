@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:hepies/constants.dart';
 import 'package:hepies/providers/prescription_provider.dart';
 import 'package:hepies/ui/doctor/medicalrecords/personal_info.dart';
+import 'package:hepies/ui/doctor/medicalrecords/personal_info_code.dart';
+import 'package:hepies/ui/pharmacy/ui/profile/profile.dart';
 import 'package:hepies/ui/pharmacy/welcome.dart';
 import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
@@ -28,23 +30,26 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
   @override
   Widget build(BuildContext context) {
     var prescProvider = Provider.of<PrescriptionProvider>(context);
-    print("readreadread ${widget.result}");
+
     List<dynamic> result = widget.result['data'];
-    List<dynamic> notReadPrescription = result.where((i) => i['status']=="NotRead").toList();
-    var diagnosis=result[0]['diagnosis'];
-    var patient = result[0]['patient'];
+    List<dynamic> notReadPrescription =
+        result.where((i) => i['status'] == "NotRead").toList();
+    var diagnosis = result[0]['diagnosis'];
+    var prescription = result[0];
+    var patient = prescription['patient'];
     List<dynamic> list_id = [];
     notReadPrescription.forEach((element) {
       list_id.add(element['id']);
     });
-    print("readreadread $list_id");
+    print("readreadread $prescription");
     return SafeArea(
       child: Scaffold(
         body: Column(
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: PersonalInfo(patient:patient,diagnosis:diagnosis),
+              child:
+                  PersonalInfoCode(patient: prescription, diagnosis: diagnosis),
             ),
             Expanded(
                 child: ListView(
@@ -218,6 +223,26 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
                                       fontSize: 20.0,
                                       fontWeight: FontWeight.bold),
                                 )),
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => PrescriberProfile(
+                                          patient: prescription,
+                                          id: prescription['professionalid'],
+                                        from: 'code',
+                                      )));
+                            },
+                            child: Container(
+                              child: Text(
+                                '${prescription['professional']}',
+                                style: TextStyle(
+                                    decoration: TextDecoration.underline,
+                                    color: Colors.grey),
                               ),
                             ),
                           )

@@ -247,4 +247,37 @@ class UserProvider with ChangeNotifier {
     }
     return json.decode(response.body);
   }
+
+  Future<Map<String, dynamic>> changePassword(
+      var code, var email,var password) async {
+    _changedStatus = ChangeStatus.Changing;
+    notifyListeners();
+
+    var result;
+    var user = await this.getProfile();
+    print("useruseruseruser $user");
+    var user_id = user['id'];
+    var username = user['username'];
+    var registrationData = {
+      'email': email,
+      'password': password,
+      'verification_code': code
+    };
+    Response response = await put(
+        Uri.parse(AppUrl.changePassword),
+        body: json.encode(registrationData),
+        headers: {'Content-Type': 'application/json'});
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      _changedStatus = ChangeStatus.Changed;
+      notifyListeners();
+
+      result = {'status': true, 'message': 'Successful', 'user': response.body};
+    } else {
+      _changedStatus = ChangeStatus.NotChanged;
+      notifyListeners();
+      result = {'status': false, 'message': response.statusCode};
+    }
+    return result;
+  }
 }

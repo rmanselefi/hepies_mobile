@@ -28,6 +28,7 @@ class _ImageInputState extends State<ImageInput> {
 
   void _openImagePicker(BuildContext context) {
     showModalBottomSheet(
+        isScrollControlled: true,
         context: context,
         builder: (BuildContext context) {
           return Container(

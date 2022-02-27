@@ -32,6 +32,7 @@ class PrescriptionProvider with ChangeNotifier {
   ReadStatus get readStatus => _fetchStatus;
   int _index = 0;
   bool isFavourite = false;
+  bool isPatient = false;
   int get prescriptionIndex => _index;
   String _status = 'add';
   String _actionStatus = 'populate';
@@ -46,10 +47,17 @@ class PrescriptionProvider with ChangeNotifier {
   List<dynamic> narcoticsDrugs = [];
   List<dynamic> instruments = [];
 
+  var professional = null;
+
   Map<String, dynamic> _singlePrescription = {};
   Map<String, dynamic> get singlePrescription => _singlePrescription;
   void changeFavStatus(bool favStatus) {
     isFavourite = favStatus;
+    notifyListeners();
+  }
+
+  void changePatientStatus(bool favStatus) {
+    isPatient = favStatus;
     notifyListeners();
   }
 
@@ -183,14 +191,21 @@ class PrescriptionProvider with ChangeNotifier {
   }
 
   void resetStatus() {
-    _actionStatus = "";
+    _actionStatus = "populate";
     _status = 'add';
+    isFavourite = false;
     notifyListeners();
   }
 
   void whenSent() {
     _actionStatus = "";
     _status = 'sent';
+    notifyListeners();
+  }
+
+  void whileEditing() {
+    _actionStatus = "edit";
+    _status = 'editing';
     notifyListeners();
   }
 
@@ -267,5 +282,22 @@ class PrescriptionProvider with ChangeNotifier {
       };
     }
     return result;
+  }
+
+  Future<dynamic> getProfessionalByID(var id) async {
+    var result;
+    Response response = await get(Uri.parse('${AppUrl.professional}/$id'));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      professional = json.decode(response.body);
+      return professional;
+    } else {
+      notifyListeners();
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return professional;
   }
 }
