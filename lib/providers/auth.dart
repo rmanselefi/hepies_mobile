@@ -17,7 +17,10 @@ enum Status {
   Registered,
   Authenticating,
   Registering,
-  LoggedOut
+  LoggedOut,
+  NotSent,
+  Sending,
+  Sent
 }
 
 class AuthProvider with ChangeNotifier {
@@ -26,6 +29,9 @@ class AuthProvider with ChangeNotifier {
   firebase_storage.UploadTask uploadTask;
   Status get loggedInStatus => _loggedInStatus;
   Status get registeredInStatus => _registeredInStatus;
+
+  Status _sendEmailStatus = Status.NotSent;
+  Status get sendEmailStatus => _sendEmailStatus;
 
   Future<Map<String, dynamic>> login(String username, String password) async {
     var result;
@@ -139,10 +145,7 @@ class AuthProvider with ChangeNotifier {
       if (res['message'] == 'phone') {
         message = 'Phone already exists';
       }
-      result = {
-        'status': false,
-        'message': message
-      };
+      result = {'status': false, 'message': message};
     }
     return result;
   }
@@ -214,16 +217,11 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
-
   Future<Map<String, dynamic>> forgotPassword(String email) async {
     var result;
+    final Map<String, dynamic> loginData = {'email': email};
 
-    final Map<String, dynamic> loginData = {
-      'email': email,
-     
-    };
-
-    _loggedInStatus = Status.Authenticating;
+    _sendEmailStatus = Status.Sending;
     notifyListeners();
 
     Response response = await post(
@@ -234,29 +232,21 @@ class AuthProvider with ChangeNotifier {
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Map<String, dynamic> responseData = json.decode(response.body);
 
-      User authUser = User.fromJson(responseData);
-      UserPreferences().saveUser(authUser);
-      var role = responseData['role']['name'];
-      _loggedInStatus = Status.LoggedIn;
-      notifyListeners();
+      print("responseDataresponseDataresponseDataresponseData $responseData");
 
+      _sendEmailStatus = Status.Sent;
+      notifyListeners();
       result = {
         'status': true,
-        'message': 'Successful',
-        'role': role,
-        'user': authUser
+        'message': 'Verification Code Sent',
       };
     } else {
-      _loggedInStatus = Status.NotLoggedIn;
+      _sendEmailStatus = Status.NotSent;
       notifyListeners();
-      result = {
-        'status': false,
-        'message': json.decode(response.body)['error']
-      };
+      result = {'status': false, 'message': 'Error Sending Verification Code'};
     }
     return result;
   }
-
 
   Future logout() async {
     UserPreferences().removeUser();

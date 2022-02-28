@@ -23,7 +23,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         CircularProgressIndicator(),
-        Text(" Authenticating ... Please wait")
+        Text("Sending Email... Please wait")
       ],
     );
 
@@ -40,30 +40,24 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
         ));
 
-    var doEmail = () {
+    var doEmail = () async {
       final form = formKey.currentState;
 
       if (form.validate()) {
         form.save();
-
-        final Future<Map<String, dynamic>> successfulMessage =
-            auth.forgotPassword(email);
-
-        successfulMessage.then((response) {
-          print("object $response");
-          if (response['status']) {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => NewPassword()));
-          } else {
-            showTopSnackBar(
-              context,
-              CustomSnackBar.error(
-                message: response['message'].toString() ??
-                    'Wrong username or password entered, try again!',
-              ),
-            );
-          }
-        });
+        var response = await auth.forgotPassword(email);
+        if (response['status']) {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => NewPassword(true)));
+        } else {
+          showTopSnackBar(
+            context,
+            CustomSnackBar.error(
+              message: response['message'].toString() ??
+                  'Wrong username or password entered, try again!',
+            ),
+          );
+        }
       } else {
         print("form is invalid");
       }
@@ -85,8 +79,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 label("Email"),
                 SizedBox(height: 5.0),
                 emailField,
-                SizedBox(height: 10,),
-                auth.loggedInStatus == Status.Authenticating
+                SizedBox(
+                  height: 10,
+                ),
+                auth.sendEmailStatus == Status.Sending
                     ? loading
                     : longButtons("Send Code", false, doEmail),
                 SizedBox(height: 5.0),

@@ -7,6 +7,8 @@ import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class NewPassword extends StatefulWidget {
+  final isSuccessful;
+  NewPassword(this.isSuccessful);
   @override
   _ChangePasswordState createState() => _ChangePasswordState();
 }
@@ -17,6 +19,22 @@ class _ChangePasswordState extends State<NewPassword> {
   TextEditingController _emailController = new TextEditingController();
   TextEditingController _passwordController = new TextEditingController();
   bool _status = true;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.isSuccessful) {
+      showTopSnackBar(
+        context,
+        CustomSnackBar.success(
+          message:
+              'Verification Code was sent for you. please reset your password by entering the sent code',
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     UserProvider auth = Provider.of<UserProvider>(context);
@@ -107,7 +125,6 @@ class _ChangePasswordState extends State<NewPassword> {
                                       decoration: const InputDecoration(
                                         hintText: "Enter Your Code",
                                       ),
-                                      obscureText: true,
                                     ),
                                   ),
                                 ],
@@ -185,9 +202,9 @@ class _ChangePasswordState extends State<NewPassword> {
                                           : null,
                                       controller: _emailController,
                                       decoration: const InputDecoration(
-                                        hintText: "Confirm Password",
+                                        hintText: "Email",
                                       ),
-                                      obscureText: true,
+                                      keyboardType: TextInputType.emailAddress,
                                     ),
                                   ),
                                 ],
@@ -238,20 +255,14 @@ class _ChangePasswordState extends State<NewPassword> {
                   if (_formKey.currentState.validate()) {
                     var res = await auth.changePassword(_codeController.text,
                         _emailController.text, _passwordController.text);
-                    print("res $res");
                     if (res['status']) {
-                      showTopSnackBar(
-                        context,
-                        CustomSnackBar.success(
-                          message: "Your password is changed successfully",
-                        ),
-                      );
-                    } else if (res['message'] == 302) {
+                      Navigator.pushReplacement(
+                          context, MaterialPageRoute(builder: (context) => Login(from: 'forgot',)));
+                    } else {
                       showTopSnackBar(
                         context,
                         CustomSnackBar.error(
-                          message:
-                              "Please make sure you entered the correct old password",
+                          message: res['message'],
                         ),
                       );
                     }

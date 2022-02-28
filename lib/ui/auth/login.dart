@@ -15,6 +15,8 @@ import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class Login extends StatefulWidget {
+  final from;
+  Login({this.from});
   @override
   _LoginState createState() => _LoginState();
 }
@@ -24,6 +26,21 @@ class _LoginState extends State<Login> {
 
   String _username, _password;
   bool _isObscure = true;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.from == 'forgot') {
+      showTopSnackBar(
+        context,
+        CustomSnackBar.success(
+          message:
+              'Your password is changed successfully! Please login with your new password',
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,8 +139,12 @@ class _LoginState extends State<Login> {
                 ModalRoute.withName('/'),
               );
             } else {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => WelcomePharmacy(user: user,)));
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => WelcomePharmacy(
+                            user: user,
+                          )));
             }
           } else {
             showTopSnackBar(
