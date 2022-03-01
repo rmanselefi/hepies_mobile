@@ -23,17 +23,29 @@ class _PharmacyFooterState extends State<PharmacyFooter> {
   @override
   Widget build(BuildContext context) {
     UserProvider nav = Provider.of<UserProvider>(context);
+    Widget customCard(int index){
+      return Container(
+        height: 100,
+        width: 200,
+        child: ListTile(
+          leading: Icon(Icons.person),// here you used image
+          title: Text("title $index"),
+          subtitle: Text("Subtitle $index"),
+        ),
+      );
+    }
     return Container(
-      width: double.infinity,
+      width: MediaQuery.of(context).size.width,
       child: Padding(
+        //scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.all(8.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
           children: [
             Column(
               mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 IconButton(
                   icon: Icon(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hepies/providers/consult.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:timeago/timeago.dart ' as timeago;
+import 'package:timeago/timeago.dart' as timeago;
 
 class PharmacyCommentList extends StatefulWidget {
   final user_id;

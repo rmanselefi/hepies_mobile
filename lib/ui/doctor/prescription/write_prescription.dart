@@ -188,8 +188,9 @@ class _WritePrescriptionState extends State<WritePrescription> {
               context, MaterialPageRoute(builder: (context) => Welcome()));
         },
         child: SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
+          child: ListView(
+            scrollDirection: Axis.vertical,
+            //mainAxisSize: MainAxisSize.min,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -497,8 +498,11 @@ class _WritePrescriptionState extends State<WritePrescription> {
               //         ? PsychoNarcoPaper(narcoPrescription)
               //         : PsychoPaper(psycoPrescription),
               SizedBox(height: 5.0),
+              Spacer(),
               Flexible(
+
                 child: Container(
+                  //alignment: Alignment.bottomCenter,
                   padding: EdgeInsets.all(8.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
