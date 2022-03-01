@@ -77,7 +77,7 @@ class _FavoritesState extends State<FavoritesPage> {
         child: Column(
           children: [
             SizedBox(
-              height: 50.0,
+              height: 50,
             ),
             Expanded(
               child: ListView(
@@ -87,7 +87,7 @@ class _FavoritesState extends State<FavoritesPage> {
                     children: [
                       Container(
                           height: 500.0,
-                          width: 400.0,
+                          width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
                               border: Border.all(
                                   color: Color(0xff1FE533), width: 2.0)),
@@ -169,11 +169,39 @@ class _FavoritesState extends State<FavoritesPage> {
                                               ),
                                               IconButton(
                                                   onPressed: () {
-                                                    setState(() {
-                                                      DatabaseHelper()
-                                                          .deleteFavorite(
-                                                              data[index].name);
-                                                    });
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return AlertDialog(
+                                                            title:
+                                                                Text("Warning"),
+                                                            content: Text(
+                                                                "Are You sure you want to delete it. you can't undo your action."),
+                                                            actions: [
+                                                              ElevatedButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    setState(
+                                                                        () {
+                                                                      DatabaseHelper()
+                                                                          .deleteFavorite(
+                                                                              data[index].name);
+                                                                    });
+                                                                  },
+                                                                  child: Text(
+                                                                      "Yes")),
+                                                              ElevatedButton(
+                                                                  onPressed:
+                                                                      () {
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                  },
+                                                                  child: Text(
+                                                                      "No")),
+                                                            ],
+                                                          );
+                                                        });
                                                   },
                                                   icon: Icon(
                                                     Icons.cancel,
@@ -193,7 +221,7 @@ class _FavoritesState extends State<FavoritesPage> {
               ),
             ),
             Container(
-                height: 50,
+                height: MediaQuery.of(context).size.height * 0.15,
                 width: double.maxFinite,
                 decoration: BoxDecoration(
                     borderRadius:
