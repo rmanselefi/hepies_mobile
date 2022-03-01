@@ -12,7 +12,7 @@ import 'package:hepies/util/shared_preference.dart';
 import 'package:hepies/widgets/header.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:multiselect_formfield/multiselect_formfield.dart';
+// import 'package:multiselect_formfield/multiselect_formfield.dart';
 import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
@@ -290,39 +290,39 @@ class _EditProfileState extends State<EditProfile>
                               child: new Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: <Widget>[
-                                  new Flexible(
-                                      child: new MultiSelectFormField(
-                                    chipBackGroundColor: Colors.red,
-                                    chipLabelStyle:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                    dialogTextStyle:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                    checkBoxActiveColor: Colors.red,
-                                    checkBoxCheckColor: Colors.green,
-                                    dialogShapeBorder: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(12.0))),
-                                    title: Text(
-                                      "Select Your interests",
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                    dataSource: interestList,
-                                    textField: 'display',
-                                    valueField: 'value',
-                                    okButtonLabel: 'OK',
-                                    cancelButtonLabel: 'CANCEL',
-                                    hintWidget:
-                                        Text('Please choose one or more'),
-                                    initialValue: interest,
-                                    onSaved: (value) {
-                                      if (value == null) return;
-                                      // print("_interests_interests_interests ${value.join(",")}");
+                                  // new Flexible(
+                                  //     child: new MultiSelectFormField(
+                                  //   chipBackGroundColor: Colors.red,
+                                  //   chipLabelStyle:
+                                  //       TextStyle(fontWeight: FontWeight.bold),
+                                  //   dialogTextStyle:
+                                  //       TextStyle(fontWeight: FontWeight.bold),
+                                  //   checkBoxActiveColor: Colors.red,
+                                  //   checkBoxCheckColor: Colors.green,
+                                  //   dialogShapeBorder: RoundedRectangleBorder(
+                                  //       borderRadius: BorderRadius.all(
+                                  //           Radius.circular(12.0))),
+                                  //   title: Text(
+                                  //     "Select Your interests",
+                                  //     style: TextStyle(fontSize: 16),
+                                  //   ),
+                                  //   dataSource: interestList,
+                                  //   textField: 'display',
+                                  //   valueField: 'value',
+                                  //   okButtonLabel: 'OK',
+                                  //   cancelButtonLabel: 'CANCEL',
+                                  //   hintWidget:
+                                  //       Text('Please choose one or more'),
+                                  //   initialValue: interest,
+                                  //   onSaved: (value) {
+                                  //     if (value == null) return;
+                                  //     // print("_interests_interests_interests ${value.join(",")}");
 
-                                      setState(() {
-                                        _interests = value;
-                                      });
-                                    },
-                                  )),
+                                  //     setState(() {
+                                  //       _interests = value;
+                                  //     });
+                                  //   },
+                                  // )),
                                 ],
                               )),
                           Padding(

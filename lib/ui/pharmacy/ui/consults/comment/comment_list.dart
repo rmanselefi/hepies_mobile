@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hepies/providers/consult.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:timeago/timeago.dart ' as timeago;
+import 'package:timeago/timeago.dart' as timeago;
 
 class PharmacyCommentList extends StatefulWidget {
   final user_id;
@@ -120,7 +120,8 @@ class _PharmacyConsultListState extends State<PharmacyCommentList> {
                                         if (result['status']) {
                                           setState(() {
                                             Provider.of<ConsultProvider>(
-                                                    context,listen: false)
+                                                    context,
+                                                    listen: false)
                                                 .getCommentByConsultId(
                                                     widget.consultId);
                                           });
@@ -137,7 +138,8 @@ class _PharmacyConsultListState extends State<PharmacyCommentList> {
                                         if (result['status']) {
                                           setState(() {
                                             Provider.of<ConsultProvider>(
-                                                    context,listen: false)
+                                                    context,
+                                                    listen: false)
                                                 .getCommentByConsultId(
                                                     widget.consultId);
                                           });
