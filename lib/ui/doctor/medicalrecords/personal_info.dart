@@ -15,7 +15,8 @@ class _PersonalInfoState extends State<PersonalInfo> {
     var patient = widget.patient;
     var remark = patient['prescription'][0]['remark'];
     var date = patient['prescription_item'][0]['createdAt'];
-    var formattedDate = new DateFormat("mm-dd-yyyy hh:mm a").format(DateTime.parse(date));
+    var formattedDate =
+        new DateFormat("mm-dd-yyyy hh:mm a").format(DateTime.parse(date));
     return Column(
       children: [
         Row(

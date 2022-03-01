@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:hashtagable/widgets/hashtag_text.dart';
 import 'package:hashtagable/widgets/hashtag_text_field.dart';
 import 'package:hepies/constants.dart';
+import 'package:hepies/models/consult.dart';
 import 'package:hepies/providers/consult.dart';
 import 'package:hepies/providers/user_provider.dart';
 import 'package:hepies/ui/pharmacy/ui/consults/comment/share_comment.dart';
@@ -21,6 +22,7 @@ import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:rich_text_view/rich_text_view.dart';
+import 'package:pagination/pagination.dart';
 
 class PharmacyConsultList extends StatefulWidget {
   final user_id;
@@ -367,12 +369,13 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
     // TODO: implement initState
     super.initState();
     _scrollController = ScrollController();
+    interestStatus = "hide";
   }
 
   @override
   Widget build(BuildContext context) {
     ConsultProvider consult = Provider.of<ConsultProvider>(context);
-    Future<dynamic> _myData =
+    Future<List<dynamic>> _myData =
         Provider.of<ConsultProvider>(context, listen: false).getConsults();
     var userProvider = Provider.of<UserProvider>(context, listen: false);
     showAlertDialog(BuildContext context, var id) {
@@ -525,7 +528,8 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Container(
-                                    width: 250,
+                                    width: MediaQuery.of(context).size.width /
+                                        1.63,
                                     child: Wrap(
                                       alignment: WrapAlignment.start,
                                       direction: Axis.horizontal,
@@ -554,98 +558,104 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                               : [],
                                     ),
                                   ),
-                                  Column(
-                                    children: [
-                                      //Delete icon
-                                      IconButton(
-                                        onPressed: () {
-                                          showAlertDialog(context, post['id']);
-                                        },
-                                        icon:
-                                            Icon(Icons.delete_outline_rounded),
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        children: [
-                                          ImageInputConsult(_setImage),
-                                          consult.editStatus ==
-                                                  ConsultStatus.Sharing
-                                              ? loading
-                                              : Align(
-                                                  alignment: Alignment.topRight,
-                                                  child: OutlinedButton(
-                                                    onPressed: () async {
-                                                      try {
-                                                        var photo = file != null
-                                                            ? File(file.path)
-                                                            : null;
-                                                        if (_topic.text !=
-                                                                "" || //Milkessa: added posting capability with either text or image
-                                                            file != null) {
-                                                          var res = await consult
-                                                              .updateConsult(
-                                                                  post['id'],
-                                                                  _topic.text,
-                                                                  photo,
-                                                                  post[
-                                                                      'image']);
-                                                          if (res['status']) {
-                                                            consult
-                                                                .getConsults();
+                                  Expanded(
+                                    child: Column(
+                                      children: [
+                                        //Delete icon
+                                        IconButton(
+                                          onPressed: () {
+                                            showAlertDialog(
+                                                context, post['id']);
+                                          },
+                                          icon: Icon(
+                                              Icons.delete_outline_rounded),
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            ImageInputConsult(_setImage),
+                                            consult.editStatus ==
+                                                    ConsultStatus.Sharing
+                                                ? loading
+                                                : Align(
+                                                    alignment:
+                                                        Alignment.topRight,
+                                                    child: OutlinedButton(
+                                                      onPressed: () async {
+                                                        try {
+                                                          var photo = file !=
+                                                                  null
+                                                              ? File(file.path)
+                                                              : null;
+                                                          if (_topic.text !=
+                                                                  "" || //Milkessa: added posting capability with either text or image
+                                                              file != null) {
+                                                            var res = await consult
+                                                                .updateConsult(
+                                                                    post['id'],
+                                                                    _topic.text,
+                                                                    photo,
+                                                                    post[
+                                                                        'image']);
+                                                            if (res['status']) {
+                                                              consult
+                                                                  .getConsults();
+                                                              showTopSnackBar(
+                                                                context,
+                                                                CustomSnackBar
+                                                                    .success(
+                                                                  message:
+                                                                      "Your consult is updated succesfully",
+                                                                ),
+                                                              );
+                                                              setState(() {
+                                                                _topic.text =
+                                                                    null;
+                                                                file = null;
+                                                              });
+                                                              Navigator.pushAndRemoveUntil(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder: (context) => userProvider.role == 'doctor' ||
+                                                                              userProvider.role ==
+                                                                                  'healthofficer' ||
+                                                                              userProvider.role ==
+                                                                                  'nurse'
+                                                                          ? Welcome()
+                                                                          : WelcomePharmacy()),
+                                                                  ModalRoute
+                                                                      .withName(
+                                                                          '/'));
+                                                            }
+                                                          } else {
                                                             showTopSnackBar(
                                                               context,
                                                               CustomSnackBar
-                                                                  .success(
+                                                                  .error(
                                                                 message:
-                                                                    "Your consult is updated succesfully",
+                                                                    "Invalid Data! Make sure you have inserted image or text",
                                                               ),
                                                             );
-                                                            setState(() {
-                                                              _topic.text =
-                                                                  null;
-                                                              file = null;
-                                                            });
-                                                            Navigator.pushAndRemoveUntil(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                    builder: (context) => userProvider.role == 'doctor' ||
-                                                                            userProvider.role ==
-                                                                                'healthofficer' ||
-                                                                            userProvider.role ==
-                                                                                'nurse'
-                                                                        ? Welcome()
-                                                                        : WelcomePharmacy()),
-                                                                ModalRoute
-                                                                    .withName(
-                                                                        '/'));
                                                           }
-                                                        } else {
+                                                        } catch (e) {
+                                                          print("eeeee ${e}");
                                                           showTopSnackBar(
                                                             context,
                                                             CustomSnackBar
                                                                 .error(
                                                               message:
-                                                                  "Invalid Data! Make sure you have inserted image or text",
+                                                                  "Unable to share your consult",
                                                             ),
                                                           );
                                                         }
-                                                      } catch (e) {
-                                                        print("eeeee ${e}");
-                                                        showTopSnackBar(
-                                                          context,
-                                                          CustomSnackBar.error(
-                                                            message:
-                                                                "Unable to share your consult",
-                                                          ),
-                                                        );
-                                                      }
-                                                    },
-                                                    child: Text('Edit'),
-                                                  )),
-                                        ],
-                                      ),
-                                    ],
+                                                      },
+                                                      child: Text('Edit'),
+                                                    )),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
@@ -657,6 +667,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
           });
     }
 
+// Pagination
     return FutureBuilder<List<dynamic>>(
         future: _myData,
         builder: (context, snapshot) {
@@ -670,6 +681,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                 child: Text('No data to show'),
               );
             }
+
             return MediaQuery.removePadding(
               context: context,
               removeTop: true,

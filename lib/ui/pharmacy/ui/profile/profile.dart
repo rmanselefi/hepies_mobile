@@ -50,7 +50,7 @@ class _PrescriberProfileState extends State<PrescriberProfile> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
-              height: 650.0,
+              height: MediaQuery.of(context).size.height / 1.47,
               decoration: BoxDecoration(
                   border: Border.all(width: 2.0, color: Color(0xff707070))),
               child: ListView(
