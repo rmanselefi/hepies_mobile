@@ -159,7 +159,7 @@ class _ShareConsultState extends State<ShareConsult> {
                       children: [
                         interestStatus == "show"
                             ? Container(
-                                width: width(context) * 0.7,
+                                width: MediaQuery.of(context).size.width/1.63,
                                 child: Wrap(
                                   alignment: WrapAlignment.start,
                                   direction: Axis.horizontal,

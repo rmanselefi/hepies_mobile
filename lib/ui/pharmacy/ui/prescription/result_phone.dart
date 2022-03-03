@@ -48,7 +48,7 @@ class _PrescriptionResultState extends State<PrescriptionResultPhone> {
         body: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(10.0),
               child: PersonalInfo(
                 patient: patient,
               ),
