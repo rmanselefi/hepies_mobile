@@ -1888,9 +1888,9 @@ class _PrescribeFormState extends State<PrescribeNarcoForm> {
                       ),
                       IconButton(
                         onPressed: () {
-                          var index = prescription.indexOf(pres);
+                          var index = widget.initialPrescription.indexOf(pres);
                           setState(() {
-                            prescription.removeAt(index);
+                            widget.initialPrescription.removeAt(index);
                           });
                         },
                         icon: Icon(Icons.cancel),

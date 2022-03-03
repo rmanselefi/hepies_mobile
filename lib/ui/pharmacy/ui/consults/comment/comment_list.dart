@@ -120,7 +120,8 @@ class _PharmacyConsultListState extends State<PharmacyCommentList> {
                                         if (result['status']) {
                                           setState(() {
                                             Provider.of<ConsultProvider>(
-                                                    context,listen: false)
+                                                    context,
+                                                    listen: false)
                                                 .getCommentByConsultId(
                                                     widget.consultId);
                                           });
@@ -137,7 +138,8 @@ class _PharmacyConsultListState extends State<PharmacyCommentList> {
                                         if (result['status']) {
                                           setState(() {
                                             Provider.of<ConsultProvider>(
-                                                    context,listen: false)
+                                                    context,
+                                                    listen: false)
                                                 .getCommentByConsultId(
                                                     widget.consultId);
                                           });
