@@ -144,7 +144,10 @@ class UserProvider with ChangeNotifier {
       _changedStatus = ChangeStatus.Changed;
       notifyListeners();
 
-      result = {'status': true, 'message': 'Successful', 'user': response.body};
+      result = {
+        'status': true,
+        'message': 'Your password is changed successfully'
+      };
     } else {
       _changedStatus = ChangeStatus.NotChanged;
       notifyListeners();

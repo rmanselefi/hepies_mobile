@@ -164,7 +164,7 @@ class _ChangePasswordState extends State<NewPassword> {
                                       decoration: const InputDecoration(
                                         hintText: "Enter Your New Password",
                                       ),
-                                      obscureText: true,
+                                      keyboardType: TextInputType.emailAddress,
                                     ),
                                   ),
                                 ],

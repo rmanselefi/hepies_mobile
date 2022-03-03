@@ -289,7 +289,6 @@ class _MyPharmacyState extends State<MyPharmacy> {
         child: Scaffold(
       body: Column(
         children: [
-          Header(),
           Expanded(
               child: ListView(
             children: [
@@ -367,7 +366,7 @@ class _MyPharmacyState extends State<MyPharmacy> {
                                     decoration: InputDecoration(
                                         border: OutlineInputBorder(
                                           borderRadius:
-                                              BorderRadius.circular(30.0),
+                                              BorderRadius.circular(10.0),
                                         ),
                                         hintText: 'Name Of Drug'),
                                   ),
@@ -403,11 +402,11 @@ class _MyPharmacyState extends State<MyPharmacy> {
               ListTile(
                 title: Text(
                   'Item',
-                  style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
                 ),
                 trailing: Text(
                   'Price',
-                  style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
                 ),
               ),
               Divider(),

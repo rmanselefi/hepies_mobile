@@ -19,7 +19,6 @@ class _PharmacyHistoryState extends State<PharmacyHistory> {
         child: Scaffold(
       body: Column(
         children: [
-          Header(),
           Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -81,7 +80,7 @@ class _PharmacyHistoryState extends State<PharmacyHistory> {
                                     child: Text(
                                       e['drug_name'],
                                       style: TextStyle(
-                                        fontSize: 18.0,
+                                        fontSize: 15.0,
                                       ),
                                     ),
                                     width: 150,
@@ -89,7 +88,7 @@ class _PharmacyHistoryState extends State<PharmacyHistory> {
                                   Text(
                                     name,
                                     style: TextStyle(
-                                      fontSize: 20.0,
+                                      fontSize: 15.0,
                                     ),
                                   ),
                                   Text(
