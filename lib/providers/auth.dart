@@ -52,20 +52,16 @@ class AuthProvider with ChangeNotifier {
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Map<String, dynamic> responseData = json.decode(response.body);
 
-      User authUser = User.fromJson(responseData);
-      UserPreferences().saveUser(authUser);
-      var role = responseData['role']['name'];
-      _loggedInStatus = Status.LoggedIn;
-      notifyListeners();
+      print("responseDataresponseDataresponseDataresponseData $responseData");
 
+      _sendEmailStatus = Status.Sent;
+      notifyListeners();
       result = {
         'status': true,
-        'message': 'Successful',
-        'role': role,
-        'user': authUser
+        'message': 'Verification Code Sent',
       };
     } else {
-      _loggedInStatus = Status.NotLoggedIn;
+      _sendEmailStatus = Status.NotSent;
       notifyListeners();
       result = {
         'status': false,
