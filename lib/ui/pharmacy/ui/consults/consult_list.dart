@@ -17,12 +17,12 @@ import 'package:intl/intl.dart';
 import 'package:linkify_text/linkify_text.dart';
 import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:rich_text_view/rich_text_view.dart';
-import 'package:pagination/pagination.dart';
 
 class PharmacyConsultList extends StatefulWidget {
   final user_id;
@@ -672,8 +672,162 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
         future: _myData,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return Center(
-              child: CircularProgressIndicator(),
+            return SizedBox(
+              height: 700,
+              child: ListView(
+                children: List.generate(
+                    3,
+                    (index) => Column(
+                          children: [
+                            Shimmer.fromColors(
+                              baseColor: Colors.grey.shade300,
+                              highlightColor: Colors.grey.shade100,
+                              child: Container(
+                                //     baseColor: Colors.grey[300],
+                                // highlightColor: Colors.grey[100],
+                                padding: EdgeInsets.symmetric(horizontal: 20),
+                                height: 220,
+                                width: double.infinity,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Container(
+                                          height: 40,
+                                          width: 40,
+                                          color: Colors.grey,
+                                        ),
+                                        SizedBox(
+                                          width: 8.0,
+                                        ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                                width: 60,
+                                                height: 5,
+                                                color: Colors.grey),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Container(
+                                                width: 60,
+                                                height: 5,
+                                                color: Colors.grey),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Container(
+                                                width: 60,
+                                                height: 5,
+                                                color: Colors.grey),
+                                            // Text("Full Name"),
+                                            // Text("role"),
+                                            // Text("16 hours ago")
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 15,
+                                    ),
+                                    Container(
+                                        width: 40,
+                                        height: 5,
+                                        color: Colors.grey),
+                                    SizedBox(
+                                      height: 40,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Container(
+                                                width: 20,
+                                                height: 20,
+                                                color: Colors.grey),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Container(
+                                                width: 40,
+                                                height: 5,
+                                                color: Colors.grey),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Container(
+                                                width: 20,
+                                                height: 20,
+                                                color: Colors.grey),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Container(
+                                                width: 40,
+                                                height: 5,
+                                                color: Colors.grey),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 20,
+                                    ),
+                                    Divider(thickness: 5),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Icon(Icons.thumb_up),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Container(
+                                                width: 40,
+                                                height: 5,
+                                                color: Colors.grey),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.comment,
+                                                ),
+                                                SizedBox(
+                                                  width: 5,
+                                                ),
+                                                Container(
+                                                    width: 40,
+                                                    height: 5,
+                                                    color: Colors.grey),
+                                              ],
+                                            )
+                                          ],
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 10)
+                          ],
+                        )),
+              ),
             );
           } else {
             if (snapshot.data == null) {
