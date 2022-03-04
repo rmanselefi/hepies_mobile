@@ -17,7 +17,7 @@ import 'package:hepies/util/validators.dart';
 import 'package:hepies/util/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-// import 'package:multiselect_formfield/multiselect_formfield.dart';
+import 'package:multiselect_formfield/multiselect_formfield.dart';
 import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
@@ -253,34 +253,34 @@ class _RegisterState extends State<Register> {
       },
     );
 
-    // final interestField = new MultiSelectFormField(
-    //   chipBackGroundColor: Colors.red,
-    //   chipLabelStyle: TextStyle(fontWeight: FontWeight.bold),
-    //   dialogTextStyle: TextStyle(fontWeight: FontWeight.bold),
-    //   checkBoxActiveColor: Colors.red,
-    //   checkBoxCheckColor: Colors.green,
-    //   dialogShapeBorder: RoundedRectangleBorder(
-    //       borderRadius: BorderRadius.all(Radius.circular(12.0))),
-    //   title: Text(
-    //     "Select Your interests",
-    //     style: TextStyle(fontSize: 16),
-    //   ),
-    //   dataSource: interestList,
-    //   textField: 'display',
-    //   valueField: 'value',
-    //   okButtonLabel: 'OK',
-    //   cancelButtonLabel: 'CANCEL',
-    //   hintWidget: Text('Please choose one or more'),
-    //   initialValue: _myInterests,
-    //   onSaved: (value) {
-    //     if (value == null) return;
-    //     // print("_interests_interests_interests ${value.join(",")}");
+    final interestField = new MultiSelectFormField(
+      chipBackGroundColor: Colors.red,
+      chipLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+      dialogTextStyle: TextStyle(fontWeight: FontWeight.bold),
+      checkBoxActiveColor: Colors.red,
+      checkBoxCheckColor: Colors.green,
+      dialogShapeBorder: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(12.0))),
+      title: Text(
+        "Select Your interests",
+        style: TextStyle(fontSize: 16),
+      ),
+      dataSource: interestList,
+      textField: 'display',
+      valueField: 'value',
+      okButtonLabel: 'OK',
+      cancelButtonLabel: 'CANCEL',
+      hintWidget: Text('Please choose one or more'),
+      initialValue: _myInterests,
+      onSaved: (value) {
+        if (value == null) return;
+        // print("_interests_interests_interests ${value.join(",")}");
 
-    //     setState(() {
-    //       _myInterests = value;
-    //     });
-    //   },
-    // );
+        setState(() {
+          _myInterests = value;
+        });
+      },
+    );
 
     final usernameField = TextFormField(
       autofocus: false,
@@ -412,7 +412,7 @@ class _RegisterState extends State<Register> {
                     SizedBox(height: 15.0),
                     label("Select your interests"),
                     SizedBox(height: 5.0),
-                    // interestField,
+                    interestField,
                     SizedBox(height: 15.0),
                     label("Upload your medical license"),
                     SizedBox(height: 5.0),

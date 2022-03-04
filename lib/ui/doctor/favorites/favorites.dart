@@ -155,7 +155,6 @@ class _FavoritesState extends State<FavoritesPage> {
                                           ),
                                         ),
                                         trailing: Container(
-                                          width: 100.0,
                                           child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.end,

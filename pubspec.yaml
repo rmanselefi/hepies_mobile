@@ -65,6 +65,7 @@ dependencies:
   hashtagable: ^2.0.2+1
   shimmer: ^2.0.0
   intl_phone_number_input: ^0.7.0+2
+  multiselect_formfield: ^0.1.7
 
 dev_dependencies:
   flutter_test:
