@@ -155,6 +155,10 @@ class _FavoritesState extends State<FavoritesPage> {
                                           ),
                                         ),
                                         trailing: Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width /
+                                              1.5,
                                           child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.end,
@@ -181,6 +185,9 @@ class _FavoritesState extends State<FavoritesPage> {
                                                               ElevatedButton(
                                                                   onPressed:
                                                                       () {
+                                                                    Navigator.pop(
+                                                                        context);
+
                                                                     setState(
                                                                         () {
                                                                       DatabaseHelper()

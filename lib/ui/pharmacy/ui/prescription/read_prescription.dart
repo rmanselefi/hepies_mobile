@@ -58,6 +58,9 @@ class _ReadPrescriptionState extends State<ReadPrescription> {
                 ),
               ),
             ),
+            SizedBox(
+              height: 10,
+            ),
             GestureDetector(
               onTap: () async {
                 var res = await prescriptionProvider
@@ -66,21 +69,18 @@ class _ReadPrescriptionState extends State<ReadPrescription> {
                 if (res['status']) {
                   if (res['isPhone']) {
                     res = await prescriptionProvider
-                        .readPrescription(
-                        '${codeController.text}');
+                        .readPrescription('${codeController.text}');
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              PrescriptionResultPhone(
-                                  res['data'])),
+                              PrescriptionResultPhone(res['data'])),
                     );
                   } else {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              PrescriptionResult(res)),
+                          builder: (context) => PrescriptionResult(res)),
                     );
                   }
                 } else {
@@ -88,7 +88,7 @@ class _ReadPrescriptionState extends State<ReadPrescription> {
                     context,
                     CustomSnackBar.error(
                       message:
-                      "Unable to read prescription. Make sure to provide correct code/phone",
+                          "Unable to read prescription. Make sure to provide correct code/phone",
                     ),
                   );
                 }
@@ -96,20 +96,17 @@ class _ReadPrescriptionState extends State<ReadPrescription> {
               child: Container(
                 width: 180,
                 margin: EdgeInsets.fromLTRB(75, 5, 75, 5),
-                height: 50,
                 alignment: Alignment.centerRight,
                 padding: EdgeInsets.all(10.0),
                 decoration: BoxDecoration(
                     color: Colors.greenAccent,
                     borderRadius: BorderRadius.circular(10.0),
-                    border: Border.all(
-                        color: Colors.black45, width: 1)),
+                    border: Border.all(color: Colors.black45, width: 1)),
                 child: Center(
                   child: Text(
                     'READ',
-                    style: TextStyle(
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold),
+                    style:
+                        TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
