@@ -53,12 +53,17 @@ class AuthProvider with ChangeNotifier {
       final Map<String, dynamic> responseData = json.decode(response.body);
 
       print("responseDataresponseDataresponseDataresponseData $responseData");
-
+      User authUser = User.fromJson(responseData);
+      UserPreferences().saveUser(authUser);
+      var role = responseData['role']['name'];
+      _loggedInStatus = Status.LoggedIn;
       _sendEmailStatus = Status.Sent;
       notifyListeners();
       result = {
         'status': true,
         'message': 'Verification Code Sent',
+        'role': role,
+        'user': authUser
       };
     } else {
       _sendEmailStatus = Status.NotSent;
