@@ -41,7 +41,7 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
     notReadPrescription.forEach((element) {
       list_id.add(element['id']);
     });
-    print("readreadread $prescription");
+    // print("readreadread $prescription");
     return SafeArea(
       child: Scaffold(
         body: Column(
@@ -52,8 +52,8 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
                   PersonalInfoCode(patient: prescription, diagnosis: diagnosis),
             ),
             Container(
-              padding: EdgeInsets.all(5),
-              margin: EdgeInsets.all(5),
+                padding: EdgeInsets.all(5),
+                margin: EdgeInsets.all(5),
                 height: MediaQuery.of(context).size.height / 1.47,
                 decoration: BoxDecoration(
                     border: Border.all(width: 2.0, color: Color(0xff707070))),
@@ -189,7 +189,7 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
                         ),
                         GestureDetector(
                           onTap: () async {
-                            print("object $selectedList");
+                            // print("object $selectedList");
                             var res = await prescProvider.acceptPrescription(
                                 selectedList, list_id);
                             if (res['status']) {

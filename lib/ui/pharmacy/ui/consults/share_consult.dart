@@ -70,6 +70,31 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
     return SafeArea(
       child: Column(
         children: [
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 5),
+            child: TextField(
+              decoration: InputDecoration(
+                suffixIcon: GestureDetector(
+                    onTap: () async {
+                      print("Working");
+                      await consult.notifySearch();
+                    },
+                    child: Icon(Icons.search)),
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                    borderSide: BorderSide(color: Colors.black45, width: 1)),
+                hintText: "Search posts by interest ...",
+                labelStyle: TextStyle(color: Colors.black38),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                    borderSide: BorderSide(color: Colors.black, width: 1)),
+                hintStyle: TextStyle(
+                  fontWeight: FontWeight.w300,
+                ),
+              ),
+            ),
+          ),
+
           // Header(),
           SizedBox(
             height: 20.0,
@@ -219,7 +244,7 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
                                             );
                                           }
                                         } catch (e) {
-                                          print("eeeee ${e}");
+                                          // print("eeeee ${e}");
                                           showTopSnackBar(
                                             context,
                                             CustomSnackBar.error(

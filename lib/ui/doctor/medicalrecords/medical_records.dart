@@ -98,11 +98,11 @@ class _MedicalRecordState extends State<MedicalRecord> {
                         ? loading
                         : GestureDetector(
                             onTap: () async {
-                              print("object clicked ${phoneController.text}");
+                              // print("object clicked ${phoneController.text}");
                               // formKey.currentState.save();
                               var res = await patientProvider
                                   .getMedicalRecord(phoneController.text);
-                              print("objectobjectobjectobject $res");
+                              // print("objectobjectobjectobject $res");
                               if (res.length != 0) {
                                 Navigator.push(
                                   context,

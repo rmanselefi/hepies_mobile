@@ -75,6 +75,32 @@ class _ShareConsultState extends State<ShareConsult> {
       child: Column(
         children: [
           // Header(),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 5),
+            child: TextField(
+              decoration: InputDecoration(
+                suffixIcon: GestureDetector(
+                    onTap: () async {
+                      await consult.notifySearch();
+                      print("Working , searching");
+
+                    },
+                    child: Icon(Icons.search)),
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                    borderSide: BorderSide(color: Colors.black38, width: 1)),
+                hintText: "Search posts by interest ...",
+                labelStyle: TextStyle(color: Colors.black45),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                    borderSide: BorderSide(color: Colors.black, width: 1)),
+                hintStyle: TextStyle(
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ),
+          ),
+
           SizedBox(
             height: 20.0,
           ),
@@ -159,7 +185,7 @@ class _ShareConsultState extends State<ShareConsult> {
                       children: [
                         interestStatus == "show"
                             ? Container(
-                                width: MediaQuery.of(context).size.width/1.63,
+                                width: MediaQuery.of(context).size.width / 1.63,
                                 child: Wrap(
                                   alignment: WrapAlignment.start,
                                   direction: Axis.horizontal,

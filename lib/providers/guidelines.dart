@@ -16,7 +16,7 @@ class GuidelinesProvider with ChangeNotifier {
     Response response = await get(Uri.parse(AppUrl.guidelines));
     if (response.statusCode == 200 || response.statusCode == 201) {
       guidelines = json.decode(response.body);
-      print("consultconsultconsultconsultconsult ${guidelines.length}");
+      // print("consultconsultconsultconsultconsult ${guidelines.length}");
       // notifyListeners();
       return guidelines;
     } else {
@@ -38,7 +38,7 @@ class GuidelinesProvider with ChangeNotifier {
     final Map<String, dynamic> registrationData = {
       'directory': directory,
     };
-    print("registrationData $registrationData");
+    // print("registrationData $registrationData");
     Response response = await patch(Uri.parse("${AppUrl.guidelinestatus}/$id"),
         body: json.encode(registrationData),
         headers: {

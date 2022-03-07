@@ -154,7 +154,7 @@ class PrescriptionProvider with ChangeNotifier {
     String token = prefs.getString('token');
     var sendData = {'patient': patientData, 'prescription': precriptionData};
     var result;
-    print("registrationData $sendData");
+    // print("registrationData $sendData");
     Response response = await post(Uri.parse(AppUrl.write),
         body: json.encode(sendData),
         headers: {
@@ -222,7 +222,7 @@ class PrescriptionProvider with ChangeNotifier {
     RegExp regExp = new RegExp(pattern);
     bool isPhone = code.length > 8;
 
-    print("isPhoneisPhone $isPhone");
+    // print("isPhoneisPhone $isPhone");
     var url = isPhone ? AppUrl.readprescriptionPhone : AppUrl.readprescription;
     var result;
     List<Consult> consults = [];
@@ -232,7 +232,7 @@ class PrescriptionProvider with ChangeNotifier {
       _fetchStatus = ReadStatus.Fetch;
       notifyListeners();
       medical = json.decode(response.body);
-      print("consultconsultconsultconsultconsult ${medical.length}");
+      // print("consultconsultconsultconsultconsult ${medical.length}");
       // notifyListeners();
       result = {'status': true, 'isPhone': isPhone, 'data': medical};
     } else {
@@ -255,7 +255,7 @@ class PrescriptionProvider with ChangeNotifier {
     List<dynamic> output =
         pres_id.where((element) => !id.contains(element)).toList();
     var result;
-    print("registrationData $output");
+    // print("registrationData $output");
 
     Response response = await post(Uri.parse(AppUrl.accept),
         body: json.encode(output),

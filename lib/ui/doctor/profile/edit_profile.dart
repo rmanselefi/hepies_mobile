@@ -73,7 +73,7 @@ class _EditProfileState extends State<EditProfile>
       loadingProfile = true;
     });
     var user = await UserProvider().getProfile();
-    print("object ${user}");
+    // print("object ${user}");
 
     setState(() {
       var inters = user['profession'][0]['interests'] != null
