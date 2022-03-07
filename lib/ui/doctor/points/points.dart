@@ -196,8 +196,13 @@ class _PointsState extends State<Points> {
                                             backgroundColor:
                                                 MaterialStateProperty.all<
                                                         Color>(
-                                                    Colors.green.shade900)),
-                                        child: Text("50 Birr")),
+                                                    // Colors.green.shade900 Miki... Change color by Dave to:
+                                                    Color(0xff07febb))),
+                                        child: Text("50 Birr",
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                            ))),
                                     SizedBox(
                                       child: VerticalDivider(),
                                       height: 40,
@@ -234,8 +239,13 @@ class _PointsState extends State<Points> {
                                             backgroundColor:
                                                 MaterialStateProperty.all<
                                                         Color>(
-                                                    Colors.green.shade900)),
-                                        child: const Text("100 Birr")),
+                                                    // Colors.green.shade900 Miki... Change color by Dave to:
+                                                    Color(0xff07febb))),
+                                        child: const Text("100 Birr",
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                            ))),
                                   ],
                                 ),
                               ),
@@ -379,9 +389,14 @@ class _PointsState extends State<Points> {
                                       style: ButtonStyle(
                                           backgroundColor:
                                               MaterialStateProperty.all<Color>(
-                                                  Colors.green.shade900)),
+                                                  // Colors.green.shade900 Miki... Change color by Dave to:
+                                                  Color(0xff07febb))),
                                       child: Text(
                                         "Send",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       )),
                                 ),
                         ],
