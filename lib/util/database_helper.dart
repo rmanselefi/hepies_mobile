@@ -55,6 +55,7 @@ class DatabaseHelper {
     if (ress.length > 0) {
       ress.forEach((element) {
         Favorites favorites = new Favorites(
+            id: element['id'],
             strength: element['strength'],
             route: element['route'],
             name: element['name'],
@@ -101,5 +102,23 @@ class DatabaseHelper {
     var dbClient = await db;
     return await dbClient
         .delete("favorites", where: 'name = ?', whereArgs: [name]);
+  }
+
+  Future<int> updateFavorite(Favorites favorite) async {
+    print("FavoritesFavoritesFavorites ${favorite.toMap()}");
+    try {
+      var dbClient = await db;
+      var name = favorite.name;
+      int result = await dbClient.rawUpdate('''
+      UPDATE favorites
+      SET name = ?
+      WHERE id = ?
+      ''', [name, favorite.id]);
+
+      print("FavoritesFavoritesFavorites $result");
+      return result;
+    } catch (e) {
+      print("eeee => $e");
+    }
   }
 }

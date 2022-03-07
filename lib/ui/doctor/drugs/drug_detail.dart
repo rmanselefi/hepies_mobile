@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_decorated_text/flutter_decorated_text.dart';
 import 'package:hepies/widgets/footer.dart';
 import 'package:hepies/widgets/header.dart';
 
@@ -13,7 +14,11 @@ class _DrugDetailState extends State<DrugDetail> {
   @override
   Widget build(BuildContext context) {
     String about = widget.drug['about'];
-    List<Text> bolded = about != null ? _transformWord(about) : "";
+    List<Text> bolded = about != null
+        ? _transformWord(about)
+        : [
+            Text('')
+          ]; // Milkessa: 'double quotation ("")' changed to '[Text('')]'
 
     return Scaffold(
       body: SafeArea(
@@ -88,9 +93,42 @@ class _DrugDetailState extends State<DrugDetail> {
                         child: Wrap(
                           alignment: WrapAlignment.start,
                           direction: Axis.horizontal,
-                          children: bolded.map<Widget>((e) {
-                            return e;
-                          }).toList(),
+                          children: [
+                            DecoratedText(
+                              text: about,
+                              style: TextStyle(fontSize: 16),
+                              rules: [
+                                DecoratorRule.words(
+                                  words: [
+                                    "Indications",
+                                    "Contraindications",
+                                    "Cautions",
+                                    "Interactions",
+                                    "Side effects",
+"Side Effects",
+"Dose",
+"Administration",
+"Adult",
+"Child",
+"Pediatric",
+"Storage",
+"Oral",
+"I.V",
+"I.M",
+"Topical",
+"Apply",
+"I.U",
+"Note",
+                                    "Storage",
+                                  ],
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
                         ),
                       ),
                     ],
@@ -100,7 +138,6 @@ class _DrugDetailState extends State<DrugDetail> {
             )),
             Container(
                 height: 50,
-                width: double.maxFinite,
                 decoration: BoxDecoration(
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(20.0))),
@@ -124,7 +161,7 @@ class _DrugDetailState extends State<DrugDetail> {
     List<String> name = word.split(' ');
     List<Text> textWidgets = [];
     for (int i = 0; i < name.length; i++) {
-      var spe=name[i].replaceAll(RegExp(",|!|'"), "");
+      var spe = name[i].replaceAll(RegExp(",|!|'"), "");
       print(spe);
       if (bold_words.contains(spe)) {
         Text bold = Text(

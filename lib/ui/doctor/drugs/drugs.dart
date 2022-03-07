@@ -25,7 +25,6 @@ class _DrugsState extends State<Drugs> {
       body: SafeArea(
         child: Column(
           children: [
-            Header(),
             SizedBox(
               height: 30.0,
             ),
@@ -39,7 +38,8 @@ class _DrugsState extends State<Drugs> {
                       child: TextField(
                         onChanged: (val) {
                           var drugs =
-                              Provider.of<DrugProvider>(context, listen: false).drugs;
+                              Provider.of<DrugProvider>(context, listen: false)
+                                  .drugs;
                           var drug = setState(() {
                             drugName = val;
                           });
@@ -53,6 +53,8 @@ class _DrugsState extends State<Drugs> {
                             hintStyle: TextStyle(color: Colors.grey[800]),
                             hintText: "Search",
                             fillColor: Colors.white70),
+                        textCapitalization: TextCapitalization
+                            .words, // Milkessa: Added 'textCapitalization' property to inforce keyboard to always start with a capital letter
                       ),
                     ),
                   ),
@@ -60,7 +62,8 @@ class _DrugsState extends State<Drugs> {
                     height: 20.0,
                   ),
                   FutureBuilder<List<dynamic>>(
-                      future: Provider.of<DrugProvider>(context).getDrugs(),
+                      future:
+                          Provider.of<DrugProvider>(context).getDrugsLocal(),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) {
                           return Center(
@@ -74,18 +77,34 @@ class _DrugsState extends State<Drugs> {
                           }
 
                           print("objectobjectobject ${snapshot.data}");
-                          List<dynamic> drugs = snapshot.data
-                              .where((element) => element['name'].contains(drugName))
-                              .toList();
+                          // Milkessa: search finding algorithm implemented inorder to list orderly.
+                          List<dynamic> drugs;
+                          for (int i = 0; i < 2; i++) {
+                            if (i == 0)
+                              drugs = snapshot.data
+                                  .where((element) =>
+                                      element['name'].startsWith(drugName))
+                                  .toList();
+                            else
+                              drugs.addAll(snapshot.data
+                                  .where((element) =>
+                                      element['name']
+                                          .contains(drugName.toLowerCase()) &
+                                      !element['name'].startsWith(drugName))
+                                  .toList());
+                          }
                           return Container(
                             height: 2 * MediaQuery.of(context).size.height / 3,
                             child: ListView(
                               shrinkWrap: true,
                               children: drugs.map<Widget>((e) {
                                 return GestureDetector(
-                                  onTap: (){
+                                  onTap: () {
                                     Navigator.push(
-                                        context, MaterialPageRoute(builder: (context) => DrugDetail(e)));
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                DrugDetail(e)));
                                   },
                                   child: Container(
                                       padding: EdgeInsets.all(10.0),
@@ -93,7 +112,8 @@ class _DrugsState extends State<Drugs> {
                                         e['name'] != null ? e['name'] : '',
                                         style: TextStyle(
                                             fontSize: 20.0,
-                                            decoration: TextDecoration.underline),
+                                            decoration:
+                                                TextDecoration.underline),
                                       )),
                                 );
                               }).toList(),
@@ -104,15 +124,12 @@ class _DrugsState extends State<Drugs> {
                 ],
               ),
             ),
-
             Container(
                 height: 50,
-                width: double.maxFinite,
                 decoration: BoxDecoration(
                     borderRadius:
-                    BorderRadius.vertical(top: Radius.circular(20.0))),
-                child: Footer()
-            )
+                        BorderRadius.vertical(top: Radius.circular(20.0))),
+                child: Footer())
           ],
         ),
       ),

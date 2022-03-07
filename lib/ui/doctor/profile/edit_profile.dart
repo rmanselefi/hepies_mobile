@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hepies/models/user.dart';
 import 'package:hepies/providers/auth.dart';
@@ -11,11 +12,10 @@ import 'package:hepies/util/shared_preference.dart';
 import 'package:hepies/widgets/header.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:multiselect_formfield/multiselect_formfield.dart';
+// import 'package:multiselect_formfield/multiselect_formfield.dart';
 import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class EditProfile extends StatefulWidget {
   @override
@@ -46,7 +46,7 @@ class _EditProfileState extends State<EditProfile>
   List interestList = [];
 
   String profile = '';
-  var interest;
+  List<dynamic> interest;
   int userId = 0;
   int professionid = 0;
   String profession = '';
@@ -57,6 +57,7 @@ class _EditProfileState extends State<EditProfile>
   String points = '';
   String license = '';
   String _profession = 'Medical Doctor';
+  var loadingProfile;
   List<dynamic> _interests = [];
   @override
   void initState() {
@@ -67,24 +68,34 @@ class _EditProfileState extends State<EditProfile>
   }
 
   getUser() async {
+    setState(() {
+      loadingProfile = true;
+    });
     var user = await UserProvider().getProfile();
     print("object ${user}");
+
     setState(() {
-      _nameController.text = user['profession'][0]['name'];
-      _fatherNameController.text = user['profession'][0]['fathername'];
+      var inters = user['profession'][0]['interests'] != null
+          ? user['profession'][0]['interests'].split(",")
+          : [];
+      List interew = [];
+      inters.forEach((element) {
+        var property = {
+          'display': "#$element",
+          'value': element,
+        };
+        interew.add(property);
+      });
+      interest = interew;
       _emailController.text = user['profession'][0]['email'];
-      _phoneController.text = user['profession'][0]['phone'];
+      _phoneController.text =
+          user['profession'][0]['phone'].toString().substring(4);
       _specialityController.text = user['profession'][0]['speciality'];
       _workplaceController.text = user['profession'][0]['workplace'];
       profile = user['profession'][0]['profile'];
-      interest = user['profession'][0]['interests'].split(",");
       userId = user['id'];
-      profession = user['profession'][0]['proffesion'];
-      username = user['username'];
-      grandfathername = user['profession'][0]['grandfathername'];
-      points = user['profession'][0]['points'];
-      license = user['profession'][0]['license'];
       professionid = user['profession'][0]['id'];
+      loadingProfile = false;
     });
   }
 
@@ -125,44 +136,6 @@ class _EditProfileState extends State<EditProfile>
         });
       },
     );
-    void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
-      setState(() {
-        if (args.value is PickerDateRange) {
-          _range =
-              DateFormat('dd/MM/yyyy').format(args.value.startDate).toString() +
-                  ' - ' +
-                  DateFormat('dd/MM/yyyy')
-                      .format(args.value.endDate ?? args.value.startDate)
-                      .toString();
-        } else if (args.value is DateTime) {
-          _selectedDate = args.value.toString();
-        } else if (args.value is List<DateTime>) {
-          _dateCount = args.value.length.toString();
-        } else {
-          _rangeCount = args.value.length.toString();
-        }
-      });
-    }
-
-    final dobField = SfDateRangePicker(
-      onSelectionChanged: _onSelectionChanged,
-      selectionMode: DateRangePickerSelectionMode.single,
-    );
-    final sexField = DropdownButtonFormField(
-      value: _sexController,
-      items: ["Male", "Female"]
-          .map((label) => DropdownMenuItem(
-                child: Text(label.toString()),
-                value: label,
-              ))
-          .toList(),
-      hint: Text('Choose Sex'),
-      onChanged: (value) {
-        setState(() {
-          _sexController = value;
-        });
-      },
-    );
     var loading = Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -187,39 +160,33 @@ class _EditProfileState extends State<EditProfile>
                             padding: EdgeInsets.only(left: 20.0, top: 20.0),
                             child: new Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
-                                IconButton(
-                                  icon: new Icon(
-                                    Icons.arrow_back_ios,
-                                    color: Colors.black,
-                                    size: 22.0,
+                                Expanded(
+                                  child: IconButton(
+                                    alignment: Alignment.centerLeft,
+                                    icon: new Icon(
+                                      Icons.arrow_back_ios,
+                                      color: Colors.black,
+                                      size: 22.0,
+                                    ),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
                                   ),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.only(left: 25.0),
-                                  child: new Text('PROFILE',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20.0,
-                                          fontFamily: 'sans-serif-light',
-                                          color: Colors.black)),
-                                ),
-                                IconButton(
-                                    icon: Icon(Icons.logout),
-                                    onPressed: () async {
-                                      await Provider.of<AuthProvider>(context,
-                                              listen: false)
-                                          .logout();
-                                      Navigator.pushAndRemoveUntil(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => Login()),
-                                          (route) => false);
-                                    })
+                                Expanded(
+                                  flex: 2,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 25.0),
+                                    child: Text('PROFILE',
+                                        textAlign: TextAlign.start,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20.0,
+                                            fontFamily: 'sans-serif-light',
+                                            color: Colors.black)),
+                                  ),
+                                ), // Milkessa: Logout button deleted
                               ],
                             )),
                         Expanded(
@@ -238,6 +205,7 @@ class _EditProfileState extends State<EditProfile>
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
+                          loadingProfile ? loadingPro : Container(),
                           Padding(
                               padding: EdgeInsets.only(
                                   left: 25.0, right: 25.0, top: 25.0),
@@ -257,83 +225,6 @@ class _EditProfileState extends State<EditProfile>
                                             fontWeight: FontWeight.bold),
                                       ),
                                     ],
-                                  ),
-                                ],
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 25.0),
-                              child: new Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  new Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      new Text(
-                                        'Name',
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 2.0),
-                              child: new Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  new Flexible(
-                                    child: new TextFormField(
-                                      decoration: const InputDecoration(
-                                        hintText: "Enter Your Name",
-                                      ),
-                                      controller: _nameController,
-                                      validator: (val) =>
-                                          val.isEmpty ? 'Name is required' : '',
-                                    ),
-                                  ),
-                                ],
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 25.0),
-                              child: new Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  new Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      new Text(
-                                        'Father Name',
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 2.0),
-                              child: new Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  new Flexible(
-                                    child: new TextFormField(
-                                      validator: (val) => val.isEmpty
-                                          ? 'Father Name is required'
-                                          : '',
-                                      controller: _fatherNameController,
-                                      decoration: const InputDecoration(
-                                        hintText: "Enter Your Father Name",
-                                      ),
-                                    ),
                                   ),
                                 ],
                               )),
@@ -372,82 +263,7 @@ class _EditProfileState extends State<EditProfile>
                                   ),
                                 ],
                               )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 25.0),
-                              child: new Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  new Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      new Text(
-                                        'Mobile',
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 2.0),
-                              child: new Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  new Flexible(
-                                    child: new TextField(
-                                      controller: _phoneController,
-                                      decoration: const InputDecoration(
-                                          hintText: "Enter Mobile Number"),
-                                    ),
-                                  ),
-                                ],
-                              )),
                           SizedBox(height: 15.0),
-                          label("Profession"),
-                          SizedBox(height: 5.0),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 25.0, right: 25.0, top: 2.0),
-                            child: professionField,
-                          ),
-                          SizedBox(height: 15.0),
-                          label("Sex"),
-                          SizedBox(height: 5.0),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 25.0, right: 25.0, top: 2.0),
-                            child: sexField,
-                          ),
-                          SizedBox(height: 15.0),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 25.0),
-                              child: new Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: <Widget>[
-                                  new Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      new Text(
-                                        'Date of Birth',
-                                        style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 25.0, right: 25.0, top: 2.0),
-                              child: dobField),
                           Padding(
                               padding: EdgeInsets.only(
                                   left: 25.0, right: 25.0, top: 25.0),
@@ -474,40 +290,39 @@ class _EditProfileState extends State<EditProfile>
                               child: new Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: <Widget>[
-                                  new Flexible(
-                                      child: new MultiSelectFormField(
-                                    autovalidate: false,
-                                    chipBackGroundColor: Colors.red,
-                                    chipLabelStyle:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                    dialogTextStyle:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                    checkBoxActiveColor: Colors.red,
-                                    checkBoxCheckColor: Colors.green,
-                                    dialogShapeBorder: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(12.0))),
-                                    title: Text(
-                                      "Select Your interests",
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                    dataSource: interestList,
-                                    textField: 'display',
-                                    valueField: 'value',
-                                    okButtonLabel: 'OK',
-                                    cancelButtonLabel: 'CANCEL',
-                                    hintWidget:
-                                        Text('Please choose one or more'),
-                                    initialValue: interest,
-                                    onSaved: (value) {
-                                      if (value == null) return;
-                                      // print("_interests_interests_interests ${value.join(",")}");
+                                  // new Flexible(
+                                  //     child: new MultiSelectFormField(
+                                  //   chipBackGroundColor: Colors.red,
+                                  //   chipLabelStyle:
+                                  //       TextStyle(fontWeight: FontWeight.bold),
+                                  //   dialogTextStyle:
+                                  //       TextStyle(fontWeight: FontWeight.bold),
+                                  //   checkBoxActiveColor: Colors.red,
+                                  //   checkBoxCheckColor: Colors.green,
+                                  //   dialogShapeBorder: RoundedRectangleBorder(
+                                  //       borderRadius: BorderRadius.all(
+                                  //           Radius.circular(12.0))),
+                                  //   title: Text(
+                                  //     "Select Your interests",
+                                  //     style: TextStyle(fontSize: 16),
+                                  //   ),
+                                  //   dataSource: interestList,
+                                  //   textField: 'display',
+                                  //   valueField: 'value',
+                                  //   okButtonLabel: 'OK',
+                                  //   cancelButtonLabel: 'CANCEL',
+                                  //   hintWidget:
+                                  //       Text('Please choose one or more'),
+                                  //   initialValue: interest,
+                                  //   onSaved: (value) {
+                                  //     if (value == null) return;
+                                  //     // print("_interests_interests_interests ${value.join(",")}");
 
-                                      setState(() {
-                                        _interests = value;
-                                      });
-                                    },
-                                  )),
+                                  //     setState(() {
+                                  //       _interests = value;
+                                  //     });
+                                  //   },
+                                  // )),
                                 ],
                               )),
                           Padding(
@@ -592,11 +407,11 @@ class _EditProfileState extends State<EditProfile>
     super.dispose();
   }
 
-  var loading = Row(
+  var loadingPro = Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: <Widget>[
       CircularProgressIndicator(),
-      Text(" Authenticating ... Please wait")
+      Text("Loading Profile ... Please wait")
     ],
   );
 
@@ -629,7 +444,7 @@ class _EditProfileState extends State<EditProfile>
                       workplace: _workplaceController.text,
                       speciality: _specialityController.text,
                       email: _emailController.text,
-                      phone: _phoneController.text,
+                      phone: '+251' + _phoneController.text,
                       points: points,
                       interests: interests,
                       license: license,

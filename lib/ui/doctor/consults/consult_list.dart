@@ -142,8 +142,7 @@ class _ConsultListState extends State<ConsultList> {
                                     : TextButton.icon(
                                         onPressed: () async {
                                           var res = await Provider.of<
-                                                      ConsultProvider>(
-                                                  context,
+                                                      ConsultProvider>(context,
                                                   listen: false)
                                               .likeConsult(e['id']);
                                           if (res['status']) {
@@ -157,41 +156,23 @@ class _ConsultListState extends State<ConsultList> {
                                           }
                                         },
                                         icon: Icon(Icons.favorite_border),
-                                        label: Text(snapshot.data['likes']
-                                            .toString()));
+                                        label: Text(
+                                            snapshot.data['likes'].toString()));
                               }
                             })
                       ],
                     ),
-                    FutureBuilder<int>(
-                        future:
-                            Provider.of<ConsultProvider>(context, listen: false)
-                                .getCommentsByConsultId(e['id']),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData) {
-                            return Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          } else {
-                            if (snapshot.data == null) {
-                              return Center(
-                                child: Text('No data to show'),
-                              );
-                            }
-                            return TextButton.icon(
-                                onPressed: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              ShareComment(e['id'])));
-                                },
-                                label: snapshot.data > 0
-                                    ? Text('${snapshot.data} Comments')
-                                    : Text('Comments'),
-                                icon: Icon(Icons.comment));
-                          }
-                        }),
+                    TextButton.icon(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ShareComment(e['id'])));
+                        },
+                        label: e['comment'].length > 0
+                            ? Text('${e['comment'].length} Comments')
+                            : Text('Comments'),
+                        icon: Icon(Icons.comment))
                   ],
                 ),
               )

@@ -14,7 +14,11 @@ import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
+import '../../../../constants.dart';
+
 class PharmacyShareConsult extends StatefulWidget {
+  final user_id;
+  PharmacyShareConsult(this.user_id);
   @override
   _PharmacyShareConsultState createState() => _PharmacyShareConsultState();
 }
@@ -25,12 +29,14 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
   XFile file;
 
   String name = '';
+  String interestStatus = "hide";
 
   List<dynamic> interests = [];
   List<dynamic> subList = [];
   void _setImage(XFile image) {
-    file = image;
-    print("_formData_formData_formData${file}");
+    setState(() {
+      file = image;
+    });
   }
 
   void setInterests() {
@@ -52,11 +58,12 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
 
   var loading = Row(
     mainAxisAlignment: MainAxisAlignment.center,
-    children: <Widget>[CircularProgressIndicator(), Text("Sharing....")],
+    children: <Widget>[CircularProgressIndicator()],
   );
   @override
   Widget build(BuildContext context) {
     ConsultProvider consult = Provider.of<ConsultProvider>(context);
+
     List<dynamic> interest = interests
         .where((element) => element['interest'].toLowerCase().contains(name))
         .toList();
@@ -72,35 +79,72 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
               children: [
-                HashTagTextField(
-                  decoration: InputDecoration(
-                      hintText: 'Share, consult, promote, inform..',
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors.grey.shade50, width: 0.5))),
-                  basicStyle: TextStyle(fontSize: 15, color: Colors.black),
-                  decoratedStyle: TextStyle(fontSize: 15, color: Colors.blue),
-                  keyboardType: TextInputType.multiline,
-                  controller: _topic,
+                Row(
+                  // Milkesa: Added mini image display next to consult text field
+                  children: [
+                    Flexible(
+                      flex: 3,
+                      child: Padding(
+                        padding: const EdgeInsets.all(3),
+                        child: HashTagTextField(
+                          decoration: InputDecoration(
+                              hintText: 'Share, consult, promote, inform..',
+                              border: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Colors.grey.shade50, width: 0.5))),
+                          basicStyle:
+                              TextStyle(fontSize: 15, color: Colors.black),
+                          decoratedStyle:
+                              TextStyle(fontSize: 15, color: Colors.blue),
+                          keyboardType: TextInputType.multiline,
+                          controller: _topic,
 
-                  /// Called when detection (word starts with #, or # and @) is being typed
-                  onDetectionTyped: (text) {
-                    if (text.length > 1) {
-                      text.substring(2);
-                      print("text ${text.substring(2)}");
-                      setState(() {
-                        name = text.substring(2).toLowerCase();
-                      });
-                    }
+                          /// Called when detection (word starts with #, or # and @) is being typed
+                          onDetectionTyped: (text) {
+                            setState(() {
+                              interestStatus = "show";
+                            });
+                            if (text.length > 1) {
+                              text.substring(2);
+                              print("text ${text.substring(2)}");
+                              setState(() {
+                                name = text.substring(2).toLowerCase();
+                              });
+                            }
 
-                    print("texttexttexttexttext $text");
-                  },
+                            print("texttexttexttexttext $text");
+                          },
 
-                  /// Called when detection is fully typed
-                  onDetectionFinished: () {
-                    print("detection finished");
-                  },
-                  maxLines: 4,
+                          /// Called when detection is fully typed
+                          onDetectionFinished: () {
+                            print("detection finished");
+                          },
+                          maxLines: 4,
+                        ),
+                      ),
+                    ),
+                    file != null
+                        ? Container(
+                            width: width(context) * 0.25,
+                            margin: EdgeInsets.all(5),
+                            child: Stack(
+                              children: [
+                                Image.file(File(file.path),
+                                    fit: BoxFit.contain),
+                                IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      file = null;
+                                    });
+                                  },
+                                  icon: Icon(Icons.cancel_outlined,
+                                      color: Colors.blue),
+                                ),
+                              ],
+                            ),
+                          )
+                        : Container(width: 0),
+                  ],
                 ),
                 Align(
                   alignment: Alignment.topRight,
@@ -109,29 +153,32 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          width: 250,
-                          child: Wrap(
-                            alignment: WrapAlignment.start,
-                            direction: Axis.horizontal,
-                            children: interest.map<Widget>((e) {
-                              return GestureDetector(
-                                onTap: () {
-                                  if (name == "") {
-                                    setState(() {
-                                      _topic.text =
-                                      "${_topic.text} #${e['interest']}";
-                                    });
-                                  }
-                                },
-                                child: Text(
-                                  "#${e['interest']} ",
-                                  style: TextStyle(color: Colors.blueAccent),
+                        interestStatus == "show"
+                            ? Container(
+                                width: width(context) * 0.7,
+                                child: Wrap(
+                                  alignment: WrapAlignment.start,
+                                  direction: Axis.horizontal,
+                                  children: interest.map<Widget>((e) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        if (name == "") {
+                                          setState(() {
+                                            _topic.text =
+                                                "${_topic.text} #${e['interest']}";
+                                          });
+                                        }
+                                      },
+                                      child: Text(
+                                        "#${e['interest']} ",
+                                        style:
+                                            TextStyle(color: Colors.blueAccent),
+                                      ),
+                                    );
+                                  }).toList(),
                                 ),
-                              );
-                            }).toList(),
-                          ),
-                        ),
+                              )
+                            : Container(),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -139,49 +186,67 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
                             consult.shareStatus == ConsultStatus.Sharing
                                 ? loading
                                 : Align(
-                                alignment: Alignment.topRight,
-                                child: OutlinedButton(
-                                  onPressed: () async {
-                                    try {
-                                      var photo = file != null
-                                          ? File(file.path)
-                                          : null;
-                                      if (_topic.text != "" &&
-                                          file != null) {
-                                        var res = await consult.share(
-                                            _topic.text, photo);
-                                        if (res['status']) {
-                                          consult.getConsults();
+                                    alignment: Alignment.topRight,
+                                    child: OutlinedButton(
+                                      onPressed: () async {
+                                        try {
+                                          var photo = file != null
+                                              ? File(file.path)
+                                              : null;
+                                          if (_topic.text !=
+                                                  "" || //Milkessa: added posting capability with either text or image
+                                              file != null) {
+                                            var res = await consult.share(
+                                                _topic.text, photo);
+                                            if (res['status']) {
+                                              consult.getConsults();
+                                              showTopSnackBar(
+                                                context,
+                                                CustomSnackBar.success(
+                                                  message:
+                                                      "Your consult is uploaded succesfully",
+                                                ),
+                                              );
+                                              _topic.text = "";
+                                            }
+                                          } else {
+                                            showTopSnackBar(
+                                              context,
+                                              CustomSnackBar.error(
+                                                message:
+                                                    "Invalid Data! Make sure you have inserted image or text",
+                                              ),
+                                            );
+                                          }
+                                        } catch (e) {
+                                          print("eeeee ${e}");
                                           showTopSnackBar(
                                             context,
-                                            CustomSnackBar.success(
+                                            CustomSnackBar.error(
                                               message:
-                                              "Your consult is uploaded succesfully",
+                                                  "Unable to share your consult",
                                             ),
                                           );
                                         }
-                                      } else {
-                                        showTopSnackBar(
-                                          context,
-                                          CustomSnackBar.error(
-                                            message:
-                                            "Invalid Data! Make sure you have inserted image or text",
-                                          ),
-                                        );
-                                      }
-                                    } catch (e) {
-                                      print("eeeee ${e}");
-                                      showTopSnackBar(
-                                        context,
-                                        CustomSnackBar.error(
-                                          message:
-                                          "Unable to share your consult",
+                                      },
+                                      child: Container(
+                                        margin: EdgeInsets.zero,
+                                        padding: EdgeInsets.all(3.0),
+                                        decoration: BoxDecoration(
+                                          boxShadow: [buttonShadow],
+                                          borderRadius:
+                                              BorderRadius.circular(3),
                                         ),
-                                      );
-                                    }
-                                  },
-                                  child: Text('Consult'),
-                                )),
+                                        child: Text(
+                                          'Consult',
+                                          textScaleFactor: 0.775,
+                                          style: TextStyle(
+                                            color: Colors.blue,
+                                            fontWeight: FontWeight.w900,
+                                          ),
+                                        ),
+                                      ),
+                                    )),
                           ],
                         ),
                       ],
@@ -189,27 +254,11 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
                   ),
                 ),
                 Divider(),
-                FutureBuilder<List<dynamic>>(
-                    future: Provider.of<ConsultProvider>(context).getConsults(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else {
-                        if (snapshot.data == null) {
-                          return Center(
-                            child: Text('No data to show'),
-                          );
-                        }
-
-                        return PharmacyConsultList(snapshot.data);
-                      }
-                    }),
+                PharmacyConsultList(widget.user_id, interest)
               ],
             ),
           ),
-          PharmacyFooter()
+          Center(child: PharmacyFooter()),
         ],
       ),
     );

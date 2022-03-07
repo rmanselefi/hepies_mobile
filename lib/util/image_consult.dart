@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 
 class ImageInputConsult extends StatefulWidget {
   final Function setImage;
@@ -64,17 +63,13 @@ class _ImageInputState extends State<ImageInputConsult> {
     // TODO: implement build
     return Column(
       children: <Widget>[
-        TextButton.icon(
+        IconButton(
           onPressed: () {
             _openImagePicker(context);
           },
-          label: Text(
-            '',
-            style: TextStyle(color: Theme.of(context).accentColor),
-          ),
-          icon: Icon(Icons.attach_file_outlined),
+          icon: Icon(Icons.attach_file_outlined, color: Colors.blue),
+          iconSize: 22,
         ),
-
       ],
     );
   }

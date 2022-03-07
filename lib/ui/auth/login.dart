@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hepies/models/user.dart';
 import 'package:hepies/providers/auth.dart';
 import 'package:hepies/providers/user_provider.dart';
+import 'package:hepies/ui/auth/forgot_password.dart';
 import 'package:hepies/ui/auth/sign_up.dart';
 import 'package:hepies/ui/pharmacy/ui/consults/share_consult.dart';
 import 'package:hepies/ui/pharmacy/welcome.dart';
@@ -14,6 +15,8 @@ import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class Login extends StatefulWidget {
+  final from;
+  Login({this.from});
   @override
   _LoginState createState() => _LoginState();
 }
@@ -25,11 +28,25 @@ class _LoginState extends State<Login> {
   bool _isObscure = true;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.from == 'forgot') {
+      showTopSnackBar(
+        context,
+        CustomSnackBar.success(
+          message:
+              'Your password is changed successfully! Please login with your new password',
+        ),
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     AuthProvider auth = Provider.of<AuthProvider>(context);
 
-    InputDecoration buildInputDecorationn(
-        String hintText, IconData icon) {
+    InputDecoration buildInputDecorationn(String hintText, IconData icon) {
       return InputDecoration(
         prefixIcon: Icon(icon, color: Color.fromRGBO(50, 62, 72, 1.0)),
         hintText: hintText,
@@ -46,25 +63,23 @@ class _LoginState extends State<Login> {
     }
 
     final usernameField = TextFormField(
-      autofocus: false,
-      validator: (value) => value.isEmpty ? "Please enter username" : null,
-      onSaved: (value) => _username = value,
-      decoration: InputDecoration(
-        prefixIcon: Icon(Icons.person, color: Color.fromRGBO(50, 62, 72, 1.0)),
-        hintText: "Username",
-        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
-
-      )
-    );
+        autofocus: false,
+        validator: (value) => value.isEmpty ? "Please enter username" : null,
+        onSaved: (value) => _username = value,
+        decoration: InputDecoration(
+          prefixIcon:
+              Icon(Icons.person, color: Color.fromRGBO(50, 62, 72, 1.0)),
+          hintText: "Username",
+          contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
+        ));
 
     final passwordField = TextFormField(
       autofocus: false,
       obscureText: _isObscure,
       validator: (value) => value.isEmpty ? "Please enter password" : null,
       onSaved: (value) => _password = value,
-      decoration:
-      buildInputDecorationn("Password", Icons.lock),
+      decoration: buildInputDecorationn("Password", Icons.lock),
     );
 
     var loading = Row(
@@ -82,7 +97,8 @@ class _LoginState extends State<Login> {
           child: Text("Forgot password?",
               style: TextStyle(fontWeight: FontWeight.w300)),
           onPressed: () {
-//            Navigator.pushReplacementNamed(context, '/reset-password');
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ForgotPassword()));
           },
         ),
         TextButton(
@@ -105,28 +121,37 @@ class _LoginState extends State<Login> {
             auth.login(_username, _password);
 
         successfulMessage.then((response) {
-          print("object $response");
+          print("object haile $response");
           if (response['status']) {
             User user = response['user'];
             var role = response['role'];
 
             Provider.of<UserProvider>(context, listen: false).setUser(user);
-            if (role == "doctor") {
+            if (role == "doctor" ||
+                role == "healthofficer" ||
+                role == "nurse") {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => Welcome(
+                          user: user,
+                        )),
+                ModalRoute.withName('/'),
+              );
+            } else {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => Welcome(
+                      builder: (context) => WelcomePharmacy(
                             user: user,
                           )));
-            } else {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => WelcomePharmacy()));
             }
           } else {
             showTopSnackBar(
               context,
               CustomSnackBar.error(
-                message: response['message'].toString(),
+                message: response['message'].toString() ??
+                    'Wrong username or password entered, try again!',
               ),
             );
           }
@@ -144,12 +169,10 @@ class _LoginState extends State<Login> {
             key: formKey,
             child: ListView(
               children: [
-                Center(
-                  child: Text(
-                    'WorkenehApp',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
-                  ),
+                Text(
+                  'Hepius',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
                 ),
                 SizedBox(height: 15.0),
                 label("Username"),

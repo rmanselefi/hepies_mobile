@@ -17,7 +17,10 @@ enum Status {
   Registered,
   Authenticating,
   Registering,
-  LoggedOut
+  LoggedOut,
+  NotSent,
+  Sending,
+  Sent
 }
 
 class AuthProvider with ChangeNotifier {
@@ -26,6 +29,9 @@ class AuthProvider with ChangeNotifier {
   firebase_storage.UploadTask uploadTask;
   Status get loggedInStatus => _loggedInStatus;
   Status get registeredInStatus => _registeredInStatus;
+
+  Status _sendEmailStatus = Status.NotSent;
+  Status get sendEmailStatus => _sendEmailStatus;
 
   Future<Map<String, dynamic>> login(String username, String password) async {
     var result;
@@ -43,29 +49,30 @@ class AuthProvider with ChangeNotifier {
       body: json.encode(loginData),
       headers: {'Content-Type': 'application/json'},
     );
-    print("ResponseResponseResponse ${response.body}");
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Map<String, dynamic> responseData = json.decode(response.body);
 
-      print("authUserauthUserauthUser ${responseData}");
+      print("responseDataresponseDataresponseDataresponseData $responseData");
       User authUser = User.fromJson(responseData);
       UserPreferences().saveUser(authUser);
       var role = responseData['role']['name'];
       _loggedInStatus = Status.LoggedIn;
+      _sendEmailStatus = Status.Sent;
       notifyListeners();
-
       result = {
         'status': true,
-        'message': 'Successful',
+        'message': 'Verification Code Sent',
         'role': role,
         'user': authUser
       };
     } else {
+      _sendEmailStatus = Status.NotSent;
       _loggedInStatus = Status.NotLoggedIn;
+
       notifyListeners();
       result = {
         'status': false,
-        'message': json.decode(response.body)['error']
+        // 'message': json.decode(response.body)['error']
       };
     }
     return result;
@@ -78,6 +85,8 @@ class AuthProvider with ChangeNotifier {
       String phone,
       String password,
       String profession,
+      String sex,
+      String dob,
       interests,
       File file) async {
     _loggedInStatus = Status.Authenticating;
@@ -109,12 +118,14 @@ class AuthProvider with ChangeNotifier {
       'license': license,
       'interests': interests,
       'proffesion': profession,
+      'dob': dob,
+      'sex': sex,
       'user': {'username': username, 'password': password, 'role': role},
     };
     Response response = await post(Uri.parse(AppUrl.register),
         body: json.encode(registrationData),
         headers: {'Content-Type': 'application/json'});
-
+    print("responseresponseresponse ${json.decode(response.body)}");
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Map<String, dynamic> responseData = json.decode(response.body);
       print("ResponseResponseResponse ${responseData}");
@@ -126,10 +137,18 @@ class AuthProvider with ChangeNotifier {
     } else {
       _loggedInStatus = Status.NotLoggedIn;
       notifyListeners();
-      result = {
-        'status': false,
-        'message': json.decode(response.body)['error']
-      };
+      var res = json.decode(response.body);
+      var message = '';
+      if (res['message'] == 'username') {
+        message = 'Username already exists';
+      }
+      if (res['message'] == 'email') {
+        message = 'Email already exists';
+      }
+      if (res['message'] == 'phone') {
+        message = 'Phone already exists';
+      }
+      result = {'status': false, 'message': message};
     }
     return result;
   }
@@ -199,6 +218,37 @@ class AuthProvider with ChangeNotifier {
       print("errorerrorerrorerrorerrorerror $err");
       return false;
     }
+  }
+
+  Future<Map<String, dynamic>> forgotPassword(String email) async {
+    var result;
+    final Map<String, dynamic> loginData = {'email': email};
+
+    _sendEmailStatus = Status.Sending;
+    notifyListeners();
+
+    Response response = await post(
+      Uri.parse(AppUrl.sendCode),
+      body: json.encode(loginData),
+      headers: {'Content-Type': 'application/json'},
+    );
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      print("responseDataresponseDataresponseDataresponseData $responseData");
+
+      _sendEmailStatus = Status.Sent;
+      notifyListeners();
+      result = {
+        'status': true,
+        'message': 'Verification Code Sent',
+      };
+    } else {
+      _sendEmailStatus = Status.NotSent;
+      notifyListeners();
+      result = {'status': false, 'message': 'Error Sending Verification Code'};
+    }
+    return result;
   }
 
   Future logout() async {

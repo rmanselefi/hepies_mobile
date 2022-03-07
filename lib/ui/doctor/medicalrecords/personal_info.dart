@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class PersonalInfo extends StatefulWidget {
   final patient;
-  PersonalInfo(this.patient);
+  final diagnosis;
+  PersonalInfo({this.patient, this.diagnosis});
   @override
   _PersonalInfoState createState() => _PersonalInfoState();
 }
@@ -11,6 +13,10 @@ class _PersonalInfoState extends State<PersonalInfo> {
   @override
   Widget build(BuildContext context) {
     var patient = widget.patient;
+    var remark = patient['prescription'][0]['remark'];
+    var date = patient['prescription_item'][0]['createdAt'];
+    var formattedDate =
+        new DateFormat("mm-dd-yyyy hh:mm a").format(DateTime.parse(date));
     return Column(
       children: [
         Row(
@@ -20,7 +26,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
               style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
             ),
             Text(
-              '${patient['name']} ${patient['fathername']}',
+              '${patient['name']} ${patient['fathername'] ?? 'empty'}',
               style: TextStyle(fontSize: 18.0),
             )
           ],
@@ -32,7 +38,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
               style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
             ),
             Text(
-              '${patient['age']}',
+              '${patient['age'] ?? 'empty'}',
               style: TextStyle(fontSize: 18.0),
             ),
             SizedBox(
@@ -43,18 +49,64 @@ class _PersonalInfoState extends State<PersonalInfo> {
               style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
             ),
             Text(
-              '${patient['sex']}',
+              '${patient['sex'] ?? 'empty'}',
               style: TextStyle(fontSize: 18.0),
             ),
             SizedBox(
               width: 10.0,
             ),
             Text(
-              'Weight -- ',
+              'Weight -- ' ?? 'empty',
               style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
             ),
             Text(
-              '${patient['weight']}Kg',
+              '${patient['weight'] ?? 'empty'}Kg',
+              style: TextStyle(fontSize: 18.0),
+            )
+          ],
+        ),
+        Row(
+          children: [
+            Text(
+              'MRN -- ',
+              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              '${patient['address'] ?? 'empty'}',
+              style: TextStyle(fontSize: 18.0),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(
+              'Dx -- ',
+              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              '${widget.diagnosis ?? 'empty'}',
+              style: TextStyle(fontSize: 18.0),
+            )
+          ],
+        ),
+        Row(
+          children: [
+            Text(
+              'Remark -- ',
+              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              '${remark == "" || remark == null ? 'empty' : remark}',
+              style: TextStyle(fontSize: 18.0),
+            ),
+            SizedBox(
+              width: 10.0,
+            ),
+            Text(
+              'Date -- ',
+              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              '${formattedDate ?? 'empty'}',
               style: TextStyle(fontSize: 18.0),
             )
           ],

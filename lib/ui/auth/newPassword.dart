@@ -6,18 +6,35 @@ import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
-class ChangePassword extends StatefulWidget {
+class NewPassword extends StatefulWidget {
+  final isSuccessful;
+  NewPassword(this.isSuccessful);
   @override
   _ChangePasswordState createState() => _ChangePasswordState();
 }
 
-class _ChangePasswordState extends State<ChangePassword> {
+class _ChangePasswordState extends State<NewPassword> {
   final _formKey = new GlobalKey<FormState>();
-  TextEditingController _oldPasswordController = new TextEditingController();
-  TextEditingController _newPasswordController = new TextEditingController();
-  TextEditingController _confirmPasswordController =
-      new TextEditingController();
+  TextEditingController _codeController = new TextEditingController();
+  TextEditingController _emailController = new TextEditingController();
+  TextEditingController _passwordController = new TextEditingController();
   bool _status = true;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (widget.isSuccessful) {
+      showTopSnackBar(
+        context,
+        CustomSnackBar.success(
+          message:
+              'Verification Code was sent for you. please reset your password by entering the sent code',
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     UserProvider auth = Provider.of<UserProvider>(context);
@@ -84,7 +101,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
                                       new Text(
-                                        'Old password',
+                                        'Code',
                                         style: TextStyle(
                                             fontSize: 16.0,
                                             fontWeight: FontWeight.bold),
@@ -102,13 +119,12 @@ class _ChangePasswordState extends State<ChangePassword> {
                                   new Flexible(
                                     child: new TextFormField(
                                       validator: (val) => val.isEmpty
-                                          ? 'Old Password is required'
+                                          ? 'Code is required'
                                           : null,
-                                      controller: _oldPasswordController,
+                                      controller: _codeController,
                                       decoration: const InputDecoration(
-                                        hintText: "Enter Your Old Password",
+                                        hintText: "Enter Your Code",
                                       ),
-                                      obscureText: true,
                                     ),
                                   ),
                                 ],
@@ -144,11 +160,11 @@ class _ChangePasswordState extends State<ChangePassword> {
                                       validator: (val) => val.isEmpty
                                           ? 'New Password is required'
                                           : null,
-                                      controller: _newPasswordController,
+                                      controller: _passwordController,
                                       decoration: const InputDecoration(
                                         hintText: "Enter Your New Password",
                                       ),
-                                      obscureText: true,
+                                      keyboardType: TextInputType.emailAddress,
                                     ),
                                   ),
                                 ],
@@ -164,7 +180,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                                     mainAxisSize: MainAxisSize.min,
                                     children: <Widget>[
                                       new Text(
-                                        'Confirm Password',
+                                        'Email',
                                         style: TextStyle(
                                             fontSize: 16.0,
                                             fontWeight: FontWeight.bold),
@@ -182,13 +198,13 @@ class _ChangePasswordState extends State<ChangePassword> {
                                   new Flexible(
                                     child: new TextFormField(
                                       validator: (val) => val.isEmpty
-                                          ? 'Please confirm your password'
+                                          ? 'Email is required'
                                           : null,
-                                      controller: _confirmPasswordController,
+                                      controller: _emailController,
                                       decoration: const InputDecoration(
-                                        hintText: "Confirm Password",
+                                        hintText: "Email",
                                       ),
-                                      obscureText: true,
+                                      keyboardType: TextInputType.emailAddress,
                                     ),
                                   ),
                                 ],
@@ -237,35 +253,18 @@ class _ChangePasswordState extends State<ChangePassword> {
                   _formKey.currentState.save();
                   print("object ${_formKey.currentState.validate()}");
                   if (_formKey.currentState.validate()) {
-                    if (_newPasswordController.text !=
-                        _confirmPasswordController.text) {
+                    var res = await auth.changePassword(_codeController.text,
+                        _emailController.text, _passwordController.text);
+                    if (res['status']) {
+                      Navigator.pushReplacement(
+                          context, MaterialPageRoute(builder: (context) => Login(from: 'forgot',)));
+                    } else {
                       showTopSnackBar(
                         context,
                         CustomSnackBar.error(
-                          message: "Please enter the same password",
+                          message: res['message'],
                         ),
                       );
-                    } else {
-                      var res = await auth.updatePassword(
-                          _newPasswordController.text,
-                          _oldPasswordController.text);
-                      print("res $res");
-                      if (res['status']) {
-                        showTopSnackBar(
-                          context,
-                          CustomSnackBar.success(
-                            message: "Your password is changed successfully",
-                          ),
-                        );
-                      } else if (res['message'] == 302) {
-                        showTopSnackBar(
-                          context,
-                          CustomSnackBar.error(
-                            message:
-                                "Please make sure you entered the correct old password",
-                          ),
-                        );
-                      }
                     }
                   }
                 },

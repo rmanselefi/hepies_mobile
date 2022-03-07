@@ -14,6 +14,9 @@ enum ConsultStatus { Shared, NotShared, Sharing }
 class ConsultProvider with ChangeNotifier {
   ConsultStatus _shareStatus = ConsultStatus.NotShared;
   ConsultStatus get shareStatus => _shareStatus;
+
+  ConsultStatus _editStatus = ConsultStatus.NotShared;
+  ConsultStatus get editStatus => _editStatus;
   List<dynamic> _interests = [];
   List<dynamic> get interests => _interests;
 
@@ -42,7 +45,6 @@ class ConsultProvider with ChangeNotifier {
     var image;
     if (file != null) {
       await AuthProvider().uploadImage(file).then((res) {
-        print('imageuriimageuriimageuri$res');
         if (res != null) {
           image = res;
         }
@@ -81,6 +83,55 @@ class ConsultProvider with ChangeNotifier {
     return result;
   }
 
+  Future<Map<String, dynamic>> updateConsult(
+      var id, String topic, File file, var imageUrl) async {
+    _editStatus = ConsultStatus.Sharing;
+    notifyListeners();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+    var image;
+    if (file != null) {
+      await AuthProvider().uploadImage(file).then((res) {
+        if (res != null) {
+          image = res;
+        }
+      });
+    } else {
+      image = imageUrl;
+    }
+    var result;
+
+    final Map<String, dynamic> registrationData = {
+      'topic': topic,
+      'image': image,
+    };
+    Response response = await put(Uri.parse('${AppUrl.consults}/$id'),
+        body: json.encode(registrationData),
+        headers: {
+          'Content-Type': 'application/json',
+          HttpHeaders.authorizationHeader: "Bearer $token"
+        });
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      _editStatus = ConsultStatus.Shared;
+      notifyListeners();
+      result = {
+        'status': true,
+        'message': 'Successful',
+        'consult': responseData
+      };
+    } else {
+      _editStatus = ConsultStatus.NotShared;
+      notifyListeners();
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return result;
+  }
+
   Future<List<dynamic>> getCommentByConsultId(var id) async {
     var result;
     List<Consult> consults = [];
@@ -105,7 +156,7 @@ class ConsultProvider with ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
     Response response =
-        await get(Uri.parse("${AppUrl.consults}/comments/$id"), headers: {
+    await get(Uri.parse("${AppUrl.consults}/comments/$id"), headers: {
       'Content-Type': 'application/json',
       HttpHeaders.authorizationHeader: "Bearer $token"
     });
@@ -127,7 +178,7 @@ class ConsultProvider with ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
     Response response =
-        await post(Uri.parse("${AppUrl.consults}/like/find/$id"), headers: {
+    await post(Uri.parse("${AppUrl.consults}/like/find/$id"), headers: {
       'Content-Type': 'application/json',
       HttpHeaders.authorizationHeader: "Bearer $token"
     });
@@ -169,7 +220,6 @@ class ConsultProvider with ChangeNotifier {
     var image;
     if (file != null) {
       await AuthProvider().uploadImage(file).then((res) {
-        print('imageuriimageuriimageuri$res');
         if (res != null) {
           image = res;
         }
@@ -215,7 +265,7 @@ class ConsultProvider with ChangeNotifier {
 
     var result;
     Response response =
-        await post(Uri.parse("${AppUrl.consults}/like/$consultid"), headers: {
+    await post(Uri.parse("${AppUrl.consults}/like/$consultid"), headers: {
       'Content-Type': 'application/json',
       HttpHeaders.authorizationHeader: "Bearer $token"
     });
@@ -242,7 +292,7 @@ class ConsultProvider with ChangeNotifier {
 
     var result;
     Response response =
-        await post(Uri.parse("${AppUrl.consults}/unlike/$consultid"), headers: {
+    await post(Uri.parse("${AppUrl.consults}/unlike/$consultid"), headers: {
       'Content-Type': 'application/json',
       HttpHeaders.authorizationHeader: "Bearer $token"
     });
@@ -279,4 +329,84 @@ class ConsultProvider with ChangeNotifier {
     }
     return json.decode(response.body);
   }
+
+  Future<Map<String, dynamic>> deleteConsult(var id) async {
+    _shareStatus = ConsultStatus.Sharing;
+    var result;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+    Response response =
+    await delete(Uri.parse("${AppUrl.consults}/$id"), headers: {
+      'Content-Type': 'application/json',
+      HttpHeaders.authorizationHeader: "Bearer $token"
+    });
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      _shareStatus = ConsultStatus.Shared;
+      notifyListeners();
+      result = {'status': true, 'message': 'success'};
+    } else {
+      _shareStatus = ConsultStatus.NotShared;
+      notifyListeners();
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return result;
+  }
+
+  Future<Map<String, dynamic>> likeComment(var commentId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+
+    var result;
+    Response response =
+    await post(Uri.parse("${AppUrl.consults}/like/comment/$commentId"), headers: {
+      'Content-Type': 'application/json',
+      HttpHeaders.authorizationHeader: "Bearer $token"
+    });
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      result = {
+        'status': true,
+        'message': 'Successful',
+        'consult': responseData
+      };
+    } else {
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return result;
+  }
+
+  Future<Map<String, dynamic>> unlikeComment(var consultid) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+
+    var result;
+    Response response =
+    await post(Uri.parse("${AppUrl.consults}/unlike/comment/$consultid"), headers: {
+      'Content-Type': 'application/json',
+      HttpHeaders.authorizationHeader: "Bearer $token"
+    });
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      result = {
+        'status': true,
+        'message': 'Successful',
+      };
+    } else {
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return result;
+  }
+
+
 }

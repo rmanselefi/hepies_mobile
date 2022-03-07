@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-
 class GradientText extends StatelessWidget {
-  GradientText(this.text, {
+  GradientText(
+    this.text, {
     @required this.gradient,
   });
 
@@ -12,10 +12,9 @@ class GradientText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ShaderMask(
-      shaderCallback: (bounds) =>
-          gradient.createShader(
-            Rect.fromLTWH(0, 0, bounds.width, bounds.height),
-          ),
+      shaderCallback: (bounds) => gradient.createShader(
+        Rect.fromLTWH(0, 0, bounds.width, bounds.height),
+      ),
       child: Text(
         text,
         style: TextStyle(

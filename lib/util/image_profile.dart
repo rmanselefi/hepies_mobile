@@ -63,32 +63,25 @@ class _ImageInputState extends State<ImageInputProfile> {
   @override
   Widget build(BuildContext context) {
     print("profileprofile ${widget.profile}");
-    bool _validURL = Uri.parse(widget.profile).isAbsolute;
+    //bool _validURL = Uri.parse(widget.profile).isAbsolute;
+    bool _validURL = false; // Milkessa: just for the time being
     // TODO: implement build
     return Column(
       children: <Widget>[
         Padding(
           padding: EdgeInsets.only(top: 20.0),
           child: new Stack(fit: StackFit.loose, children: <Widget>[
-            new Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                new Container(
-                    width: 140.0,
-                    height: 140.0,
-                    decoration: new BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: !_validURL
-                          ? new DecorationImage(
-                              image: _image == null
-                                  ? new ExactAssetImage('assets/as.png')
-                                  : new FileImage(
-                                      File(_image.path.toString()),
-                                    ),
-                              fit: BoxFit.cover,
-                            )
-                          : new DecorationImage(
+            widget.profile != null || _image != null
+                ? new Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      new Container(
+                          width: 140.0,
+                          height: 140.0,
+                          decoration: new BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: new DecorationImage(
                               image: _image == null
                                   ? new NetworkImage(widget.profile)
                                   : new FileImage(
@@ -96,9 +89,10 @@ class _ImageInputState extends State<ImageInputProfile> {
                                     ),
                               fit: BoxFit.cover,
                             ),
-                    )),
-              ],
-            ),
+                          )),
+                    ],
+                  )
+                : Container(),
             Padding(
                 padding: EdgeInsets.only(top: 90.0, right: 100.0),
                 child: new Row(

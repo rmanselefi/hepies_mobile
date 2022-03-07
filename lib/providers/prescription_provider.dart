@@ -31,6 +31,8 @@ class PrescriptionProvider with ChangeNotifier {
   ReadStatus _fetchStatus = ReadStatus.NotFetch;
   ReadStatus get readStatus => _fetchStatus;
   int _index = 0;
+  bool isFavourite = false;
+  bool isPatient = false;
   int get prescriptionIndex => _index;
   String _status = 'add';
   String _actionStatus = 'populate';
@@ -40,8 +42,24 @@ class PrescriptionProvider with ChangeNotifier {
   List<dynamic> get prescription => _prescription;
   List<dynamic> medical = [];
 
+  List<dynamic> generalDrugs = [];
+  List<dynamic> psychoDrugs = [];
+  List<dynamic> narcoticsDrugs = [];
+  List<dynamic> instruments = [];
+
+  var professional = null;
+
   Map<String, dynamic> _singlePrescription = {};
   Map<String, dynamic> get singlePrescription => _singlePrescription;
+  void changeFavStatus(bool favStatus) {
+    isFavourite = favStatus;
+    notifyListeners();
+  }
+
+  void changePatientStatus(bool favStatus) {
+    isPatient = favStatus;
+    notifyListeners();
+  }
 
   Future<List<dynamic>> getPrescriptions() async {
     var result;
@@ -58,6 +76,74 @@ class PrescriptionProvider with ChangeNotifier {
       };
     }
     return json.decode(response.body);
+  }
+
+  Future<List<dynamic>> getGeneralDrugs() async {
+    var result;
+    Response response = await get(Uri.parse(AppUrl.generaldrugs));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      generalDrugs = json.decode(response.body);
+      return generalDrugs;
+    } else {
+      notifyListeners();
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return generalDrugs;
+  }
+
+  Future<List<dynamic>> getPsychotropicDrugs() async {
+    var result;
+    Response response = await get(Uri.parse(AppUrl.generaldrugs));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      psychoDrugs = json.decode(response.body);
+      return psychoDrugs;
+    } else {
+      notifyListeners();
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return psychoDrugs;
+  }
+
+  Future<List<dynamic>> getNarcoticDrugs() async {
+    var result;
+    Response response = await get(Uri.parse(AppUrl.narcoticsdrugs));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      narcoticsDrugs = json.decode(response.body);
+      return narcoticsDrugs;
+    } else {
+      notifyListeners();
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return narcoticsDrugs;
+  }
+
+  Future<List<dynamic>> getInstruments() async {
+    var result;
+    Response response = await get(Uri.parse(AppUrl.instrument));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      instruments = json.decode(response.body);
+      return instruments;
+    } else {
+      notifyListeners();
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return instruments;
   }
 
   Future<Map<String, dynamic>> writePrescription(
@@ -105,8 +191,9 @@ class PrescriptionProvider with ChangeNotifier {
   }
 
   void resetStatus() {
-    _actionStatus = "";
+    _actionStatus = "populate";
     _status = 'add';
+    isFavourite = false;
     notifyListeners();
   }
 
@@ -116,17 +203,26 @@ class PrescriptionProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void whileEditing() {
+    _actionStatus = "edit";
+    _status = 'editing';
+    notifyListeners();
+  }
+
   void setFavoriteCombinations(List<dynamic> prescriptions) {
     _prescription = prescriptions;
     notifyListeners();
   }
 
-  Future<dynamic> readPrescription(var code) async {
+  Future<dynamic> readPrescription(String code) async {
     _fetchStatus = ReadStatus.Fetching;
     notifyListeners();
-    String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
-    RegExp regExp = new RegExp(patttern);
-    bool isPhone = regExp.hasMatch(code);
+    String pattern = r'(^(?:[+251]9)?[0-9]{10,12}$)';
+    // String pattern = r'^(?:\+?88|0088)?01[13-9]\d{8}$';
+    RegExp regExp = new RegExp(pattern);
+    bool isPhone = code.length > 8;
+
+    print("isPhoneisPhone $isPhone");
     var url = isPhone ? AppUrl.readprescriptionPhone : AppUrl.readprescription;
     var result;
     List<Consult> consults = [];
@@ -139,7 +235,6 @@ class PrescriptionProvider with ChangeNotifier {
       print("consultconsultconsultconsultconsult ${medical.length}");
       // notifyListeners();
       result = {'status': true, 'isPhone': isPhone, 'data': medical};
-
     } else {
       _fetchStatus = ReadStatus.NotFetch;
       notifyListeners();
@@ -152,19 +247,22 @@ class PrescriptionProvider with ChangeNotifier {
     // return json.decode(response.body);
   }
 
-  Future<Map<String, dynamic>> acceptPrescription(List id,List pres_id) async {
+  Future<Map<String, dynamic>> acceptPrescription(List id, List pres_id) async {
     _sentStatus = PrescriptionStatus.Sending;
     notifyListeners();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
-    List<dynamic> output = pres_id.where((element) => !id.contains(element)).toList();
+    List<dynamic> output =
+        pres_id.where((element) => !id.contains(element)).toList();
     var result;
     print("registrationData $output");
-    Response response =
-        await post(Uri.parse(AppUrl.accept), body: json.encode(output), headers: {
-      'Content-Type': 'application/json',
-      HttpHeaders.authorizationHeader: "Bearer $token"
-    });
+
+    Response response = await post(Uri.parse(AppUrl.accept),
+        body: json.encode(output),
+        headers: {
+          'Content-Type': 'application/json',
+          HttpHeaders.authorizationHeader: "Bearer $token"
+        });
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       final bool responseData = json.decode(response.body);
@@ -184,5 +282,22 @@ class PrescriptionProvider with ChangeNotifier {
       };
     }
     return result;
+  }
+
+  Future<dynamic> getProfessionalByID(var id) async {
+    var result;
+    Response response = await get(Uri.parse('${AppUrl.professional}/$id'));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      professional = json.decode(response.body);
+      return professional;
+    } else {
+      notifyListeners();
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return professional;
   }
 }

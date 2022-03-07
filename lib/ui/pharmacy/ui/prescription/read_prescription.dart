@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hepies/constants.dart';
 import 'package:hepies/providers/patient_provider.dart';
 import 'package:hepies/providers/prescription_provider.dart';
 import 'package:hepies/ui/pharmacy/ui/prescription/prescription_result.dart';
@@ -16,47 +17,106 @@ class ReadPrescription extends StatefulWidget {
 
 class _ReadPrescriptionState extends State<ReadPrescription> {
   var codeController = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     var prescriptionProvider = Provider.of<PrescriptionProvider>(context);
     return SafeArea(
       child: Scaffold(
         body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Header(),
+            SizedBox(
+              height: 30.0,
+            ),
+            Container(
+              child: Center(
+                child: Text(
+                  'Enter prescription code',
+                  style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 15.0,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25),
+              child: TextFormField(
+                controller: codeController,
+                enabled: true,
+                decoration: InputDecoration(
+                  prefixIcon: Padding(
+                    padding:
+                        EdgeInsets.only(right: 5, left: 10, top: 5, bottom: 5),
+                  ),
+                  hintText: 'Enter code here...',
+                  counterText: "",
+                  contentPadding: EdgeInsets.all(5),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(5.0)),
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () async {
+                var res = await prescriptionProvider
+                    .readPrescription('${codeController.text}');
+                print("objectobjectobjectobject $res");
+                if (res['status']) {
+                  if (res['isPhone']) {
+                    res = await prescriptionProvider
+                        .readPrescription(
+                        '${codeController.text}');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              PrescriptionResultPhone(
+                                  res['data'])),
+                    );
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              PrescriptionResult(res)),
+                    );
+                  }
+                } else {
+                  showTopSnackBar(
+                    context,
+                    CustomSnackBar.error(
+                      message:
+                      "Unable to read prescription. Make sure to provide correct code/phone",
+                    ),
+                  );
+                }
+              },
+              child: Container(
+                width: 180,
+                margin: EdgeInsets.fromLTRB(75, 5, 75, 5),
+                height: 50,
+                alignment: Alignment.centerRight,
+                padding: EdgeInsets.all(10.0),
+                decoration: BoxDecoration(
+                    color: Colors.greenAccent,
+                    borderRadius: BorderRadius.circular(10.0),
+                    border: Border.all(
+                        color: Colors.black45, width: 1)),
+                child: Center(
+                  child: Text(
+                    'READ',
+                    style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ),
             Expanded(
               child: ListView(
                 children: [
-                  SizedBox(
-                    height: 30.0,
-                  ),
-                  Container(
-                    child: Center(
-                      child: Text(
-                        'Enter Code',
-                        style: TextStyle(
-                            fontSize: 20.0, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 15.0,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      controller: codeController,
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.read_more,
-                            color: Color.fromRGBO(50, 62, 72, 1.0)),
-                        // hintText: hintText,
-                        contentPadding:
-                            EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(5.0)),
-                      ),
-                    ),
-                  ),
                   SizedBox(
                     height: 15.0,
                   ),
@@ -64,61 +124,65 @@ class _ReadPrescriptionState extends State<ReadPrescription> {
                       ? loading
                       : Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: GestureDetector(
-                            onTap: () async {
-                              var res = await prescriptionProvider
-                                  .readPrescription(codeController.text);
-                              print("objectobjectobjectobject $res");
-                              if (res['status']) {
-                                if (res['isPhone']) {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            PrescriptionResultPhone(res['data'])),
-                                  );
-                                } else {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            PrescriptionResult(res)),
-                                  );
-                                }
-                              } else {
-                                showTopSnackBar(
-                                  context,
-                                  CustomSnackBar.error(
-                                    message:
-                                        "Unable to read prescription. Make sure to provide correct code/phone",
-                                  ),
-                                );
-                              }
-                            },
-                            child: Container(
-                              width: 180,
-                              height: 70,
-                              padding: EdgeInsets.all(10.0),
-                              decoration: BoxDecoration(
-                                  color: Colors.greenAccent,
-                                  borderRadius: BorderRadius.circular(40.0),
-                                  border: Border.all(
-                                      color: Colors.black45, width: 1)),
-                              child: Center(
-                                child: Text(
-                                  'READ',
-                                  style: TextStyle(
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ),
-                          ),
+                          // child: GestureDetector(
+                          //   onTap: () async {
+                          //     var res = await prescriptionProvider
+                          //         .readPrescription('${codeController.text}');
+                          //     print("objectobjectobjectobject $res");
+                          //     if (res['status']) {
+                          //       if (res['isPhone']) {
+                          //         res = await prescriptionProvider
+                          //             .readPrescription(
+                          //                 '${codeController.text}');
+                          //         Navigator.push(
+                          //           context,
+                          //           MaterialPageRoute(
+                          //               builder: (context) =>
+                          //                   PrescriptionResultPhone(
+                          //                       res['data'])),
+                          //         );
+                          //       } else {
+                          //         Navigator.push(
+                          //           context,
+                          //           MaterialPageRoute(
+                          //               builder: (context) =>
+                          //                   PrescriptionResult(res)),
+                          //         );
+                          //       }
+                          //     } else {
+                          //       showTopSnackBar(
+                          //         context,
+                          //         CustomSnackBar.error(
+                          //           message:
+                          //               "Unable to read prescription. Make sure to provide correct code/phone",
+                          //         ),
+                          //       );
+                          //     }
+                          //   },
+                          //   child: Container(
+                          //     width: 180,
+                          //     height: 70,
+                          //     padding: EdgeInsets.all(10.0),
+                          //     decoration: BoxDecoration(
+                          //         color: Colors.greenAccent,
+                          //         borderRadius: BorderRadius.circular(40.0),
+                          //         border: Border.all(
+                          //             color: Colors.black45, width: 1)),
+                          //     child: Center(
+                          //       child: Text(
+                          //         'READ',
+                          //         style: TextStyle(
+                          //             fontSize: 18.0,
+                          //             fontWeight: FontWeight.bold),
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
                         ),
                 ],
               ),
             ),
-            PharmacyFooter()
+            Center(child: PharmacyFooter())
           ],
         ),
       ),

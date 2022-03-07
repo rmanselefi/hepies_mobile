@@ -29,12 +29,10 @@ class _PharmacyShareConsultState extends State<ShareComment> {
     file = image;
     print("_formData_formData_formData${file}");
   }
+
   var loading = Row(
     mainAxisAlignment: MainAxisAlignment.center,
-    children: <Widget>[
-      CircularProgressIndicator(),
-      Text("Commenting....")
-    ],
+    children: <Widget>[CircularProgressIndicator(), Text("Commenting....")],
   );
   @override
   Widget build(BuildContext context) {
@@ -74,49 +72,56 @@ class _PharmacyShareConsultState extends State<ShareComment> {
                     children: [
                       ImageInputConsult(_setImage),
                       consult.shareStatus == ConsultStatus.Sharing
-                          ? loading:
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: OutlinedButton(
-                          onPressed: () async {
-                            final form = formKey.currentState;
-                            if (form.validate()) {
-                              form.save();
-                              try {
-                                var photo = file != null ? File(file.path) : null;
-                                var res = await consult.comment(_topic, photo,consultid);
-                                if (res['status']) {
-                                  setState(() {
-                                    consult.getCommentByConsultId(consultid);
-                                  });
-                                  showTopSnackBar(
-                                    context,
-                                    CustomSnackBar.error(
-                                      message: 'Your Comment is shared succesfully',
-                                    ),
-                                  );
-                                }
-                              } catch (e) {
-                                print("eeeee ${e}");
-                                showTopSnackBar(
-                                  context,
-                                  CustomSnackBar.error(
-                                    message: 'Unable to share your Comment'
-                                  ),
-                                );
-                              }
-                            } else {
-                              showTopSnackBar(
-                                context,
-                                CustomSnackBar.error(
-                                    message: "Please Complete the form properly"
-                                ),
-                              );
-                            }
-                          },
-                          child: Text('Consult'),
-                        ),
-                      ),
+                          ? loading
+                          : Align(
+                              alignment: Alignment.topRight,
+                              child: OutlinedButton(
+                                onPressed: () async {
+                                  final form = formKey.currentState;
+                                  if (form.validate()) {
+                                    form.save();
+                                    try {
+                                      var photo =
+                                          file != null ? File(file.path) : null;
+                                      var res = await consult.comment(
+                                          _topic, photo, consultid);
+                                      if (res['status']) {
+                                        setState(() {
+                                          _topic = "";
+                                          file = null;
+                                          consult
+                                              .getCommentByConsultId(consultid);
+                                        });
+
+                                        showTopSnackBar(
+                                          context,
+                                          CustomSnackBar.error(
+                                            message:
+                                                'Your Comment is shared succesfully',
+                                          ),
+                                        );
+                                      }
+                                    } catch (e) {
+                                      print("eeeee ${e}");
+                                      showTopSnackBar(
+                                        context,
+                                        CustomSnackBar.error(
+                                            message:
+                                                'Unable to share your Comment'),
+                                      );
+                                    }
+                                  } else {
+                                    showTopSnackBar(
+                                      context,
+                                      CustomSnackBar.error(
+                                          message:
+                                              "Please Complete the form properly"),
+                                    );
+                                  }
+                                },
+                                child: Text('Consult'),
+                              ),
+                            ),
                     ],
                   ),
                   SizedBox(
@@ -124,7 +129,8 @@ class _PharmacyShareConsultState extends State<ShareComment> {
                   ),
                   Divider(),
                   FutureBuilder<List<dynamic>>(
-                      future: Provider.of<ConsultProvider>(context).getCommentByConsultId(consultid),
+                      future: Provider.of<ConsultProvider>(context)
+                          .getCommentByConsultId(consultid),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) {
                           return Center(
@@ -138,7 +144,7 @@ class _PharmacyShareConsultState extends State<ShareComment> {
                           }
 
                           print("objectobjectobject ${snapshot.data}");
-                          return PharmacyCommentList(snapshot.data);
+                          return PharmacyCommentList(snapshot.data, 0);
                         }
                       }),
                 ],
