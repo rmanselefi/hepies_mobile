@@ -67,6 +67,8 @@ class AuthProvider with ChangeNotifier {
       };
     } else {
       _sendEmailStatus = Status.NotSent;
+      _loggedInStatus = Status.NotLoggedIn;
+
       notifyListeners();
       result = {
         'status': false,
