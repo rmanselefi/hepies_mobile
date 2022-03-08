@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:hepies/providers/consult.dart';
 import 'package:hepies/providers/user_provider.dart';
 import 'package:hepies/ui/doctor/drugs/drugs.dart';
 import 'package:hepies/ui/doctor/medicalrecords/medical_records.dart';
@@ -23,17 +24,18 @@ class _PharmacyFooterState extends State<PharmacyFooter> {
   @override
   Widget build(BuildContext context) {
     UserProvider nav = Provider.of<UserProvider>(context);
-    Widget customCard(int index){
+    Widget customCard(int index) {
       return Container(
         height: 100,
         width: 200,
         child: ListTile(
-          leading: Icon(Icons.person),// here you used image
+          leading: Icon(Icons.person), // here you used image
           title: Text("title $index"),
           subtitle: Text("Subtitle $index"),
         ),
       );
     }
+
     return Container(
       width: MediaQuery.of(context).size.width,
       child: Padding(
@@ -57,7 +59,7 @@ class _PharmacyFooterState extends State<PharmacyFooter> {
                         ? width(context) * 0.0875
                         : width(context) * 0.0625,
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     nav.changeNavSelection(NavSelection.home);
                     Navigator.push(
                         context,

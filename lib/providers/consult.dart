@@ -41,10 +41,15 @@ class ConsultProvider with ChangeNotifier {
     return jsonDecode(response.body);
   }
 
-  Future notifySearch() {
-    isonSearching = true;
-    notifyListeners();
-  }
+  // Future notifySearch() {
+  //   isonSearching = true;
+  //   notifyListeners();
+  // }
+
+  // Future switchSearch() {
+  //   isonSearching = false;
+  //   notifyListeners();
+  // }
 
   Future<List<dynamic>> searchConsults(String word, int take, int skip) async {
     var result;
