@@ -41,7 +41,7 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
     notReadPrescription.forEach((element) {
       list_id.add(element['id']);
     });
-    print("readreadread $prescription");
+    // print("readreadread $prescription");
     return SafeArea(
       child: Scaffold(
         body: WillPopScope(

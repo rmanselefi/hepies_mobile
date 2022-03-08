@@ -29,7 +29,7 @@ class PharmacyProvider with ChangeNotifier {
       _fetchStatus = Status.Fetch;
       notifyListeners();
       medical = json.decode(response.body);
-      print("consultconsultconsultconsultconsult ${medical.length}");
+      // print("consultconsultconsultconsultconsult ${medical.length}");
       // notifyListeners();
       return medical;
     } else {
@@ -47,7 +47,7 @@ class PharmacyProvider with ChangeNotifier {
       String drug_name, String drug_id, String price) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String professionid = prefs.getInt('professionid').toString();
-    print("professionidprofessionid $professionid");
+    // print("professionidprofessionid $professionid");
     String token = prefs.getString('token');
 
     var result;
@@ -58,7 +58,7 @@ class PharmacyProvider with ChangeNotifier {
       'drug': drug_id,
       'professional': professionid
     };
-    print("registrationData $registrationData");
+    // print("registrationData $registrationData");
     Response response = await post(Uri.parse(AppUrl.pharmacy),
         body: json.encode(registrationData),
         headers: {
@@ -84,7 +84,7 @@ class PharmacyProvider with ChangeNotifier {
   Future<List<dynamic>> getMyPharmacy() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String professionid = prefs.getInt('professionid').toString();
-    print("professionidprofessionid $professionid");
+    // print("professionidprofessionid $professionid");
     var result;
     List<Consult> consults = [];
     Response response =
@@ -92,7 +92,7 @@ class PharmacyProvider with ChangeNotifier {
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       medical = json.decode(response.body);
-      print("consultconsultconsultconsultconsult ${medical.length}");
+      // print("consultconsultconsultconsultconsult ${medical.length}");
       // notifyListeners();
       return medical;
     } else {
@@ -105,21 +105,20 @@ class PharmacyProvider with ChangeNotifier {
   }
 
   Future<List<dynamic>> getMyPharmacyHistory() async {
-
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
-    print("object i got hereeeee");
-    print("professionidprofessionid $token");
+    // print("object i got hereeeee");
+    // print("professionidprofessionid $token");
     var result;
 
     Response response = await post(Uri.parse(AppUrl.history), headers: {
       'Content-Type': 'application/json',
       HttpHeaders.authorizationHeader: "Bearer $token"
     });
-    print("responseresponseresponse ${response.body}");
+    // print("responseresponseresponse ${response.body}");
     if (response.statusCode == 200 || response.statusCode == 201) {
       medical = json.decode(response.body);
-      print("consultconsultconsultconsultconsult ${medical.length}");
+      // print("consultconsultconsultconsultconsult ${medical.length}");
       // notifyListeners();
       return medical;
     } else {
@@ -131,12 +130,11 @@ class PharmacyProvider with ChangeNotifier {
     return json.decode(response.body);
   }
 
-
-  Future<Map<String, dynamic>> updateMyPharmacy(pharmacy_id,
-      String drug_name, String drug_id, String price) async {
+  Future<Map<String, dynamic>> updateMyPharmacy(
+      pharmacy_id, String drug_name, String drug_id, String price) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String professionid = prefs.getInt('professionid').toString();
-    print("professionidprofessionid $professionid");
+    // print("professionidprofessionid $professionid");
     String token = prefs.getString('token');
 
     var result;
@@ -147,7 +145,7 @@ class PharmacyProvider with ChangeNotifier {
       'drug': drug_id,
       'profession': professionid
     };
-    print("registrationData $registrationData");
+    // print("registrationData $registrationData");
     Response response = await put(Uri.parse('${AppUrl.pharmacy}/$pharmacy_id'),
         body: json.encode(registrationData),
         headers: {
@@ -169,7 +167,6 @@ class PharmacyProvider with ChangeNotifier {
     }
     return result;
   }
-
 
   get getDrug {
     notifyListeners();

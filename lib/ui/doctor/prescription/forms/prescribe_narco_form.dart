@@ -218,7 +218,7 @@ class _PrescribeFormState extends State<PrescribeNarcoForm> {
           "diagnosis": "",
         },
       };
-      print("favorites  $precriptionData");
+      // print("favorites  $precriptionData");
       finaPrescription.add(precriptionData);
     }
   }
@@ -1108,8 +1108,8 @@ class _PrescribeFormState extends State<PrescribeNarcoForm> {
                                                       if (value.text.isEmpty) {
                                                         return [];
                                                       }
-                                                      print(
-                                                          "generalDrugsgeneralDrugs $generalDrugs");
+                                                      // print(
+                                                      //     "generalDrugsgeneralDrugs $generalDrugs");
                                                       // The logic to find out which ones should appear
                                                       // Milkessa: implemented a search mechanism that is organized and alphabetical
                                                       List<dynamic> drugRes;
@@ -1454,8 +1454,8 @@ class _PrescribeFormState extends State<PrescribeNarcoForm> {
                           var profession =
                               "${user.profession} ${user.name} ${user.fathername}";
                           if (status == 'add' && !isPatient) {
-                            print(
-                                "statusstatusstatus ===> ${user.professionid}");
+                            // print(
+                            //     "statusstatusstatus ===> ${user.professionid}");
                             final Map<String, dynamic> patientData = {
                               "name": patient.name,
                               "age": ageController.text,
@@ -1669,7 +1669,7 @@ class _PrescribeFormState extends State<PrescribeNarcoForm> {
                             if (value.text.isEmpty) {
                               return [];
                             }
-                            print("instrument=========> $instruments");
+                            // print("instrument=========> $instruments");
                             // The logic to find out which ones should appear
                             // Milkessa: implemented a search mechanism that is organized and alphabetical
                             List<dynamic> instrumentRes;
@@ -1693,7 +1693,7 @@ class _PrescribeFormState extends State<PrescribeNarcoForm> {
                             setState(() {
                               sizes = value['size'].split(',');
                             });
-                            print("sizessizessizessizes $sizes");
+                            // print("sizessizessizessizes $sizes");
                           },
                           displayStringForOption: (option) => option['material_name'],
                           fieldViewBuilder: (BuildContext context,
@@ -1766,7 +1766,7 @@ class _PrescribeFormState extends State<PrescribeNarcoForm> {
                     if (value.text.isEmpty) {
                       return [];
                     }
-                    print("instrument=========> $instruments");
+                    // print("instrument=========> $instruments");
                     // The logic to find out which ones should appear
                     // Milkessa: implemented a search mechanism that is organized and alphabetical
                     List<dynamic> instrumentRes;

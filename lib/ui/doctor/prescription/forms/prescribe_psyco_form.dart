@@ -215,7 +215,7 @@ class _PrescribeFormState extends State<PrescribePsychoForm> {
           "diagnosis": "",
         },
       };
-      print("favorites  $precriptionData");
+      // print("favorites  $precriptionData");
       finaPrescription.add(precriptionData);
     }
   }
@@ -1105,8 +1105,8 @@ class _PrescribeFormState extends State<PrescribePsychoForm> {
                                                 if (value.text.isEmpty) {
                                                   return [];
                                                 }
-                                                print(
-                                                    "generalDrugsgeneralDrugs $generalDrugs");
+                                                // print(
+                                                //     "generalDrugsgeneralDrugs $generalDrugs");
                                                 // The logic to find out which ones should appear
                                                 // Milkessa: implemented a search mechanism that is organized and alphabetical
                                                 List<dynamic> drugRes;
@@ -1655,7 +1655,7 @@ class _PrescribeFormState extends State<PrescribePsychoForm> {
                     if (value.text.isEmpty) {
                       return [];
                     }
-                    print("instrument=========> $instruments");
+                    // print("instrument=========> $instruments");
                     // The logic to find out which ones should appear
                     // Milkessa: implemented a search mechanism that is organized and alphabetical
                     List<dynamic> instrumentRes;

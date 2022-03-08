@@ -25,16 +25,17 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:rich_text_view/rich_text_view.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 
-class PharmacyConsultList extends StatefulWidget {
+class SearchList extends StatefulWidget {
   final user_id;
   final interest;
+  final queryWord;
 
-  PharmacyConsultList(this.user_id, this.interest);
+  SearchList(this.user_id, this.interest, this.queryWord);
   @override
-  _PharmacyConsultListState createState() => _PharmacyConsultListState();
+  _SearchListState createState() => _SearchListState();
 }
 
-class _PharmacyConsultListState extends State<PharmacyConsultList> {
+class _SearchListState extends State<SearchList> {
   ScrollController _scrollController;
   var _topic = new TextEditingController();
   String interestStatus = "hide";
@@ -154,40 +155,24 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
     );
   }
 
-  List<dynamic> listofConsults = [];
   List<dynamic> searchConsultsResult = [];
   bool isLoadingConsults = false;
-  Future<List<dynamic>> consultPagination() async {
-    setState(() {
-      isLoadingConsults = true;
-    });
-    List<dynamic> consult =
-        await Provider.of<ConsultProvider>(context, listen: false)
-            .getConsultsbyPagination(5, skip);
-    await Future.delayed(const Duration(seconds: 3), () {});
-
-    setState(() {
-      listofConsults.addAll(consult[0]);
-      isLoadingConsults = false;
-      skip = skip + 5;
-    });
-    print("consult haile" + listofConsults.toString());
-    return listofConsults;
-  }
 
   Future<List<dynamic>> searchConsults() async {
     setState(() {
-      searchSkip++;
       isLoadingConsults = true;
     });
     List<dynamic> consult =
         await Provider.of<ConsultProvider>(context, listen: false)
-            .searchConsults("ent", 5, searchSkip);
+            .searchConsults(widget.queryWord, 5, searchSkip);
     await Future.delayed(const Duration(seconds: 3), () {});
-    searchConsultsResult.addAll(consult[0]);
     setState(() {
+      searchSkip = searchSkip + 5;
+      searchConsultsResult.addAll(consult[0]);
       isLoadingConsults = false;
     });
+    print("consult search haile" + searchConsultsResult.toString());
+
     return searchConsultsResult;
   }
 
@@ -501,7 +486,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
     var appstate = Provider.of<ConsultProvider>(context);
 // Pagination
     return FutureBuilder<List<dynamic>>(
-        future: consultPagination(),
+        future: searchConsults(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return ShimmerEffect();
@@ -521,7 +506,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
               removeTop: true,
               child: LazyLoadScrollView(
                 // isLoading: isLoadingConsults,
-                onEndOfPage: () => consultPagination(),
+                onEndOfPage: () => searchConsults(),
                 child: ListView.builder(
                   controller: _scrollController,
                   shrinkWrap: true,

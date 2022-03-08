@@ -67,9 +67,9 @@ class _GuidelinesState extends State<Guidelines> {
     String path = '';
 
     Directory dir = await getApplicationDocumentsDirectory();
-    print("dirdirdir ${dir.path}");
+    // print("dirdirdir ${dir.path}");
     path = '${dir.path}/$uniqueFileName';
-    print('Path---------> ' + path);
+    // print('Path---------> ' + path);
     return path;
   }
 

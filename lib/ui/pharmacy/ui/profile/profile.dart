@@ -32,7 +32,7 @@ class _PrescriberProfileState extends State<PrescriberProfile> {
   @override
   Widget build(BuildContext context) {
     var patient = widget.patient;
-    print("professionalprofessionalprofessional $professional");
+    // print("professionalprofessionalprofessional $professional");
     return SafeArea(
         child: Scaffold(
       body: Column(
