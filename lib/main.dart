@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
           home: FutureBuilder(
               future: getUserData(),
               builder: (context, snapshot) {
-                print("object ${snapshot.data}");
+                // print("object ${snapshot.data}");
                 switch (snapshot.connectionState) {
                   case ConnectionState.none:
                   case ConnectionState.waiting:

@@ -25,7 +25,7 @@ class _PharmacyConsultListState extends State<PharmacyCommentList> {
   List<Widget> buildCommentSection(consults) {
     List<Widget> comments = [];
     consults.forEach((e) {
-      print("widgetwidgetwidget ${e['like']}");
+      // print("widgetwidgetwidget ${e['like']}");
       var res = e['like'].where((l) => l['user_id'] == widget.user_id).toList();
       DateTime time = DateTime.parse(e['createdAt']);
       var profile = e['user']['profession'][0]['profile'];

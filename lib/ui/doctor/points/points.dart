@@ -168,7 +168,7 @@ class _PointsState extends State<Points> {
                                           if (double.parse(points) > 500) {
                                             var res = await UserProvider()
                                                 .buyCredit(50);
-                                            print("resresresres $res");
+                                            // print("resresresres $res");
                                             if (res['status']) {
                                               var voucher = res['result'];
                                               launch(

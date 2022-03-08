@@ -153,7 +153,7 @@ class _PharmacyShareConsultState extends State<PharmacyShareComment> {
                                             );
                                           }
                                         } catch (e) {
-                                          print("eeeee ${e}");
+                                          // print("eeeee ${e}");
 
                                           showTopSnackBar(
                                             context,

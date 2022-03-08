@@ -8,6 +8,7 @@ import 'package:hepies/constants.dart';
 import 'package:hepies/providers/consult.dart';
 import 'package:hepies/ui/doctor/consults/consult_list.dart';
 import 'package:hepies/ui/pharmacy/ui/consults/consult_list.dart';
+import 'package:hepies/ui/pharmacy/ui/consults/search_list.dart';
 import 'package:hepies/ui/pharmacy/widgets/footer.dart';
 import 'package:hepies/util/image_consult.dart';
 import 'package:hepies/widgets/footer.dart';
@@ -28,6 +29,8 @@ class ShareConsult extends StatefulWidget {
 class _ShareConsultState extends State<ShareConsult> {
   final formKey = new GlobalKey<FormState>();
   var _topic = new TextEditingController();
+  var _search = new TextEditingController();
+  bool isOnSearch = false;
   XFile file;
   List<dynamic> interests = [];
   List<dynamic> subList = [];
@@ -75,6 +78,42 @@ class _ShareConsultState extends State<ShareConsult> {
       child: Column(
         children: [
           // Header(),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 5),
+            child: TextField(
+              onChanged: (text) {
+                setState(() {
+                  isOnSearch = false;
+                });
+              },
+              controller: _search,
+              decoration: InputDecoration(
+                suffixIcon: GestureDetector(
+                    onTap: () {
+                      // await consult.notifySearch();
+                      setState(() {
+                        isOnSearch = true;
+                      });
+                      print("current search state" + isOnSearch.toString());
+
+                      print("Working , searching");
+                    },
+                    child: Icon(Icons.search)),
+                focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                    borderSide: BorderSide(color: Colors.black38, width: 1)),
+                hintText: "Search posts by interest ...",
+                labelStyle: TextStyle(color: Colors.black45),
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                    borderSide: BorderSide(color: Colors.black, width: 1)),
+                hintStyle: TextStyle(
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ),
+          ),
+
           SizedBox(
             height: 20.0,
           ),
@@ -159,7 +198,7 @@ class _ShareConsultState extends State<ShareConsult> {
                       children: [
                         interestStatus == "show"
                             ? Container(
-                                width: MediaQuery.of(context).size.width/1.63,
+                                width: MediaQuery.of(context).size.width / 1.63,
                                 child: Wrap(
                                   alignment: WrapAlignment.start,
                                   direction: Axis.horizontal,
@@ -269,151 +308,103 @@ class _ShareConsultState extends State<ShareConsult> {
                   ),
                 ),
                 Divider(),
-                FutureBuilder<List<dynamic>>(
-                    future: Provider.of<ConsultProvider>(context).getConsults(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return SizedBox(
-                          height: 700,
-                          child: ListView(
-                            children: List.generate(
-                                3,
-                                (index) => Column(
-                                      children: [
-                                        Shimmer.fromColors(
-                                          baseColor: Colors.grey.shade300,
-                                          highlightColor: Colors.grey.shade100,
-                                          child: Container(
-                                            //     baseColor: Colors.grey[300],
-                                            // highlightColor: Colors.grey[100],
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 20),
-                                            height: 220,
-                                            width: double.infinity,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Row(
+                isOnSearch
+                    ? SearchList(
+                        widget.user_id, interest, _search.text.toString())
+                    : FutureBuilder<List<dynamic>>(
+                        future:
+                            Provider.of<ConsultProvider>(context).getConsults(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return SizedBox(
+                              height: 700,
+                              child: ListView(
+                                children: List.generate(
+                                    3,
+                                    (index) => Column(
+                                          children: [
+                                            Shimmer.fromColors(
+                                              baseColor: Colors.grey.shade300,
+                                              highlightColor:
+                                                  Colors.grey.shade100,
+                                              child: Container(
+                                                //     baseColor: Colors.grey[300],
+                                                // highlightColor: Colors.grey[100],
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 20),
+                                                height: 220,
+                                                width: double.infinity,
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
                                                   children: [
-                                                    Container(
-                                                      height: 40,
-                                                      width: 40,
-                                                      color: Colors.grey,
+                                                    Row(
+                                                      children: [
+                                                        Container(
+                                                          height: 40,
+                                                          width: 40,
+                                                          color: Colors.grey,
+                                                        ),
+                                                        SizedBox(
+                                                          width: 8.0,
+                                                        ),
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Container(
+                                                                width: 60,
+                                                                height: 5,
+                                                                color: Colors
+                                                                    .grey),
+                                                            SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            Container(
+                                                                width: 60,
+                                                                height: 5,
+                                                                color: Colors
+                                                                    .grey),
+                                                            SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            Container(
+                                                                width: 60,
+                                                                height: 5,
+                                                                color: Colors
+                                                                    .grey),
+                                                            // Text("Full Name"),
+                                                            // Text("role"),
+                                                            // Text("16 hours ago")
+                                                          ],
+                                                        ),
+                                                      ],
                                                     ),
                                                     SizedBox(
-                                                      width: 8.0,
+                                                      height: 15,
                                                     ),
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
-                                                      children: [
-                                                        Container(
-                                                            width: 60,
-                                                            height: 5,
-                                                            color: Colors.grey),
-                                                        SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                        Container(
-                                                            width: 60,
-                                                            height: 5,
-                                                            color: Colors.grey),
-                                                        SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                        Container(
-                                                            width: 60,
-                                                            height: 5,
-                                                            color: Colors.grey),
-                                                        // Text("Full Name"),
-                                                        // Text("role"),
-                                                        // Text("16 hours ago")
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 15,
-                                                ),
-                                                Container(
-                                                    width: 40,
-                                                    height: 5,
-                                                    color: Colors.grey),
-                                                SizedBox(
-                                                  height: 40,
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Row(
-                                                      children: [
-                                                        Container(
-                                                            width: 20,
-                                                            height: 20,
-                                                            color: Colors.grey),
-                                                        SizedBox(
-                                                          width: 5,
-                                                        ),
-                                                        Container(
-                                                            width: 40,
-                                                            height: 5,
-                                                            color: Colors.grey),
-                                                      ],
+                                                    Container(
+                                                        width: 40,
+                                                        height: 5,
+                                                        color: Colors.grey),
+                                                    SizedBox(
+                                                      height: 40,
                                                     ),
                                                     Row(
-                                                      children: [
-                                                        Container(
-                                                            width: 20,
-                                                            height: 20,
-                                                            color: Colors.grey),
-                                                        SizedBox(
-                                                          width: 5,
-                                                        ),
-                                                        Container(
-                                                            width: 40,
-                                                            height: 5,
-                                                            color: Colors.grey),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                                SizedBox(
-                                                  height: 20,
-                                                ),
-                                                Divider(thickness: 5),
-                                                SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Row(
-                                                      children: [
-                                                        Icon(Icons.thumb_up),
-                                                        SizedBox(
-                                                          width: 5,
-                                                        ),
-                                                        Container(
-                                                            width: 40,
-                                                            height: 5,
-                                                            color: Colors.grey),
-                                                      ],
-                                                    ),
-                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
                                                       children: [
                                                         Row(
                                                           children: [
-                                                            Icon(
-                                                              Icons.comment,
-                                                            ),
+                                                            Container(
+                                                                width: 20,
+                                                                height: 20,
+                                                                color: Colors
+                                                                    .grey),
                                                             SizedBox(
                                                               width: 5,
                                                             ),
@@ -423,34 +414,97 @@ class _ShareConsultState extends State<ShareConsult> {
                                                                 color: Colors
                                                                     .grey),
                                                           ],
+                                                        ),
+                                                        Row(
+                                                          children: [
+                                                            Container(
+                                                                width: 20,
+                                                                height: 20,
+                                                                color: Colors
+                                                                    .grey),
+                                                            SizedBox(
+                                                              width: 5,
+                                                            ),
+                                                            Container(
+                                                                width: 40,
+                                                                height: 5,
+                                                                color: Colors
+                                                                    .grey),
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(
+                                                      height: 20,
+                                                    ),
+                                                    Divider(thickness: 5),
+                                                    SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Row(
+                                                          children: [
+                                                            Icon(
+                                                                Icons.thumb_up),
+                                                            SizedBox(
+                                                              width: 5,
+                                                            ),
+                                                            Container(
+                                                                width: 40,
+                                                                height: 5,
+                                                                color: Colors
+                                                                    .grey),
+                                                          ],
+                                                        ),
+                                                        Row(
+                                                          children: [
+                                                            Row(
+                                                              children: [
+                                                                Icon(
+                                                                  Icons.comment,
+                                                                ),
+                                                                SizedBox(
+                                                                  width: 5,
+                                                                ),
+                                                                Container(
+                                                                    width: 40,
+                                                                    height: 5,
+                                                                    color: Colors
+                                                                        .grey),
+                                                              ],
+                                                            )
+                                                          ],
                                                         )
                                                       ],
                                                     )
                                                   ],
-                                                )
-                                              ],
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                        ),
-                                        SizedBox(height: 10)
-                                      ],
-                                    )),
-                          ),
-                        );
+                                            SizedBox(height: 10)
+                                          ],
+                                        )),
+                              ),
+                            );
 
-                        // Center(
-                        //   child: CircularProgressIndicator(),
-                        // );
-                      } else {
-                        if (snapshot.data == null) {
-                          return Center(
-                            child: Text('No data to show'),
-                          );
-                        }
+                            // Center(
+                            //   child: CircularProgressIndicator(),
+                            // );
+                          } else {
+                            if (snapshot.data == null) {
+                              return Center(
+                                child: Text('No data to show'),
+                              );
+                            }
 
-                        return PharmacyConsultList(widget.user_id, interest);
-                      }
-                    }),
+                            return PharmacyConsultList(
+                                widget.user_id, interest);
+                          }
+                        }),
               ],
             ),
           ),

@@ -463,7 +463,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                       ],
                     ),
                     Builder(builder: (context) {
-                      print("prescriptionprescription $prescription");
+                      // print("prescriptionprescription $prescription");
                       if (pretype == "general") {
                         return PrescribeForm(
                             setPrescription: _setPrescription,
@@ -636,7 +636,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                   try {
                                     if (pretype == "general" ||
                                         pretype == "instrument") {
-                                      print("patientpatient $patient");
+                                      // print("patientpatient $patient");
                                       if (prescription.length != 0 &&
                                           patient.length != 0) {
                                         for (var i = 0;

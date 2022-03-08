@@ -76,7 +76,7 @@ class _DrugsState extends State<Drugs> {
                             );
                           }
 
-                          print("objectobjectobject ${snapshot.data}");
+                          // print("objectobjectobject ${snapshot.data}");
                           // Milkessa: search finding algorithm implemented inorder to list orderly.
                           List<dynamic> drugs;
                           for (int i = 0; i < 2; i++) {
@@ -125,7 +125,6 @@ class _DrugsState extends State<Drugs> {
               ),
             ),
             Container(
-                height: 50,
                 decoration: BoxDecoration(
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(20.0))),

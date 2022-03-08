@@ -64,7 +64,7 @@ class _ResultDetailState extends State<ResultDetail> {
                 .inMinutes ==
             0)
         .toList();
-print("ixixixix $ix");
+// print("ixixixix $ix");
     var diagnosis = dx[0]['diagnosis'];
 
     final splitNames = diagnosis.split(',');
