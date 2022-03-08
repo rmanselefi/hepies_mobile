@@ -159,17 +159,19 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
   bool isLoadingConsults = false;
   Future<List<dynamic>> consultPagination() async {
     setState(() {
-      skip++;
       isLoadingConsults = true;
     });
     List<dynamic> consult =
         await Provider.of<ConsultProvider>(context, listen: false)
             .getConsultsbyPagination(5, skip);
     await Future.delayed(const Duration(seconds: 3), () {});
-    listofConsults.addAll(consult[0]);
+
     setState(() {
+      listofConsults.addAll(consult[0]);
       isLoadingConsults = false;
+      skip = skip + 5;
     });
+    print("consult haile" + listofConsults.toString());
     return listofConsults;
   }
 
@@ -192,8 +194,6 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
   @override
   void initState() {
     // TODO: implement initState
-    consultPagination();
-    searchConsults();
     super.initState();
     _scrollController = ScrollController();
 
