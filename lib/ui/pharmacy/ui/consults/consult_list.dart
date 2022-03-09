@@ -155,7 +155,6 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
   }
 
   List<dynamic> listofConsults = [];
-  List<dynamic> searchConsultsResult = [];
   bool isLoadingConsults = false;
   Future<List<dynamic>> consultPagination() async {
     setState(() {
@@ -171,25 +170,10 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
       isLoadingConsults = false;
       skip = skip + 5;
     });
-    print("consult haile" + listofConsults.toString());
+    // print("consult haile" + listofConsults.toString());
     return listofConsults;
   }
 
-  Future<List<dynamic>> searchConsults() async {
-    setState(() {
-      searchSkip++;
-      isLoadingConsults = true;
-    });
-    List<dynamic> consult =
-        await Provider.of<ConsultProvider>(context, listen: false)
-            .searchConsults("ent", 5, searchSkip);
-    await Future.delayed(const Duration(seconds: 3), () {});
-    searchConsultsResult.addAll(consult[0]);
-    setState(() {
-      isLoadingConsults = false;
-    });
-    return searchConsultsResult;
-  }
 
   @override
   void initState() {

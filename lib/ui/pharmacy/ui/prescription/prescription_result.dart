@@ -51,22 +51,26 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
           },
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: PersonalInfoCode(
-                    patient: prescription, diagnosis: diagnosis),
+              Expanded(
+                flex: 2,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: PersonalInfoCode(
+                      patient: prescription, diagnosis: diagnosis),
+                ),
               ),
-              Container(
-                  padding: EdgeInsets.all(5),
-                  margin: EdgeInsets.all(5),
-                  height: MediaQuery.of(context).size.height / 1.47,
-                  decoration: BoxDecoration(
-                      border: Border.all(width: 2.0, color: Color(0xff707070))),
-                  child: ListView(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
+              Expanded(
+                flex: 5,
+                child: Container(
+                    padding: EdgeInsets.all(5),
+                    margin: EdgeInsets.all(5),
+                    height: MediaQuery.of(context).size.height / 1.47,
+                    decoration: BoxDecoration(
+                        border:
+                            Border.all(width: 2.0, color: Color(0xff707070))),
+                    child: ListView(
+                      children: [
+                        Container(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,18 +141,6 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
                                               });
                                             },
                                           ),
-                                          // Checkbox(
-                                          //   value: selectedList.contains(e['id']),
-                                          //   onChanged: (bool value) {
-                                          //     setState(() {
-                                          //       if (value) {
-                                          //         selectedList.add(e['id']);
-                                          //       } else {
-                                          //         selectedList.remove(e['id']);
-                                          //       }
-                                          //     });
-                                          //   },
-                                          // ),
                                         ],
                                       ),
                                     );
@@ -156,113 +148,121 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
                             ],
                           ),
                         ),
-                      ),
-                    ],
-                  )),
+                      ],
+                    )),
+              ),
               prescProvider.sentStatus == PrescriptionStatus.Sending
                   ? loading
-                  : Padding(
-                      padding: EdgeInsets.all(5),
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: 15.0,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Container(
-                                width: 100,
-                                height: 40,
-                                margin: EdgeInsets.only(right: 20.0, top: 0.0),
-                                decoration: BoxDecoration(
-                                    color: Color(0xff88DE91),
-                                    border: Border.all(color: Colors.black45),
-                                    borderRadius: BorderRadius.circular(10.0)),
-                                child: Center(
-                                    child: Text(
-                                  'Cancel',
-                                  style: TextStyle(
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.bold),
-                                )),
-                              ),
+                  : Expanded(
+                      flex: 1,
+                      child: Padding(
+                        padding: EdgeInsets.all(5),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 15.0,
                             ),
-                          ),
-                          GestureDetector(
-                            onTap: () async {
-                              print("object $selectedList");
-                              var res = await prescProvider.acceptPrescription(
-                                  selectedList, list_id);
-                              if (res['status']) {
-                                showTopSnackBar(
-                                  context,
-                                  CustomSnackBar.success(
-                                    message:
-                                        'Your prescriptions are sent succesfully',
-                                  ),
-                                );
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            WelcomePharmacy()));
-                              } else {
-                                showTopSnackBar(
-                                  context,
-                                  CustomSnackBar.error(
-                                      message:
-                                          'Unable to send your prescriptions'),
-                                );
-                              }
-                            },
-                            child: Align(
-                              alignment: Alignment.centerRight,
-                              child: Container(
-                                width: 100,
-                                height: 40,
-                                margin: EdgeInsets.only(right: 20.0, top: 0.0),
-                                decoration: BoxDecoration(
-                                    color: Color(0xff07febb),
-                                    border: Border.all(color: Colors.black45),
-                                    borderRadius: BorderRadius.circular(10.0)),
-                                child: Center(
-                                    child: Text(
-                                  'Accept',
-                                  style: TextStyle(
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.bold),
-                                )),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: GestureDetector(
+                            GestureDetector(
                               onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => PrescriberProfile(
-                                              patient: prescription,
-                                              id: prescription[
-                                                  'professionalid'],
-                                              from: 'code',
-                                            )));
+                                Navigator.of(context).pop();
                               },
-                              child: Container(
-                                child: Text(
-                                  '${prescription['professional']}',
-                                  style: TextStyle(
-                                      decoration: TextDecoration.underline,
-                                      color: Colors.grey),
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: Container(
+                                  width: 100,
+                                  height: 40,
+                                  margin:
+                                      EdgeInsets.only(right: 20.0, top: 0.0),
+                                  decoration: BoxDecoration(
+                                      color: Color(0xff88DE91),
+                                      border: Border.all(color: Colors.black45),
+                                      borderRadius:
+                                          BorderRadius.circular(10.0)),
+                                  child: Center(
+                                      child: Text(
+                                    'Cancel',
+                                    style: TextStyle(
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.bold),
+                                  )),
                                 ),
                               ),
                             ),
-                          )
-                        ],
+                            GestureDetector(
+                              onTap: () async {
+                                print("object $selectedList");
+                                var res = await prescProvider
+                                    .acceptPrescription(selectedList, list_id);
+                                if (res['status']) {
+                                  showTopSnackBar(
+                                    context,
+                                    CustomSnackBar.success(
+                                      message:
+                                          'Your prescriptions are sent succesfully',
+                                    ),
+                                  );
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              WelcomePharmacy()));
+                                } else {
+                                  showTopSnackBar(
+                                    context,
+                                    CustomSnackBar.error(
+                                        message:
+                                            'Unable to send your prescriptions'),
+                                  );
+                                }
+                              },
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: Container(
+                                  width: 100,
+                                  height: 40,
+                                  margin:
+                                      EdgeInsets.only(right: 20.0, top: 0.0),
+                                  decoration: BoxDecoration(
+                                      color: Color(0xff07febb),
+                                      border: Border.all(color: Colors.black45),
+                                      borderRadius:
+                                          BorderRadius.circular(10.0)),
+                                  child: Center(
+                                      child: Text(
+                                    'Accept',
+                                    style: TextStyle(
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.bold),
+                                  )),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              PrescriberProfile(
+                                                patient: prescription,
+                                                id: prescription[
+                                                    'professionalid'],
+                                                from: 'code',
+                                              )));
+                                },
+                                child: Container(
+                                  child: Text(
+                                    '${prescription['professional']}',
+                                    style: TextStyle(
+                                        decoration: TextDecoration.underline,
+                                        color: Colors.grey),
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
             ],
