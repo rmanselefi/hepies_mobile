@@ -543,31 +543,44 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                       onPressed: () async {
                                         var user =
                                             await UserPreferences().getUser();
-                                        prescription.forEach((element) async {
-                                          Favorites favorites = new Favorites(
-                                              drug_name: element['drug_name'],
-                                              drug: int.parse(element['drug']),
-                                              name: favoriteController.text,
-                                              profession_id: user.professionid,
-                                              route: element['route'],
-                                              strength: element['strength'],
-                                              unit: element['unit'],
-                                              type: element['type'],
-                                              frequency: element['frequency'],
-                                              takein: element['takein']);
+                                        if (prescription.length > 0) {
+                                          prescription.forEach((element) async {
+                                            Favorites favorites = new Favorites(
+                                                drug_name: element['drug_name'],
+                                                drug:
+                                                    int.parse(element['drug']),
+                                                name: favoriteController.text,
+                                                profession_id:
+                                                    user.professionid,
+                                                route: element['route'],
+                                                strength: element['strength'],
+                                                unit: element['unit'],
+                                                type: element['type'],
+                                                frequency: element['frequency'],
+                                                takein: element['takein']);
 
-                                          var db = new DatabaseHelper();
-                                          var res =
-                                              await db.saveFavorites(favorites);
-                                        });
-                                        Navigator.pop(context, 'OK');
-                                        showTopSnackBar(
-                                          context,
-                                          CustomSnackBar.success(
-                                            message:
-                                                "Your prescriptions are saved to favorites successfully",
-                                          ),
-                                        );
+                                            var db = new DatabaseHelper();
+                                            var res = await db
+                                                .saveFavorites(favorites);
+                                          });
+                                          Navigator.pop(context, 'OK');
+                                          showTopSnackBar(
+                                            context,
+                                            CustomSnackBar.success(
+                                              message:
+                                                  "Your prescriptions are saved to favorites successfully",
+                                            ),
+                                          );
+                                        } else {
+                                          Navigator.pop(context, 'OK');
+                                          showTopSnackBar(
+                                            context,
+                                            CustomSnackBar.error(
+                                              message:
+                                                  "No prescriptions found. you have to write at least one pescription",
+                                            ),
+                                          );
+                                        }
                                       },
                                       child: const Text('OK'),
                                     ),
