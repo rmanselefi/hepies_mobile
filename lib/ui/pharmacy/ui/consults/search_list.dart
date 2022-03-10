@@ -171,7 +171,7 @@ class _SearchListState extends State<SearchList> {
       searchConsultsResult.addAll(consult[0]);
       isLoadingConsults = false;
     });
-    print("consult search haile" + searchConsultsResult.toString());
+    // print("consult search haile" + searchConsultsResult.toString());
 
     return searchConsultsResult;
   }
