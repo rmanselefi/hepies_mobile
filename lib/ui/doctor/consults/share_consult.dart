@@ -89,7 +89,7 @@ class _ShareConsultState extends State<ShareConsult> {
               children: [
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                  height: MediaQuery.of(context).size.height / 15,
+                  height: MediaQuery.of(context).size.height / 18,
                   child: TextField(
                     onChanged: (text) {
                       setState(() {
