@@ -1770,10 +1770,10 @@ class _PrescribeFormState extends State<PrescribeForm> {
                 Expanded(
                   child: pres['type'] == "general"
                       ? Text(
-                          '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['drug_name']} ${pres['strength']} '
-                          '${pres['unit']} ${pres['route']} Every ${pres['frequency']} For ${pres['takein']}')
+                          '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['drug_name'] != null ? pres['drug_name'] : ""} ${pres['strength'] != null ? pres['strength'] : ""} '
+                          '${pres['unit'] != null ? pres['unit'] : ""} ${pres['route'] != null ? pres['route'] : ""} Every ${pres['frequency'] != null ? pres['frequency'] : ""} For ${pres['takein'] != null ? pres['takein'] : ""}')
                       : Text(
-                          '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['material_name']} ${pres['size']} ${pres['amount']}'),
+                          '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['material_name'] != null ? pres['material_name'] : ""} ${pres['size'] != null ? pres['size'] : ""} ${pres['amount'] != null ? pres['amount'] : ""}'),
                 ),
                 Expanded(
                   child: Row(
