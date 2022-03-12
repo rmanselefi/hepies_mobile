@@ -11,9 +11,11 @@ import 'package:hepies/providers/drug_provider.dart';
 import 'package:hepies/providers/patient_provider.dart';
 import 'package:hepies/providers/prescription_provider.dart';
 import 'package:hepies/util/shared_preference.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 
 // ignore: must_be_immutable
 class PrescribeForm extends StatefulWidget {
@@ -809,22 +811,23 @@ class _PrescribeFormState extends State<PrescribeForm> {
                               padding: const EdgeInsets.all(8.0),
                               child: Container(
                                 width: width(context) * 0.575,
-                                height: 40.0,
-                                child: TextFormField(
+                                height: 55.0,
+                                child: IntlPhoneField(
+                                  initialCountryCode: 'ET',
+                                  showDropdownIcon: false,
                                   // Milkessa: Fixed phone input field formatting
                                   textAlign: TextAlign.start,
                                   controller: phoneController,
                                   enabled: !rememberMe || status == "edit",
-                                  maxLength: 9,
-                                  keyboardType: TextInputType.number,
+                                  keyboardType: TextInputType.phone,
                                   onSaved: (value) {
                                     setState(() {
-                                      patient.phone = "+251$value";
+                                      patient.phone = "+251${value.number}";
                                     });
                                   },
-                                  onChanged: (String val) async {
-                                    var phone = "+251$val";
-                                    if (val.length == 9) {
+                                  onChanged: (PhoneNumber) async {
+                                    var phone = "+251${PhoneNumber.number}";
+                                    if (PhoneNumber.number.length == 9) {
                                       var res = await patientProvider
                                           .getPatient(phone);
                                       if (res != null) {
@@ -843,35 +846,60 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                       patient.phone = phone;
                                     });
                                   },
+                                  // onChanged: (String val) async {
+                                  //   var phone = "+251$val";
+                                  //   if (val.length == 9) {
+                                  //     var res = await patientProvider
+                                  //         .getPatient(phone);
+                                  //     if (res != null) {
+                                  //       setState(() {
+                                  //         ageController.text = res['age'];
+                                  //         _chosenValue = res['sex'];
+                                  //         nameController.text = res['name'];
+                                  //         fnameController.text =
+                                  //             res['fathername'];
+                                  //         phoneController.text =
+                                  //             phone.substring(4);
+                                  //       });
+                                  //     }
+                                  //   }
+                                  //   setState(() {
+                                  //     patient.phone = phone;
+                                  //   });
+                                  // },
                                   decoration: InputDecoration(
-                                      counterText: "",
-                                      contentPadding: EdgeInsets.zero,
-                                      prefixIcon: SizedBox(
-                                        width: 35,
-                                        child: Center(
-                                          child: Text(
-                                            '+251 ',
-                                            textScaleFactor: 0.9,
-                                          ),
-                                        ),
-                                        // CountryCodePicker(
-                                        //   onChanged: (value) {
-                                        //     setState(() {
-                                        //       _countryCode = value.dialCode;
-                                        //       _countryCode == null
-                                        //           ? _countryCode = "+251 - 9"
-                                        //           : _countryCode = '+251 - 9';
-                                        //     });
-                                        //   },
-                                        //   backgroundColor: Colors.white,
-                                        //   initialSelection: 'ET',
-                                        //   favorite: ['+251 - 9', 'ET'],
-                                        //   showCountryOnly: false,
-                                        //   showOnlyCountryWhenClosed: false,
-                                        //   alignLeft: false,
-                                        //   padding: EdgeInsets.all(0.0),
-                                        //   showFlag: false,
-                                        // ),
+                                      // counterText: "",
+                                      // contentPadding: EdgeInsets.zero,
+                                      // prefixIcon: SizedBox(
+                                      //   width: 35,
+                                      //   child: Center(
+                                      //     child: Text(
+                                      //       '+251 ',
+                                      //       textScaleFactor: 0.9,
+                                      //     ),
+                                      //   ),
+                                      //   // CountryCodePicker(
+                                      //   //   onChanged: (value) {
+                                      //   //     setState(() {
+                                      //   //       _countryCode = value.dialCode;
+                                      //   //       _countryCode == null
+                                      //   //           ? _countryCode = "+251 - 9"
+                                      //   //           : _countryCode = '+251 - 9';
+                                      //   //     });
+                                      //   //   },
+                                      //   //   backgroundColor: Colors.white,
+                                      //   //   initialSelection: 'ET',
+                                      //   //   favorite: ['+251 - 9', 'ET'],
+                                      //   //   showCountryOnly: false,
+                                      //   //   showOnlyCountryWhenClosed: false,
+                                      //   //   alignLeft: false,
+                                      //   //   padding: EdgeInsets.all(0.0),
+                                      //   //   showFlag: false,
+                                      //   // ),
+                                      // ),
+                                      labelText: 'Phone Number',
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(),
                                       ),
                                       suffix: patientProvider.fetchStatus ==
                                               Status.Fetching
@@ -881,7 +909,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                               child:
                                                   CircularProgressIndicator())
                                           : null,
-                                      border: OutlineInputBorder(),
                                       hintStyle: TextStyle(
                                           color: !rememberMe
                                               ? Colors.redAccent
@@ -1799,4 +1826,3 @@ class _PrescribeFormState extends State<PrescribeForm> {
     );
   }
 }
-
