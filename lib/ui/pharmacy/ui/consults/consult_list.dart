@@ -174,7 +174,6 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
     return listofConsults;
   }
 
-
   @override
   void initState() {
     // TODO: implement initState
@@ -631,7 +630,8 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                             height: 5,
                           ),
                           RichTextView(
-                            text: "${snapshot.data[index]['topic'] ?? ' '}",
+                            text:
+                                "${snapshot.data[index]['interests']} ${snapshot.data[index]['topic'] ?? ' '}",
                             maxLines: 3,
                             align: TextAlign.center,
                             onHashTagClicked: (hashtag) =>

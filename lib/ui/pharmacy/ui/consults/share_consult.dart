@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hashtagable/widgets/hashtag_text_field.dart';
 import 'package:hepies/providers/consult.dart';
 import 'package:hepies/ui/doctor/consults/consult_list.dart';
+import 'package:hepies/ui/doctor/consults/post_consult.dart';
 import 'package:hepies/ui/pharmacy/ui/consults/consult_list.dart';
 import 'package:hepies/ui/pharmacy/ui/consults/search_list.dart';
 import 'package:hepies/ui/pharmacy/widgets/footer.dart';
@@ -27,7 +28,6 @@ class PharmacyShareConsult extends StatefulWidget {
 
 class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
   final formKey = new GlobalKey<FormState>();
-  var _topic = new TextEditingController();
   var _search = new TextEditingController();
 
   XFile file;
@@ -123,180 +123,18 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
                     ),
                   ),
                 ),
-                Row(
-                  // Milkesa: Added mini image display next to consult text field
-                  children: [
-                    Flexible(
-                      flex: 3,
-                      child: Padding(
-                        padding: const EdgeInsets.all(3),
-                        child: HashTagTextField(
-                          decoration: InputDecoration(
-                              hintText: 'Share, consult, promote, inform..',
-                              border: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.grey.shade50, width: 0.5))),
-                          basicStyle:
-                              TextStyle(fontSize: 15, color: Colors.black),
-                          decoratedStyle:
-                              TextStyle(fontSize: 15, color: Colors.blue),
-                          keyboardType: TextInputType.multiline,
-                          controller: _topic,
-
-                          /// Called when detection (word starts with #, or # and @) is being typed
-                          onDetectionTyped: (text) {
-                            setState(() {
-                              interestStatus = "show";
-                            });
-                            if (text.length > 1) {
-                              text.substring(2);
-                              print("text ${text.substring(2)}");
-                              setState(() {
-                                name = text.substring(2).toLowerCase();
-                              });
-                            }
-
-                            print("texttexttexttexttext $text");
-                          },
-
-                          /// Called when detection is fully typed
-                          onDetectionFinished: () {
-                            print("detection finished");
-                          },
-                          maxLines: 4,
-                        ),
-                      ),
-                    ),
-                    file != null
-                        ? Container(
-                            width: width(context) * 0.25,
-                            margin: EdgeInsets.all(5),
-                            child: Stack(
-                              children: [
-                                Image.file(File(file.path),
-                                    fit: BoxFit.contain),
-                                IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      file = null;
-                                    });
-                                  },
-                                  icon: Icon(Icons.cancel_outlined,
-                                      color: Colors.blue),
-                                ),
-                              ],
-                            ),
-                          )
-                        : Container(width: 0),
-                  ],
-                ),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: Container(
-                    padding: EdgeInsets.only(right: 15.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        interestStatus == "show"
-                            ? Container(
-                                width: width(context) * 0.7,
-                                child: Wrap(
-                                  alignment: WrapAlignment.start,
-                                  direction: Axis.horizontal,
-                                  children: interest.map<Widget>((e) {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        if (name == "") {
-                                          setState(() {
-                                            _topic.text =
-                                                "${_topic.text} #${e['interest']}";
-                                          });
-                                        }
-                                      },
-                                      child: Text(
-                                        "#${e['interest']} ",
-                                        style:
-                                            TextStyle(color: Colors.blueAccent),
-                                      ),
-                                    );
-                                  }).toList(),
-                                ),
-                              )
-                            : Container(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            ImageInputConsult(_setImage),
-                            consult.shareStatus == ConsultStatus.Sharing
-                                ? loading
-                                : Align(
-                                    alignment: Alignment.topRight,
-                                    child: OutlinedButton(
-                                      onPressed: () async {
-                                        try {
-                                          var photo = file != null
-                                              ? File(file.path)
-                                              : null;
-                                          if (_topic.text !=
-                                                  "" || //Milkessa: added posting capability with either text or image
-                                              file != null) {
-                                            var res = await consult.share(
-                                                _topic.text, photo);
-                                            if (res['status']) {
-                                              consult.getConsults();
-                                              showTopSnackBar(
-                                                context,
-                                                CustomSnackBar.success(
-                                                  message:
-                                                      "Your consult is uploaded succesfully",
-                                                ),
-                                              );
-                                              _topic.text = "";
-                                            }
-                                          } else {
-                                            showTopSnackBar(
-                                              context,
-                                              CustomSnackBar.error(
-                                                message:
-                                                    "Invalid Data! Make sure you have inserted image or text",
-                                              ),
-                                            );
-                                          }
-                                        } catch (e) {
-                                          // print("eeeee ${e}");
-                                          showTopSnackBar(
-                                            context,
-                                            CustomSnackBar.error(
-                                              message:
-                                                  "Unable to share your consult",
-                                            ),
-                                          );
-                                        }
-                                      },
-                                      child: Container(
-                                        margin: EdgeInsets.zero,
-                                        padding: EdgeInsets.all(3.0),
-                                        decoration: BoxDecoration(
-                                          boxShadow: [buttonShadow],
-                                          borderRadius:
-                                              BorderRadius.circular(3),
-                                        ),
-                                        child: Text(
-                                          'Consult',
-                                          textScaleFactor: 0.775,
-                                          style: TextStyle(
-                                            color: Colors.blue,
-                                            fontWeight: FontWeight.w900,
-                                          ),
-                                        ),
-                                      ),
-                                    )),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                Container(
+                    margin: EdgeInsets.all(10),
+                    padding: EdgeInsets.all(10),
+                    child: TextField(
+                      readOnly: true,
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => PostConsult()));
+                      },
+                      decoration:
+                          InputDecoration(hintText: "Share your consults"),
+                    )),
                 Divider(),
                 isOnSearch
                     ? SearchList(

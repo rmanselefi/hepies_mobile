@@ -166,6 +166,7 @@ class _SearchListState extends State<SearchList> {
         await Provider.of<ConsultProvider>(context, listen: false)
             .searchConsults(widget.queryWord, 5, searchSkip);
     await Future.delayed(const Duration(seconds: 3), () {});
+    print("consult by interet" + consult[0].toString());
     setState(() {
       searchSkip = searchSkip + 5;
       searchConsultsResult.addAll(consult[0]);
@@ -181,7 +182,7 @@ class _SearchListState extends State<SearchList> {
     // TODO: implement initState
     super.initState();
     _scrollController = ScrollController();
-
+    searchConsults();
     interestStatus = "hide";
   }
 
@@ -632,7 +633,8 @@ class _SearchListState extends State<SearchList> {
                             height: 5,
                           ),
                           RichTextView(
-                            text: "${snapshot.data[index]['topic'] ?? ' '}",
+                            text:
+                                "${snapshot.data[index]['interests']} ${snapshot.data[index]['topic'] ?? ' '}",
                             maxLines: 3,
                             align: TextAlign.center,
                             onHashTagClicked: (hashtag) =>
