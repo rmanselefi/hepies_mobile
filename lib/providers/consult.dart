@@ -133,7 +133,7 @@ class ConsultProvider with ChangeNotifier {
   }
 
   Future<Map<String, dynamic>> updateConsult(
-      var id, String topic, File file, var imageUrl) async {
+      var id, String topic, File file, var imageUrl, String interest) async {
     _editStatus = ConsultStatus.Sharing;
     notifyListeners();
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -153,6 +153,7 @@ class ConsultProvider with ChangeNotifier {
     final Map<String, dynamic> registrationData = {
       'topic': topic,
       'image': image,
+      "interests": interests
     };
     Response response = await put(Uri.parse('${AppUrl.consults}/$id'),
         body: json.encode(registrationData),

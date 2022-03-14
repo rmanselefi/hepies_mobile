@@ -18,6 +18,7 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:multiselect_formfield/multiselect_formfield.dart';
 
 class PostConsult extends StatefulWidget {
   const PostConsult({Key key}) : super(key: key);
@@ -34,6 +35,9 @@ class _PostConsultState extends State<PostConsult> {
   List<dynamic> interests = [];
   List<dynamic> subList = [];
   String interestStatus = "hide";
+  List<dynamic> _myInterests = [];
+
+  List interestList = [];
 
   var name = '';
   void _setImage(XFile image) {
@@ -54,6 +58,20 @@ class _PostConsultState extends State<PostConsult> {
     });
   }
 
+  getInterests() async {
+    List interests = await ConsultProvider().getInterests();
+
+    setState(() {
+      interests.forEach((element) {
+        var property = {
+          'display': "#${element['interest']}",
+          'value': element['interest'],
+        };
+        interestList.add(property);
+      });
+    });
+  }
+
   var loading = Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: <Widget>[CircularProgressIndicator()],
@@ -63,6 +81,7 @@ class _PostConsultState extends State<PostConsult> {
     // TODO: implement initState
     super.initState();
     setInterests();
+    getInterests();
   }
 
   @override
@@ -72,7 +91,40 @@ class _PostConsultState extends State<PostConsult> {
     List<dynamic> interest = interests
         .where((element) => element['interest'].toLowerCase().contains(name))
         .toList();
-
+    final interestField = new MultiSelectFormField(
+      open: () {
+        getInterests();
+      },
+      chipBackGroundColor: Colors.red,
+      chipLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+      dialogTextStyle: TextStyle(fontWeight: FontWeight.bold),
+      checkBoxActiveColor: Colors.red,
+      checkBoxCheckColor: Colors.green,
+      dialogShapeBorder: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(12.0))),
+      title: Text(
+        "Select Your interests",
+        style: TextStyle(fontSize: 16),
+      ),
+      dataSource: interestList,
+      textField: 'display',
+      valueField: 'value',
+      okButtonLabel: 'OK',
+      cancelButtonLabel: 'CANCEL',
+      hintWidget: Text('Please choose one or more'),
+      initialValue: _myInterests,
+      onSaved: (value) {
+        if (value == null) return;
+        // print("_interests_interests_interests ${value.join(",")}");
+        var hashtaglists = [];
+        for (var item in value) {
+          hashtaglists.add("#${item.toString()}");
+        }
+        setState(() {
+          _myInterests = hashtaglists;
+        });
+      },
+    );
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.white,
@@ -91,8 +143,7 @@ class _PostConsultState extends State<PostConsult> {
                   margin: EdgeInsets.all(10),
                   child: TextField(
                     controller: _topic,
-                    keyboardType:TextInputType.multiline,
-                
+                    keyboardType: TextInputType.multiline,
                     decoration: InputDecoration(
                       hintText: "Enter your Topic....",
                       border: OutlineInputBorder(
@@ -100,7 +151,6 @@ class _PostConsultState extends State<PostConsult> {
                               BorderSide(color: Colors.black, width: 1)),
                     ),
                     maxLines: 8,
-
                   )),
             ),
             Expanded(
@@ -112,41 +162,7 @@ class _PostConsultState extends State<PostConsult> {
                     flex: 3,
                     child: Padding(
                       padding: EdgeInsets.all(3),
-                      child: HashTagTextField(
-                        decoration: InputDecoration(
-                            hintText: 'Add your consults by typing with #..',
-                            border: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Colors.grey.shade50, width: 0.5))),
-                        basicStyle:
-                            TextStyle(fontSize: 15, color: Colors.black),
-                        decoratedStyle:
-                            TextStyle(fontSize: 15, color: Colors.blue),
-                        keyboardType: TextInputType.multiline,
-                        controller: _interestsController,
-
-                        /// Called when detection (word starts with #, or # and @) is being typed
-                        onDetectionTyped: (text) {
-                          setState(() {
-                            interestStatus = "show";
-                          });
-                          if (text.length > 1) {
-                            text.substring(2);
-                            print("text ${text.substring(2)}");
-                            setState(() {
-                              name = text.substring(2).toLowerCase();
-                            });
-                          }
-
-                          print("texttexttexttexttext $text");
-                        },
-
-                        /// Called when detection is fully typed
-                        onDetectionFinished: () {
-                          print("detection finished");
-                        },
-                        maxLines: 4,
-                      ),
+                      child: interestField,
                     ),
                   ),
                   file != null
@@ -182,36 +198,6 @@ class _PostConsultState extends State<PostConsult> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    interestStatus == "show"
-                        ? Expanded(
-                            child: Container(
-                              width: MediaQuery.of(context).size.width / 1.63,
-                              child: Wrap(
-                                alignment: WrapAlignment.start,
-                                direction: Axis.horizontal,
-                                children: interest.map<Widget>((e) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      if (name == "") {
-                                        setState(() {
-                                          _interestsController.text =
-                                              "${_interestsController.text} #${e['interest']}";
-                                        });
-                                      }
-                                    },
-                                    child: Text(
-                                      "#${e['interest']} ",
-                                      style: TextStyle(
-                                        color: Colors.blueAccent,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
-                              ),
-                            ),
-                          )
-                        : Container(),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
@@ -225,13 +211,13 @@ class _PostConsultState extends State<PostConsult> {
                                     try {
                                       var photo =
                                           file != null ? File(file.path) : null;
-                                      if (_interestsController.text !=
-                                              "" || //Milkessa: added posting capability with either text or image
+                                      if (_myInterests.length !=
+                                              0 || //Milkessa: added posting capability with either text or image
                                           file != null) {
                                         var res = await consult.share(
                                             _topic.text,
                                             photo,
-                                            _interestsController.text);
+                                            _myInterests.join(" ").toString());
                                         if (res['status']) {
                                           consult.getConsults();
                                           showTopSnackBar(
