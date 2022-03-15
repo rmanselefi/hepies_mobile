@@ -647,7 +647,19 @@ class _SearchListState extends State<SearchList> {
                           onUrlClicked: (url) => launch(url),
                           linkStyle: TextStyle(color: Colors.blue),
                         ),
-                        Text(" ${searchConsultsResult[index]['topic'] ?? ' '}"),
+                        RichTextView(
+                          text:
+                              "${searchConsultsResult[index]['topic'] != null ? searchConsultsResult[index]['topic'] : ""}",
+                          maxLines: 3,
+                          align: TextAlign.center,
+                          onHashTagClicked: (hashtag) =>
+                              print('is $hashtag trending?'),
+                          onMentionClicked: (mention) =>
+                              print('$mention clicked'),
+                          onUrlClicked: (url) => launch(url),
+                          linkStyle: TextStyle(color: Colors.blue),
+                        ),
+
                         SizedBox(
                           height: 10,
                         ),

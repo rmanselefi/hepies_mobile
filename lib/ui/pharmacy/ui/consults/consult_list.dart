@@ -234,7 +234,8 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                   await Provider.of<ConsultProvider>(context, listen: false)
                       .getConsultsbyPagination(5, skip);
               Navigator.of(context).pop();
-              Navigator.of(context).pop();
+              Navigator.of(context).pop(true);
+
               showTopSnackBar(
                 context,
                 CustomSnackBar.success(
@@ -650,7 +651,19 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                             onUrlClicked: (url) => launch(url),
                             linkStyle: TextStyle(color: Colors.blue),
                           ),
-                          Text("${listofConsults[index]['topic'] ?? ' '}"),
+                          RichTextView(
+                            text:
+                                "${listofConsults[index]['topic'] != null ? listofConsults[index]['topic'] : ""} ",
+                            maxLines: 2,
+                            align: TextAlign.center,
+                            onHashTagClicked: (hashtag) =>
+                                print('is $hashtag trending?'),
+                            onMentionClicked: (mention) =>
+                                print('$mention clicked'),
+                            onUrlClicked: (url) => launch(url),
+                            linkStyle: TextStyle(color: Colors.blue),
+                          ),
+                          // Text("${listofConsults[index]['topic'] ?? ' '}"),
                           SizedBox(
                             height: 10,
                           ),
