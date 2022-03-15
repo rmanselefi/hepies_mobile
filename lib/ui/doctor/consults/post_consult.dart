@@ -103,7 +103,7 @@ class _PostConsultState extends State<PostConsult> {
       dialogShapeBorder: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(12.0))),
       title: Text(
-        "Add interests for youS",
+        "Add interests ",
         style: TextStyle(fontSize: 16),
       ),
       dataSource: interestList,

@@ -375,7 +375,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(8.0))),
                                         title: Text(
-                                          "Add interests for your consult",
+                                          "Add interests",
                                           style: TextStyle(fontSize: 16),
                                         ),
                                         dataSource: interestList,

@@ -380,7 +380,7 @@ class _SearchListState extends State<SearchList> {
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(8.0))),
                                         title: Text(
-                                          "Add interests for you consult",
+                                          "Add interests",
                                           style: TextStyle(fontSize: 16),
                                         ),
                                         dataSource: interestList,
