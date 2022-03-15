@@ -1386,6 +1386,21 @@ class _PrescribeFormState extends State<PrescribeForm> {
                               message: "Phone number is required",
                             ),
                           );
+                        } else if (phoneController.text.length !=
+                                9 &&
+                            !rememberMe &&
+                            status != "edit") {
+                          print("phone number length : " +
+                              phoneController.text
+                                  .substring(4)
+                                  .length
+                                  .toString());
+                          showTopSnackBar(
+                            context,
+                            CustomSnackBar.error(
+                              message: "please add correct phoneNumber",
+                            ),
+                          );
                         } else if (ageController.text == "" &&
                             !rememberMe &&
                             status != "edit" &&

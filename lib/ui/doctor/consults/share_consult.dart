@@ -28,6 +28,7 @@ class ShareConsult extends StatefulWidget {
 }
 
 class _ShareConsultState extends State<ShareConsult> {
+  ScrollController _parentScrollController = ScrollController();
   var _search = new TextEditingController();
   bool isOnSearch = false;
   // XFile file;
@@ -76,12 +77,14 @@ class _ShareConsultState extends State<ShareConsult> {
             // Header(),
 
             SizedBox(
-              height: 20.0,
+              height: 30.0,
             ),
             Expanded(
-              child: ListView(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
+                child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              physics: AlwaysScrollableScrollPhysics(),
+              controller: _parentScrollController,
+              child: Column(
                 children: [
                   Container(
                     margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
@@ -140,14 +143,11 @@ class _ShareConsultState extends State<ShareConsult> {
                   Divider(),
                   isOnSearch
                       ? SearchList(
-                          widget.user_id, interest, _search.text.toString())
-                      : 
-                       PharmacyConsultList(
-                                  widget.user_id, interest)
-                          
+                          widget.user_id, interest, _search.text.toString() , _parentScrollController)
+                      : PharmacyConsultList(widget.user_id, interest, _parentScrollController)
                 ],
               ),
-            ),
+            )),
             Footer(),
           ],
         ),

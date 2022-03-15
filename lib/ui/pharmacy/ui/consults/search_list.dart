@@ -30,8 +30,10 @@ class SearchList extends StatefulWidget {
   final user_id;
   final interest;
   final queryWord;
+  final parentScrollController;
 
-  SearchList(this.user_id, this.interest, this.queryWord);
+  SearchList(
+      this.user_id, this.interest, this.queryWord, this.parentScrollController);
   @override
   _SearchListState createState() => _SearchListState();
 }
@@ -196,6 +198,15 @@ class _SearchListState extends State<SearchList> {
     // TODO: implement initState
     super.initState();
     _scrollController = ScrollController();
+    _scrollController.addListener(() {
+      if (_scrollController.offset ==
+          _scrollController.position.minScrollExtent) {
+        widget.parentScrollController.animateTo(
+            widget.parentScrollController.position.minScrollExtent,
+            duration: Duration(seconds: 1),
+            curve: Curves.easeIn);
+      }
+    });
     searchConsults();
     getInterests();
     interestStatus = "hide";
@@ -369,7 +380,7 @@ class _SearchListState extends State<SearchList> {
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(8.0))),
                                         title: Text(
-                                          "Select Your interests",
+                                          "Add interests for you consult",
                                           style: TextStyle(fontSize: 16),
                                         ),
                                         dataSource: interestList,
@@ -511,6 +522,7 @@ class _SearchListState extends State<SearchList> {
                 controller: _scrollController,
                 shrinkWrap: true,
                 itemCount: searchConsultsResult.length,
+                physics: ClampingScrollPhysics(),
                 itemBuilder: (BuildContext context, int index) {
                   var e = searchConsultsResult[index];
                   var profile = e['author'] != null
@@ -625,7 +637,7 @@ class _SearchListState extends State<SearchList> {
                         ),
                         RichTextView(
                           text:
-                              "${searchConsultsResult[index]['interests']} ${searchConsultsResult[index]['topic'] ?? ' '}",
+                              "${searchConsultsResult[index]['interests'] != null ? searchConsultsResult[index]['interests'] : ""}",
                           maxLines: 3,
                           align: TextAlign.center,
                           onHashTagClicked: (hashtag) =>
@@ -635,6 +647,7 @@ class _SearchListState extends State<SearchList> {
                           onUrlClicked: (url) => launch(url),
                           linkStyle: TextStyle(color: Colors.blue),
                         ),
+                        Text(" ${searchConsultsResult[index]['topic'] ?? ' '}"),
                         SizedBox(
                           height: 10,
                         ),

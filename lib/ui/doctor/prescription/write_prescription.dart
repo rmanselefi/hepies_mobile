@@ -182,7 +182,12 @@ class _WritePrescriptionState extends State<WritePrescription> {
     var prescProvider = Provider.of<PrescriptionProvider>(context);
     return WillPopScope(
       onWillPop: () async {
-        Navigator.pop(context);
+          Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Welcome(
+                                  currenIndex: 0,
+                                )));    
         return;
       },
       child: Scaffold(

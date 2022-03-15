@@ -29,8 +29,9 @@ import 'package:multiselect_formfield/multiselect_formfield.dart';
 class PharmacyConsultList extends StatefulWidget {
   final user_id;
   final interest;
+  final parentScrollController;
 
-  PharmacyConsultList(this.user_id, this.interest);
+  PharmacyConsultList(this.user_id, this.interest, this.parentScrollController);
   @override
   _PharmacyConsultListState createState() => _PharmacyConsultListState();
 }
@@ -196,6 +197,15 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
     // TODO: implement initState
     super.initState();
     _scrollController = ScrollController();
+    _scrollController.addListener(() {
+      if (_scrollController.offset ==
+          _scrollController.position.minScrollExtent) {
+        widget.parentScrollController.animateTo(
+            widget.parentScrollController.position.minScrollExtent,
+            duration: Duration(seconds: 1),
+            curve: Curves.easeIn);
+      }
+    });
     consultPagination();
     getInterests();
     interestStatus = "hide";
@@ -365,7 +375,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(8.0))),
                                         title: Text(
-                                          "Select Your interests",
+                                          "Add interests for your consult",
                                           style: TextStyle(fontSize: 16),
                                         ),
                                         dataSource: interestList,
@@ -400,8 +410,6 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                               Expanded(
                                 child: Column(
                                   children: [
-                                    //Delete icon
-
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
@@ -479,6 +487,9 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                                   },
                                                   child: Text('Edit'),
                                                 )),
+                                        SizedBox(
+                                          width: 20,
+                                        )
                                       ],
                                     ),
                                   ],
@@ -497,640 +508,657 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
         : MediaQuery.removePadding(
             context: context,
             removeTop: true,
-            child: LazyLoadScrollView(
-              isLoading: isLoadingConsults,
-              onEndOfPage: () => consultPagination(),
-              child: ListView.builder(
-                controller: _scrollController,
-                shrinkWrap: true,
-                itemCount: listofConsults.length,
-                itemBuilder: (BuildContext context, int index) {
-                  var e = listofConsults[index];
-                  var profile = e['author'] != null
-                      ? e['author']['profession'][0]['profile']
-                      : "";
-                  bool _validURL = profile != "" && profile != null
-                      ? Uri.parse(profile).isAbsolute
-                      : false;
-                  DateTime time = DateTime.parse(e['createdAt']);
-                  var duration = timeago.format(time);
+            child: Container(
+              height: MediaQuery.of(context).size.height / 1.5,
+              child: LazyLoadScrollView(
+                isLoading: isLoadingConsults,
+                scrollOffset: 400,
+                onEndOfPage: () => consultPagination(),
+                child: ListView.builder(
+                  controller: _scrollController,
+                  itemCount: listofConsults.length,
+                  shrinkWrap: true,
+                  physics: ClampingScrollPhysics(),
+                  itemBuilder: (BuildContext context, int index) {
+                    var e = listofConsults[index];
+                    var profile = e['author'] != null
+                        ? e['author']['profession'][0]['profile']
+                        : "";
+                    bool _validURL = profile != "" && profile != null
+                        ? Uri.parse(profile).isAbsolute
+                        : false;
+                    DateTime time = DateTime.parse(e['createdAt']);
+                    var duration = timeago.format(time);
 
-                  if (index == listofConsults.length - 1) {
-                    return Padding(
-                        padding: EdgeInsets.all(8), child: ShimmerEffect());
-                  }
-                  return Container(
-                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
-                    margin: EdgeInsets.only(bottom: 0.0, top: 8),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border(
-                            top: BorderSide(color: Colors.black54, width: 0.50),
-                            bottom: BorderSide(
-                                color: Colors.black54, width: 0.50))),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                GestureDetector(
-                                  onTap: profile != null
-                                      ? () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  Image.network(
-                                                profile,
-                                                fit: BoxFit.contain,
-                                              ),
-                                            ),
-                                          );
-                                        }
-                                      : null,
-                                  child: Container(
-                                    width: 40,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(40))),
-                                    child: ClipRRect(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(40)),
-                                        child: profile != null && _validURL
-                                            ? Image.network(profile)
-                                            : Icon(
-                                                Icons.person,
-                                                size: 40,
-                                              )),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 4,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      e['user'],
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Container(
-                                      child: Text(
-                                        "Doctor",
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.black54),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                    Text('$duration',
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.black54))
-                                  ],
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                SizedBox(
-                                  width: width(context) * 0.05,
-                                ),
-                                e['author'] != null &&
-                                        e['author']['id'] == widget.user_id
-                                    ? IconButton(
-                                        onPressed: () {
-                                          _topic.text = e['topic'] ?? '';
-                                          showEdit(context, e);
-                                        },
-                                        icon: Icon(Icons.more_vert_outlined))
-                                    : Container(),
-                              ],
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        RichTextView(
-                          text:
-                              "${listofConsults[index]['interests']} ${listofConsults[index]['topic'] ?? ' '}",
-                          maxLines: 3,
-                          align: TextAlign.center,
-                          onHashTagClicked: (hashtag) =>
-                              print('is $hashtag trending?'),
-                          onMentionClicked: (mention) =>
-                              print('$mention clicked'),
-                          onUrlClicked: (url) => launch(url),
-                          linkStyle: TextStyle(color: Colors.blue),
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        e['image'] != null
-                            ? GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => Image.network(
-                                        e['image'],
-                                        fit: BoxFit.contain,
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  height: height(context) * 0.375,
-                                  child: Image.network(
-                                    e['image'],
-                                    fit: BoxFit.contain,
-                                  ),
-                                ),
-                              )
-                            : Container(
-                                height: 0.0,
-                                width: 0.0,
-                              ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              child: Row(
+                    if (index == listofConsults.length - 1) {
+                      return Padding(
+                          padding: EdgeInsets.all(8), child: ShimmerEffect());
+                    }
+                    return Container(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+                      margin: EdgeInsets.only(bottom: 0.0, top: 8),
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border(
+                              top: BorderSide(
+                                  color: Colors.black54, width: 0.50),
+                              bottom: BorderSide(
+                                  color: Colors.black54, width: 0.50))),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  TextButton.icon(
-                                      onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
+                                  GestureDetector(
+                                    onTap: profile != null
+                                        ? () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
                                                 builder: (context) =>
-                                                    PharmacyShareComment(
-                                                        e['id'],
-                                                        [
-                                                          Row(
-                                                            children: [
-                                                              GestureDetector(
-                                                                onTap:
-                                                                    profile !=
-                                                                            null
-                                                                        ? () {
-                                                                            Navigator.push(
-                                                                              context,
-                                                                              MaterialPageRoute(
-                                                                                builder: (context) => Image.network(
-                                                                                  profile,
-                                                                                  fit: BoxFit.contain,
+                                                    Image.network(
+                                                  profile,
+                                                  fit: BoxFit.contain,
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                        : null,
+                                    child: Container(
+                                      width: 40,
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(40))),
+                                      child: ClipRRect(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(40)),
+                                          child: profile != null && _validURL
+                                              ? Image.network(profile)
+                                              : Icon(
+                                                  Icons.person,
+                                                  size: 40,
+                                                )),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 4,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        e['user'],
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Container(
+                                        child: Text(
+                                          "Doctor",
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.black54),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      Text('$duration',
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.black54))
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  SizedBox(
+                                    width: width(context) * 0.05,
+                                  ),
+                                  e['author'] != null &&
+                                          e['author']['id'] == widget.user_id
+                                      ? IconButton(
+                                          onPressed: () {
+                                            _topic.text = e['topic'] ?? '';
+                                            showEdit(context, e);
+                                          },
+                                          icon: Icon(Icons.more_vert_outlined))
+                                      : Container(),
+                                ],
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          RichTextView(
+                            text:
+                                "${listofConsults[index]['interests'] != null ? listofConsults[index]['interests'] : ""} ",
+                            maxLines: 2,
+                            align: TextAlign.center,
+                            onHashTagClicked: (hashtag) =>
+                                print('is $hashtag trending?'),
+                            onMentionClicked: (mention) =>
+                                print('$mention clicked'),
+                            onUrlClicked: (url) => launch(url),
+                            linkStyle: TextStyle(color: Colors.blue),
+                          ),
+                          Text("${listofConsults[index]['topic'] ?? ' '}"),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          e['image'] != null
+                              ? GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => Image.network(
+                                          e['image'],
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: height(context) * 0.375,
+                                    child: Image.network(
+                                      e['image'],
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                )
+                              : Container(
+                                  height: 0.0,
+                                  width: 0.0,
+                                ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Container(
+                                child: Row(
+                                  children: [
+                                    TextButton.icon(
+                                        onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      PharmacyShareComment(
+                                                          e['id'],
+                                                          [
+                                                            Row(
+                                                              children: [
+                                                                GestureDetector(
+                                                                  onTap:
+                                                                      profile !=
+                                                                              null
+                                                                          ? () {
+                                                                              Navigator.push(
+                                                                                context,
+                                                                                MaterialPageRoute(
+                                                                                  builder: (context) => Image.network(
+                                                                                    profile,
+                                                                                    fit: BoxFit.contain,
+                                                                                  ),
                                                                                 ),
-                                                                              ),
-                                                                            );
-                                                                          }
-                                                                        : null,
-                                                                child:
-                                                                    Container(
-                                                                  width: 40,
-                                                                  height: 40,
-                                                                  decoration: BoxDecoration(
-                                                                      borderRadius:
-                                                                          BorderRadius.all(
-                                                                              Radius.circular(40))),
-                                                                  child: ClipRRect(
-                                                                      borderRadius: BorderRadius.all(Radius.circular(40)),
-                                                                      child: profile != null
-                                                                          ? Image.network(profile)
-                                                                          : Icon(
-                                                                              Icons.person,
-                                                                              size: 40,
-                                                                            )),
-                                                                ),
-                                                              ),
-                                                              SizedBox(
-                                                                width: 4,
-                                                              ),
-                                                              Column(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .start,
-                                                                children: [
-                                                                  Text(
-                                                                    e['user'],
-                                                                    style:
-                                                                        TextStyle(
-                                                                      fontSize:
-                                                                          18,
-                                                                    ),
-                                                                  ),
-                                                                  Container(
-                                                                    width: 100,
-                                                                    child: Text(
-                                                                      "Doctor",
-                                                                      style: TextStyle(
-                                                                          fontSize:
-                                                                              12,
-                                                                          color:
-                                                                              Colors.black54),
-                                                                      overflow:
-                                                                          TextOverflow
-                                                                              .ellipsis,
-                                                                    ),
-                                                                  ),
-                                                                  Text(
-                                                                      '$duration',
-                                                                      style: TextStyle(
-                                                                          fontSize:
-                                                                              12,
-                                                                          color:
-                                                                              Colors.black54))
-                                                                ],
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          SizedBox(
-                                                            height: 5,
-                                                          ),
-
-                                                          RichTextView(
-                                                            text:
-                                                                "${listofConsults[index]['topic'] ?? ' '}",
-                                                            maxLines: 3,
-                                                            align: TextAlign
-                                                                .center,
-                                                            onHashTagClicked:
-                                                                (hashtag) => print(
-                                                                    'is $hashtag trending?'),
-                                                            onMentionClicked:
-                                                                (mention) => print(
-                                                                    '$mention clicked'),
-                                                            onUrlClicked:
-                                                                (url) =>
-                                                                    launch(url),
-                                                            linkStyle: TextStyle(
-                                                                color: Colors
-                                                                    .blue),
-                                                          ),
-                                                          // Text(
-                                                          //   _post[index].tags,
-                                                          //   style: TextStyle(color: blueColor),
-                                                          // ),
-                                                          SizedBox(
-                                                            height: 10,
-                                                          ),
-                                                          e['image'] != null
-                                                              ? GestureDetector(
-                                                                  onTap: () {
-                                                                    Navigator
-                                                                        .push(
-                                                                      context,
-                                                                      MaterialPageRoute(
-                                                                        builder:
-                                                                            (context) =>
-                                                                                Image.network(
-                                                                          e['image'],
-                                                                          fit: BoxFit
-                                                                              .contain,
-                                                                        ),
-                                                                      ),
-                                                                    );
-                                                                  },
+                                                                              );
+                                                                            }
+                                                                          : null,
                                                                   child:
                                                                       Container(
-                                                                    width: MediaQuery.of(
-                                                                            context)
-                                                                        .size
-                                                                        .width,
-                                                                    height: height(
-                                                                            context) *
-                                                                        0.375,
-                                                                    child: Image
-                                                                        .network(
-                                                                      e['image'],
-                                                                      fit: BoxFit
-                                                                          .contain,
-                                                                    ),
+                                                                    width: 40,
+                                                                    height: 40,
+                                                                    decoration: BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.all(Radius.circular(40))),
+                                                                    child: ClipRRect(
+                                                                        borderRadius: BorderRadius.all(Radius.circular(40)),
+                                                                        child: profile != null
+                                                                            ? Image.network(profile)
+                                                                            : Icon(
+                                                                                Icons.person,
+                                                                                size: 40,
+                                                                              )),
                                                                   ),
-                                                                )
-                                                              : Container(
-                                                                  height: 0.0,
-                                                                  width: 0.0,
                                                                 ),
-                                                        ],
-                                                        widget.user_id)));
-                                      },
-                                      icon: Icon(
-                                        Icons.thumb_up_sharp,
-                                        color: Colors.grey,
-                                        size: 15,
-                                      ),
-                                      label: Text(
-                                        "${e['like'] != null ? e['like'].length : ''} likes",
-                                        style: TextStyle(color: Colors.grey),
-                                      )),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            GestureDetector(
-                              child: Row(
-                                children: [
-                                  Text(
-                                    e['comment'] != null
-                                        ? e['comment'].length.toString()
-                                        : "",
-                                    style: TextStyle(color: Colors.grey),
-                                  ),
-                                  Text(" comments",
-                                      style: TextStyle(color: Colors.grey))
-                                ],
-                              ),
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            PharmacyShareComment(
-                                                e['id'],
-                                                [
-                                                  Row(
-                                                    children: [
-                                                      GestureDetector(
-                                                        onTap: profile != null
-                                                            ? () {
-                                                                Navigator.push(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                    builder:
-                                                                        (context) =>
-                                                                            Image.network(
-                                                                      profile,
-                                                                      fit: BoxFit
-                                                                          .contain,
+                                                                SizedBox(
+                                                                  width: 4,
+                                                                ),
+                                                                Column(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  children: [
+                                                                    Text(
+                                                                      e['user'],
+                                                                      style:
+                                                                          TextStyle(
+                                                                        fontSize:
+                                                                            18,
+                                                                      ),
                                                                     ),
-                                                                  ),
-                                                                );
-                                                              }
-                                                            : null,
-                                                        child: Container(
-                                                          width: 40,
-                                                          height: 40,
-                                                          decoration: BoxDecoration(
-                                                              borderRadius: BorderRadius
-                                                                  .all(Radius
-                                                                      .circular(
-                                                                          40))),
-                                                          child: ClipRRect(
-                                                              borderRadius: BorderRadius
-                                                                  .all(Radius
-                                                                      .circular(
-                                                                          40)),
-                                                              child: profile !=
-                                                                      null
-                                                                  ? Image.network(
-                                                                      profile)
-                                                                  : Icon(
-                                                                      Icons
-                                                                          .person,
-                                                                      size: 40,
-                                                                    )),
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        width: 4,
-                                                      ),
-                                                      Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Text(
-                                                            e['user'],
-                                                            style: TextStyle(
-                                                              fontSize: 18,
+                                                                    Container(
+                                                                      width:
+                                                                          100,
+                                                                      child:
+                                                                          Text(
+                                                                        "Doctor",
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                12,
+                                                                            color:
+                                                                                Colors.black54),
+                                                                        overflow:
+                                                                            TextOverflow.ellipsis,
+                                                                      ),
+                                                                    ),
+                                                                    Text(
+                                                                        '$duration',
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                12,
+                                                                            color:
+                                                                                Colors.black54))
+                                                                  ],
+                                                                ),
+                                                              ],
                                                             ),
-                                                          ),
-                                                          Container(
-                                                            width: 100,
-                                                            child: Text(
-                                                              "Doctor",
-                                                              style: TextStyle(
-                                                                  fontSize: 12,
-                                                                  color: Colors
-                                                                      .black54),
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
+                                                            SizedBox(
+                                                              height: 5,
                                                             ),
-                                                          ),
-                                                          Text('$duration',
-                                                              style: TextStyle(
-                                                                  fontSize: 12,
-                                                                  color: Colors
-                                                                      .black54))
-                                                        ],
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    height: 5,
-                                                  ),
 
-                                                  RichTextView(
-                                                    text:
-                                                        "${listofConsults[index]['topic'] ?? ' '}",
-                                                    maxLines: 3,
-                                                    align: TextAlign.center,
-                                                    onHashTagClicked:
-                                                        (hashtag) => print(
-                                                            'is $hashtag trending?'),
-                                                    onMentionClicked:
-                                                        (mention) => print(
-                                                            '$mention clicked'),
-                                                    onUrlClicked: (url) =>
-                                                        launch(url),
-                                                    linkStyle: TextStyle(
-                                                        color: Colors.blue),
-                                                  ),
-                                                  // Text(
-                                                  //   _post[index].tags,
-                                                  //   style: TextStyle(color: blueColor),
-                                                  // ),
-                                                  SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  e['image'] != null
-                                                      ? GestureDetector(
-                                                          onTap: () {
-                                                            Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                        Image
-                                                                            .network(
-                                                                  e['image'],
-                                                                  fit: BoxFit
-                                                                      .contain,
-                                                                ),
-                                                              ),
-                                                            );
-                                                          },
-                                                          child: Container(
-                                                            width:
-                                                                MediaQuery.of(
-                                                                        context)
-                                                                    .size
-                                                                    .width,
-                                                            height: height(
-                                                                    context) *
-                                                                0.375,
-                                                            child:
-                                                                Image.network(
-                                                              e['image'],
-                                                              fit: BoxFit
-                                                                  .contain,
+                                                            RichTextView(
+                                                              text:
+                                                                  "${listofConsults[index]['topic'] ?? ' '}",
+                                                              maxLines: 3,
+                                                              align: TextAlign
+                                                                  .center,
+                                                              onHashTagClicked:
+                                                                  (hashtag) =>
+                                                                      print(
+                                                                          'is $hashtag trending?'),
+                                                              onMentionClicked:
+                                                                  (mention) =>
+                                                                      print(
+                                                                          '$mention clicked'),
+                                                              onUrlClicked:
+                                                                  (url) =>
+                                                                      launch(
+                                                                          url),
+                                                              linkStyle: TextStyle(
+                                                                  color: Colors
+                                                                      .blue),
                                                             ),
-                                                          ),
-                                                        )
-                                                      : Container(
-                                                          height: 0.0,
-                                                          width: 0.0,
-                                                        ),
-                                                ],
-                                                widget.user_id)));
-                              },
-                            )
-                          ],
-                        ),
-                        Divider(
-                          thickness: 0.50,
-                          color: Colors.black26,
-                        ),
-                        _rowButton(
-                          e,
-                          [
-                            Row(
-                              children: [
-                                GestureDetector(
-                                  onTap: profile != null
-                                      ? () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  Image.network(
-                                                profile,
-                                                fit: BoxFit.contain,
-                                              ),
-                                            ),
-                                          );
-                                        }
-                                      : null,
-                                  child: Container(
-                                    width: 40,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(40))),
-                                    child: ClipRRect(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(40)),
-                                        child: profile != null
-                                            ? Image.network(profile)
-                                            : Icon(
-                                                Icons.person,
-                                                size: 40,
-                                              )),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 4,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      e['user'],
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                      ),
+                                                            // Text(
+                                                            //   _post[index].tags,
+                                                            //   style: TextStyle(color: blueColor),
+                                                            // ),
+                                                            SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            e['image'] != null
+                                                                ? GestureDetector(
+                                                                    onTap: () {
+                                                                      Navigator
+                                                                          .push(
+                                                                        context,
+                                                                        MaterialPageRoute(
+                                                                          builder: (context) =>
+                                                                              Image.network(
+                                                                            e['image'],
+                                                                            fit:
+                                                                                BoxFit.contain,
+                                                                          ),
+                                                                        ),
+                                                                      );
+                                                                    },
+                                                                    child:
+                                                                        Container(
+                                                                      width: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .width,
+                                                                      height: height(
+                                                                              context) *
+                                                                          0.375,
+                                                                      child: Image
+                                                                          .network(
+                                                                        e['image'],
+                                                                        fit: BoxFit
+                                                                            .contain,
+                                                                      ),
+                                                                    ),
+                                                                  )
+                                                                : Container(
+                                                                    height: 0.0,
+                                                                    width: 0.0,
+                                                                  ),
+                                                          ],
+                                                          widget.user_id)));
+                                        },
+                                        icon: Icon(
+                                          Icons.thumb_up_sharp,
+                                          color: Colors.grey,
+                                          size: 15,
+                                        ),
+                                        label: Text(
+                                          "${e['like'] != null ? e['like'].length : ''} likes",
+                                          style: TextStyle(color: Colors.grey),
+                                        )),
+                                    SizedBox(
+                                      width: 5,
                                     ),
-                                    Container(
-                                      width: 100,
-                                      child: Text(
-                                        "Doctor",
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.black54),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                    Text('$duration',
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.black54))
                                   ],
                                 ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            LinkifyText(
-                              "${listofConsults[index]['topic'] ?? ' '}",
-                              isLinkNavigationEnable: true,
-                              linkColor: Colors.blueAccent,
-                              fontColor: Colors.black,
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            e['image'] != null
-                                ? GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => Image.network(
-                                            e['image'],
-                                            fit: BoxFit.contain,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      height: height(context) * 0.375,
-                                      child: Image.network(
-                                        e['image'],
-                                        fit: BoxFit.contain,
-                                      ),
+                              ),
+                              GestureDetector(
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      e['comment'] != null
+                                          ? e['comment'].length.toString()
+                                          : "",
+                                      style: TextStyle(color: Colors.grey),
                                     ),
-                                  )
-                                : Container(
-                                    height: 0.0,
-                                    width: 0.0,
+                                    Text(" comments",
+                                        style: TextStyle(color: Colors.grey))
+                                  ],
+                                ),
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              PharmacyShareComment(
+                                                  e['id'],
+                                                  [
+                                                    Row(
+                                                      children: [
+                                                        GestureDetector(
+                                                          onTap: profile != null
+                                                              ? () {
+                                                                  Navigator
+                                                                      .push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                      builder:
+                                                                          (context) =>
+                                                                              Image.network(
+                                                                        profile,
+                                                                        fit: BoxFit
+                                                                            .contain,
+                                                                      ),
+                                                                    ),
+                                                                  );
+                                                                }
+                                                              : null,
+                                                          child: Container(
+                                                            width: 40,
+                                                            height: 40,
+                                                            decoration: BoxDecoration(
+                                                                borderRadius: BorderRadius
+                                                                    .all(Radius
+                                                                        .circular(
+                                                                            40))),
+                                                            child: ClipRRect(
+                                                                borderRadius: BorderRadius
+                                                                    .all(Radius
+                                                                        .circular(
+                                                                            40)),
+                                                                child: profile !=
+                                                                        null
+                                                                    ? Image.network(
+                                                                        profile)
+                                                                    : Icon(
+                                                                        Icons
+                                                                            .person,
+                                                                        size:
+                                                                            40,
+                                                                      )),
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          width: 4,
+                                                        ),
+                                                        Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                              e['user'],
+                                                              style: TextStyle(
+                                                                fontSize: 18,
+                                                              ),
+                                                            ),
+                                                            Container(
+                                                              width: 100,
+                                                              child: Text(
+                                                                "Doctor",
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    color: Colors
+                                                                        .black54),
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                              ),
+                                                            ),
+                                                            Text('$duration',
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    color: Colors
+                                                                        .black54))
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(
+                                                      height: 5,
+                                                    ),
+
+                                                    RichTextView(
+                                                      text:
+                                                          "${listofConsults[index]['topic'] ?? ' '}",
+                                                      maxLines: 3,
+                                                      align: TextAlign.center,
+                                                      onHashTagClicked:
+                                                          (hashtag) => print(
+                                                              'is $hashtag trending?'),
+                                                      onMentionClicked:
+                                                          (mention) => print(
+                                                              '$mention clicked'),
+                                                      onUrlClicked: (url) =>
+                                                          launch(url),
+                                                      linkStyle: TextStyle(
+                                                          color: Colors.blue),
+                                                    ),
+                                                    // Text(
+                                                    //   _post[index].tags,
+                                                    //   style: TextStyle(color: blueColor),
+                                                    // ),
+                                                    SizedBox(
+                                                      height: 10,
+                                                    ),
+                                                    e['image'] != null
+                                                        ? GestureDetector(
+                                                            onTap: () {
+                                                              Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          Image
+                                                                              .network(
+                                                                    e['image'],
+                                                                    fit: BoxFit
+                                                                        .contain,
+                                                                  ),
+                                                                ),
+                                                              );
+                                                            },
+                                                            child: Container(
+                                                              width:
+                                                                  MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width,
+                                                              height: height(
+                                                                      context) *
+                                                                  0.375,
+                                                              child:
+                                                                  Image.network(
+                                                                e['image'],
+                                                                fit: BoxFit
+                                                                    .contain,
+                                                              ),
+                                                            ),
+                                                          )
+                                                        : Container(
+                                                            height: 0.0,
+                                                            width: 0.0,
+                                                          ),
+                                                  ],
+                                                  widget.user_id)));
+                                },
+                              )
+                            ],
+                          ),
+                          Divider(
+                            thickness: 0.50,
+                            color: Colors.black26,
+                          ),
+                          _rowButton(
+                            e,
+                            [
+                              Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: profile != null
+                                        ? () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Image.network(
+                                                  profile,
+                                                  fit: BoxFit.contain,
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                        : null,
+                                    child: Container(
+                                      width: 40,
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(40))),
+                                      child: ClipRRect(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(40)),
+                                          child: profile != null
+                                              ? Image.network(profile)
+                                              : Icon(
+                                                  Icons.person,
+                                                  size: 40,
+                                                )),
+                                    ),
                                   ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                      ],
-                    ),
-                  );
-                },
+                                  SizedBox(
+                                    width: 4,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        e['user'],
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                      Container(
+                                        width: 100,
+                                        child: Text(
+                                          "Doctor",
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.black54),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      Text('$duration',
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.black54))
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              LinkifyText(
+                                "${listofConsults[index]['topic'] ?? ' '}",
+                                isLinkNavigationEnable: true,
+                                linkColor: Colors.blueAccent,
+                                fontColor: Colors.black,
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              e['image'] != null
+                                  ? GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => Image.network(
+                                              e['image'],
+                                              fit: BoxFit.contain,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Container(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        height: height(context) * 0.375,
+                                        child: Image.network(
+                                          e['image'],
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ),
+                                    )
+                                  : Container(
+                                      height: 0.0,
+                                      width: 0.0,
+                                    ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
           );
