@@ -555,6 +555,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
     List<dynamic> consult =
         await Provider.of<ConsultProvider>(context, listen: false)
             .getConsultsbyPagination(5, skip);
+            
     listofConsults.addAll(consult[0]);
     setState(() {
       isLoadingConsults = false;

@@ -28,7 +28,7 @@ class ConsultProvider with ChangeNotifier {
     // List<Consult> consults = [];
     Response response =
         await get(Uri.parse(AppUrl.pagination + "?take=${take}&skip=${skip}"));
-    // print("haile" + response.body);
+    print("haile" + response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       return json.decode(response.body);
     } else {

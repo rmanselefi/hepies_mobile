@@ -213,7 +213,7 @@ class _PostConsultState extends State<PostConsult> {
                                           file != null ? File(file.path) : null;
                                       if (_myInterests.length !=
                                               0 || //Milkessa: added posting capability with either text or image
-                                          file != null) {
+                                          file != null || _topic.text.length != 0) {
                                         var res = await consult.share(
                                             _topic.text,
                                             photo,
