@@ -49,9 +49,10 @@ class _DrawerCustomState extends State<DrawerCustom> {
                 CircleAvatar(
                   radius: width(context) * 0.15,
                   backgroundColor: Colors.grey,
-                  backgroundImage: widget.profile != null && widget.profile != ""
-                      ? NetworkImage(widget.profile)
-                      : null,
+                  backgroundImage:
+                      widget.profile != null && widget.profile != ""
+                          ? NetworkImage(widget.profile)
+                          : null,
                 ),
                 SizedBox(height: 5),
                 Row(
@@ -62,10 +63,13 @@ class _DrawerCustomState extends State<DrawerCustom> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '     ${widget.name}',
+                          widget.name != null ? '     ${widget.name}' : "",
                           textScaleFactor: 1.1,
                         ),
-                        Text('      ${widget.profession}',
+                        Text(
+                            widget.profession != null
+                                ? '${widget.profession}'
+                                : "",
                             style: TextStyle(color: Colors.black45)),
                       ],
                     ),

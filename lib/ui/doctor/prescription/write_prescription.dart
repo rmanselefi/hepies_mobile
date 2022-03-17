@@ -180,14 +180,19 @@ class _WritePrescriptionState extends State<WritePrescription> {
   @override
   Widget build(BuildContext context) {
     var prescProvider = Provider.of<PrescriptionProvider>(context);
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: WillPopScope(
-        onWillPop: () async {
-          return Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Welcome()));
-        },
-        child: Column(
+    return WillPopScope(
+      onWillPop: () async {
+          Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Welcome(
+                                  currenIndex: 0,
+                                )));    
+        return;
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Column(
           children: [
             SafeArea(
               child: SizedBox(

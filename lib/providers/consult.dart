@@ -28,7 +28,7 @@ class ConsultProvider with ChangeNotifier {
     // List<Consult> consults = [];
     Response response =
         await get(Uri.parse(AppUrl.pagination + "?take=${take}&skip=${skip}"));
-    // print("haile" + response.body);
+    print("haile" + response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       return json.decode(response.body);
     } else {
@@ -40,16 +40,6 @@ class ConsultProvider with ChangeNotifier {
     }
     return jsonDecode(response.body);
   }
-
-  // Future notifySearch() {
-  //   isonSearching = true;
-  //   notifyListeners();
-  // }
-
-  // Future switchSearch() {
-  //   isonSearching = false;
-  //   notifyListeners();
-  // }
 
   Future<List<dynamic>> searchConsults(String word, int take, int skip) async {
     var result;
@@ -84,7 +74,8 @@ class ConsultProvider with ChangeNotifier {
     return json.decode(response.body);
   }
 
-  Future<Map<String, dynamic>> share(String topic, File file) async {
+  Future<Map<String, dynamic>> share(
+      String topic, File file, String inputInterest) async {
     _shareStatus = ConsultStatus.Sharing;
     notifyListeners();
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -102,6 +93,7 @@ class ConsultProvider with ChangeNotifier {
     final Map<String, dynamic> registrationData = {
       'topic': topic,
       'image': image,
+      "interests": inputInterest
     };
     Response response = await post(Uri.parse(AppUrl.consults),
         body: json.encode(registrationData),
@@ -131,7 +123,7 @@ class ConsultProvider with ChangeNotifier {
   }
 
   Future<Map<String, dynamic>> updateConsult(
-      var id, String topic, File file, var imageUrl) async {
+      var id, String topic, File file, var imageUrl, String interest) async {
     _editStatus = ConsultStatus.Sharing;
     notifyListeners();
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -151,6 +143,7 @@ class ConsultProvider with ChangeNotifier {
     final Map<String, dynamic> registrationData = {
       'topic': topic,
       'image': image,
+      "interests": interests
     };
     Response response = await put(Uri.parse('${AppUrl.consults}/$id'),
         body: json.encode(registrationData),
