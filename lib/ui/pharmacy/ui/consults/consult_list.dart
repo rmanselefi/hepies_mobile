@@ -12,6 +12,7 @@ import 'package:hepies/ui/pharmacy/ui/consults/comment/share_comment.dart';
 import 'package:hepies/ui/pharmacy/welcome.dart';
 import 'package:hepies/ui/welcome.dart';
 import 'package:hepies/util/image_consult.dart';
+import 'package:hepies/util/shared_preference.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:linkify_text/linkify_text.dart';
@@ -55,7 +56,7 @@ class _RowButtonState extends State<RowButton> {
         : [];
     res.length > 0 ? isLiked = true : isLiked = false;
     totalLikes = widget.e['like'].length;
-    print("res ${res}");
+    // print("res ${res}");
   }
 
   @override
@@ -206,7 +207,7 @@ class _RowButtonState extends State<RowButton> {
                         size: 15,
                       ),
                       label: Text(
-                        "${totalLikes}",
+                        "${totalLikes} ${totalLikes == 0 ? "Like" : "Likes"}",
                         style: TextStyle(color: Colors.grey),
                       )),
                   SizedBox(
@@ -555,7 +556,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
     List<dynamic> consult =
         await Provider.of<ConsultProvider>(context, listen: false)
             .getConsultsbyPagination(5, skip);
-            
+
     listofConsults.addAll(consult[0]);
     setState(() {
       isLoadingConsults = false;
@@ -607,7 +608,18 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                   await Provider.of<ConsultProvider>(context, listen: false)
                       .getConsultsbyPagination(5, skip);
               Navigator.of(context).pop();
-              Navigator.of(context).pop(true);
+              var currentUser = await UserPreferences().getUser();
+
+              print("role : ${currentUser.role}");
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => currentUser.role == 'doctor' ||
+                              currentUser.role == 'healthofficer' ||
+                              currentUser.role == 'nurse'
+                          ? Welcome()
+                          : WelcomePharmacy()),
+                  ModalRoute.withName('/'));
 
               showTopSnackBar(
                 context,
@@ -802,6 +814,8 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                                       if (_topic.text !=
                                                               "" || //Milkessa: added posting capability with either text or image
                                                           file != null) {
+                                                        print(
+                                                            "interests ${_myInterests}");
                                                         var res = await consult
                                                             .updateConsult(
                                                                 post['id'],
@@ -825,13 +839,20 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                                             _topic.text = null;
                                                             file = null;
                                                           });
+
+                                                          var currentUser =
+                                                              await UserPreferences()
+                                                                  .getUser();
+
+                                                          print(
+                                                              "role : ${currentUser.role}");
                                                           Navigator.pushAndRemoveUntil(
                                                               context,
                                                               MaterialPageRoute(
-                                                                  builder: (context) => userProvider.role == 'doctor' ||
-                                                                          userProvider.role ==
+                                                                  builder: (context) => currentUser.role == 'doctor' ||
+                                                                          currentUser.role ==
                                                                               'healthofficer' ||
-                                                                          userProvider.role ==
+                                                                          currentUser.role ==
                                                                               'nurse'
                                                                       ? Welcome()
                                                                       : WelcomePharmacy()),

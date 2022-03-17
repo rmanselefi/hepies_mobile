@@ -51,7 +51,6 @@ class AuthProvider with ChangeNotifier {
     );
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Map<String, dynamic> responseData = json.decode(response.body);
-
       // print("responseDataresponseDataresponseDataresponseData $responseData");
       User authUser = User.fromJson(responseData);
       UserPreferences().saveUser(authUser);

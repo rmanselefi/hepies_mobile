@@ -28,7 +28,6 @@ class ConsultProvider with ChangeNotifier {
     // List<Consult> consults = [];
     Response response =
         await get(Uri.parse(AppUrl.pagination + "?take=${take}&skip=${skip}"));
-    print("haile" + response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       return json.decode(response.body);
     } else {
@@ -122,8 +121,8 @@ class ConsultProvider with ChangeNotifier {
     return result;
   }
 
-  Future<Map<String, dynamic>> updateConsult(
-      var id, String topic, File file, var imageUrl, String interest) async {
+  Future<Map<String, dynamic>> updateConsult(var id, String topic, File file,
+      var imageUrl, String Inputinterests) async {
     _editStatus = ConsultStatus.Sharing;
     notifyListeners();
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -143,7 +142,7 @@ class ConsultProvider with ChangeNotifier {
     final Map<String, dynamic> registrationData = {
       'topic': topic,
       'image': image,
-      "interests": interests
+      "interests": Inputinterests
     };
     Response response = await put(Uri.parse('${AppUrl.consults}/$id'),
         body: json.encode(registrationData),
