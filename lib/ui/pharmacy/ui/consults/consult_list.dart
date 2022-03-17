@@ -26,6 +26,441 @@ import 'package:rich_text_view/rich_text_view.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
 
+class RowButton extends StatefulWidget {
+  RowButton(
+      {Key key, this.e, this.post, this.userId, this.profile, this.duration})
+      : super(key: key);
+
+  var e;
+  List<Widget> post;
+  var userId;
+  var profile;
+  var duration;
+
+  @override
+  State<RowButton> createState() => _RowButtonState();
+}
+
+class _RowButtonState extends State<RowButton> {
+  bool isLiked = false;
+  int totalLikes = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    super.initState();
+    var res = widget.e['like'] != null
+        ? widget.e['like'].where((l) => l['user_id'] == widget.userId).toList()
+        : [];
+    res.length > 0 ? isLiked = true : isLiked = false;
+    totalLikes = widget.e['like'].length;
+    print("res ${res}");
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              child: Row(
+                children: [
+                  TextButton.icon(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PharmacyShareComment(
+                                    widget.e['id'],
+                                    [
+                                      Row(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: widget.profile != null
+                                                ? () {
+                                                    Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            Image.network(
+                                                          widget.profile,
+                                                          fit: BoxFit.contain,
+                                                        ),
+                                                      ),
+                                                    );
+                                                  }
+                                                : null,
+                                            child: Container(
+                                              width: 40,
+                                              height: 40,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(40))),
+                                              child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.all(
+                                                          Radius.circular(40)),
+                                                  child: widget.profile != null
+                                                      ? Image.network(
+                                                          widget.profile)
+                                                      : Icon(
+                                                          Icons.person,
+                                                          size: 40,
+                                                        )),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 4,
+                                          ),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                widget.e['user'],
+                                                style: TextStyle(
+                                                  fontSize: 18,
+                                                ),
+                                              ),
+                                              Container(
+                                                width: 100,
+                                                child: Text(
+                                                  "Doctor",
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: Colors.black54),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ),
+                                              Text('${widget.duration}',
+                                                  style: TextStyle(
+                                                      fontSize: 12,
+                                                      color: Colors.black54))
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+
+                                      RichTextView(
+                                        text: "${widget.e['topic'] ?? ' '}",
+                                        maxLines: 3,
+                                        align: TextAlign.center,
+                                        onHashTagClicked: (hashtag) =>
+                                            print('is $hashtag trending?'),
+                                        onMentionClicked: (mention) =>
+                                            print('$mention clicked'),
+                                        onUrlClicked: (url) => launch(url),
+                                        linkStyle:
+                                            TextStyle(color: Colors.blue),
+                                      ),
+                                      // Text(
+                                      //   _post[index].tags,
+                                      //   style: TextStyle(color: blueColor),
+                                      // ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                      widget.e['image'] != null
+                                          ? GestureDetector(
+                                              onTap: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        Image.network(
+                                                      widget.e['image'],
+                                                      fit: BoxFit.contain,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              child: Container(
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                height: height(context) * 0.375,
+                                                child: Image.network(
+                                                  widget.e['image'],
+                                                  fit: BoxFit.contain,
+                                                ),
+                                              ),
+                                            )
+                                          : Container(
+                                              height: 0.0,
+                                              width: 0.0,
+                                            ),
+                                    ],
+                                    widget.userId)));
+                      },
+                      icon: Icon(
+                        Icons.thumb_up_sharp,
+                        color: Colors.grey,
+                        size: 15,
+                      ),
+                      label: Text(
+                        "${totalLikes}",
+                        style: TextStyle(color: Colors.grey),
+                      )),
+                  SizedBox(
+                    width: 5,
+                  ),
+                ],
+              ),
+            ),
+            GestureDetector(
+              child: Row(
+                children: [
+                  Text(
+                    widget.e['comment'] != null
+                        ? widget.e['comment'].length.toString()
+                        : "",
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                  Text(" comments", style: TextStyle(color: Colors.grey))
+                ],
+              ),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PharmacyShareComment(
+                            widget.e['id'],
+                            [
+                              Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: widget.profile != null
+                                        ? () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    Image.network(
+                                                  widget.profile,
+                                                  fit: BoxFit.contain,
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                        : null,
+                                    child: Container(
+                                      width: 40,
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(40))),
+                                      child: ClipRRect(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(40)),
+                                          child: widget.profile != null
+                                              ? Image.network(widget.profile)
+                                              : Icon(
+                                                  Icons.person,
+                                                  size: 40,
+                                                )),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 4,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        widget.e['user'],
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                        ),
+                                      ),
+                                      Container(
+                                        width: 100,
+                                        child: Text(
+                                          "Doctor",
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.black54),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      Text('${widget.duration}',
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.black54))
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+
+                              RichTextView(
+                                text: "${widget.e['topic'] ?? ' '}",
+                                maxLines: 3,
+                                align: TextAlign.center,
+                                onHashTagClicked: (hashtag) =>
+                                    print('is $hashtag trending?'),
+                                onMentionClicked: (mention) =>
+                                    print('$mention clicked'),
+                                onUrlClicked: (url) => launch(url),
+                                linkStyle: TextStyle(color: Colors.blue),
+                              ),
+                              // Text(
+                              //   _post[index].tags,
+                              //   style: TextStyle(color: blueColor),
+                              // ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              widget.e['image'] != null
+                                  ? GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => Image.network(
+                                              widget.e['image'],
+                                              fit: BoxFit.contain,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Container(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        height: height(context) * 0.375,
+                                        child: Image.network(
+                                          widget.e['image'],
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ),
+                                    )
+                                  : Container(
+                                      height: 0.0,
+                                      width: 0.0,
+                                    ),
+                            ],
+                            widget.userId)));
+              },
+            )
+          ],
+        ),
+        Divider(
+          thickness: 0.50,
+          color: Colors.black26,
+        ),
+        Container(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Consumer<ConsultProvider>(
+                  builder: (context, consultPProvider, child) {
+                return BouncingWidget(
+                  scaleFactor: 1.5,
+                  onPressed: () async {
+                    setState(() {
+                      isLiked = !isLiked;
+                    });
+
+                    if (isLiked) {
+                      print("like woriing");
+                      var r = await Provider.of<ConsultProvider>(context,
+                              listen: false)
+                          .likeConsult(widget.e['id']);
+                      print("r" + r.toString());
+                      setState(() {
+                        ++totalLikes;
+                      });
+                    } else {
+                      print("unlike working");
+
+                      var r = await Provider.of<ConsultProvider>(context,
+                              listen: false)
+                          .unlikeConsult(widget.e['id']);
+                      print("r" + r.toString());
+                      setState(() {
+                        --totalLikes;
+                      });
+                    }
+                  },
+                  child: rowSingleButton(
+                      color: (isLiked) ? Colors.blueAccent : Colors.black,
+                      name: "Like",
+                      iconImage: (isLiked)
+                          ? Icons.thumb_up_sharp
+                          : Icons.thumb_up_outlined,
+                      isHover: false),
+                );
+              }),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PharmacyShareComment(
+                              widget.e['id'], widget.post, widget.userId)));
+                },
+                child: rowSingleButton(
+                    color: Colors.black,
+                    name: "Comment",
+                    iconImage: Icons.comment,
+                    isHover: false),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class rowSingleButton extends StatelessWidget {
+  rowSingleButton(
+      {Key key, this.name, this.iconImage, this.color, this.isHover})
+      : super(key: key);
+  String name;
+  dynamic iconImage;
+  Color color;
+  bool isHover;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 4, horizontal: 6),
+      decoration: BoxDecoration(
+          color: isHover ? Colors.black.withOpacity(.1) : Colors.transparent,
+          borderRadius: BorderRadius.all(Radius.circular(4))),
+      child: Row(
+        children: [
+          Container(
+            width: 28,
+            height: 28,
+            child: Icon(
+              iconImage,
+              color: color,
+            ),
+          ),
+          SizedBox(
+            width: 5,
+          ),
+          Text(
+            name,
+            style: TextStyle(fontSize: 16),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class PharmacyConsultList extends StatefulWidget {
   final user_id;
   final interest;
@@ -90,71 +525,8 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
     children: <Widget>[CircularProgressIndicator()],
   );
 
-  Widget _rowButton(var e, List<Widget> post) {
-    var res = e['like'] != null
-        ? e['like'].where((l) => l['user_id'] == widget.user_id).toList()
-        : [];
-    return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          res.length > 0
-              ? BouncingWidget(
-                  scaleFactor: 1.5,
-                  onPressed: () async {
-                    var res = await Provider.of<ConsultProvider>(context,
-                            listen: false)
-                        .unlikeConsult(e['id']);
-                    if (res['status']) {
-                      setState(() {
-                        Provider.of<ConsultProvider>(context, listen: false)
-                            .getLikeByConsultIdForUser(e['id']);
-                      });
-                    }
-                  },
-                  child: rowSingleButton(
-                      color: Colors.blueAccent,
-                      name: "Like",
-                      iconImage: Icons.thumb_up_sharp,
-                      isHover: false),
-                )
-              : BouncingWidget(
-                  scaleFactor: 1.5,
-                  onPressed: () async {
-                    var res = await Provider.of<ConsultProvider>(context,
-                            listen: false)
-                        .likeConsult(e['id']);
-                    if (res['status']) {
-                      setState(() {
-                        Provider.of<ConsultProvider>(context, listen: false)
-                            .getLikeByConsultIdForUser(e['id']);
-                      });
-                    }
-                  },
-                  child: rowSingleButton(
-                      color: Colors.black,
-                      name: "Like",
-                      iconImage: Icons.thumb_up_outlined,
-                      isHover: false),
-                ),
-          InkWell(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          PharmacyShareComment(e['id'], post, widget.user_id)));
-            },
-            child: rowSingleButton(
-                color: Colors.black,
-                name: "Comment",
-                iconImage: Icons.comment,
-                isHover: false),
-          ),
-        ],
-      ),
-    );
-  }
+  bool Islked = false;
+  var currentIndex = 0;
 
   List<dynamic> listofConsults = [];
   bool isLoadingConsults = false;
@@ -504,6 +876,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
           });
     }
 
+    var consultState = Provider.of<ConsultProvider>(context);
     return listofConsults.length == 0
         ? ShimmerEffect()
         : MediaQuery.removePadding(
@@ -696,368 +1069,10 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                           SizedBox(
                             height: 10,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                child: Row(
-                                  children: [
-                                    TextButton.icon(
-                                        onPressed: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      PharmacyShareComment(
-                                                          e['id'],
-                                                          [
-                                                            Row(
-                                                              children: [
-                                                                GestureDetector(
-                                                                  onTap:
-                                                                      profile !=
-                                                                              null
-                                                                          ? () {
-                                                                              Navigator.push(
-                                                                                context,
-                                                                                MaterialPageRoute(
-                                                                                  builder: (context) => Image.network(
-                                                                                    profile,
-                                                                                    fit: BoxFit.contain,
-                                                                                  ),
-                                                                                ),
-                                                                              );
-                                                                            }
-                                                                          : null,
-                                                                  child:
-                                                                      Container(
-                                                                    width: 40,
-                                                                    height: 40,
-                                                                    decoration: BoxDecoration(
-                                                                        borderRadius:
-                                                                            BorderRadius.all(Radius.circular(40))),
-                                                                    child: ClipRRect(
-                                                                        borderRadius: BorderRadius.all(Radius.circular(40)),
-                                                                        child: profile != null
-                                                                            ? Image.network(profile)
-                                                                            : Icon(
-                                                                                Icons.person,
-                                                                                size: 40,
-                                                                              )),
-                                                                  ),
-                                                                ),
-                                                                SizedBox(
-                                                                  width: 4,
-                                                                ),
-                                                                Column(
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .start,
-                                                                  children: [
-                                                                    Text(
-                                                                      e['user'],
-                                                                      style:
-                                                                          TextStyle(
-                                                                        fontSize:
-                                                                            18,
-                                                                      ),
-                                                                    ),
-                                                                    Container(
-                                                                      width:
-                                                                          100,
-                                                                      child:
-                                                                          Text(
-                                                                        "Doctor",
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                12,
-                                                                            color:
-                                                                                Colors.black54),
-                                                                        overflow:
-                                                                            TextOverflow.ellipsis,
-                                                                      ),
-                                                                    ),
-                                                                    Text(
-                                                                        '$duration',
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                12,
-                                                                            color:
-                                                                                Colors.black54))
-                                                                  ],
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            SizedBox(
-                                                              height: 5,
-                                                            ),
 
-                                                            RichTextView(
-                                                              text:
-                                                                  "${listofConsults[index]['topic'] ?? ' '}",
-                                                              maxLines: 3,
-                                                              align: TextAlign
-                                                                  .center,
-                                                              onHashTagClicked:
-                                                                  (hashtag) =>
-                                                                      print(
-                                                                          'is $hashtag trending?'),
-                                                              onMentionClicked:
-                                                                  (mention) =>
-                                                                      print(
-                                                                          '$mention clicked'),
-                                                              onUrlClicked:
-                                                                  (url) =>
-                                                                      launch(
-                                                                          url),
-                                                              linkStyle: TextStyle(
-                                                                  color: Colors
-                                                                      .blue),
-                                                            ),
-                                                            // Text(
-                                                            //   _post[index].tags,
-                                                            //   style: TextStyle(color: blueColor),
-                                                            // ),
-                                                            SizedBox(
-                                                              height: 10,
-                                                            ),
-                                                            e['image'] != null
-                                                                ? GestureDetector(
-                                                                    onTap: () {
-                                                                      Navigator
-                                                                          .push(
-                                                                        context,
-                                                                        MaterialPageRoute(
-                                                                          builder: (context) =>
-                                                                              Image.network(
-                                                                            e['image'],
-                                                                            fit:
-                                                                                BoxFit.contain,
-                                                                          ),
-                                                                        ),
-                                                                      );
-                                                                    },
-                                                                    child:
-                                                                        Container(
-                                                                      width: MediaQuery.of(
-                                                                              context)
-                                                                          .size
-                                                                          .width,
-                                                                      height: height(
-                                                                              context) *
-                                                                          0.375,
-                                                                      child: Image
-                                                                          .network(
-                                                                        e['image'],
-                                                                        fit: BoxFit
-                                                                            .contain,
-                                                                      ),
-                                                                    ),
-                                                                  )
-                                                                : Container(
-                                                                    height: 0.0,
-                                                                    width: 0.0,
-                                                                  ),
-                                                          ],
-                                                          widget.user_id)));
-                                        },
-                                        icon: Icon(
-                                          Icons.thumb_up_sharp,
-                                          color: Colors.grey,
-                                          size: 15,
-                                        ),
-                                        label: Text(
-                                          "${e['like'] != null ? e['like'].length : ''} likes",
-                                          style: TextStyle(color: Colors.grey),
-                                        )),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              GestureDetector(
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      e['comment'] != null
-                                          ? e['comment'].length.toString()
-                                          : "",
-                                      style: TextStyle(color: Colors.grey),
-                                    ),
-                                    Text(" comments",
-                                        style: TextStyle(color: Colors.grey))
-                                  ],
-                                ),
-                                onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              PharmacyShareComment(
-                                                  e['id'],
-                                                  [
-                                                    Row(
-                                                      children: [
-                                                        GestureDetector(
-                                                          onTap: profile != null
-                                                              ? () {
-                                                                  Navigator
-                                                                      .push(
-                                                                    context,
-                                                                    MaterialPageRoute(
-                                                                      builder:
-                                                                          (context) =>
-                                                                              Image.network(
-                                                                        profile,
-                                                                        fit: BoxFit
-                                                                            .contain,
-                                                                      ),
-                                                                    ),
-                                                                  );
-                                                                }
-                                                              : null,
-                                                          child: Container(
-                                                            width: 40,
-                                                            height: 40,
-                                                            decoration: BoxDecoration(
-                                                                borderRadius: BorderRadius
-                                                                    .all(Radius
-                                                                        .circular(
-                                                                            40))),
-                                                            child: ClipRRect(
-                                                                borderRadius: BorderRadius
-                                                                    .all(Radius
-                                                                        .circular(
-                                                                            40)),
-                                                                child: profile !=
-                                                                        null
-                                                                    ? Image.network(
-                                                                        profile)
-                                                                    : Icon(
-                                                                        Icons
-                                                                            .person,
-                                                                        size:
-                                                                            40,
-                                                                      )),
-                                                          ),
-                                                        ),
-                                                        SizedBox(
-                                                          width: 4,
-                                                        ),
-                                                        Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Text(
-                                                              e['user'],
-                                                              style: TextStyle(
-                                                                fontSize: 18,
-                                                              ),
-                                                            ),
-                                                            Container(
-                                                              width: 100,
-                                                              child: Text(
-                                                                "Doctor",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        12,
-                                                                    color: Colors
-                                                                        .black54),
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                              ),
-                                                            ),
-                                                            Text('$duration',
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        12,
-                                                                    color: Colors
-                                                                        .black54))
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    SizedBox(
-                                                      height: 5,
-                                                    ),
-
-                                                    RichTextView(
-                                                      text:
-                                                          "${listofConsults[index]['topic'] ?? ' '}",
-                                                      maxLines: 3,
-                                                      align: TextAlign.center,
-                                                      onHashTagClicked:
-                                                          (hashtag) => print(
-                                                              'is $hashtag trending?'),
-                                                      onMentionClicked:
-                                                          (mention) => print(
-                                                              '$mention clicked'),
-                                                      onUrlClicked: (url) =>
-                                                          launch(url),
-                                                      linkStyle: TextStyle(
-                                                          color: Colors.blue),
-                                                    ),
-                                                    // Text(
-                                                    //   _post[index].tags,
-                                                    //   style: TextStyle(color: blueColor),
-                                                    // ),
-                                                    SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    e['image'] != null
-                                                        ? GestureDetector(
-                                                            onTap: () {
-                                                              Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                          Image
-                                                                              .network(
-                                                                    e['image'],
-                                                                    fit: BoxFit
-                                                                        .contain,
-                                                                  ),
-                                                                ),
-                                                              );
-                                                            },
-                                                            child: Container(
-                                                              width:
-                                                                  MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width,
-                                                              height: height(
-                                                                      context) *
-                                                                  0.375,
-                                                              child:
-                                                                  Image.network(
-                                                                e['image'],
-                                                                fit: BoxFit
-                                                                    .contain,
-                                                              ),
-                                                            ),
-                                                          )
-                                                        : Container(
-                                                            height: 0.0,
-                                                            width: 0.0,
-                                                          ),
-                                                  ],
-                                                  widget.user_id)));
-                                },
-                              )
-                            ],
-                          ),
-                          Divider(
-                            thickness: 0.50,
-                            color: Colors.black26,
-                          ),
-                          _rowButton(
-                            e,
-                            [
+                          RowButton(
+                            e: e,
+                            post: [
                               Row(
                                 children: [
                                   GestureDetector(
@@ -1163,7 +1178,11 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                       width: 0.0,
                                     ),
                             ],
+                            userId: widget.user_id,
+                            profile: profile,
+                            duration: duration,
                           ),
+
                           SizedBox(
                             height: 10,
                           ),
