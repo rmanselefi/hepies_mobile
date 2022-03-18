@@ -742,7 +742,7 @@ class _SearchListState extends State<SearchList> {
                                         okButtonLabel: 'OK',
                                         cancelButtonLabel: 'CANCEL',
                                         hintWidget:
-                                            Text('Please choose one or more'),
+                                            Text('you can  choose one or more'),
                                         initialValue: _myInterests,
                                         onSaved: (value) {
                                           if (value == null) return;

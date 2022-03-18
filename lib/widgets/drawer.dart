@@ -101,8 +101,8 @@ class _DrawerCustomState extends State<DrawerCustom> {
                   onTap: () async {
                     // Milkessa: Implemented intent to email with nice formatting
                     final mailtoLink = Mailto(
-                      to: ['to@example.com'],
-                      cc: ['cc1@example.com', 'cc2@example.com'],
+                      to: ['contact@hepius.co'],
+                      cc: ['contact@hepius.co', 'contact@hepius.co'],
                       subject: 'mailto example subject',
                       body: 'mailto example body',
                     );

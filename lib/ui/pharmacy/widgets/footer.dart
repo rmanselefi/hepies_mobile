@@ -61,7 +61,7 @@ class _PharmacyFooterState extends State<PharmacyFooter> {
                   ),
                   onPressed: () async {
                     nav.changeNavSelection(NavSelection.home);
-                    Navigator.push(
+                    Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                             builder: (context) => WelcomePharmacy()));

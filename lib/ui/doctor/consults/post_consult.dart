@@ -111,7 +111,7 @@ class _PostConsultState extends State<PostConsult> {
       valueField: 'value',
       okButtonLabel: 'OK',
       cancelButtonLabel: 'CANCEL',
-      hintWidget: Text('Please choose one or more'),
+      hintWidget: Text('you can choose one or more'),
       initialValue: _myInterests,
       onSaved: (value) {
         if (value == null) return;
@@ -145,7 +145,7 @@ class _PostConsultState extends State<PostConsult> {
                     controller: _topic,
                     keyboardType: TextInputType.multiline,
                     decoration: InputDecoration(
-                      hintText: "Enter your Topic....",
+                      hintText: "Enter your consult....",
                       border: OutlineInputBorder(
                           borderSide:
                               BorderSide(color: Colors.black, width: 1)),
@@ -191,96 +191,86 @@ class _PostConsultState extends State<PostConsult> {
                 ],
               ),
             ),
-            Align(
-              alignment: Alignment.topRight,
-              child: Container(
-                padding: EdgeInsets.only(right: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        ImageInputConsult(_setImage),
-                        consult.shareStatus == ConsultStatus.Sharing
-                            ? loading
-                            : Align(
-                                alignment: Alignment.topRight,
-                                child: OutlinedButton(
-                                  onPressed: () async {
-                                    try {
-                                      var photo =
-                                          file != null ? File(file.path) : null;
-                                      if (_myInterests.length !=
-                                              0 || //Milkessa: added posting capability with either text or image
-                                          file != null || _topic.text.length != 0) {
-                                        var res = await consult.share(
-                                            _topic.text,
-                                            photo,
-                                            _myInterests.join(" ").toString());
-                                        if (res['status']) {
-                                          consult.getConsults();
-                                          showTopSnackBar(
-                                            context,
-                                            CustomSnackBar.success(
-                                              message:
-                                                  "Your consult is uploaded succesfully",
-                                            ),
-                                          );
-                                          Navigator.pop(context);
-                                        }
-                                      } else {
-                                        showTopSnackBar(
-                                          context,
-                                          CustomSnackBar.error(
-                                            message:
-                                                "Invalid Data! Make sure you have inserted image or text",
-                                          ),
-                                        );
-                                        Navigator.pop(context);
-                                      }
-                                    } catch (e) {
-                                      print("eeeee ${e}");
-                                      showTopSnackBar(
-                                        context,
-                                        CustomSnackBar.error(
-                                          message:
-                                              "Unable to share your consult",
-                                        ),
-                                      );
-                                      Navigator.pop(context);
-                                    }
-                                  },
-                                  child: Container(
-                                    margin: EdgeInsets.zero,
-                                    padding: EdgeInsets.all(3.0),
-                                    decoration: BoxDecoration(
-                                      boxShadow: [buttonShadow],
-                                      borderRadius: BorderRadius.circular(3),
-                                    ),
-                                    child: Container(
-                                      margin: EdgeInsets.zero,
-                                      padding: EdgeInsets.all(3.0),
-                                      decoration: BoxDecoration(
-                                        boxShadow: [buttonShadow],
-                                        borderRadius: BorderRadius.circular(3),
+            Container(
+              padding: EdgeInsets.only(right: 10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ImageInputConsult(_setImage),
+                  consult.shareStatus == ConsultStatus.Sharing
+                      ? loading
+                      : Align(
+                          alignment: Alignment.topRight,
+                          child: OutlinedButton(
+                            onPressed: () async {
+                              try {
+                                var photo =
+                                    file != null ? File(file.path) : null;
+                                if (_myInterests.length !=
+                                        0 || //Milkessa: added posting capability with either text or image
+                                    file != null ||
+                                    _topic.text.length != 0) {
+                                  var res = await consult.share(_topic.text,
+                                      photo, _myInterests.join(" ").toString());
+                                  if (res['status']) {
+                                    consult.getConsults();
+                                    showTopSnackBar(
+                                      context,
+                                      CustomSnackBar.success(
+                                        message:
+                                            "Your consult is uploaded succesfully",
                                       ),
-                                      child: Text(
-                                        'Consult',
-                                        textScaleFactor: 0.775,
-                                        style: TextStyle(
-                                          color: Colors.blue,
-                                          fontWeight: FontWeight.w900,
-                                        ),
-                                      ),
+                                    );
+                                    Navigator.pop(context);
+                                  }
+                                } else {
+                                  showTopSnackBar(
+                                    context,
+                                    CustomSnackBar.error(
+                                      message:
+                                          "Invalid Data! Make sure you have inserted image or text",
                                     ),
+                                  );
+                                  Navigator.pop(context);
+                                }
+                              } catch (e) {
+                                print("eeeee ${e}");
+                                showTopSnackBar(
+                                  context,
+                                  CustomSnackBar.error(
+                                    message: "Unable to share your consult",
+                                  ),
+                                );
+                                Navigator.pop(context);
+                              }
+                            },
+                            child: Container(
+                              margin: EdgeInsets.zero,
+                              padding: EdgeInsets.all(3.0),
+                              decoration: BoxDecoration(
+                                boxShadow: [buttonShadow],
+                                borderRadius: BorderRadius.circular(3),
+                              ),
+                              child: Container(
+                                margin: EdgeInsets.zero,
+                                padding: EdgeInsets.all(3.0),
+                                decoration: BoxDecoration(
+                                  boxShadow: [buttonShadow],
+                                  borderRadius: BorderRadius.circular(3),
+                                ),
+                                child: Text(
+                                  'Consult',
+                                  textScaleFactor: 0.775,
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                    fontWeight: FontWeight.w900,
                                   ),
                                 ),
                               ),
-                      ],
-                    ),
-                  ],
-                ),
+                            ),
+                          ),
+                        ),
+                ],
               ),
             ),
           ],

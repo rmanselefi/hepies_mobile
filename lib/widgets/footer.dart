@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +39,7 @@ class _FooterState extends State<Footer> {
                   onPressed: () async {
                     // await Provider.of<ConsultProvider>(context).switchSearch();
 
-                    Navigator.push(
+                    Navigator.pushReplacement<Void, void>(
                         context,
                         MaterialPageRoute(
                             builder: (context) => Welcome(

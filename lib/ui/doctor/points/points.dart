@@ -195,8 +195,7 @@ class _PointsState extends State<Points> {
                                         style: ButtonStyle(
                                             backgroundColor:
                                                 MaterialStateProperty.all<
-                                                        Color>(
-                                                    Color(0xff07febb))),
+                                                    Color>(Color(0xff07febb))),
                                         child: Text("50 Birr")),
                                     SizedBox(
                                       child: VerticalDivider(),
@@ -233,8 +232,7 @@ class _PointsState extends State<Points> {
                                         style: ButtonStyle(
                                             backgroundColor:
                                                 MaterialStateProperty.all<
-                                                        Color>(
-                                                    Color(0xff07febb))),
+                                                    Color>(Color(0xff07febb))),
                                         child: const Text("100 Birr")),
                                   ],
                                 ),
@@ -245,7 +243,7 @@ class _PointsState extends State<Points> {
                   Padding(
                     padding: const EdgeInsets.only(top: 15),
                     child: Text(
-                      'Transfer points to other professional', //Milkessa: added to word 'points'
+                      'Donate points to other professional', //Milkessa: added to word 'points'
                       style: TextStyle(
                           fontWeight: FontWeight.w300,
                           fontSize: 18.0,

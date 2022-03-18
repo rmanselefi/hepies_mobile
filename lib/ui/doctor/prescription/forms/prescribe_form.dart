@@ -283,7 +283,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
   Widget _textSizes() {
     return Container(
       height: 40.0,
-      width: width(context) * 0.225,
+      width: width(context) * 0.3,
       child: new Row(
         children: <Widget>[
           new Expanded(
@@ -326,12 +326,13 @@ class _PrescribeFormState extends State<PrescribeForm> {
     var frequency = ["Qd", "BID", "TID", "QID", "PRN"];
     return Container(
       height: 40.0,
+      margin: EdgeInsets.only(left: 5),
       width: width(context) * 0.3,
       child: new Row(
         children: <Widget>[
           new Expanded(
               child: Container(
-                  width: 80.0,
+                  width: 100.0,
                   child: new TextField(
                     controller: everyController,
                     onChanged: (val) {
@@ -348,7 +349,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                     },
                     decoration: InputDecoration(
                       contentPadding:
-                          EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                          EdgeInsets.symmetric(horizontal: 5, vertical: 8),
                       border: OutlineInputBorder(),
                       hintText: 'Every',
                       enabled: isEvery && !isPatient,
@@ -358,7 +359,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                               : Colors.grey,
                           fontSize: 15.0),
                       suffixIcon: Container(
-                        width: 10.0,
+                        width: 8.0,
                         margin: const EdgeInsets.only(left: 5.0),
                         child: PopupMenuButton<String>(
                           icon: const Icon(Icons.arrow_drop_down),
@@ -805,7 +806,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                           ],
                         ),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -813,6 +814,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                 width: width(context) * 0.575,
                                 height: 55.0,
                                 child: IntlPhoneField(
+                                  onTap: () {},
                                   initialCountryCode: 'ET',
                                   showDropdownIcon: false,
                                   // Milkessa: Fixed phone input field formatting
@@ -846,57 +848,8 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                       patient.phone = phone;
                                     });
                                   },
-                                  // onChanged: (String val) async {
-                                  //   var phone = "+251$val";
-                                  //   if (val.length == 9) {
-                                  //     var res = await patientProvider
-                                  //         .getPatient(phone);
-                                  //     if (res != null) {
-                                  //       setState(() {
-                                  //         ageController.text = res['age'];
-                                  //         _chosenValue = res['sex'];
-                                  //         nameController.text = res['name'];
-                                  //         fnameController.text =
-                                  //             res['fathername'];
-                                  //         phoneController.text =
-                                  //             phone.substring(4);
-                                  //       });
-                                  //     }
-                                  //   }
-                                  //   setState(() {
-                                  //     patient.phone = phone;
-                                  //   });
-                                  // },
+
                                   decoration: InputDecoration(
-                                      // counterText: "",
-                                      // contentPadding: EdgeInsets.zero,
-                                      // prefixIcon: SizedBox(
-                                      //   width: 35,
-                                      //   child: Center(
-                                      //     child: Text(
-                                      //       '+251 ',
-                                      //       textScaleFactor: 0.9,
-                                      //     ),
-                                      //   ),
-                                      //   // CountryCodePicker(
-                                      //   //   onChanged: (value) {
-                                      //   //     setState(() {
-                                      //   //       _countryCode = value.dialCode;
-                                      //   //       _countryCode == null
-                                      //   //           ? _countryCode = "+251 - 9"
-                                      //   //           : _countryCode = '+251 - 9';
-                                      //   //     });
-                                      //   //   },
-                                      //   //   backgroundColor: Colors.white,
-                                      //   //   initialSelection: 'ET',
-                                      //   //   favorite: ['+251 - 9', 'ET'],
-                                      //   //   showCountryOnly: false,
-                                      //   //   showOnlyCountryWhenClosed: false,
-                                      //   //   alignLeft: false,
-                                      //   //   padding: EdgeInsets.all(0.0),
-                                      //   //   showFlag: false,
-                                      //   // ),
-                                      // ),
                                       labelText: 'Phone Number',
                                       border: OutlineInputBorder(
                                         borderSide: BorderSide(),
@@ -1226,11 +1179,8 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                           }),
                                       Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                            MainAxisAlignment.start,
                                         children: [
-                                          SizedBox(
-                                            width: 8.0,
-                                          ),
                                           Container(
                                             width: width(context) * 0.3375,
                                             height: 40.0,
@@ -1264,7 +1214,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                         children: [
                                           _textEvery(),
                                           Container(
-                                            width: width(context) * 0.2875,
+                                            width: width(context) * 0.25,
                                             height: 40,
                                             child: Row(
                                               children: [
@@ -1359,10 +1309,12 @@ class _PrescribeFormState extends State<PrescribeForm> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Container(
+                            margin: EdgeInsets.only(left: 2),
                             width: MediaQuery.of(context).size.width,
                             height: 50,
                             child: TextFormField(
                               controller: remarkController,
+                              enabled: !rememberMe ? true : false,
                               decoration: InputDecoration(
                                   border: OutlineInputBorder(),
                                   labelText: 'Remark',
@@ -1386,8 +1338,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                               message: "Phone number is required",
                             ),
                           );
-                        } else if (phoneController.text.length !=
-                                9 &&
+                        } else if (phoneController.text.length != 9 &&
                             !rememberMe &&
                             status != "edit") {
                           print("phone number length : " +
@@ -1682,10 +1633,10 @@ class _PrescribeFormState extends State<PrescribeForm> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(2.0),
           child: Container(
             width: MediaQuery.of(context).size.width - 20,
-            height: 60,
+            height: 80,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(

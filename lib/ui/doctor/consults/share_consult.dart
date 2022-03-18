@@ -113,7 +113,7 @@ class _ShareConsultState extends State<ShareConsult> {
                             borderRadius: BorderRadius.all(Radius.circular(30)),
                             borderSide:
                                 BorderSide(color: Colors.black38, width: 1)),
-                        hintText: "Search consults by interest ...",
+                        hintText: "Search consults  ...",
                         labelStyle: TextStyle(color: Colors.black45),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(30)),
@@ -142,9 +142,10 @@ class _ShareConsultState extends State<ShareConsult> {
                       )),
                   Divider(),
                   isOnSearch
-                      ? SearchList(
-                          widget.user_id, interest, _search.text.toString() , _parentScrollController)
-                      : PharmacyConsultList(widget.user_id, interest, _parentScrollController)
+                      ? SearchList(widget.user_id, interest,
+                          _search.text.toString(), _parentScrollController)
+                      : PharmacyConsultList(
+                          widget.user_id, interest, _parentScrollController)
                 ],
               ),
             )),
