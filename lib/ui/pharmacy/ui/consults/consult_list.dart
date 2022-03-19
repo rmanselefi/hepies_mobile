@@ -654,6 +654,14 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
     }
 
     showEdit(BuildContext context, var post) {
+      var i = [];
+      for (var item in post['interests'].split(' ')) {
+        i.add(item.substring(1));
+      }
+      print(i.toString());
+      setState(() {
+        _myInterests = i;
+      });
       showModalBottomSheet(
           context: context,
           builder: (BuildContext context) {
@@ -1023,6 +1031,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                       ? IconButton(
                                           onPressed: () {
                                             _topic.text = e['topic'] ?? '';
+
                                             showEdit(context, e);
                                           },
                                           icon: Icon(Icons.more_vert_outlined))

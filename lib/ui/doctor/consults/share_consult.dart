@@ -19,6 +19,7 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:hepies/util/helpers.dart';
 
 class ShareConsult extends StatefulWidget {
   final user_id;
@@ -143,7 +144,7 @@ class _ShareConsultState extends State<ShareConsult> {
                   Divider(),
                   isOnSearch
                       ? SearchList(widget.user_id, interest,
-                          _search.text.toString(), _parentScrollController)
+                         capitalize(_search.text.toString()), _parentScrollController)
                       : PharmacyConsultList(
                           widget.user_id, interest, _parentScrollController)
                 ],

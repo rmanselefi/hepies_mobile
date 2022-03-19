@@ -8,6 +8,7 @@ import 'package:hepies/ui/doctor/consults/post_consult.dart';
 import 'package:hepies/ui/pharmacy/ui/consults/consult_list.dart';
 import 'package:hepies/ui/pharmacy/ui/consults/search_list.dart';
 import 'package:hepies/ui/pharmacy/widgets/footer.dart';
+import 'package:hepies/util/helpers.dart';
 import 'package:hepies/util/image_consult.dart';
 import 'package:hepies/widgets/footer.dart';
 import 'package:hepies/widgets/header.dart';
@@ -145,7 +146,7 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
                     ? SearchList(
                         widget.user_id,
                         interest,
-                        _search.text.trim().toString(),
+                        capitalize(_search.text.trim().toString()),
                         _parentScrollController)
                     : PharmacyConsultList(
                         widget.user_id, interest, _parentScrollController)

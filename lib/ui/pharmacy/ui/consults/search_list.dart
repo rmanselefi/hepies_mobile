@@ -26,6 +26,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:rich_text_view/rich_text_view.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
+import 'package:hepies/util/helpers.dart';
 
 class RowButton extends StatefulWidget {
   RowButton(
@@ -208,7 +209,6 @@ class _RowButtonState extends State<RowButton> {
                       ),
                       label: Text(
                         "${totalLikes} ${totalLikes == 0 ? "Like" : "Likes"}",
-
                         style: TextStyle(color: Colors.grey),
                       )),
                   SizedBox(
@@ -576,7 +576,7 @@ class _SearchListState extends State<SearchList> {
         onPressed: () async {
           var res = await ConsultProvider().deleteConsult(id);
           if (res['status']) {
-            setState(() async{
+            setState(() async {
               _myData = Provider.of<ConsultProvider>(context, listen: false)
                   .getConsults();
 
@@ -626,6 +626,14 @@ class _SearchListState extends State<SearchList> {
     }
 
     showEdit(BuildContext context, var post) {
+       var i = [];
+      for (var item in post['interests'].split(' ')) {
+        i.add(item.substring(1));
+      }
+      print(i.toString());
+      setState(() {
+        _myInterests = i;
+      });
       showModalBottomSheet(
           context: context,
           builder: (BuildContext context) {
@@ -984,6 +992,8 @@ class _SearchListState extends State<SearchList> {
                                     ? IconButton(
                                         onPressed: () {
                                           _topic.text = e['topic'] ?? '';
+                                          print("i" + e['interests']);
+
                                           showEdit(context, e);
                                         },
                                         icon: Icon(Icons.more_vert_outlined))

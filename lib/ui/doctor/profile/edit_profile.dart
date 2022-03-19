@@ -60,25 +60,41 @@ class _EditProfileState extends State<EditProfile>
   String _profession = 'Medical Doctor';
   var loadingProfile;
   List<dynamic> _interests = [];
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getUser();
+    getUserInterest();
     getInterests();
   }
 
+  getUserInterest() async {
+    print("working");
+    var user = await UserProvider().getProfile();
+    var interestss = user['profession'][0]['interests'] != null
+        ? user['profession'][0]['interests'].split(",")
+        : [];
+    setState(() {
+      _interests = interestss.sublist(1);
+    });
+    print("interset" + _interests.toString());
+  }
+
   getUser() async {
+    print("working user");
+    Future.delayed(Duration(seconds: 5));
     setState(() {
       loadingProfile = true;
     });
     var user = await UserProvider().getProfile();
     // print("object ${user}");
+    var inters = user['profession'][0]['interests'] != null
+        ? user['profession'][0]['interests'].split(",")
+        : [];
 
     setState(() {
-      var inters = user['profession'][0]['interests'] != null
-          ? user['profession'][0]['interests'].split(",")
-          : [];
       List interew = [];
       inters.forEach((element) {
         var property = {
@@ -101,6 +117,8 @@ class _EditProfileState extends State<EditProfile>
   }
 
   getInterests() async {
+    print("i working");
+    Future.delayed(Duration(seconds: 5));
     List interests = await ConsultProvider().getInterests();
 
     setState(() {
@@ -112,6 +130,9 @@ class _EditProfileState extends State<EditProfile>
         interestList.add(property);
       });
     });
+
+    // print(interestList);
+    // print("somethig");
   }
 
   String _selectedDate = '';
@@ -292,38 +313,49 @@ class _EditProfileState extends State<EditProfile>
                                 mainAxisSize: MainAxisSize.max,
                                 children: <Widget>[
                                   new Flexible(
-                                      child: new MultiSelectFormField(
-                                    chipBackGroundColor: Colors.red,
-                                    chipLabelStyle:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                    dialogTextStyle:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                    checkBoxActiveColor: Colors.red,
-                                    checkBoxCheckColor: Colors.green,
-                                    dialogShapeBorder: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(12.0))),
-                                    title: Text(
-                                      "Select Your interests",
-                                      style: TextStyle(fontSize: 16),
-                                    ),
-                                    dataSource: interestList,
-                                    textField: 'display',
-                                    valueField: 'value',
-                                    okButtonLabel: 'OK',
-                                    cancelButtonLabel: 'CANCEL',
-                                    hintWidget:
-                                        Text('Please choose one or more'),
-                                    initialValue: interest,
-                                    onSaved: (value) {
-                                      if (value == null) return;
-                                      // print("_interests_interests_interests ${value.join(",")}");
+                                      child: interestList.length > 0
+                                          ? MultiSelectFormField(
+                                              chipBackGroundColor: Colors.red,
+                                              chipLabelStyle: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                              dialogTextStyle: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                              checkBoxActiveColor: Colors.red,
+                                              checkBoxCheckColor: Colors.green,
+                                              dialogShapeBorder:
+                                                  RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  12.0))),
+                                              title: Text(
+                                                "Select Your interests",
+                                                style: TextStyle(fontSize: 16),
+                                              ),
+                                              dataSource:
+                                                  interestList.length > 0
+                                                      ? interestList
+                                                      : [],
+                                              textField: 'display',
+                                              valueField: 'value',
+                                              okButtonLabel: 'OK',
+                                              cancelButtonLabel: 'CANCEL',
+                                              hintWidget: Text(
+                                                  'Please choose one or more'),
+                                              initialValue:
+                                                  _interests.length > 0
+                                                      ? _interests
+                                                      : [],
+                                              onSaved: (value) {
+                                                if (value == null) return;
+                                                // print("_interests_interests_interests ${value.join(",")}");
 
-                                      setState(() {
-                                        _interests = value;
-                                      });
-                                    },
-                                  )),
+                                                setState(() {
+                                                  _interests = value;
+                                                });
+                                              },
+                                            )
+                                          : Container()),
                                 ],
                               )),
                           Padding(
