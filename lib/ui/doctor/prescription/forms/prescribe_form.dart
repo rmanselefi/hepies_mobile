@@ -11,11 +11,12 @@ import 'package:hepies/providers/drug_provider.dart';
 import 'package:hepies/providers/patient_provider.dart';
 import 'package:hepies/providers/prescription_provider.dart';
 import 'package:hepies/util/shared_preference.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:intl_phone_field/phone_number.dart';
 import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:phone_number/phone_number.dart';
 
 // ignore: must_be_immutable
 class PrescribeForm extends StatefulWidget {
@@ -39,6 +40,7 @@ class PrescribeForm extends StatefulWidget {
 }
 
 class _PrescribeFormState extends State<PrescribeForm> {
+  bool isValidPhoneNumber = false;
   String status = 'add';
   var action_status = 'populate';
   String _chosenValue;
@@ -814,6 +816,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                 width: width(context) * 0.575,
                                 height: 55.0,
                                 child: IntlPhoneField(
+                                  countries: ["ET"],
                                   onTap: () {},
                                   initialCountryCode: 'ET',
                                   showDropdownIcon: false,
@@ -827,9 +830,21 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                       patient.phone = "+251${value.number}";
                                     });
                                   },
-                                  onChanged: (PhoneNumber) async {
-                                    var phone = "+251${PhoneNumber.number}";
-                                    if (PhoneNumber.number.length == 9) {
+                                  onChanged: (value) async {
+                                    var phone = "+251${value.number}";
+                                    PhoneNumberUtil plugin = PhoneNumberUtil();
+                                    RegionInfo region =
+                                        RegionInfo(code: 'ET', prefix: 251);
+                                    if (value.number.length == 9) {
+                                      bool isValid = await plugin.validate(
+                                          phone, region.code);
+                                      if (isValid) {
+                                        setState(() {
+                                          isValidPhoneNumber = true;
+                                        });
+                                      }
+                                      print("is valide" + isValid.toString());
+
                                       var res = await patientProvider
                                           .getPatient(phone);
                                       if (res != null) {
@@ -1329,6 +1344,16 @@ class _PrescribeFormState extends State<PrescribeForm> {
                     child: MaterialButton(
                       onPressed: () async {
                         _formKey.currentState.save();
+                        if (!isValidPhoneNumber &&
+                            !rememberMe &&
+                            status != "edit") {
+                          showTopSnackBar(
+                            context,
+                            CustomSnackBar.error(
+                              message: "Phone number is not valid",
+                            ),
+                          );
+                        }
                         if (phoneController.text == "" &&
                             !rememberMe &&
                             status != "edit") {

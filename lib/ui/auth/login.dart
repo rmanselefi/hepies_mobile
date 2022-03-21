@@ -116,9 +116,8 @@ class _LoginState extends State<Login> {
 
       if (form.validate()) {
         form.save();
-
         final Future<Map<String, dynamic>> successfulMessage =
-            auth.login(_username, _password);
+            auth.login(_username.trim(), _password);
 
         successfulMessage.then((response) {
           print("object haile $response");
@@ -150,8 +149,7 @@ class _LoginState extends State<Login> {
             showTopSnackBar(
               context,
               CustomSnackBar.error(
-                message: 
-                    'Wrong username or password entered, try again!',
+                message: 'Wrong username or password entered, try again!',
               ),
             );
           }

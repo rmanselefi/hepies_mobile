@@ -79,6 +79,7 @@ class ConsultProvider with ChangeNotifier {
     notifyListeners();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
+    print(token);
     var image;
     if (file != null) {
       await AuthProvider().uploadImage(file).then((res) {

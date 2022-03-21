@@ -68,6 +68,7 @@ dependencies:
   multiselect_formfield: ^0.1.7
   lazy_load_scrollview: ^1.3.0
   intl_phone_field: ^3.0.1
+  phone_number: ^0.12.0+1
 
 dev_dependencies:
   flutter_test:

@@ -49,14 +49,14 @@ class PharmacyProvider with ChangeNotifier {
     String professionid = prefs.getInt('professionid').toString();
     // print("professionidprofessionid $professionid");
     String token = prefs.getString('token');
-
+    print("post p" + professionid);
     var result;
 
     final Map<String, dynamic> registrationData = {
       'price': price,
       'drug_name': drug_name,
       'drug': drug_id,
-      'professional': professionid
+      'professional':  professionid ,
     };
     // print("registrationData $registrationData");
     Response response = await post(Uri.parse(AppUrl.pharmacy),
@@ -66,6 +66,7 @@ class PharmacyProvider with ChangeNotifier {
           HttpHeaders.authorizationHeader: "Bearer $token"
         });
 
+    print("drung" + response.body + response.statusCode.toString());
     if (response.statusCode == 200 || response.statusCode == 201) {
       result = {
         'status': true,
@@ -85,15 +86,17 @@ class PharmacyProvider with ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String professionid = prefs.getInt('professionid').toString();
     // print("professionidprofessionid $professionid");
+    print(professionid);
     var result;
     List<Consult> consults = [];
     Response response =
         await get(Uri.parse("${AppUrl.mypharmacy}/$professionid"));
-
+    print("response pharmaacy" + response.body);
     if (response.statusCode == 200 || response.statusCode == 201) {
       medical = json.decode(response.body);
       // print("consultconsultconsultconsultconsult ${medical.length}");
       // notifyListeners();
+      print("m" + medical.toString());
       return medical;
     } else {
       result = {
