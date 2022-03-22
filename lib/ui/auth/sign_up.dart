@@ -183,17 +183,7 @@ class _RegisterState extends State<Register> {
           value.isEmpty ? "Please enter your father name" : null,
       onSaved: (value) => _fathername = value,
       decoration: buildInputDecoration("Confirm password", Icons.person),
-    );
-
-    // final phoneField = TextFormField(
-    //   autofocus: false,
-    //   maxLength: 9,
-    //   keyboardType: TextInputType.number,
-    //   validator: (value) =>
-    //       value.isEmpty ? "Please enter your phone number" : null,
-    //   onSaved: (value) => _phone = '+251' + value,
-    //   decoration: buildInputDecoration("Confirm password", Icons.contact_phone),
-    // );
+    );  
     final phoneField = Container(
       child: IntlPhoneField(
           countries: ["ET"],

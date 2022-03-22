@@ -77,7 +77,7 @@ class _EditProfileState extends State<EditProfile>
         ? user['profession'][0]['interests'].split(",")
         : [];
     setState(() {
-      _interests = interestss.sublist(1);
+      _interests = interestss;
     });
     print("interset" + _interests.toString());
   }

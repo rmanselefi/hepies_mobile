@@ -96,7 +96,8 @@ class _DrawerCustomState extends State<DrawerCustom> {
                   leading: Icon(Icons.inbox, color: Color(0xff0FF6A0)),
                   title: Text(
                     'Contact Us',
-                    style: TextStyle(color: Colors.black45),
+                    style: TextStyle(
+                        color: Colors.black, fontFamily: 'Roboto-Bold'),
                   ),
                   onTap: () async {
                     // Milkessa: Implemented intent to email with nice formatting
@@ -117,7 +118,8 @@ class _DrawerCustomState extends State<DrawerCustom> {
                   leading: Icon(Icons.privacy_tip, color: Color(0xff0FF6A0)),
                   title: Text(
                     'Privacy Policy and Terms and Conditions',
-                    style: TextStyle(color: Colors.black45),
+                    style: TextStyle(
+                        color: Colors.black ,fontFamily: 'Roboto-Bold'),
                   ),
                   onTap: () {
                     // Navigator.push(
@@ -129,7 +131,7 @@ class _DrawerCustomState extends State<DrawerCustom> {
                 ListTile(
                   leading: Icon(Icons.person, color: Color(0xff0FF6A0)),
                   title: Text('Change Password',
-                      style: TextStyle(color: Colors.black45)),
+                      style: TextStyle(color: Colors.black, fontFamily:'Roboto-Bold')),
                   onTap: () {
                     Navigator.push(
                         context,
@@ -143,7 +145,7 @@ class _DrawerCustomState extends State<DrawerCustom> {
                     color: Color(0xff0FF6A0),
                   ),
                   title:
-                      Text('Logout', style: TextStyle(color: Colors.black45)),
+                      Text('Logout', style: TextStyle(color: Colors.black, fontFamily:'Roboto-Bold')),
                   onTap: () async {
                     await Provider.of<AuthProvider>(context, listen: false)
                         .logout();
