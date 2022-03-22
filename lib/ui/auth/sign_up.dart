@@ -17,7 +17,9 @@ import 'package:hepies/util/validators.dart';
 import 'package:hepies/util/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
+import 'package:phone_number/phone_number.dart';
 import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
@@ -33,6 +35,9 @@ class _RegisterState extends State<Register> {
   TapGestureRecognizer _tapRecognizer;
   String _selectedDate = '';
   String _range = '';
+
+  bool isValidPhoneNumber = false;
+  String finalPhoneNumber = "";
 
   var passwordController = new TextEditingController();
   List interestList = [];
@@ -180,14 +185,45 @@ class _RegisterState extends State<Register> {
       decoration: buildInputDecoration("Confirm password", Icons.person),
     );
 
-    final phoneField = TextFormField(
-      autofocus: false,
-      maxLength: 9,
-      keyboardType: TextInputType.number,
-      validator: (value) =>
-          value.isEmpty ? "Please enter your phone number" : null,
-      onSaved: (value) => _phone = '+251' + value,
-      decoration: buildInputDecoration("Confirm password", Icons.contact_phone),
+    // final phoneField = TextFormField(
+    //   autofocus: false,
+    //   maxLength: 9,
+    //   keyboardType: TextInputType.number,
+    //   validator: (value) =>
+    //       value.isEmpty ? "Please enter your phone number" : null,
+    //   onSaved: (value) => _phone = '+251' + value,
+    //   decoration: buildInputDecoration("Confirm password", Icons.contact_phone),
+    // );
+    final phoneField = Container(
+      child: IntlPhoneField(
+          countries: ["ET"],
+          onTap: () {},
+          initialCountryCode: 'ET',
+          showDropdownIcon: false,
+          // Milkessa: Fixed phone input field formatting
+          textAlign: TextAlign.start,
+          keyboardType: TextInputType.phone,
+          onSaved: (value) {},
+          onChanged: (value) async {
+            PhoneNumberUtil plugin = PhoneNumberUtil();
+            RegionInfo region = RegionInfo(code: 'ET', prefix: 251);
+            var phoneValue = '+251${value.number}';
+            if (value.number.length == 9) {
+              bool isValid = await plugin.validate(phoneValue, region.code);
+              if (isValid) {
+                setState(() {
+                  isValidPhoneNumber = true;
+                  _phone = phoneValue;
+                });
+              }
+            }
+          },
+          decoration: InputDecoration(
+            labelText: 'Phone Number',
+            border: OutlineInputBorder(
+              borderSide: BorderSide(),
+            ),
+          )),
     );
 
     final professionField = DropdownButtonFormField(
@@ -319,46 +355,57 @@ class _RegisterState extends State<Register> {
       var interests = _myInterests.join(",");
       final form = formKey.currentState;
       if (form.validate() && file != null) {
-        form.save();
-        auth
-            .register(
-                _name,
-                _fathername,
-                _username,
-                _phone,
-                _password,
-                _professionController,
-                _sexController,
-                _selectedDate,
-                interests,
-                File(file.path))
-            .then((response) {
-          if (response['status']) {
+        if (isValidPhoneNumber) {
+          form.save();
+          print(_phone);
+          auth
+              .register(
+                  _name,
+                  _fathername,
+                  _username,
+                  _phone,
+                  _password,
+                  _professionController,
+                  _sexController,
+                  _selectedDate,
+                  interests,
+                  File(file.path))
+              .then((response) {
+            if (response['status']) {
+              showTopSnackBar(
+                context,
+                CustomSnackBar.success(
+                  message: "Registration Successful. Please login",
+                ),
+              );
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AuthorizationPage(
+                          profession: _professionController,
+                          fatherName: _fathername,
+                          name: _name,
+                        )),
+                ModalRoute.withName('/'),
+              );
+            } else {
+              showTopSnackBar(
+                context,
+                CustomSnackBar.error(
+                  message: response['message'],
+                ),
+              );
+            }
+          });
+        }else{
             showTopSnackBar(
-              context,
-              CustomSnackBar.success(
-                message: "Registration Successful. Please login",
-              ),
-            );
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => AuthorizationPage(
-                        profession: _professionController,
-                        fatherName: _fathername,
-                        name: _name,
-                      )),
-              ModalRoute.withName('/'),
-            );
-          } else {
-            showTopSnackBar(
-              context,
-              CustomSnackBar.error(
-                message: response['message'],
-              ),
-            );
-          }
-        });
+          context,
+          CustomSnackBar.error(
+            message: "Invalid Phone Number",
+          ),
+        );
+
+        }
       } else {
         showTopSnackBar(
           context,

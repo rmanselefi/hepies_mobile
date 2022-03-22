@@ -22,7 +22,7 @@ class _FooterState extends State<Footer> {
     return Container(
       width: double.infinity,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(2.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           mainAxisSize: MainAxisSize.min,

@@ -77,9 +77,6 @@ class _ShareConsultState extends State<ShareConsult> {
           children: [
             // Header(),
 
-            SizedBox(
-              height: 30.0,
-            ),
             Expanded(
                 child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
@@ -143,8 +140,11 @@ class _ShareConsultState extends State<ShareConsult> {
                       )),
                   Divider(),
                   isOnSearch
-                      ? SearchList(widget.user_id, interest,
-                         capitalize(_search.text.toString()), _parentScrollController)
+                      ? SearchList(
+                          widget.user_id,
+                          interest,
+                          capitalize(_search.text.toString()),
+                          _parentScrollController)
                       : PharmacyConsultList(
                           widget.user_id, interest, _parentScrollController)
                 ],
