@@ -80,8 +80,6 @@ class _ReadPrescriptionState extends State<ReadPrescription> {
                   // print("objectobjectobjectobject $res");
                   if (res['status']) {
                     if (res['isPhone']) {
-                      res = await prescriptionProvider
-                          .readPrescription('${codeController.text}');
                       Navigator.push(
                         context,
                         MaterialPageRoute(

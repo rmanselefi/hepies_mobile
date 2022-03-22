@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hepies/constants.dart';
 import 'package:hepies/models/user.dart';
 import 'package:hepies/providers/consult.dart';
@@ -186,7 +187,11 @@ class _WelcomeState extends State<Welcome> {
           ),
         ),
         drawer: DrawerCustom(name, profession, profile),
-        body: ShareConsult(user_id),
+        body: WillPopScope(
+            onWillPop: () {
+              return SystemNavigator.pop();
+            },
+            child: ShareConsult(user_id)),
       ),
     );
   }

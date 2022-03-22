@@ -198,6 +198,7 @@ class _MyPharmacyState extends State<MyPharmacy> {
                                         VoidCallback onFieldSubmitted) {
                                       drugEditController =
                                           fieldTextEditingController;
+                                      drugEditController.text = drug_name;
                                       return Container(
                                         width: 200,
                                         child: TextFormField(
@@ -302,7 +303,6 @@ class _MyPharmacyState extends State<MyPharmacy> {
       onWillPop: () {
         nav.changeNavSelection(NavSelection.home);
         Navigator.pop(context);
-
         return;
       },
       child: SafeArea(
