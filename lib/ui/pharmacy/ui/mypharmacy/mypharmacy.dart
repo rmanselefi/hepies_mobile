@@ -293,7 +293,6 @@ class _MyPharmacyState extends State<MyPharmacy> {
       onWillPop: () {
         nav.changeNavSelection(NavSelection.home);
         Navigator.pop(context);
-
         return;
       },
       child: SafeArea(

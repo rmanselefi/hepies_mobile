@@ -141,8 +141,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
     // var index = Provider.of<PrescriptionProvider>(context).prescriptionIndex;
     //
     // setState(() {
-    //   status = statuse;
-    //   action_status = actionstatus;
     //   presIndex = index;
     // });
     // print("i got here =======> $action_status");
@@ -1386,8 +1384,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                               message: "Phone number is required",
                             ),
                           );
-                        } else if (phoneController.text.length !=
-                                9 &&
+                        } else if (phoneController.text.length != 9 &&
                             !rememberMe &&
                             status != "edit") {
                           print("phone number length : " +
@@ -1801,6 +1798,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                           //     .setPrescriptionForm(
                           //     pres, prescription.indexOf(pres));
                           setState(() {
+                            presIndex =  widget.initialPrescription.indexOf(pres);
                             drugnameController.value =
                                 TextEditingValue(text: pres['drug_name']);
                             _selectedAnimal = pres['drug_name'];

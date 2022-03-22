@@ -56,9 +56,9 @@ class PharmacyProvider with ChangeNotifier {
       'price': price,
       'drug_name': drug_name,
       'drug': drug_id,
-      'professional': professionid
+      'profession': professionid
     };
-    // print("registrationData $registrationData");
+    print("registrationData ==> My Pharmacy ======> $registrationData");
     Response response = await post(Uri.parse(AppUrl.pharmacy),
         body: json.encode(registrationData),
         headers: {

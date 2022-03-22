@@ -32,8 +32,12 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
     var prescProvider = Provider.of<PrescriptionProvider>(context);
 
     List<dynamic> result = widget.result['data'];
-    List<dynamic> notReadPrescription =
-        result.where((i) => i['status'] == "NotRead").toList();
+    List<dynamic> notReadPrescription = result
+        .where((i) =>
+            i['status'] == "NotRead" &&
+            DateTime.now().difference(DateTime.parse(i['createdAt'])).inDays <=
+                15)
+        .toList();
     var diagnosis = result[0]['diagnosis'];
     var prescription = result[0];
     var patient = prescription['patient'];
