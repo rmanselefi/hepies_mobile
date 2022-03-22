@@ -39,6 +39,7 @@ class _PrescriptionResultState extends State<PrescriptionResultPhone> {
             DateTime.now().difference(DateTime.parse(i['createdAt'])).inDays <=
                 15)
         .toList();
+    print("notReadPrescriptionnotReadPrescriptionnotReadPrescription ===>  $notReadPrescription");
     List<dynamic> list_id = [];
     notReadPrescription.forEach((element) {
       list_id.add(element['id']);

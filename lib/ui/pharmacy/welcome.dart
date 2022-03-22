@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hepies/models/user.dart';
 import 'package:hepies/providers/drug_provider.dart';
 import 'package:hepies/providers/user_provider.dart';
@@ -150,7 +151,11 @@ class _WelcomePharmacyState extends State<WelcomePharmacy> {
         ),
       ),
       drawer: DrawerCustom(name, profession, profile),
-      body: PharmacyShareConsult(user_id),
+      body: WillPopScope(
+          onWillPop: () {
+            return SystemNavigator.pop();
+          },
+          child: PharmacyShareConsult(user_id)),
     ));
   }
 }
