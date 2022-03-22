@@ -25,7 +25,7 @@ import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
+   await Firebase.initializeApp();
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   Directory dir = await getApplicationDocumentsDirectory();
   Hive.init(dir.path);
@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
           home: FutureBuilder(
               future: getUserData(),
               builder: (context, snapshot) {
-                print("object ${snapshot.data}");
+                // print("object ${snapshot.data}");
                 switch (snapshot.connectionState) {
                   case ConnectionState.none:
                   case ConnectionState.waiting:

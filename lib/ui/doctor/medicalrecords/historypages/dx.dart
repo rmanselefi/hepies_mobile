@@ -16,7 +16,7 @@ class _DXState extends State<DX>  with AutomaticKeepAliveClientMixin {
     setState(() {
       diags = diags;
     });
-    print("object ${diags}");
+    // print("object ${diags}");
     dx.diagnosis_list = diags;
     widget.setDx(dx);
   }

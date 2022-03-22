@@ -11,9 +11,11 @@ import 'package:hepies/providers/drug_provider.dart';
 import 'package:hepies/providers/patient_provider.dart';
 import 'package:hepies/providers/prescription_provider.dart';
 import 'package:hepies/util/shared_preference.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 
 // ignore: must_be_immutable
 class PrescribeForm extends StatefulWidget {
@@ -139,8 +141,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
     // var index = Provider.of<PrescriptionProvider>(context).prescriptionIndex;
     //
     // setState(() {
-    //   status = statuse;
-    //   action_status = actionstatus;
     //   presIndex = index;
     // });
     // print("i got here =======> $action_status");
@@ -215,7 +215,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
           "diagnosis": "",
         },
       };
-      print("favorites  $precriptionData");
+      // print("favorites  $precriptionData");
       finaPrescription.add(precriptionData);
     }
   }
@@ -809,22 +809,23 @@ class _PrescribeFormState extends State<PrescribeForm> {
                               padding: const EdgeInsets.all(8.0),
                               child: Container(
                                 width: width(context) * 0.575,
-                                height: 40.0,
-                                child: TextFormField(
+                                height: 55.0,
+                                child: IntlPhoneField(
+                                  initialCountryCode: 'ET',
+                                  showDropdownIcon: false,
                                   // Milkessa: Fixed phone input field formatting
                                   textAlign: TextAlign.start,
                                   controller: phoneController,
                                   enabled: !rememberMe || status == "edit",
-                                  maxLength: 9,
-                                  keyboardType: TextInputType.number,
+                                  keyboardType: TextInputType.phone,
                                   onSaved: (value) {
                                     setState(() {
-                                      patient.phone = "+251$value";
+                                      patient.phone = "+251${value.number}";
                                     });
                                   },
-                                  onChanged: (String val) async {
-                                    var phone = "+251$val";
-                                    if (val.length == 9) {
+                                  onChanged: (PhoneNumber) async {
+                                    var phone = "+251${PhoneNumber.number}";
+                                    if (PhoneNumber.number.length == 9) {
                                       var res = await patientProvider
                                           .getPatient(phone);
                                       if (res != null) {
@@ -843,35 +844,60 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                       patient.phone = phone;
                                     });
                                   },
+                                  // onChanged: (String val) async {
+                                  //   var phone = "+251$val";
+                                  //   if (val.length == 9) {
+                                  //     var res = await patientProvider
+                                  //         .getPatient(phone);
+                                  //     if (res != null) {
+                                  //       setState(() {
+                                  //         ageController.text = res['age'];
+                                  //         _chosenValue = res['sex'];
+                                  //         nameController.text = res['name'];
+                                  //         fnameController.text =
+                                  //             res['fathername'];
+                                  //         phoneController.text =
+                                  //             phone.substring(4);
+                                  //       });
+                                  //     }
+                                  //   }
+                                  //   setState(() {
+                                  //     patient.phone = phone;
+                                  //   });
+                                  // },
                                   decoration: InputDecoration(
-                                      counterText: "",
-                                      contentPadding: EdgeInsets.zero,
-                                      prefixIcon: SizedBox(
-                                        width: 35,
-                                        child: Center(
-                                          child: Text(
-                                            '+251 ',
-                                            textScaleFactor: 0.9,
-                                          ),
-                                        ),
-                                        // CountryCodePicker(
-                                        //   onChanged: (value) {
-                                        //     setState(() {
-                                        //       _countryCode = value.dialCode;
-                                        //       _countryCode == null
-                                        //           ? _countryCode = "+251 - 9"
-                                        //           : _countryCode = '+251 - 9';
-                                        //     });
-                                        //   },
-                                        //   backgroundColor: Colors.white,
-                                        //   initialSelection: 'ET',
-                                        //   favorite: ['+251 - 9', 'ET'],
-                                        //   showCountryOnly: false,
-                                        //   showOnlyCountryWhenClosed: false,
-                                        //   alignLeft: false,
-                                        //   padding: EdgeInsets.all(0.0),
-                                        //   showFlag: false,
-                                        // ),
+                                      // counterText: "",
+                                      // contentPadding: EdgeInsets.zero,
+                                      // prefixIcon: SizedBox(
+                                      //   width: 35,
+                                      //   child: Center(
+                                      //     child: Text(
+                                      //       '+251 ',
+                                      //       textScaleFactor: 0.9,
+                                      //     ),
+                                      //   ),
+                                      //   // CountryCodePicker(
+                                      //   //   onChanged: (value) {
+                                      //   //     setState(() {
+                                      //   //       _countryCode = value.dialCode;
+                                      //   //       _countryCode == null
+                                      //   //           ? _countryCode = "+251 - 9"
+                                      //   //           : _countryCode = '+251 - 9';
+                                      //   //     });
+                                      //   //   },
+                                      //   //   backgroundColor: Colors.white,
+                                      //   //   initialSelection: 'ET',
+                                      //   //   favorite: ['+251 - 9', 'ET'],
+                                      //   //   showCountryOnly: false,
+                                      //   //   showOnlyCountryWhenClosed: false,
+                                      //   //   alignLeft: false,
+                                      //   //   padding: EdgeInsets.all(0.0),
+                                      //   //   showFlag: false,
+                                      //   // ),
+                                      // ),
+                                      labelText: 'Phone Number',
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(),
                                       ),
                                       suffix: patientProvider.fetchStatus ==
                                               Status.Fetching
@@ -881,7 +907,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                               child:
                                                   CircularProgressIndicator())
                                           : null,
-                                      border: OutlineInputBorder(),
                                       hintStyle: TextStyle(
                                           color: !rememberMe
                                               ? Colors.redAccent
@@ -1105,8 +1130,8 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                                       if (value.text.isEmpty) {
                                                         return [];
                                                       }
-                                                      print(
-                                                          "generalDrugsgeneralDrugs $generalDrugs");
+                                                      // print(
+                                                      //     "generalDrugsgeneralDrugs $generalDrugs");
                                                       // The logic to find out which ones should appear
                                                       // Milkessa: implemented a search mechanism that is organized and alphabetical
                                                       List<dynamic> drugRes;
@@ -1357,6 +1382,20 @@ class _PrescribeFormState extends State<PrescribeForm> {
                             context,
                             CustomSnackBar.error(
                               message: "Phone number is required",
+                            ),
+                          );
+                        } else if (phoneController.text.length != 9 &&
+                            !rememberMe &&
+                            status != "edit") {
+                          print("phone number length : " +
+                              phoneController.text
+                                  .substring(4)
+                                  .length
+                                  .toString());
+                          showTopSnackBar(
+                            context,
+                            CustomSnackBar.error(
+                              message: "please add correct phoneNumber",
                             ),
                           );
                         } else if (ageController.text == "" &&
@@ -1655,7 +1694,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                     if (value.text.isEmpty) {
                       return [];
                     }
-                    print("instrument=========> $instruments");
+                    // print("instrument=========> $instruments");
                     // The logic to find out which ones should appear
                     // Milkessa: implemented a search mechanism that is organized and alphabetical
                     List<dynamic> instrumentRes;
@@ -1743,10 +1782,10 @@ class _PrescribeFormState extends State<PrescribeForm> {
                 Expanded(
                   child: pres['type'] == "general"
                       ? Text(
-                          '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['drug_name']} ${pres['strength']} '
-                          '${pres['unit']} ${pres['route']} Every ${pres['frequency']} For ${pres['takein']}')
+                          '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['drug_name'] != null ? pres['drug_name'] : ""} ${pres['strength'] != null ? pres['strength'] : ""} '
+                          '${pres['unit'] != null ? pres['unit'] : ""} ${pres['route'] != null ? pres['route'] : ""} Every ${pres['frequency'] != null ? pres['frequency'] : ""} For ${pres['takein'] != null ? pres['takein'] : ""}')
                       : Text(
-                          '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['material_name']} ${pres['size']} ${pres['amount']}'),
+                          '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['material_name'] != null ? pres['material_name'] : ""} ${pres['size'] != null ? pres['size'] : ""} ${pres['amount'] != null ? pres['amount'] : ""}'),
                 ),
                 Expanded(
                   child: Row(
@@ -1759,6 +1798,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                           //     .setPrescriptionForm(
                           //     pres, prescription.indexOf(pres));
                           setState(() {
+                            presIndex =  widget.initialPrescription.indexOf(pres);
                             drugnameController.value =
                                 TextEditingValue(text: pres['drug_name']);
                             _selectedAnimal = pres['drug_name'];
@@ -1799,4 +1839,3 @@ class _PrescribeFormState extends State<PrescribeForm> {
     );
   }
 }
-

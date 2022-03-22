@@ -743,7 +743,7 @@ class _IXState extends State<IX> with AutomaticKeepAliveClientMixin {
           controller: _wbccountController,
           onChanged: (val) {
             hematology.wbccount = val;
-            print("object ${hematology.wbccount}");
+            // print("object ${hematology.wbccount}");
             widget.setHematology(hematology);
           },
           decoration: InputDecoration(

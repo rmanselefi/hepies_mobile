@@ -105,20 +105,20 @@ class _DrugDetailState extends State<DrugDetail> {
                                     "Cautions",
                                     "Interactions",
                                     "Side effects",
-"Side Effects",
-"Dose",
-"Administration",
-"Adult",
-"Child",
-"Pediatric",
-"Storage",
-"Oral",
-"I.V",
-"I.M",
-"Topical",
-"Apply",
-"I.U",
-"Note",
+                                    "Side Effects",
+                                    "Dose",
+                                    "Administration",
+                                    "Adult",
+                                    "Child",
+                                    "Pediatric",
+                                    "Storage",
+                                    "Oral",
+                                    "I.V",
+                                    "I.M",
+                                    "Topical",
+                                    "Apply",
+                                    "I.U",
+                                    "Note",
                                     "Storage",
                                   ],
                                   style: TextStyle(
@@ -137,7 +137,6 @@ class _DrugDetailState extends State<DrugDetail> {
               ],
             )),
             Container(
-                height: 50,
                 decoration: BoxDecoration(
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(20.0))),
@@ -162,7 +161,7 @@ class _DrugDetailState extends State<DrugDetail> {
     List<Text> textWidgets = [];
     for (int i = 0; i < name.length; i++) {
       var spe = name[i].replaceAll(RegExp(",|!|'"), "");
-      print(spe);
+      // print(spe);
       if (bold_words.contains(spe)) {
         Text bold = Text(
           name[i] + ' ',

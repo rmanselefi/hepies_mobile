@@ -103,7 +103,7 @@ class _MedicalResultState extends State<MedicalResult> {
                                           context,
                                           listen: false)
                                       .readPrescription(e['code']);
-                              print("pattttttttttttttttt========>>>> $pat");
+                              // print("pattttttttttttttttt========>>>> $pat");
                               if (prescription != null) {
                                 Navigator.push(
                                     context,

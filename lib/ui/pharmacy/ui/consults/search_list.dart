@@ -393,9 +393,9 @@ class _RowButtonState extends State<RowButton> {
                     }
                   },
                   child: rowSingleButton(
-                      color: (isLiked) ? Colors.blueAccent : Colors.black,
+                      color: isLiked? Colors.blueAccent : Colors.black,
                       name: "Like",
-                      iconImage: (isLiked)
+                      iconImage: isLiked
                           ? Icons.thumb_up_sharp
                           : Icons.thumb_up_outlined,
                       isHover: false),
@@ -461,17 +461,19 @@ class rowSingleButton extends StatelessWidget {
   }
 }
 
-class PharmacyConsultList extends StatefulWidget {
+class SearchList extends StatefulWidget {
   final user_id;
   final interest;
+  final queryWord;
   final parentScrollController;
 
-  PharmacyConsultList(this.user_id, this.interest, this.parentScrollController);
+  SearchList(
+      this.user_id, this.interest, this.queryWord, this.parentScrollController);
   @override
-  _PharmacyConsultListState createState() => _PharmacyConsultListState();
+  _SearchListState createState() => _SearchListState();
 }
 
-class _PharmacyConsultListState extends State<PharmacyConsultList> {
+class _SearchListState extends State<SearchList> {
   ScrollController _scrollController;
   var _topic = new TextEditingController();
   String interestStatus = "hide";
@@ -491,49 +493,32 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
     // print("_formData_formData_formData${file}");
   }
 
-  Widget rowSingleButton(
-      {String name, dynamic iconImage, Color color, bool isHover}) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 4, horizontal: 6),
-      decoration: BoxDecoration(
-          color: isHover ? Colors.black.withOpacity(.1) : Colors.transparent,
-          borderRadius: BorderRadius.all(Radius.circular(4))),
-      child: Row(
-        children: [
-          Container(
-            width: 28,
-            height: 28,
-            child: Icon(
-              iconImage,
-              color: color,
-            ),
-          ),
-          SizedBox(
-            width: 5,
-          ),
-          Text(
-            name,
-            style: TextStyle(fontSize: 16),
-          ),
-        ],
-      ),
-    );
-  }
-
   var loading = Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: <Widget>[CircularProgressIndicator()],
   );
 
-  bool Islked = false;
-  var currentIndex = 0;
-
-  List<dynamic> listofConsults = [];
+  List<dynamic> searchConsultsResult = [];
   bool isLoadingConsults = false;
+
+  Future<List<dynamic>> searchConsults() async {
+    setState(() {
+      isLoadingConsults = true;
+    });
+    List<dynamic> consult =
+        await Provider.of<ConsultProvider>(context, listen: false)
+            .searchConsults(widget.queryWord, 5, searchSkip);
+    await Future.delayed(const Duration(seconds: 3), () {});
+    searchConsultsResult.addAll(consult[0]);
+    setState(() {
+      isLoadingConsults = false;
+      searchSkip = searchSkip + 5;
+    });
+    return searchConsultsResult;
+  }
 
   List interestList = [];
   List<dynamic> _myInterests = [];
-
   getInterests() async {
     List interests = await ConsultProvider().getInterests();
 
@@ -546,23 +531,6 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
         interestList.add(property);
       });
     });
-  }
-
-  Future<List<dynamic>> consultPagination() async {
-    setState(() {
-      isLoadingConsults = true;
-    });
-    List<dynamic> consult =
-        await Provider.of<ConsultProvider>(context, listen: false)
-            .getConsultsbyPagination(5, skip);
-            
-    listofConsults.addAll(consult[0]);
-    setState(() {
-      isLoadingConsults = false;
-      skip = skip + 5;
-    });
-    print("consult hail e" + listofConsults.length.toString());
-    return listofConsults;
   }
 
   @override
@@ -579,7 +547,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
             curve: Curves.easeIn);
       }
     });
-    consultPagination();
+    searchConsults();
     getInterests();
     interestStatus = "hide";
   }
@@ -587,9 +555,13 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
   @override
   Widget build(BuildContext context) {
     ConsultProvider consult = Provider.of<ConsultProvider>(context);
+    Future<List<dynamic>> _myData =
+        Provider.of<ConsultProvider>(context, listen: false).getConsults();
+
+    // var appState = Provider.of<ConsultProvider>(context);
+
     var userProvider = Provider.of<UserProvider>(context, listen: false);
     showAlertDialog(BuildContext context, var id) {
-      print(id.toString());
       // set up the buttons
       Widget cancelButton = TextButton(
         child: Text("No"),
@@ -602,13 +574,12 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
         onPressed: () async {
           var res = await ConsultProvider().deleteConsult(id);
           if (res['status']) {
-            setState(() async {
-              listofConsults =
-                  await Provider.of<ConsultProvider>(context, listen: false)
-                      .getConsultsbyPagination(5, skip);
-              Navigator.of(context).pop();
-              Navigator.of(context).pop(true);
+            setState(() {
+              _myData = Provider.of<ConsultProvider>(context, listen: false)
+                  .getConsults();
 
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
               showTopSnackBar(
                 context,
                 CustomSnackBar.success(
@@ -784,6 +755,8 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                               Expanded(
                                 child: Column(
                                   children: [
+                                    //Delete icon
+
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
@@ -861,9 +834,6 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                                   },
                                                   child: Text('Edit'),
                                                 )),
-                                        SizedBox(
-                                          width: 20,
-                                        )
                                       ],
                                     ),
                                   ],
@@ -877,201 +847,192 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
           });
     }
 
-    var consultState = Provider.of<ConsultProvider>(context);
-    return listofConsults.length == 0
+    var appstate = Provider.of<ConsultProvider>(context);
+// Pagination
+
+    return searchConsultsResult.length == 0
         ? ShimmerEffect()
         : MediaQuery.removePadding(
             context: context,
             removeTop: true,
-            child: Container(
-              height: MediaQuery.of(context).size.height / 1.5,
-              child: LazyLoadScrollView(
-                isLoading: isLoadingConsults,
-                scrollOffset: 400,
-                onEndOfPage: () => consultPagination(),
-                child: ListView.builder(
-                  controller: _scrollController,
-                  itemCount: listofConsults.length,
-                  shrinkWrap: true,
-                  physics: ClampingScrollPhysics(),
-                  itemBuilder: (BuildContext context, int index) {
-                    var e = listofConsults[index];
-                    var profile = e['author'] != null
-                        ? e['author']['profession'][0]['profile']
-                        : "";
-                    bool _validURL = profile != "" && profile != null
-                        ? Uri.parse(profile).isAbsolute
-                        : false;
-                    DateTime time = DateTime.parse(e['createdAt']);
-                    var duration = timeago.format(time);
+            child: LazyLoadScrollView(
+              isLoading: isLoadingConsults,
+              onEndOfPage: () => searchConsults(),
+              child: ListView.builder(
+                controller: _scrollController,
+                shrinkWrap: true,
+                itemCount: searchConsultsResult.length,
+                physics: ClampingScrollPhysics(),
+                itemBuilder: (BuildContext context, int index) {
+                  var e = searchConsultsResult[index];
+                  var profile = e['author'] != null
+                      ? e['author']['profession'][0]['profile']
+                      : "";
+                  bool _validURL = profile != "" && profile != null
+                      ? Uri.parse(profile).isAbsolute
+                      : false;
+                  DateTime time = DateTime.parse(e['createdAt']);
+                  var duration = timeago.format(time);
 
-                    if (index == listofConsults.length - 1) {
-                      return Padding(
-                          padding: EdgeInsets.all(8), child: ShimmerEffect());
-                    }
-                    return Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 8, horizontal: 15),
-                      margin: EdgeInsets.only(bottom: 0.0, top: 8),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border(
-                              top: BorderSide(
-                                  color: Colors.black54, width: 0.50),
-                              bottom: BorderSide(
-                                  color: Colors.black54, width: 0.50))),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  GestureDetector(
-                                    onTap: profile != null
-                                        ? () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    Image.network(
-                                                  profile,
-                                                  fit: BoxFit.contain,
-                                                ),
+                  return Container(
+                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+                    margin: EdgeInsets.only(bottom: 0.0, top: 8),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border(
+                            top: BorderSide(color: Colors.black54, width: 0.50),
+                            bottom: BorderSide(
+                                color: Colors.black54, width: 0.50))),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                GestureDetector(
+                                  onTap: profile != null
+                                      ? () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  Image.network(
+                                                profile,
+                                                fit: BoxFit.contain,
                                               ),
-                                            );
-                                          }
-                                        : null,
-                                    child: Container(
-                                      width: 40,
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(40))),
-                                      child: ClipRRect(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(40)),
-                                          child: profile != null && _validURL
-                                              ? Image.network(profile)
-                                              : Icon(
-                                                  Icons.person,
-                                                  size: 40,
-                                                )),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 4,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        e['user'],
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      Container(
-                                        child: Text(
-                                          "Doctor",
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.black54),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                      Text('$duration',
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.black54))
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  SizedBox(
-                                    width: width(context) * 0.05,
-                                  ),
-                                  e['author'] != null &&
-                                          e['author']['id'] == widget.user_id
-                                      ? IconButton(
-                                          onPressed: () {
-                                            _topic.text = e['topic'] ?? '';
-                                            showEdit(context, e);
-                                          },
-                                          icon: Icon(Icons.more_vert_outlined))
-                                      : Container(),
-                                ],
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          RichTextView(
-                            text:
-                                "${listofConsults[index]['interests'] != null ? listofConsults[index]['interests'] : ""} ",
-                            maxLines: 2,
-                            align: TextAlign.center,
-                            onHashTagClicked: (hashtag) =>
-                                print('is $hashtag trending?'),
-                            onMentionClicked: (mention) =>
-                                print('$mention clicked'),
-                            onUrlClicked: (url) => launch(url),
-                            linkStyle: TextStyle(color: Colors.blue),
-                          ),
-                          RichTextView(
-                            text:
-                                "${listofConsults[index]['topic'] != null ? listofConsults[index]['topic'] : ""} ",
-                            maxLines: 2,
-                            align: TextAlign.center,
-                            onHashTagClicked: (hashtag) =>
-                                print('is $hashtag trending?'),
-                            onMentionClicked: (mention) =>
-                                print('$mention clicked'),
-                            onUrlClicked: (url) => launch(url),
-                            linkStyle: TextStyle(color: Colors.blue),
-                          ),
-                          // Text("${listofConsults[index]['topic'] ?? ' '}"),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          e['image'] != null
-                              ? GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => Image.network(
-                                          e['image'],
-                                          fit: BoxFit.contain,
-                                        ),
-                                      ),
-                                    );
-                                  },
+                                            ),
+                                          );
+                                        }
+                                      : null,
                                   child: Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    height: height(context) * 0.375,
-                                    child: Image.network(
-                                      e['image'],
-                                      fit: BoxFit.contain,
-                                    ),
+                                    width: 40,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(40))),
+                                    child: ClipRRect(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(40)),
+                                        child: profile != null && _validURL
+                                            ? Image.network(profile)
+                                            : Icon(
+                                                Icons.person,
+                                                size: 40,
+                                              )),
                                   ),
-                                )
-                              : Container(
-                                  height: 0.0,
-                                  width: 0.0,
                                 ),
-                          SizedBox(
-                            height: 10,
-                          ),
-
-                          RowButton(
+                                SizedBox(
+                                  width: 4,
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      e['user'],
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Container(
+                                      child: Text(
+                                        "Doctor",
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.black54),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    Text('$duration',
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.black54))
+                                  ],
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                SizedBox(
+                                  width: width(context) * 0.05,
+                                ),
+                                e['author'] != null &&
+                                        e['author']['id'] == widget.user_id
+                                    ? IconButton(
+                                        onPressed: () {
+                                          _topic.text = e['topic'] ?? '';
+                                          showEdit(context, e);
+                                        },
+                                        icon: Icon(Icons.more_vert_outlined))
+                                    : Container(),
+                              ],
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        RichTextView(
+                          text:
+                              "${searchConsultsResult[index]['interests'] != null ? searchConsultsResult[index]['interests'] : ""}",
+                          maxLines: 3,
+                          align: TextAlign.center,
+                          onHashTagClicked: (hashtag) =>
+                              print('is $hashtag trending?'),
+                          onMentionClicked: (mention) =>
+                              print('$mention clicked'),
+                          onUrlClicked: (url) => launch(url),
+                          linkStyle: TextStyle(color: Colors.blue),
+                        ),
+                        RichTextView(
+                          text:
+                              "${searchConsultsResult[index]['topic'] != null ? searchConsultsResult[index]['topic'] : ""}",
+                          maxLines: 3,
+                          align: TextAlign.center,
+                          onHashTagClicked: (hashtag) =>
+                              print('is $hashtag trending?'),
+                          onMentionClicked: (mention) =>
+                              print('$mention clicked'),
+                          onUrlClicked: (url) => launch(url),
+                          linkStyle: TextStyle(color: Colors.blue),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        e['image'] != null
+                            ? GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => Image.network(
+                                        e['image'],
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: height(context) * 0.375,
+                                  child: Image.network(
+                                    e['image'],
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              )
+                            : Container(
+                                height: 0.0,
+                                width: 0.0,
+                              ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                       
+                                                 RowButton(
                             e: e,
                             post: [
                               Row(
@@ -1143,7 +1104,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                 height: 5,
                               ),
                               LinkifyText(
-                                "${listofConsults[index]['topic'] ?? ' '}",
+                                "${ searchConsultsResult[index]['topic'] ?? ' '}",
                                 isLinkNavigationEnable: true,
                                 linkColor: Colors.blueAccent,
                                 fontColor: Colors.black,
@@ -1184,14 +1145,13 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                             duration: duration,
                           ),
 
-                          SizedBox(
-                            height: 10,
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                      ],
+                    ),
+                  );
+                },
               ),
             ),
           );

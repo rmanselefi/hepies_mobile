@@ -13,6 +13,8 @@ class AppUrl {
   static const String profile = baseURL + "/users/profile/update";
   static const String consults = baseURL + "/consulting";
   static const String fill = baseURL + "/voucher/fill";
+  static const String search = baseURL + "/consulting/search";
+  static const String pagination = baseURL + "/consulting/paginate";
 
   static const String interests = baseURL + "/consulting/interests";
   static const String prescription = baseURL + "/prescription";
@@ -41,5 +43,4 @@ class AppUrl {
   static const String forgotPassword = baseURL + "/forgot-password";
 
   static const String professional = baseURL + "/users";
-
 }

@@ -19,6 +19,43 @@ class ConsultProvider with ChangeNotifier {
   ConsultStatus get editStatus => _editStatus;
   List<dynamic> _interests = [];
   List<dynamic> get interests => _interests;
+  bool isonSearching = false;
+
+  Future<List<dynamic>> getConsultsbyPagination(int take, int skip) async {
+    // isonSearching = false;
+    // notifyListeners();
+    var result;
+    // List<Consult> consults = [];
+    Response response =
+        await get(Uri.parse(AppUrl.pagination + "?take=${take}&skip=${skip}"));
+    print("haile" + response.body);
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return json.decode(response.body);
+    } else {
+      notifyListeners();
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return jsonDecode(response.body);
+  }
+
+  Future<List<dynamic>> searchConsults(String word, int take, int skip) async {
+    var result;
+    Response response = await get(
+        Uri.parse(AppUrl.search + "?search=${word}&take=${take}&skip=${skip}"));
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return json.decode(response.body);
+    } else {
+      notifyListeners();
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return jsonDecode(response.body);
+  }
 
   Future<List<dynamic>> getConsults() async {
     var result;
@@ -37,7 +74,8 @@ class ConsultProvider with ChangeNotifier {
     return json.decode(response.body);
   }
 
-  Future<Map<String, dynamic>> share(String topic, File file) async {
+  Future<Map<String, dynamic>> share(
+      String topic, File file, String inputInterest) async {
     _shareStatus = ConsultStatus.Sharing;
     notifyListeners();
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -55,6 +93,7 @@ class ConsultProvider with ChangeNotifier {
     final Map<String, dynamic> registrationData = {
       'topic': topic,
       'image': image,
+      "interests": inputInterest
     };
     Response response = await post(Uri.parse(AppUrl.consults),
         body: json.encode(registrationData),
@@ -84,7 +123,7 @@ class ConsultProvider with ChangeNotifier {
   }
 
   Future<Map<String, dynamic>> updateConsult(
-      var id, String topic, File file, var imageUrl) async {
+      var id, String topic, File file, var imageUrl, String interest) async {
     _editStatus = ConsultStatus.Sharing;
     notifyListeners();
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -104,6 +143,7 @@ class ConsultProvider with ChangeNotifier {
     final Map<String, dynamic> registrationData = {
       'topic': topic,
       'image': image,
+      "interests": interests
     };
     Response response = await put(Uri.parse('${AppUrl.consults}/$id'),
         body: json.encode(registrationData),
@@ -156,7 +196,7 @@ class ConsultProvider with ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
     Response response =
-    await get(Uri.parse("${AppUrl.consults}/comments/$id"), headers: {
+        await get(Uri.parse("${AppUrl.consults}/comments/$id"), headers: {
       'Content-Type': 'application/json',
       HttpHeaders.authorizationHeader: "Bearer $token"
     });
@@ -178,7 +218,7 @@ class ConsultProvider with ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
     Response response =
-    await post(Uri.parse("${AppUrl.consults}/like/find/$id"), headers: {
+        await post(Uri.parse("${AppUrl.consults}/like/find/$id"), headers: {
       'Content-Type': 'application/json',
       HttpHeaders.authorizationHeader: "Bearer $token"
     });
@@ -265,7 +305,7 @@ class ConsultProvider with ChangeNotifier {
 
     var result;
     Response response =
-    await post(Uri.parse("${AppUrl.consults}/like/$consultid"), headers: {
+        await post(Uri.parse("${AppUrl.consults}/like/$consultid"), headers: {
       'Content-Type': 'application/json',
       HttpHeaders.authorizationHeader: "Bearer $token"
     });
@@ -292,7 +332,7 @@ class ConsultProvider with ChangeNotifier {
 
     var result;
     Response response =
-    await post(Uri.parse("${AppUrl.consults}/unlike/$consultid"), headers: {
+        await post(Uri.parse("${AppUrl.consults}/unlike/$consultid"), headers: {
       'Content-Type': 'application/json',
       HttpHeaders.authorizationHeader: "Bearer $token"
     });
@@ -336,7 +376,7 @@ class ConsultProvider with ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
     Response response =
-    await delete(Uri.parse("${AppUrl.consults}/$id"), headers: {
+        await delete(Uri.parse("${AppUrl.consults}/$id"), headers: {
       'Content-Type': 'application/json',
       HttpHeaders.authorizationHeader: "Bearer $token"
     });
@@ -361,11 +401,12 @@ class ConsultProvider with ChangeNotifier {
     String token = prefs.getString('token');
 
     var result;
-    Response response =
-    await post(Uri.parse("${AppUrl.consults}/like/comment/$commentId"), headers: {
-      'Content-Type': 'application/json',
-      HttpHeaders.authorizationHeader: "Bearer $token"
-    });
+    Response response = await post(
+        Uri.parse("${AppUrl.consults}/like/comment/$commentId"),
+        headers: {
+          'Content-Type': 'application/json',
+          HttpHeaders.authorizationHeader: "Bearer $token"
+        });
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Map<String, dynamic> responseData = json.decode(response.body);
@@ -388,11 +429,12 @@ class ConsultProvider with ChangeNotifier {
     String token = prefs.getString('token');
 
     var result;
-    Response response =
-    await post(Uri.parse("${AppUrl.consults}/unlike/comment/$consultid"), headers: {
-      'Content-Type': 'application/json',
-      HttpHeaders.authorizationHeader: "Bearer $token"
-    });
+    Response response = await post(
+        Uri.parse("${AppUrl.consults}/unlike/comment/$consultid"),
+        headers: {
+          'Content-Type': 'application/json',
+          HttpHeaders.authorizationHeader: "Bearer $token"
+        });
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       result = {
@@ -407,6 +449,4 @@ class ConsultProvider with ChangeNotifier {
     }
     return result;
   }
-
-
 }
