@@ -145,6 +145,16 @@ class _LoginState extends State<Login> {
                             user: user,
                           )));
             }
+          }
+          if (response['timeout']) {
+            print("time out");
+            showTopSnackBar(
+              context,
+              CustomSnackBar.error(
+                message:
+                    'Unable to login, please check your internet connection!',
+              ),
+            );
           } else {
             showTopSnackBar(
               context,

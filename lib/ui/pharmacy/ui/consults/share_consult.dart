@@ -77,6 +77,9 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
     return SafeArea(
       child: Column(
         children: [
+          SizedBox(
+            height: 30,
+          ),
           Expanded(
             child: ListView(
               scrollDirection: Axis.vertical,

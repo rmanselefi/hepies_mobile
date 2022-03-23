@@ -64,7 +64,7 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  height: 650.0,
+                  height: 500.0,
                   decoration: BoxDecoration(
                       border: Border.all(width: 2.0, color: Color(0xff707070))),
                   child: ListView(
@@ -210,23 +210,25 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
                             ),
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => PrescriberProfile(
-                                          patient: prescription,
-                                          id: prescription['professionalid'],
-                                          from: 'code',
-                                        )));
-                          },
-                          child: Container(
-                            child: Text(
-                              '${prescription['professional']}',
-                              style: TextStyle(
-                                  decoration: TextDecoration.underline,
-                                  color: Colors.grey),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => PrescriberProfile(
+                                            patient: prescription,
+                                            id: prescription['professionalid'],
+                                            from: 'code',
+                                          )));
+                            },
+                            child: Container(
+                              child: Text(
+                                '${prescription['professional']}',
+                                style: TextStyle(
+                                    decoration: TextDecoration.underline,
+                                    color: Colors.grey),
+                              ),
                             ),
                           ),
                         ),

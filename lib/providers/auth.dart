@@ -48,7 +48,10 @@ class AuthProvider with ChangeNotifier {
       Uri.parse(AppUrl.login),
       body: json.encode(loginData),
       headers: {'Content-Type': 'application/json'},
-    );
+    ).timeout(Duration(seconds: 6), onTimeout: () {
+      return Response("Unable to  login, check your internet connection", 408);
+    });
+
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Map<String, dynamic> responseData = json.decode(response.body);
       // print("responseDataresponseDataresponseDataresponseData $responseData");
@@ -63,6 +66,12 @@ class AuthProvider with ChangeNotifier {
         'message': 'Verification Code Sent',
         'role': role,
         'user': authUser
+      };
+    } else if (response.statusCode == 408) {
+      return result = {
+        'status': false,
+        'message': json.decode(response.body),
+        'timeout': true
       };
     } else {
       _sendEmailStatus = Status.NotSent;

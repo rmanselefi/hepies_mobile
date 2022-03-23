@@ -52,6 +52,7 @@ class _ShareConsultState extends State<ShareConsult> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     setInterests();
   }
 
@@ -75,8 +76,9 @@ class _ShareConsultState extends State<ShareConsult> {
       child: SafeArea(
         child: Column(
           children: [
-            // Header(),
-
+            SizedBox(
+              height: 30,
+            ),
             Expanded(
                 child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
@@ -85,7 +87,7 @@ class _ShareConsultState extends State<ShareConsult> {
               child: Column(
                 children: [
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    margin: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
                     height: MediaQuery.of(context).size.height / 18,
                     child: TextField(
                       onChanged: (text) {
@@ -124,7 +126,8 @@ class _ShareConsultState extends State<ShareConsult> {
                     ),
                   ),
                   Container(
-                      margin: EdgeInsets.all(10),
+                      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+                      height: MediaQuery.of(context).size.height / 16,
                       child: TextField(
                         readOnly: true,
                         onTap: () {

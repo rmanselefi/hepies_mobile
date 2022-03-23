@@ -8,9 +8,11 @@ import 'package:hepies/providers/auth.dart';
 import 'package:hepies/ui/auth/change_password.dart';
 import 'package:hepies/ui/auth/login.dart';
 import 'package:hepies/ui/doctor/profile/edit_profile.dart';
+import 'package:hepies/widgets/Privacy.dart';
 import 'package:provider/provider.dart';
 import 'package:mailto/mailto.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 
 class DrawerCustom extends StatefulWidget {
   final name;
@@ -96,8 +98,7 @@ class _DrawerCustomState extends State<DrawerCustom> {
                   leading: Icon(Icons.inbox, color: Color(0xff0FF6A0)),
                   title: Text(
                     'Contact Us',
-                    style: TextStyle(
-                        color: Colors.black, fontFamily: 'Roboto-Bold'),
+                    style: TextStyle(color: Colors.black),
                   ),
                   onTap: () async {
                     // Milkessa: Implemented intent to email with nice formatting
@@ -118,20 +119,20 @@ class _DrawerCustomState extends State<DrawerCustom> {
                   leading: Icon(Icons.privacy_tip, color: Color(0xff0FF6A0)),
                   title: Text(
                     'Privacy Policy and Terms and Conditions',
-                    style: TextStyle(
-                        color: Colors.black ,fontFamily: 'Roboto-Bold'),
+                    style: TextStyle(color: Colors.black),
                   ),
                   onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => ContactUs()),
-                    // );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => PrivacyPolicy()),
+                    );
                   },
                 ),
                 ListTile(
                   leading: Icon(Icons.person, color: Color(0xff0FF6A0)),
                   title: Text('Change Password',
-                      style: TextStyle(color: Colors.black, fontFamily:'Roboto-Bold')),
+                      style:
+                          TextStyle(color: Colors.black)),
                   onTap: () {
                     Navigator.push(
                         context,
@@ -144,8 +145,9 @@ class _DrawerCustomState extends State<DrawerCustom> {
                     Icons.exit_to_app,
                     color: Color(0xff0FF6A0),
                   ),
-                  title:
-                      Text('Logout', style: TextStyle(color: Colors.black, fontFamily:'Roboto-Bold')),
+                  title: Text('Logout',
+                      style:
+                          TextStyle(color: Colors.black)),
                   onTap: () async {
                     await Provider.of<AuthProvider>(context, listen: false)
                         .logout();
