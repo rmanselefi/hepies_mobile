@@ -23,6 +23,7 @@ import 'package:phone_number/phone_number.dart';
 import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:email_validator/email_validator.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -148,6 +149,7 @@ class _RegisterState extends State<Register> {
   }
 
   String _username,
+      _email,
       _password,
       _confirmPassword,
       _name,
@@ -176,6 +178,14 @@ class _RegisterState extends State<Register> {
       onSaved: (value) => _name = value,
       decoration: buildInputDecoration("Confirm password", Icons.person),
     );
+    final emailField = TextFormField(
+      autofocus: false,
+      validator: (value) => value.isEmpty || !(EmailValidator.validate(value))
+          ? "Please enter  a valid email address address"
+          : null,
+      onSaved: (value) => _email = value,
+      decoration: buildInputDecoration("Confirm password", Icons.email),
+    );
 
     final fatherNameField = TextFormField(
       autofocus: false,
@@ -183,7 +193,7 @@ class _RegisterState extends State<Register> {
           value.isEmpty ? "Please enter your father name" : null,
       onSaved: (value) => _fathername = value,
       decoration: buildInputDecoration("Confirm password", Icons.person),
-    );  
+    );
     final phoneField = Container(
       child: IntlPhoneField(
           countries: ["ET"],
@@ -351,6 +361,7 @@ class _RegisterState extends State<Register> {
           auth
               .register(
                   _name,
+                  _email,
                   _fathername,
                   _username,
                   _phone,
@@ -387,14 +398,13 @@ class _RegisterState extends State<Register> {
               );
             }
           });
-        }else{
-            showTopSnackBar(
-          context,
-          CustomSnackBar.error(
-            message: "Invalid Phone Number",
-          ),
-        );
-
+        } else {
+          showTopSnackBar(
+            context,
+            CustomSnackBar.error(
+              message: "Invalid Phone Number",
+            ),
+          );
         }
       } else {
         showTopSnackBar(
@@ -422,6 +432,10 @@ class _RegisterState extends State<Register> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    SizedBox(height: 15.0),
+                    label("Email"),
+                    SizedBox(height: 5.0),
+                    emailField,
                     SizedBox(height: 15.0),
                     label("Name"),
                     SizedBox(height: 5.0),

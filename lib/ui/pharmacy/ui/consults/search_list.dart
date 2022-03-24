@@ -27,6 +27,7 @@ import 'package:rich_text_view/rich_text_view.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
 import 'package:hepies/util/helpers.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 
 class RowButton extends StatefulWidget {
   RowButton(
@@ -626,7 +627,7 @@ class _SearchListState extends State<SearchList> {
     }
 
     showEdit(BuildContext context, var post) {
-       var i = [];
+      var i = [];
       for (var item in post['interests'].split(' ')) {
         i.add(item.substring(1));
       }

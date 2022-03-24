@@ -26,6 +26,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:rich_text_view/rich_text_view.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 
 class RowButton extends StatefulWidget {
   RowButton(
@@ -922,7 +923,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                   controller: _scrollController,
                   itemCount: listofConsults.length,
                   shrinkWrap: true,
-                  physics: ClampingScrollPhysics(),
+                  physics: ScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
                     var e = listofConsults[index];
                     var profile = e['author'] != null
@@ -1067,7 +1068,6 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                             onUrlClicked: (url) => launch(url),
                             linkStyle: TextStyle(color: Colors.blue),
                           ),
-                          // Text("${listofConsults[index]['topic'] ?? ' '}"),
                           SizedBox(
                             height: 10,
                           ),
@@ -1100,7 +1100,6 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                           SizedBox(
                             height: 10,
                           ),
-
                           RowButton(
                             e: e,
                             post: [
@@ -1213,7 +1212,6 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                             profile: profile,
                             duration: duration,
                           ),
-
                           SizedBox(
                             height: 10,
                           ),

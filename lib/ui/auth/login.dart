@@ -146,8 +146,8 @@ class _LoginState extends State<Login> {
                           )));
             }
           }
-          if (response['timeout']) {
-            print("time out");
+          if (response['error']) {
+            print("error");
             showTopSnackBar(
               context,
               CustomSnackBar.error(

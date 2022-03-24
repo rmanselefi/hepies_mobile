@@ -76,9 +76,7 @@ class _ShareConsultState extends State<ShareConsult> {
       child: SafeArea(
         child: Column(
           children: [
-            SizedBox(
-              height: 30,
-            ),
+            
             Expanded(
                 child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
