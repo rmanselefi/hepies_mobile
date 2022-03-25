@@ -13,7 +13,6 @@ import 'package:provider/provider.dart';
 import 'package:mailto/mailto.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-
 class DrawerCustom extends StatefulWidget {
   final name;
   final profession;
@@ -116,23 +115,43 @@ class _DrawerCustomState extends State<DrawerCustom> {
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.privacy_tip, color: Color(0xff0FF6A0)),
+                  leading: Icon(Icons.lock, color: Color(0xff0FF6A0)),
                   title: Text(
-                    'Privacy Policy and Terms and Conditions',
+                    'Privacy Policy',
                     style: TextStyle(color: Colors.black),
                   ),
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => PrivacyPolicy()),
+                      MaterialPageRoute(
+                          builder: (context) => PrivacyPolicy(
+                                url: "https://hepius.co/privacy-policy/",
+                                title: "Privacy Policy",
+                              )),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.privacy_tip_rounded,color: Color(0xff0FF6A0)),
+                  title: Text(
+                    'Terms and Conditions',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PrivacyPolicy(
+                                url: "https://hepius.co/terms-and-conditions/",
+                                title: "Terms and Conditions",
+                              )),
                     );
                   },
                 ),
                 ListTile(
                   leading: Icon(Icons.person, color: Color(0xff0FF6A0)),
                   title: Text('Change Password',
-                      style:
-                          TextStyle(color: Colors.black)),
+                      style: TextStyle(color: Colors.black)),
                   onTap: () {
                     Navigator.push(
                         context,
@@ -145,9 +164,7 @@ class _DrawerCustomState extends State<DrawerCustom> {
                     Icons.exit_to_app,
                     color: Color(0xff0FF6A0),
                   ),
-                  title: Text('Logout',
-                      style:
-                          TextStyle(color: Colors.black)),
+                  title: Text('Logout', style: TextStyle(color: Colors.black)),
                   onTap: () async {
                     await Provider.of<AuthProvider>(context, listen: false)
                         .logout();
