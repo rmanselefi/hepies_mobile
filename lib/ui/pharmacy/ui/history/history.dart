@@ -30,92 +30,113 @@ class _PharmacyHistoryState extends State<PharmacyHistory> {
         body: Column(
           children: [
             Expanded(
-                child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: ListView(
-                children: [
-                  SizedBox(
-                    height: 10.0,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        child: Text(
-                          'Drug Name',
-                          style: TextStyle(
-                              fontSize: 20.0, fontWeight: FontWeight.bold),
+              child: Padding(
+                padding: EdgeInsets.all(5),
+                child: ListView(
+                  children: [
+                    SizedBox(
+                      height: 10.0,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          child: Text(
+                            'Drug Name',
+                            style: TextStyle(
+                                fontSize: 20.0, fontWeight: FontWeight.bold),
+                          ),
                         ),
-                        padding: EdgeInsets.only(left: 5.0),
-                      ),
-                      Text(
-                        'Patient Name',
-                        style: TextStyle(
-                            fontSize: 20.0, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        'Date',
-                        style: TextStyle(
-                            fontSize: 20.0, fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                  Divider(),
-                  FutureBuilder(
-                      future: pharmacyProvider.getMyPharmacyHistory(),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        } else {
-                          if (snapshot.data == null) {
+                        Container(
+                          child: Text(
+                            'Patient Name',
+                            style: TextStyle(
+                                fontSize: 20.0, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        Container(
+                          child: Text(
+                            'Date',
+                            style: TextStyle(
+                                fontSize: 20.0, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Divider(),
+                    FutureBuilder(
+                        future: pharmacyProvider.getMyPharmacyHistory(),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
                             return Center(
-                              child: Text('No data to show'),
+                              child: CircularProgressIndicator(),
                             );
-                          }
-                          return ListView(
-                              shrinkWrap: true,
-                              children: snapshot.data.map<Widget>((e) {
-                                var date = new DateFormat.yMMMd()
-                                    .format(DateTime.parse(e['readDate']));
-                                var name = e['patient']['name'] +
-                                    " " +
-                                    e['patient']['fathername'];
-                                return Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        e['drug_name'],
-                                        style: TextStyle(
-                                          fontSize: 15.0,
+                          } else {
+                            if (snapshot.data == null) {
+                              return Center(
+                                child: Text('No data to show'),
+                              );
+                            }
+                            return ListView(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                children: snapshot.data.reversed.map<Widget>((e) {
+                                  var date = new DateFormat.yMMMd().add_Hm()
+                                      .format(DateTime.parse(e['readDate']));
+                                  var name = e['patient']['name'] +
+                                      " " +
+                                      e['patient']['fathername'];
+                                  return Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: Container(
+                                          height: 40,
+                                          margin: EdgeInsets.only(left: 20),
+                                          child: Text(
+                                            e['drug_name'],
+                                            style: TextStyle(
+                                              fontSize: 15.0,
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                      width: 150,
-                                    ),
-                                    Text(
-                                      name,
-                                      style: TextStyle(
-                                        fontSize: 15.0,
+                                      Expanded(
+                                        child: Container(
+                                          margin: EdgeInsets.only(left: 20),
+
+                                          height: 30,
+                                          child: Text(
+                                            name,
+                                            style: TextStyle(
+                                              fontSize: 15.0,
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      '$date',
-                                      style: TextStyle(
-                                        fontSize: 15.0,
+                                      Expanded(
+                                        child: Container(
+                                          height: 40,
+                                          margin: EdgeInsets.only(left: 20),
+
+                                          child: Text(
+                                            '$date',
+                                            style: TextStyle(
+                                              fontSize: 15.0,
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                );
-                              }).toList());
-                        }
-                      }),
-                ],
+                                    ],
+                                  );
+                                }).toList());
+                          }
+                        }),
+                  ],
+                ),
               ),
-            )),
+            ),
             Center(child: PharmacyFooter())
           ],
         ),

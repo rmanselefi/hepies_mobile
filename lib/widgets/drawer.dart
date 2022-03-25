@@ -8,6 +8,7 @@ import 'package:hepies/providers/auth.dart';
 import 'package:hepies/ui/auth/change_password.dart';
 import 'package:hepies/ui/auth/login.dart';
 import 'package:hepies/ui/doctor/profile/edit_profile.dart';
+import 'package:hepies/widgets/Privacy.dart';
 import 'package:provider/provider.dart';
 import 'package:mailto/mailto.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -96,13 +97,13 @@ class _DrawerCustomState extends State<DrawerCustom> {
                   leading: Icon(Icons.inbox, color: Color(0xff0FF6A0)),
                   title: Text(
                     'Contact Us',
-                    style: TextStyle(color: Colors.black45),
+                    style: TextStyle(color: Colors.black),
                   ),
                   onTap: () async {
                     // Milkessa: Implemented intent to email with nice formatting
                     final mailtoLink = Mailto(
-                      to: ['to@example.com'],
-                      cc: ['cc1@example.com', 'cc2@example.com'],
+                      to: ['contact@hepius.co'],
+                      cc: ['contact@hepius.co', 'contact@hepius.co'],
                       subject: 'mailto example subject',
                       body: 'mailto example body',
                     );
@@ -114,22 +115,43 @@ class _DrawerCustomState extends State<DrawerCustom> {
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.privacy_tip, color: Color(0xff0FF6A0)),
+                  leading: Icon(Icons.lock, color: Color(0xff0FF6A0)),
                   title: Text(
-                    'Privacy Policy and Terms and Conditions',
-                    style: TextStyle(color: Colors.black45),
+                    'Privacy Policy',
+                    style: TextStyle(color: Colors.black),
                   ),
                   onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => ContactUs()),
-                    // );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PrivacyPolicy(
+                                url: "https://hepius.co/privacy-policy/",
+                                title: "Privacy Policy",
+                              )),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.privacy_tip_rounded,color: Color(0xff0FF6A0)),
+                  title: Text(
+                    'Terms and Conditions',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PrivacyPolicy(
+                                url: "https://hepius.co/terms-and-conditions/",
+                                title: "Terms and Conditions",
+                              )),
+                    );
                   },
                 ),
                 ListTile(
                   leading: Icon(Icons.person, color: Color(0xff0FF6A0)),
                   title: Text('Change Password',
-                      style: TextStyle(color: Colors.black45)),
+                      style: TextStyle(color: Colors.black)),
                   onTap: () {
                     Navigator.push(
                         context,
@@ -142,8 +164,7 @@ class _DrawerCustomState extends State<DrawerCustom> {
                     Icons.exit_to_app,
                     color: Color(0xff0FF6A0),
                   ),
-                  title:
-                      Text('Logout', style: TextStyle(color: Colors.black45)),
+                  title: Text('Logout', style: TextStyle(color: Colors.black)),
                   onTap: () async {
                     await Provider.of<AuthProvider>(context, listen: false)
                         .logout();

@@ -19,6 +19,7 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:hepies/util/helpers.dart';
 
 class ShareConsult extends StatefulWidget {
   final user_id;
@@ -51,6 +52,7 @@ class _ShareConsultState extends State<ShareConsult> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
     setInterests();
   }
 
@@ -74,11 +76,7 @@ class _ShareConsultState extends State<ShareConsult> {
       child: SafeArea(
         child: Column(
           children: [
-            // Header(),
-
-            SizedBox(
-              height: 30.0,
-            ),
+            
             Expanded(
                 child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
@@ -87,7 +85,7 @@ class _ShareConsultState extends State<ShareConsult> {
               child: Column(
                 children: [
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    margin: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
                     height: MediaQuery.of(context).size.height / 18,
                     child: TextField(
                       onChanged: (text) {
@@ -113,7 +111,7 @@ class _ShareConsultState extends State<ShareConsult> {
                             borderRadius: BorderRadius.all(Radius.circular(30)),
                             borderSide:
                                 BorderSide(color: Colors.black38, width: 1)),
-                        hintText: "Search consults by interest ...",
+                        hintText: "Search consults  ...",
                         labelStyle: TextStyle(color: Colors.black45),
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(30)),
@@ -126,7 +124,8 @@ class _ShareConsultState extends State<ShareConsult> {
                     ),
                   ),
                   Container(
-                      margin: EdgeInsets.all(10),
+                      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+                      height: MediaQuery.of(context).size.height / 16,
                       child: TextField(
                         readOnly: true,
                         onTap: () {
@@ -143,8 +142,12 @@ class _ShareConsultState extends State<ShareConsult> {
                   Divider(),
                   isOnSearch
                       ? SearchList(
-                          widget.user_id, interest, _search.text.toString() , _parentScrollController)
-                      : PharmacyConsultList(widget.user_id, interest, _parentScrollController)
+                          widget.user_id,
+                          interest,
+                          capitalize(_search.text.toString()),
+                          _parentScrollController)
+                      : PharmacyConsultList(
+                          widget.user_id, interest, _parentScrollController)
                 ],
               ),
             )),

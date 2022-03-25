@@ -99,7 +99,7 @@ class _WelcomePharmacyState extends State<WelcomePharmacy> {
                 Flexible(child: SizedBox(width: width(context) * 0.225)),
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                             builder: (context) => WelcomePharmacy(

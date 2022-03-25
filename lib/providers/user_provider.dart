@@ -165,14 +165,14 @@ class UserProvider with ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
     var result;
-    var registrationData = {'points': point, 'phone': '+251$phone'};
+    var registrationData = {'points': point, 'phone': phone};
     Response response = await post(Uri.parse(AppUrl.transfer),
         body: json.encode(registrationData),
         headers: {
           'Content-Type': 'application/json',
           HttpHeaders.authorizationHeader: "Bearer $token"
         });
-
+    print("point response " + response.body.toString());
     if (response.statusCode == 200 || response.statusCode == 201) {
       _pointStatus = ChangeStatus.Changed;
       notifyListeners();

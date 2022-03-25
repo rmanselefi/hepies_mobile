@@ -74,7 +74,7 @@ class UserPreferences {
 
   void removeUser() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.clear();
+    await prefs.clear();
   }
 
   Future<String> getToken(args) async {

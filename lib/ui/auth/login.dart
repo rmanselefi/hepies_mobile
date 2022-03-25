@@ -116,9 +116,8 @@ class _LoginState extends State<Login> {
 
       if (form.validate()) {
         form.save();
-
         final Future<Map<String, dynamic>> successfulMessage =
-            auth.login(_username, _password);
+            auth.login(_username.trim(), _password);
 
         successfulMessage.then((response) {
           print("object haile $response");
@@ -146,12 +145,21 @@ class _LoginState extends State<Login> {
                             user: user,
                           )));
             }
+          }
+          if (response['error']) {
+            print("error");
+            showTopSnackBar(
+              context,
+              CustomSnackBar.error(
+                message:
+                    'Unable to login, please check your internet connection!',
+              ),
+            );
           } else {
             showTopSnackBar(
               context,
               CustomSnackBar.error(
-                message: 
-                    'Wrong username or password entered, try again!',
+                message: 'Wrong username or password entered, try again!',
               ),
             );
           }

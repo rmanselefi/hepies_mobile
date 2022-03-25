@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +22,7 @@ class _FooterState extends State<Footer> {
     return Container(
       width: double.infinity,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(2.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           mainAxisSize: MainAxisSize.min,
@@ -37,7 +39,7 @@ class _FooterState extends State<Footer> {
                   onPressed: () async {
                     // await Provider.of<ConsultProvider>(context).switchSearch();
 
-                    Navigator.push(
+                    Navigator.pushReplacement<Void, void>(
                         context,
                         MaterialPageRoute(
                             builder: (context) => Welcome(

@@ -32,7 +32,7 @@ class _PrescriberProfileState extends State<PrescriberProfile> {
   @override
   Widget build(BuildContext context) {
     var patient = widget.patient;
-    // print("professionalprofessionalprofessional $professional");
+    print("professionalprofessionalprofessional $professional");
     return SafeArea(
         child: Scaffold(
       body: Column(
@@ -50,8 +50,8 @@ class _PrescriberProfileState extends State<PrescriberProfile> {
                     ),
             ),
           ),
-          Expanded(flex: 4,
-
+          Expanded(
+            flex: 4,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
@@ -63,9 +63,13 @@ class _PrescriberProfileState extends State<PrescriberProfile> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Icon(
-                        Icons.person,
-                        size: 100,
+                      child: CircleAvatar(
+                        radius: 60,
+                        backgroundColor: Colors.grey,
+                        backgroundImage: professional['profile'] != null &&
+                                professional['profile'] != ""
+                            ? NetworkImage(professional['profile'])
+                            : null,
                       ),
                     ),
                     professional != null
@@ -106,9 +110,11 @@ class _PrescriberProfileState extends State<PrescriberProfile> {
                                   width: 20,
                                 ),
                                 professional != null
-                                    ? Text(
-                                        'Email - ${professional['email']} ',
-                                        style: TextStyle(fontSize: 20),
+                                    ? Expanded(
+                                        child: Text(
+                                          'Email - ${professional['email']} ',
+                                          style: TextStyle(fontSize: 20),
+                                        ),
                                       )
                                     : Text("")
                               ],
@@ -157,7 +163,8 @@ class _PrescriberProfileState extends State<PrescriberProfile> {
                   child: Center(
                       child: Text(
                     'Back',
-                    style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                    style:
+                        TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
                   )),
                 ),
               ),

@@ -71,6 +71,7 @@ class _MyPharmacyState extends State<MyPharmacy> {
                                       .addDrugToPharmacy(drugController.text,
                                           drug_id, priceController.text)
                                       .whenComplete(() {
+                                    print("working s");
                                     setState(() {
                                       adding = false;
                                     });
@@ -78,12 +79,16 @@ class _MyPharmacyState extends State<MyPharmacy> {
                                         message: 'Item successfully added');
                                   });
                                   if (res['status']) {
+                                    var y = await Provider.of<PharmacyProvider>(
+                                            context,
+                                            listen: false)
+                                        .getMyPharmacy();
                                     setState(() {
                                       Provider.of<PharmacyProvider>(context,
                                               listen: false)
                                           .getMyPharmacy();
                                     });
-
+                                    print("p" + y.toString());
                                     Navigator.pushAndRemoveUntil<void>(
                                       context,
                                       MaterialPageRoute<void>(
@@ -93,7 +98,11 @@ class _MyPharmacyState extends State<MyPharmacy> {
                                       ModalRoute.withName('/'),
                                     );
                                     ;
+                                  } else {
+                                    print("res" + res.toString());
                                   }
+                                } else {
+                                  print("form not working");
                                 }
                               },
                               child: Text('Add')),
@@ -189,6 +198,7 @@ class _MyPharmacyState extends State<MyPharmacy> {
                                         VoidCallback onFieldSubmitted) {
                                       drugEditController =
                                           fieldTextEditingController;
+                                      drugEditController.text = drug_name;
                                       return Container(
                                         width: 200,
                                         child: TextFormField(

@@ -30,10 +30,11 @@ class AuthorizationPage extends StatelessWidget {
                   textScaleFactor: 1.1,
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 15.0)),
-              LinkifyText(
-                'If you are not authorized within the specified time, Please contact us on contact@Hepius.co or CALL ',
+           LinkifyText(
+                'If you are not authorized within the specified time, Please contact us on contact @hepius.co or CALL ',
                 linkColor: Colors.blue,
               ),
+
               Row(
                 children: [
                   Text('CALL'),

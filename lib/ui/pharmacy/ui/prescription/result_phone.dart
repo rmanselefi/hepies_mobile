@@ -21,7 +21,7 @@ class _PrescriptionResultState extends State<PrescriptionResultPhone> {
     mainAxisAlignment: MainAxisAlignment.center,
     children: <Widget>[
       CircularProgressIndicator(),
-      Text("Sending your prescription ... Please wait")
+      Text("Accepting your prescription ... Please wait")
     ],
   );
 
@@ -39,7 +39,8 @@ class _PrescriptionResultState extends State<PrescriptionResultPhone> {
             DateTime.now().difference(DateTime.parse(i['createdAt'])).inDays <=
                 15)
         .toList();
-    print("notReadPrescriptionnotReadPrescriptionnotReadPrescription ===>  $notReadPrescription");
+    print(
+        "notReadPrescriptionnotReadPrescriptionnotReadPrescription ===>  $notReadPrescription");
     List<dynamic> list_id = [];
     notReadPrescription.forEach((element) {
       list_id.add(element['id']);

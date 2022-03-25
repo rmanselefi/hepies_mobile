@@ -4,6 +4,8 @@ import 'package:hepies/constants.dart';
 import 'package:hepies/providers/user_provider.dart';
 import 'package:hepies/widgets/footer.dart';
 import 'package:hepies/widgets/header.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:phone_number/phone_number.dart';
 import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
@@ -24,6 +26,9 @@ class _PointsState extends State<Points> {
   var phoneController = new TextEditingController();
   var pointsController = new TextEditingController();
   final _formKey = new GlobalKey<FormState>();
+
+  var isValidPhoneN = false;
+  var FinalPhoneNumber = "";
 
   String _countryCode;
   var points;
@@ -46,7 +51,6 @@ class _PointsState extends State<Points> {
               child: ListView(
                 children: [
                   Card(
-                    // margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                     shadowColor: Colors.green.shade600,
                     elevation: 5,
                     child: Column(
@@ -77,14 +81,7 @@ class _PointsState extends State<Points> {
                                           style: TextStyle(
                                               color: Colors.black,
                                               fontSize: 40.0),
-                                        ))
-                                        // Text(
-                                        //   '${point ?? 0} Pts',
-                                        //   style: TextStyle(
-                                        //       color: Colors.black38,
-                                        //       fontSize: 40.0),
-                                        // ),
-                                        ),
+                                        ))),
                                   ),
                                 );
                               } else {
@@ -118,14 +115,7 @@ class _PointsState extends State<Points> {
                                                   text: '.Pts',
                                                   style:
                                                       TextStyle(fontSize: 14))
-                                            ]))
-                                        // Text(
-                                        //   '${point ?? 0} Pts',
-                                        //   style: TextStyle(
-                                        //       color: Colors.black38,
-                                        //       fontSize: 40.0),
-                                        // ),
-                                        ),
+                                            ]))),
                                   ),
                                 );
                               }
@@ -143,17 +133,6 @@ class _PointsState extends State<Points> {
                           ),
                         ),
                         Divider(),
-
-                        // Center(
-                        //   child: Text(
-                        //     'Buy Air Time',
-                        //     style: TextStyle(
-                        //         decoration: TextDecoration.underline,
-                        //         fontSize: 25.0,
-                        //         color: Color(0xff0FF6A0)),
-                        //   ),
-                        // ),
-
                         userProvider.pointFiftyStatus == ChangeStatus.Changing
                             ? loading
                             : Padding(
@@ -195,8 +174,7 @@ class _PointsState extends State<Points> {
                                         style: ButtonStyle(
                                             backgroundColor:
                                                 MaterialStateProperty.all<
-                                                        Color>(
-                                                    Color(0xff07febb))),
+                                                    Color>(Color(0xff07febb))),
                                         child: Text("50 Birr")),
                                     SizedBox(
                                       child: VerticalDivider(),
@@ -233,8 +211,7 @@ class _PointsState extends State<Points> {
                                         style: ButtonStyle(
                                             backgroundColor:
                                                 MaterialStateProperty.all<
-                                                        Color>(
-                                                    Color(0xff07febb))),
+                                                    Color>(Color(0xff07febb))),
                                         child: const Text("100 Birr")),
                                   ],
                                 ),
@@ -245,7 +222,7 @@ class _PointsState extends State<Points> {
                   Padding(
                     padding: const EdgeInsets.only(top: 15),
                     child: Text(
-                      'Transfer points to other professional', //Milkessa: added to word 'points'
+                      'Donate points to other professional', //Milkessa: added to word 'points'
                       style: TextStyle(
                           fontWeight: FontWeight.w300,
                           fontSize: 18.0,
@@ -263,56 +240,40 @@ class _PointsState extends State<Points> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: InternationalPhoneNumberInput(
-                              onSaved: (value) {
-                                //_auth["phoneNumber"] = value.toString();
-                              },
-                              onInputChanged: (PhoneNumber number) {
-                                phoneController.text = number.phoneNumber;
-                              },
-                              onInputValidated: (bool value) {},
-                              selectorConfig: const SelectorConfig(
-                                  selectorType:
-                                      PhoneInputSelectorType.BOTTOM_SHEET,
-                                  trailingSpace: false),
-                              ignoreBlank: false,
-                              autoValidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              selectorTextStyle:
-                                  const TextStyle(color: Colors.black),
-                              initialValue: PhoneNumber(isoCode: "ET"),
-                              formatInput: true,
-                              keyboardType:
-                                  const TextInputType.numberWithOptions(
-                                      signed: true, decimal: true),
-                              inputBorder: const OutlineInputBorder(
-                                  borderSide: BorderSide.none),
-                              spaceBetweenSelectorAndTextField: 0,
-                              inputDecoration: const InputDecoration(
-                                  hintText: "Phone Number",
-                                  hintStyle: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black45),
-                                  fillColor: Colors.white,
-                                  filled: true,
+                          Container(
+                            child: IntlPhoneField(
+                                countries: ["ET"],
+                                onTap: () {},
+                                initialCountryCode: 'ET',
+                                showDropdownIcon: false,
+                                // Milkessa: Fixed phone input field formatting
+                                textAlign: TextAlign.start,
+                                controller: phoneController,
+                                keyboardType: TextInputType.phone,
+                                onSaved: (value) {},
+                                onChanged: (value) async {
+                                  PhoneNumberUtil plugin = PhoneNumberUtil();
+                                  RegionInfo region =
+                                      RegionInfo(code: 'ET', prefix: 251);
+                                  var phoneValue = '+251${value.number}';
+                                  if (value.number.length == 9) {
+                                    bool isValid = await plugin.validate(
+                                        phoneValue, region.code);
+                                    if (isValid) {
+                                      setState(() {
+                                        isValidPhoneN = true;
+                                        FinalPhoneNumber = phoneValue;
+                                      });
+                                    }
+                                  }
+                                },
+                                decoration: InputDecoration(
+                                  labelText: 'Phone Number',
                                   border: OutlineInputBorder(
-                                      borderSide: BorderSide.none)),
-                            ),
+                                    borderSide: BorderSide(),
+                                  ),
+                                )),
                           ),
-                          // TextFormField(
-                          //   controller: phoneController,
-                          //   decoration: InputDecoration(
-                          //     fillColor: Colors.white,
-                          //     filled: true,
-                          //     hintText: "Phone Number",
-                          //     border: OutlineInputBorder(
-                          //         borderSide: BorderSide.none),
-
-                          //     //border: InputBorder.none
-                          //   ),
-                          // ),
                           SizedBox(
                             height: 50,
                             child: TextFormField(
@@ -340,29 +301,42 @@ class _PointsState extends State<Points> {
                                             double.parse(points) >
                                                 double.parse(
                                                     pointsController.text)) {
-                                          var res =
-                                              await userProvider.transferPoint(
-                                                  pointsController.text,
-                                                  phoneController.text);
-                                          if (res['status']) {
-                                            showTopSnackBar(
-                                              context,
-                                              CustomSnackBar.success(
-                                                message:
-                                                    "Successfully transferred points to ${pointsController.text}",
-                                              ),
-                                            );
-                                          } else {
-                                            if (res['statusCode'] == 404) {
-                                              phoneController.text = "";
-                                              pointsController.text = "";
+                                          if (isValidPhoneN) {
+                                            print("phone Number value" +
+                                                FinalPhoneNumber);
+                                            var res = await userProvider
+                                                .transferPoint(
+                                                    pointsController.text,
+                                                    FinalPhoneNumber);
+                                            if (res['status']) {
                                               showTopSnackBar(
                                                 context,
-                                                CustomSnackBar.error(
-                                                  message: "User not available",
+                                                CustomSnackBar.success(
+                                                  message:
+                                                      "Successfully transferred points to ${pointsController.text}",
                                                 ),
                                               );
+                                            } else {
+                                              if (res['statusCode'] == 404) {
+                                                phoneController.text = "";
+                                                pointsController.text = "";
+                                                showTopSnackBar(
+                                                  context,
+                                                  CustomSnackBar.error(
+                                                    message:
+                                                        "User not available",
+                                                  ),
+                                                );
+                                              }
                                             }
+                                          } else {
+                                            showTopSnackBar(
+                                              context,
+                                              CustomSnackBar.error(
+                                                message:
+                                                    "Invalide Phone Number ",
+                                              ),
+                                            );
                                           }
                                         } else if (double.parse(points) <
                                             double.parse(

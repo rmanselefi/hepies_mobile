@@ -43,43 +43,54 @@ class AuthProvider with ChangeNotifier {
 
     _loggedInStatus = Status.Authenticating;
     notifyListeners();
+    try {
+      Response response = await post(
+        Uri.parse(AppUrl.login),
+        body: json.encode(loginData),
+        headers: {'Content-Type': 'application/json'},
+      );
+      print("response + ${response.statusCode}");
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        // print("responseDataresponseDataresponseDataresponseData $responseData");
+        User authUser = User.fromJson(responseData);
+        UserPreferences().saveUser(authUser);
+        var role = responseData['role']['name'];
+        _loggedInStatus = Status.LoggedIn;
+        _sendEmailStatus = Status.Sent;
+        notifyListeners();
+        result = {
+          'status': true,
+          'message': 'Verification Code Sent',
+          'role': role,
+          'user': authUser
+        };
+      } else {
+        _sendEmailStatus = Status.NotSent;
+        _loggedInStatus = Status.NotLoggedIn;
 
-    Response response = await post(
-      Uri.parse(AppUrl.login),
-      body: json.encode(loginData),
-      headers: {'Content-Type': 'application/json'},
-    );
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      final Map<String, dynamic> responseData = json.decode(response.body);
-
-      // print("responseDataresponseDataresponseDataresponseData $responseData");
-      User authUser = User.fromJson(responseData);
-      UserPreferences().saveUser(authUser);
-      var role = responseData['role']['name'];
-      _loggedInStatus = Status.LoggedIn;
-      _sendEmailStatus = Status.Sent;
-      notifyListeners();
-      result = {
-        'status': true,
-        'message': 'Verification Code Sent',
-        'role': role,
-        'user': authUser
-      };
-    } else {
-      _sendEmailStatus = Status.NotSent;
+        notifyListeners();
+        result = {
+          'status': false,
+          // 'message': json.decode(response.body)['error']
+        };
+      }
+    } catch (e) {
       _loggedInStatus = Status.NotLoggedIn;
-
       notifyListeners();
       result = {
-        'status': false,
-        // 'message': json.decode(response.body)['error']
+        'status':false,
+        'error': true,
+        'message': 'Internet Connection error',
       };
     }
+
     return result;
   }
 
   Future<Map<String, dynamic>> register(
       String name,
+      String email,
       String fathername,
       String username,
       String phone,
@@ -113,6 +124,7 @@ class AuthProvider with ChangeNotifier {
     }
     final Map<String, dynamic> registrationData = {
       'name': name,
+      'email': email,
       'fathername': fathername,
       'phone': phone,
       'license': license,

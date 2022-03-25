@@ -12,6 +12,7 @@ import 'package:hepies/ui/pharmacy/ui/consults/comment/share_comment.dart';
 import 'package:hepies/ui/pharmacy/welcome.dart';
 import 'package:hepies/ui/welcome.dart';
 import 'package:hepies/util/image_consult.dart';
+import 'package:hepies/util/shared_preference.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:linkify_text/linkify_text.dart';
@@ -25,6 +26,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:rich_text_view/rich_text_view.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
+import 'package:hepies/util/helpers.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 
 class RowButton extends StatefulWidget {
   RowButton(
@@ -206,7 +209,7 @@ class _RowButtonState extends State<RowButton> {
                         size: 15,
                       ),
                       label: Text(
-                        "${totalLikes}",
+                        "${totalLikes} ${totalLikes == 0 ? "Like" : "Likes"}",
                         style: TextStyle(color: Colors.grey),
                       )),
                   SizedBox(
@@ -393,7 +396,7 @@ class _RowButtonState extends State<RowButton> {
                     }
                   },
                   child: rowSingleButton(
-                      color: isLiked? Colors.blueAccent : Colors.black,
+                      color: isLiked ? Colors.blueAccent : Colors.black,
                       name: "Like",
                       iconImage: isLiked
                           ? Icons.thumb_up_sharp
@@ -574,12 +577,23 @@ class _SearchListState extends State<SearchList> {
         onPressed: () async {
           var res = await ConsultProvider().deleteConsult(id);
           if (res['status']) {
-            setState(() {
+            setState(() async {
               _myData = Provider.of<ConsultProvider>(context, listen: false)
                   .getConsults();
 
               Navigator.of(context).pop();
-              Navigator.of(context).pop();
+              var currentUser = await UserPreferences().getUser();
+
+              print("role : ${currentUser.role}");
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => currentUser.role == 'doctor' ||
+                              currentUser.role == 'healthofficer' ||
+                              currentUser.role == 'nurse'
+                          ? Welcome()
+                          : WelcomePharmacy()),
+                  ModalRoute.withName('/'));
               showTopSnackBar(
                 context,
                 CustomSnackBar.success(
@@ -613,6 +627,14 @@ class _SearchListState extends State<SearchList> {
     }
 
     showEdit(BuildContext context, var post) {
+      var i = [];
+      for (var item in post['interests'].split(' ')) {
+        i.add(item.substring(1));
+      }
+      print(i.toString());
+      setState(() {
+        _myInterests = i;
+      });
       showModalBottomSheet(
           context: context,
           builder: (BuildContext context) {
@@ -729,7 +751,7 @@ class _SearchListState extends State<SearchList> {
                                         okButtonLabel: 'OK',
                                         cancelButtonLabel: 'CANCEL',
                                         hintWidget:
-                                            Text('Please choose one or more'),
+                                            Text('you can  choose one or more'),
                                         initialValue: _myInterests,
                                         onSaved: (value) {
                                           if (value == null) return;
@@ -798,13 +820,20 @@ class _SearchListState extends State<SearchList> {
                                                             _topic.text = null;
                                                             file = null;
                                                           });
+
+                                                          var currentUser =
+                                                              await UserPreferences()
+                                                                  .getUser();
+
+                                                          print(
+                                                              "role : ${currentUser.role}");
                                                           Navigator.pushAndRemoveUntil(
                                                               context,
                                                               MaterialPageRoute(
-                                                                  builder: (context) => userProvider.role == 'doctor' ||
-                                                                          userProvider.role ==
+                                                                  builder: (context) => currentUser.role == 'doctor' ||
+                                                                          currentUser.role ==
                                                                               'healthofficer' ||
-                                                                          userProvider.role ==
+                                                                          currentUser.role ==
                                                                               'nurse'
                                                                       ? Welcome()
                                                                       : WelcomePharmacy()),
@@ -964,6 +993,8 @@ class _SearchListState extends State<SearchList> {
                                     ? IconButton(
                                         onPressed: () {
                                           _topic.text = e['topic'] ?? '';
+                                          print("i" + e['interests']);
+
                                           showEdit(context, e);
                                         },
                                         icon: Icon(Icons.more_vert_outlined))
@@ -1031,120 +1062,116 @@ class _SearchListState extends State<SearchList> {
                         SizedBox(
                           height: 10,
                         ),
-                       
-                                                 RowButton(
-                            e: e,
-                            post: [
-                              Row(
-                                children: [
-                                  GestureDetector(
-                                    onTap: profile != null
-                                        ? () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    Image.network(
-                                                  profile,
-                                                  fit: BoxFit.contain,
-                                                ),
+                        RowButton(
+                          e: e,
+                          post: [
+                            Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: profile != null
+                                      ? () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  Image.network(
+                                                profile,
+                                                fit: BoxFit.contain,
                                               ),
-                                            );
-                                          }
-                                        : null,
-                                    child: Container(
-                                      width: 40,
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(40))),
-                                      child: ClipRRect(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(40)),
-                                          child: profile != null
-                                              ? Image.network(profile)
-                                              : Icon(
-                                                  Icons.person,
-                                                  size: 40,
-                                                )),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 4,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        e['user'],
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                        ),
-                                      ),
-                                      Container(
-                                        width: 100,
-                                        child: Text(
-                                          "Doctor",
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.black54),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
-                                      Text('$duration',
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.black54))
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              LinkifyText(
-                                "${ searchConsultsResult[index]['topic'] ?? ' '}",
-                                isLinkNavigationEnable: true,
-                                linkColor: Colors.blueAccent,
-                                fontColor: Colors.black,
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              e['image'] != null
-                                  ? GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => Image.network(
-                                              e['image'],
-                                              fit: BoxFit.contain,
                                             ),
-                                          ),
-                                        );
-                                      },
-                                      child: Container(
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        height: height(context) * 0.375,
-                                        child: Image.network(
-                                          e['image'],
-                                          fit: BoxFit.contain,
-                                        ),
+                                          );
+                                        }
+                                      : null,
+                                  child: Container(
+                                    width: 40,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(40))),
+                                    child: ClipRRect(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(40)),
+                                        child: profile != null
+                                            ? Image.network(profile)
+                                            : Icon(
+                                                Icons.person,
+                                                size: 40,
+                                              )),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 4,
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      e['user'],
+                                      style: TextStyle(
+                                        fontSize: 18,
                                       ),
-                                    )
-                                  : Container(
-                                      height: 0.0,
-                                      width: 0.0,
                                     ),
-                            ],
-                            userId: widget.user_id,
-                            profile: profile,
-                            duration: duration,
-                          ),
-
+                                    Container(
+                                      width: 100,
+                                      child: Text(
+                                        "Doctor",
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.black54),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    Text('$duration',
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.black54))
+                                  ],
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            LinkifyText(
+                              "${searchConsultsResult[index]['topic'] ?? ' '}",
+                              isLinkNavigationEnable: true,
+                              linkColor: Colors.blueAccent,
+                              fontColor: Colors.black,
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            e['image'] != null
+                                ? GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => Image.network(
+                                            e['image'],
+                                            fit: BoxFit.contain,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      height: height(context) * 0.375,
+                                      child: Image.network(
+                                        e['image'],
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
+                                  )
+                                : Container(
+                                    height: 0.0,
+                                    width: 0.0,
+                                  ),
+                          ],
+                          userId: widget.user_id,
+                          profile: profile,
+                          duration: duration,
+                        ),
                         SizedBox(
                           height: 10,
                         ),

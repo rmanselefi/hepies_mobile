@@ -40,7 +40,7 @@ class _PharmacyFooterState extends State<PharmacyFooter> {
       width: MediaQuery.of(context).size.width,
       child: Padding(
         //scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(5.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -61,7 +61,7 @@ class _PharmacyFooterState extends State<PharmacyFooter> {
                   ),
                   onPressed: () async {
                     nav.changeNavSelection(NavSelection.home);
-                    Navigator.push(
+                    Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                             builder: (context) => WelcomePharmacy()));

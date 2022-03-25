@@ -12,6 +12,7 @@ import 'package:hepies/ui/pharmacy/ui/consults/comment/share_comment.dart';
 import 'package:hepies/ui/pharmacy/welcome.dart';
 import 'package:hepies/ui/welcome.dart';
 import 'package:hepies/util/image_consult.dart';
+import 'package:hepies/util/shared_preference.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:linkify_text/linkify_text.dart';
@@ -25,6 +26,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:rich_text_view/rich_text_view.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 
 class RowButton extends StatefulWidget {
   RowButton(
@@ -55,7 +57,7 @@ class _RowButtonState extends State<RowButton> {
         : [];
     res.length > 0 ? isLiked = true : isLiked = false;
     totalLikes = widget.e['like'].length;
-    print("res ${res}");
+    // print("res ${res}");
   }
 
   @override
@@ -206,7 +208,7 @@ class _RowButtonState extends State<RowButton> {
                         size: 15,
                       ),
                       label: Text(
-                        "${totalLikes}",
+                        "${totalLikes} ${totalLikes == 0 ? "Like" : "Likes"}",
                         style: TextStyle(color: Colors.grey),
                       )),
                   SizedBox(
@@ -555,7 +557,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
     List<dynamic> consult =
         await Provider.of<ConsultProvider>(context, listen: false)
             .getConsultsbyPagination(5, skip);
-            
+
     listofConsults.addAll(consult[0]);
     setState(() {
       isLoadingConsults = false;
@@ -607,7 +609,18 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                   await Provider.of<ConsultProvider>(context, listen: false)
                       .getConsultsbyPagination(5, skip);
               Navigator.of(context).pop();
-              Navigator.of(context).pop(true);
+              var currentUser = await UserPreferences().getUser();
+
+              print("role : ${currentUser.role}");
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => currentUser.role == 'doctor' ||
+                              currentUser.role == 'healthofficer' ||
+                              currentUser.role == 'nurse'
+                          ? Welcome()
+                          : WelcomePharmacy()),
+                  ModalRoute.withName('/'));
 
               showTopSnackBar(
                 context,
@@ -642,6 +655,14 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
     }
 
     showEdit(BuildContext context, var post) {
+      var i = [];
+      for (var item in post['interests'].split(' ')) {
+        i.add(item.substring(1));
+      }
+      print(i.toString());
+      setState(() {
+        _myInterests = i;
+      });
       showModalBottomSheet(
           context: context,
           builder: (BuildContext context) {
@@ -758,7 +779,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                         okButtonLabel: 'OK',
                                         cancelButtonLabel: 'CANCEL',
                                         hintWidget:
-                                            Text('Please choose one or more'),
+                                            Text('you can  choose one or more'),
                                         initialValue: _myInterests,
                                         onSaved: (value) {
                                           if (value == null) return;
@@ -802,6 +823,8 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                                       if (_topic.text !=
                                                               "" || //Milkessa: added posting capability with either text or image
                                                           file != null) {
+                                                        print(
+                                                            "interests ${_myInterests}");
                                                         var res = await consult
                                                             .updateConsult(
                                                                 post['id'],
@@ -825,13 +848,20 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                                             _topic.text = null;
                                                             file = null;
                                                           });
+
+                                                          var currentUser =
+                                                              await UserPreferences()
+                                                                  .getUser();
+
+                                                          print(
+                                                              "role : ${currentUser.role}");
                                                           Navigator.pushAndRemoveUntil(
                                                               context,
                                                               MaterialPageRoute(
-                                                                  builder: (context) => userProvider.role == 'doctor' ||
-                                                                          userProvider.role ==
+                                                                  builder: (context) => currentUser.role == 'doctor' ||
+                                                                          currentUser.role ==
                                                                               'healthofficer' ||
-                                                                          userProvider.role ==
+                                                                          currentUser.role ==
                                                                               'nurse'
                                                                       ? Welcome()
                                                                       : WelcomePharmacy()),
@@ -893,7 +923,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                   controller: _scrollController,
                   itemCount: listofConsults.length,
                   shrinkWrap: true,
-                  physics: ClampingScrollPhysics(),
+                  physics: ScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
                     var e = listofConsults[index];
                     var profile = e['author'] != null
@@ -1002,6 +1032,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                       ? IconButton(
                                           onPressed: () {
                                             _topic.text = e['topic'] ?? '';
+
                                             showEdit(context, e);
                                           },
                                           icon: Icon(Icons.more_vert_outlined))
@@ -1037,7 +1068,6 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                             onUrlClicked: (url) => launch(url),
                             linkStyle: TextStyle(color: Colors.blue),
                           ),
-                          // Text("${listofConsults[index]['topic'] ?? ' '}"),
                           SizedBox(
                             height: 10,
                           ),
@@ -1070,7 +1100,6 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                           SizedBox(
                             height: 10,
                           ),
-
                           RowButton(
                             e: e,
                             post: [
@@ -1183,7 +1212,6 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                             profile: profile,
                             duration: duration,
                           ),
-
                           SizedBox(
                             height: 10,
                           ),

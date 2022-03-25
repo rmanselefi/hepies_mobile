@@ -130,7 +130,7 @@ class _WelcomeState extends State<Welcome> {
                   Flexible(child: SizedBox(width: width(context) * 0.225)),
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(
+                      Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                               builder: (context) => Welcome(

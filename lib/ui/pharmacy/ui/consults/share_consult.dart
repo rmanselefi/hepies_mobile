@@ -8,6 +8,7 @@ import 'package:hepies/ui/doctor/consults/post_consult.dart';
 import 'package:hepies/ui/pharmacy/ui/consults/consult_list.dart';
 import 'package:hepies/ui/pharmacy/ui/consults/search_list.dart';
 import 'package:hepies/ui/pharmacy/widgets/footer.dart';
+import 'package:hepies/util/helpers.dart';
 import 'package:hepies/util/image_consult.dart';
 import 'package:hepies/widgets/footer.dart';
 import 'package:hepies/widgets/header.dart';
@@ -76,10 +77,6 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
     return SafeArea(
       child: Column(
         children: [
-          // Header(),
-          SizedBox(
-            height: 20.0,
-          ),
           Expanded(
             child: ListView(
               scrollDirection: Axis.vertical,
@@ -113,7 +110,7 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
                           borderRadius: BorderRadius.all(Radius.circular(30)),
                           borderSide:
                               BorderSide(color: Colors.black38, width: 1)),
-                      hintText: "Search consults by interest ...",
+                      hintText: "Search consults ...",
                       labelStyle: TextStyle(color: Colors.black45),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(30)),
@@ -126,7 +123,8 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
                   ),
                 ),
                 Container(
-                    margin: EdgeInsets.all(10),
+                    margin: EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+                    height: MediaQuery.of(context).size.height / 16,
                     child: TextField(
                       readOnly: true,
                       onTap: () {
@@ -142,10 +140,17 @@ class _PharmacyShareConsultState extends State<PharmacyShareConsult> {
                     )),
                 Divider(),
                 isOnSearch
-                    ? SearchList(widget.user_id, interest,
-                        _search.text.toString(), _parentScrollController)
-                    : PharmacyConsultList(
-                        widget.user_id, interest, _parentScrollController)
+                    ? Container(
+                        child: SearchList(
+                            widget.user_id,
+                            interest,
+                            capitalize(_search.text.trim().toString()),
+                            _parentScrollController),
+                      )
+                    : Container(
+                        child: PharmacyConsultList(
+                            widget.user_id, interest, _parentScrollController),
+                      ),
               ],
             ),
           ),

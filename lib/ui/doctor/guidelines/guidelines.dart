@@ -208,7 +208,7 @@ class _GuidelinesState extends State<Guidelines> {
                       Provider.of<GuidelinesProvider>(context, listen: false)
                           .guidelines;
                   var drug = setState(() {
-                    drugName = val;
+                    drugName = val.toUpperCase();
                   });
                 },
                 decoration: InputDecoration(
@@ -277,7 +277,8 @@ class _GuidelinesState extends State<Guidelines> {
 
                   List<dynamic> guidlines = snapshot
                       .data // Milkessa: the list name 'drugs' changed to 'guidelines'
-                      .where((element) => element['name'].contains(drugName))
+                      .where((element) =>
+                          element['name'].toUpperCase().contains(drugName))
                       .toList();
                   return Container(
                     height: 3 * MediaQuery.of(context).size.height / 4,
@@ -310,7 +311,7 @@ class _GuidelinesState extends State<Guidelines> {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     checkStatus(e['id'].toString())
-                                        ? Flexible(
+                                        ?((progress * 100).toStringAsFixed(2) == "100.00")? Flexible(
                                             child: TextButton(
                                               onPressed: () async {
                                                 print("object ${e['url']}");
@@ -328,7 +329,7 @@ class _GuidelinesState extends State<Guidelines> {
                                                 ),
                                               ),
                                             ),
-                                          )
+                                          ):Container()
                                         : Container(),
                                     SizedBox(width: 6),
                                     IconButton(
