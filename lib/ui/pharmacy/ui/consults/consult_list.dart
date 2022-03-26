@@ -567,6 +567,8 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
     return listofConsults;
   }
 
+  bool isEditing = false;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -816,6 +818,9 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                                 alignment: Alignment.topRight,
                                                 child: OutlinedButton(
                                                   onPressed: () async {
+                                                    setState(() {
+                                                      isEditing = true;
+                                                    });
                                                     try {
                                                       var photo = file != null
                                                           ? File(file.path)
@@ -889,7 +894,9 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                                       );
                                                     }
                                                   },
-                                                  child: Text('Edit'),
+                                                  child: isEditing
+                                                      ? loading
+                                                      : Text('Edit'),
                                                 )),
                                         SizedBox(
                                           width: 20,

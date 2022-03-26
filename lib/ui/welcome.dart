@@ -128,21 +128,24 @@ class _WelcomeState extends State<Welcome> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Flexible(child: SizedBox(width: width(context) * 0.225)),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Welcome(
-                                    currenIndex: 0,
-                                  )));
-                    },
-                    child: GradientText(
-                      'Hepius',
-                      gradient: LinearGradient(colors: [
-                        Colors.blue,
-                        Colors.blue,
-                      ]),
+                  Padding(
+                    padding: EdgeInsets.only(left: 15),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Welcome(
+                                      currenIndex: 0,
+                                    )));
+                      },
+                      child: GradientText(
+                        'Hepius',
+                        gradient: LinearGradient(colors: [
+                          Colors.blue,
+                          Colors.blue,
+                        ]),
+                      ),
                     ),
                   ),
                   Flexible(child: SizedBox(width: width(context) * 0.2)),

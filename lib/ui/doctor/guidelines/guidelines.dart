@@ -76,6 +76,7 @@ class _GuidelinesState extends State<Guidelines> {
   Future downloadFile(String imageUrl, int id) async {
     downloadId = id;
     try {
+      print("working download again");
       setState(() {
         downloading = true;
         // download = (rec / total) * 100;
@@ -99,13 +100,12 @@ class _GuidelinesState extends State<Guidelines> {
           });
         },
         cancelToken: token,
-      )
-          // .onError((DioError error, stackTrace) {
-          //   dio.close();
-          //   print('Dio client is closed');
-          //   return Future.delayed(Duration(microseconds: 1));
-          // })
-          ;
+      );
+      // .onError((DioError error, stackTrace) async {
+      //   await dio.close();
+      //   print('Dio client is closed');
+      //   return Future.delayed(Duration(microseconds: 1));
+      // });
       setState(() {
         downloading = false;
       });
@@ -280,6 +280,7 @@ class _GuidelinesState extends State<Guidelines> {
                       .where((element) =>
                           element['name'].toUpperCase().contains(drugName))
                       .toList();
+                  // print(guidlines.toString());
                   return Container(
                     height: 3 * MediaQuery.of(context).size.height / 4,
                     child: ListView(
@@ -311,31 +312,40 @@ class _GuidelinesState extends State<Guidelines> {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     checkStatus(e['id'].toString())
-                                        ?((progress * 100).toStringAsFixed(2) == "100.00")? Flexible(
-                                            child: TextButton(
-                                              onPressed: () async {
-                                                print("object ${e['url']}");
-                                                await viewFile(
-                                                    e['url'],
-                                                    e['id'].toString(),
-                                                    context);
-                                              },
-                                              child: Text(
-                                                'Open',
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.w900,
-                                                  color: Colors.blue,
-                                                  fontSize: 16,
+                                        ? ((progress * 100)
+                                                    .toStringAsFixed(2) ==
+                                                "100.00")
+                                            ? Flexible(
+                                                child: TextButton(
+                                                  onPressed: () async {
+                                                    print("object ${e['url']}");
+                                                    await viewFile(
+                                                        e['url'],
+                                                        e['id'].toString(),
+                                                        context);
+                                                  },
+                                                  child: Text(
+                                                    'Open',
+                                                    style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.w900,
+                                                      color: Colors.blue,
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
                                                 ),
-                                              ),
-                                            ),
-                                          ):Container()
+                                              )
+                                            : Container()
                                         : Container(),
                                     SizedBox(width: 6),
                                     IconButton(
                                       padding: EdgeInsets.zero,
                                       constraints: BoxConstraints(),
                                       onPressed: () {
+                                        if (token.isCancelled) {
+                                          token = new CancelToken();
+                                        }
+                                        print(checkStatus(e['id'].toString()));
                                         if (!checkStatus(e['id'].toString())) {
                                           setState(() {
                                             downloadFile(e['url'], e['id']);

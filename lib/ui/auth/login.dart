@@ -145,8 +145,7 @@ class _LoginState extends State<Login> {
                             user: user,
                           )));
             }
-          }
-          if (response['error']) {
+          } else if (response['error'] != null && response['error']) {
             print("error");
             showTopSnackBar(
               context,
@@ -155,7 +154,8 @@ class _LoginState extends State<Login> {
                     'Unable to login, please check your internet connection!',
               ),
             );
-          } else {
+          } else if (response['invalidcredentials']) {
+            print("excuted");
             showTopSnackBar(
               context,
               CustomSnackBar.error(

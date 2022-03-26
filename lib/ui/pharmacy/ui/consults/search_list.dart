@@ -555,6 +555,8 @@ class _SearchListState extends State<SearchList> {
     interestStatus = "hide";
   }
 
+  bool isEditing = false;
+
   @override
   Widget build(BuildContext context) {
     ConsultProvider consult = Provider.of<ConsultProvider>(context);
@@ -790,6 +792,9 @@ class _SearchListState extends State<SearchList> {
                                                 alignment: Alignment.topRight,
                                                 child: OutlinedButton(
                                                   onPressed: () async {
+                                                    setState(() {
+                                                      isEditing = true;
+                                                    });
                                                     try {
                                                       var photo = file != null
                                                           ? File(file.path)
@@ -861,7 +866,9 @@ class _SearchListState extends State<SearchList> {
                                                       );
                                                     }
                                                   },
-                                                  child: Text('Edit'),
+                                                  child: isEditing
+                                                      ? loading
+                                                      : Text('Edit'),
                                                 )),
                                       ],
                                     ),
