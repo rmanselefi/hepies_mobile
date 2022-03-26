@@ -15,6 +15,7 @@ import 'package:hepies/util/gradient_text.dart';
 import 'package:hepies/util/shared_preference.dart';
 import 'package:hepies/widgets/drawer.dart';
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -35,6 +36,7 @@ class _WelcomePharmacyState extends State<WelcomePharmacy> {
   var profile;
   var points;
   var overallPoints;
+  var f;
   @override
   void initState() {
     // TODO: implement initState
@@ -49,6 +51,7 @@ class _WelcomePharmacyState extends State<WelcomePharmacy> {
         overallPoints = user['profession'][0]['overall_points'];
       });
     });
+    f = NumberFormat("###,###.0#", "en_US");
   }
 
   Future<void> initLocalDrugList() async {
@@ -135,11 +138,12 @@ class _WelcomePharmacyState extends State<WelcomePharmacy> {
                             border: Border.all(color: Colors.green, width: 2),
                             borderRadius: BorderRadius.circular(35.0)),
                         child: Text(
-                          '${points ?? 0} Pts',
+                          '${f.format(int.parse(points != null ? points : '0')) ?? 0} Pts',
                           style: TextStyle(color: Colors.green, fontSize: 18.0),
                         ),
                       ),
-                      Text('Overall ${overallPoints ?? ' - '}pts',
+                      Text(
+                          'Overall ${f.format(int.parse(overallPoints != null ? overallPoints : '0')) ?? ' - '}pts',
                           style: TextStyle(color: Colors.green, fontSize: 12.0))
                     ],
                   ),

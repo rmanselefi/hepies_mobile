@@ -11,6 +11,7 @@ import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:intl/intl.dart';
 
 class Points extends StatefulWidget {
   final points;
@@ -39,6 +40,14 @@ class _PointsState extends State<Points> {
       Text("Processing your request")
     ],
   );
+  var f;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    f = NumberFormat("###,###.0#", "en_US");
+  }
+
   @override
   Widget build(BuildContext context) {
     var userProvider = Provider.of<UserProvider>(context);
@@ -106,13 +115,12 @@ class _PointsState extends State<Points> {
                                             borderRadius:
                                                 BorderRadius.circular(20.0)),
                                         child: Text.rich(TextSpan(
-                                            text: '${point ?? 0}',
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 40.0),
+                                            text:
+                                                '${f.format(int.parse(point != null ? point : '0')) ?? 0}',
+                                            style: TextStyle(color: Colors.black, fontSize: 40.0),
                                             children: [
                                               TextSpan(
-                                                  text: '.Pts',
+                                                  text: '.Ptds',
                                                   style:
                                                       TextStyle(fontSize: 14))
                                             ]))),

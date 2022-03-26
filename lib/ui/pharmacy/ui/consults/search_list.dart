@@ -18,6 +18,7 @@ import 'package:intl/intl.dart';
 import 'package:linkify_text/linkify_text.dart';
 import 'package:provider/provider.dart';
 import 'package:readmore/readmore.dart';
+import 'package:recase/recase.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
@@ -967,7 +968,7 @@ class _SearchListState extends State<SearchList> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      e['user'],
+                                      e['user'].toString().titleCase,
                                       style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold),

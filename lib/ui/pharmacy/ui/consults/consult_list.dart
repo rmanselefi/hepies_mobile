@@ -27,6 +27,7 @@ import 'package:rich_text_view/rich_text_view.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:recase/recase.dart';
 
 class RowButton extends StatefulWidget {
   RowButton(
@@ -1006,7 +1007,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        e['user'],
+                                        e['user'].toString().titleCase,
                                         style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold),
