@@ -557,6 +557,11 @@ class _SearchListState extends State<SearchList> {
   }
 
   bool isEditing = false;
+  bool isDeleting = false;
+  var deleteLoading = Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: <Widget>[CircularProgressIndicator()],
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -631,8 +636,10 @@ class _SearchListState extends State<SearchList> {
 
     showEdit(BuildContext context, var post) {
       var i = [];
-      for (var item in post['interests'].split(' ')) {
-        i.add(item.substring(1));
+      if (post['interests'] != null && post['interests'] != '') {
+        for (var item in post['interests'].split(' ')) {
+          i.add(item.substring(1));
+        }
       }
       print(i.toString());
       setState(() {
@@ -662,10 +669,50 @@ class _SearchListState extends State<SearchList> {
                               Container(
                                 margin: EdgeInsets.only(right: 10),
                                 child: IconButton(
-                                  onPressed: () {
-                                    showAlertDialog(context, post['id']);
+                                  onPressed: () async {
+                                    setState(() {
+                                      isDeleting = true;
+                                    });
+                                    var res = await ConsultProvider()
+                                        .deleteConsult(post['id']);
+                                    if (res['status']) {
+                                      setState(() async {
+                                        _myData = Provider.of<ConsultProvider>(
+                                                context,
+                                                listen: false)
+                                            .getConsults();
+
+                                        Navigator.of(context).pop();
+                                        var currentUser =
+                                            await UserPreferences().getUser();
+
+                                        print("role : ${currentUser.role}");
+                                        Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => currentUser
+                                                                .role ==
+                                                            'doctor' ||
+                                                        currentUser.role ==
+                                                            'healthofficer' ||
+                                                        currentUser.role ==
+                                                            'nurse'
+                                                    ? Welcome()
+                                                    : WelcomePharmacy()),
+                                            ModalRoute.withName('/'));
+                                        showTopSnackBar(
+                                          context,
+                                          CustomSnackBar.success(
+                                            message:
+                                                "Your consult is successfully deleted",
+                                          ),
+                                        );
+                                      });
+                                    }
                                   },
-                                  icon: Icon(Icons.delete_outline_rounded),
+                                  icon: isDeleting
+                                      ? CircularProgressIndicator()
+                                      : Icon(Icons.delete_outline_rounded),
                                 ),
                               )
                             ],

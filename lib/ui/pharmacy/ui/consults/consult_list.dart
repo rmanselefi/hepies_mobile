@@ -569,6 +569,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
   }
 
   bool isEditing = false;
+  bool isDeleting = false;
 
   @override
   void initState() {
@@ -658,11 +659,13 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
     }
 
     showEdit(BuildContext context, var post) {
+      print("working");
       var i = [];
-      for (var item in post['interests'].split(' ')) {
-        i.add(item.substring(1));
+      if (post['interests']!= null && post['interests'] != '') {
+        for (var item in post['interests'].split(' ')) {
+          i.add(item.substring(1));
+        }
       }
-      print(i.toString());
       setState(() {
         _myInterests = i;
       });
@@ -690,10 +693,53 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                               Container(
                                 margin: EdgeInsets.only(right: 10),
                                 child: IconButton(
-                                  onPressed: () {
-                                    showAlertDialog(context, post['id']);
+                                  onPressed: () async {
+                                    setState(() {
+                                      isDeleting = true;
+                                    });
+                                    print("working");
+                                    var res = await ConsultProvider()
+                                        .deleteConsult(post['id']);
+                                    if (res['status']) {
+                                      setState(() async {
+                                        listofConsults =
+                                            await Provider.of<ConsultProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .getConsultsbyPagination(
+                                                    5, skip);
+                                        Navigator.of(context).pop();
+                                        var currentUser =
+                                            await UserPreferences().getUser();
+
+                                        print("role : ${currentUser.role}");
+                                        Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => currentUser
+                                                                .role ==
+                                                            'doctor' ||
+                                                        currentUser.role ==
+                                                            'healthofficer' ||
+                                                        currentUser.role ==
+                                                            'nurse'
+                                                    ? Welcome()
+                                                    : WelcomePharmacy()),
+                                            ModalRoute.withName('/'));
+
+                                        showTopSnackBar(
+                                          context,
+                                          CustomSnackBar.success(
+                                            message:
+                                                "Your consult is successfully deleted",
+                                          ),
+                                        );
+                                      });
+                                    }
                                   },
-                                  icon: Icon(Icons.delete_outline_rounded),
+                                  icon: isDeleting
+                                      ? CircularProgressIndicator()
+                                      : Icon(Icons.delete_outline_rounded),
                                 ),
                               )
                             ],
