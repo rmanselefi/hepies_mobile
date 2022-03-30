@@ -101,6 +101,7 @@ class _PointsState extends State<Points> {
                                 }
                                 var res = snapshot.data;
                                 var point = res['profession'][0]['points'] ?? 0;
+                                // print("s" point.runtimeType);
                                 points = res['profession'][0]['points'];
 
                                 return Padding(
@@ -116,7 +117,7 @@ class _PointsState extends State<Points> {
                                                 BorderRadius.circular(20.0)),
                                         child: Text.rich(TextSpan(
                                             text:
-                                                '${f.format(int.parse(point != null ? point : '0')) ?? 0}',
+                                                '${f.format(double.parse(point != null ? point : '0')) ?? 0}',
                                             style: TextStyle(color: Colors.black, fontSize: 40.0),
                                             children: [
                                               TextSpan(

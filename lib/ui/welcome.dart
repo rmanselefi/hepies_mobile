@@ -171,7 +171,7 @@ class _WelcomeState extends State<Welcome> {
                               border: Border.all(color: Colors.green, width: 2),
                               borderRadius: BorderRadius.circular(35.0)),
                           child: Text(
-                            '${f.format(int.parse(points != null ? points : '0')) ?? 0} Pts',
+                            '${f.format(double.parse(points != null ? points : '0')) ?? 0} Pts',
                             style:
                                 TextStyle(color: Colors.green, fontSize: 18.0),
                           ),
@@ -181,7 +181,7 @@ class _WelcomeState extends State<Welcome> {
                         ),
                         Flexible(
                           child: Text(
-                              'Overall ${f.format(int.parse(overallPoints != null ? overallPoints : '0')) ?? ' - '}pts',
+                              'Overall ${f.format(double.parse(overallPoints != null ? overallPoints : '0')) ?? ' - '}pts',
                               style: TextStyle(
                                   color: Colors.green, fontSize: 12.0)),
                         )
