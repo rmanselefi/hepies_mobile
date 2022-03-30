@@ -79,7 +79,7 @@ class _WelcomeState extends State<Welcome> {
       });
     });
 
-    f = NumberFormat("###,###.0#", "en_US");
+    f = NumberFormat.decimalPattern("en_US");
   }
 
   @override

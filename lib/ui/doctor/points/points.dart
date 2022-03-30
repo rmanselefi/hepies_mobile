@@ -45,7 +45,7 @@ class _PointsState extends State<Points> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    f = NumberFormat("###,###.0#", "en_US");
+    f = NumberFormat.decimalPattern("en_US");
   }
 
   @override

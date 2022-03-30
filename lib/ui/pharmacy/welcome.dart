@@ -51,7 +51,7 @@ class _WelcomePharmacyState extends State<WelcomePharmacy> {
         overallPoints = user['profession'][0]['overall_points'];
       });
     });
-    f = NumberFormat("###,###.0#", "en_US");
+    f = NumberFormat.decimalPattern("en_US");
   }
 
   Future<void> initLocalDrugList() async {
