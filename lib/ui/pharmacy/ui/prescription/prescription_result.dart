@@ -38,7 +38,7 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
             DateTime.now().difference(DateTime.parse(i['createdAt'])).inDays <=
                 15)
         .toList();
-    var diagnosis = result[0]['diagnosis'];
+    var diagnosis = result[0]['prescription']['diagnosis'];
     var prescription = result[0];
     var patient = prescription['patient'];
     List<dynamic> list_id = [];

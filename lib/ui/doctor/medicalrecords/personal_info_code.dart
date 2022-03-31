@@ -19,6 +19,8 @@ class _PersonalInfoState extends State<PersonalInfoCode> {
     var date = prescription['prescription']['createdAt'];
     var formattedDate =
         new DateFormat("mm-dd-yyyy hh:mm a").format(DateTime.parse(date));
+    print("p" + patient.toString());
+    // print("all p" + prescription.toString());
     return Column(
       children: [
         Row(
@@ -74,7 +76,7 @@ class _PersonalInfoState extends State<PersonalInfoCode> {
               style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
             ),
             Text(
-              '${patient['address'] ?? 'empty'}',
+              '${patient['mrn'] ?? 'empty'}',
               style: TextStyle(fontSize: 18.0),
             ),
             SizedBox(
