@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:hepies/constants.dart';
 import 'package:hepies/models/dx.dart';
 import 'package:hepies/models/favorites.dart';
-import 'package:hepies/models/hx.dart';
-import 'package:hepies/models/px.dart';
 import 'package:hepies/models/user.dart';
 import 'package:hepies/providers/prescription_provider.dart';
 import 'package:hepies/providers/user_provider.dart';
@@ -14,12 +12,10 @@ import 'package:hepies/ui/doctor/guidelines/guidelines.dart';
 import 'package:hepies/ui/doctor/prescription/forms/prescribe_form.dart';
 import 'package:hepies/ui/doctor/prescription/forms/prescribe_narco_form.dart';
 import 'package:hepies/ui/doctor/prescription/forms/prescribe_psyco_form.dart';
-import 'package:hepies/ui/doctor/prescription/papers/prescription_paper.dart';
-import 'package:hepies/ui/doctor/prescription/papers/psycho_narco_paper.dart';
-import 'package:hepies/ui/doctor/prescription/papers/psycho_paper.dart';
 import 'package:hepies/ui/welcome.dart';
 import 'package:hepies/util/database_helper.dart';
 import 'package:hepies/util/shared_preference.dart';
+import 'package:phone_number/phone_number.dart';
 import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
@@ -51,6 +47,8 @@ class _WritePrescriptionState extends State<WritePrescription> {
   String sex = "";
   String weight = "";
   String isFit = "";
+  String ageLabel = "";
+  String address = "";
 
   @override
   void initState() {
@@ -112,6 +110,49 @@ class _WritePrescriptionState extends State<WritePrescription> {
     });
   }
 
+  void setPatientInfo(type, value) {
+    if (type == "name") {
+      setState(() {
+        name = value;
+      });
+    }
+    if (type == "phone") {
+      setState(() {
+        phoneNumber = value;
+      });
+    }
+    if (type == "fatherName") {
+      setState(() {
+        fatherName = value;
+      });
+    }
+    if (type == "sex") {
+      setState(() {
+        sex = value;
+      });
+    }
+    if (type == "age") {
+      setState(() {
+        age = value;
+      });
+    }
+    if (type == "weight") {
+      setState(() {
+        weight = value;
+      });
+    }
+    if (type == "ageLabel") {
+      setState(() {
+        ageLabel = value;
+      });
+    }
+    if (type == "address") {
+      setState(() {
+        address = value;
+      });
+    }
+  }
+
   void setFromFavorites(List<dynamic> fav) async {
     List<dynamic> press = [];
     User user = await UserPreferences().getUser();
@@ -145,10 +186,9 @@ class _WritePrescriptionState extends State<WritePrescription> {
 
   var favoriteController = new TextEditingController();
 
-  void _setPrescription(List<dynamic> pres, List<dynamic> pat) {
+  void _setPrescription(List<dynamic> pres) {
     setState(() {
       prescription = pres;
-      patient = pat;
     });
   }
 
@@ -182,12 +222,12 @@ class _WritePrescriptionState extends State<WritePrescription> {
     var prescProvider = Provider.of<PrescriptionProvider>(context);
     return WillPopScope(
       onWillPop: () async {
-          Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Welcome(
-                                  currenIndex: 0,
-                                )));    
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => Welcome(
+                      currenIndex: 0,
+                    )));
         return;
       },
       child: Scaffold(
@@ -472,7 +512,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                       if (pretype == "general") {
                         return PrescribeForm(
                             setPrescription: _setPrescription,
-                            setPatient: _setPatient,
+                            setPatient: setPatientInfo,
                             setFav: setFavorite,
                             initialPrescription: prescription,
                             type: 'general',
@@ -654,58 +694,96 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                   try {
                                     if (pretype == "general" ||
                                         pretype == "instrument") {
-                                      // print("patientpatient $patient");
-                                      if (prescription.length != 0 &&
-                                          patient.length != 0) {
-                                        for (var i = 0;
-                                            i < patient.length;
-                                            i++) {
-                                          var phone = patient[i]['phone'];
-                                          var name = patient[i]['name'];
-                                          var age = patient[i]['age'];
-                                          var sex = patient[i]['sex'];
-                                          if (phone == "" ||
-                                              phone == null ||
-                                              sex == "" ||
-                                              sex == null ||
-                                              name == "" ||
-                                              name == null ||
-                                              age == "" ||
-                                              age == null) {
-                                            showTopSnackBar(
-                                              context,
-                                              CustomSnackBar.error(
-                                                message:
-                                                    "Please make sure all patient information is provided before sending prescription",
-                                              ),
-                                            );
-
-                                            return;
-                                          }
-                                        }
-                                        var res = await prescProvider
-                                            .writePrescription(
-                                                prescription, patient);
-                                        if (res['status']) {
-                                          Provider.of<PrescriptionProvider>(
-                                                  context,
-                                                  listen: false)
-                                              .resetStatus();
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      WritePrescription(
-                                                        from: 'sent',
-                                                      )));
-                                        } else {
+                                      print("patientpatient ${phoneNumber.length}");
+                                      if (prescription.length != 0) {
+                                        if (phoneNumber == "" ||
+                                            sex == "" ||
+                                            name == "" ||
+                                            age == "") {
                                           showTopSnackBar(
                                             context,
                                             CustomSnackBar.error(
                                               message:
-                                                  "Unable to send your prescriptions",
+                                                  "Please make sure all patient information is provided before sending prescription",
                                             ),
                                           );
+
+                                          return;
+                                        } else {
+                                          var phone = "+251$phoneNumber";
+                                          PhoneNumberUtil plugin =
+                                              PhoneNumberUtil();
+                                          RegionInfo region = RegionInfo(
+                                              code: 'ET', prefix: 251);
+                                          if (phoneNumber.length == 13) {
+                                            bool isValid =
+                                                await plugin.validate(
+                                                    phoneNumber, region.code);
+
+                                            if (!isValid) {
+                                              showTopSnackBar(
+                                                context,
+                                                CustomSnackBar.error(
+                                                  message:
+                                                      "Phone number is not valid",
+                                                ),
+                                              );
+                                            } else {
+                                              print("got hereeeeeeeeeee====>>");
+                                              User user =
+                                                  await UserPreferences()
+                                                      .getUser();
+                                              final Map<String, dynamic>
+                                                  patientData = {
+                                                "name": name,
+                                                "age": age,
+                                                "age_label": ageLabel,
+                                                "fathername": fatherName,
+                                                "grandfathername": "kebede",
+                                                "phone": phoneNumber,
+                                                "sex": sex,
+                                                "weight": weight,
+                                                "mrn": address,
+                                                "professionid":
+                                                    user.professionid
+                                              };
+                                              var res = await prescProvider
+                                                  .writePrescription(
+                                                      prescription,
+                                                      patientData);
+                                              if (res['status']) {
+                                                Provider.of<PrescriptionProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .resetStatus();
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            WritePrescription(
+                                                              from: 'sent',
+                                                            )));
+                                              } else {
+                                                showTopSnackBar(
+                                                  context,
+                                                  CustomSnackBar.error(
+                                                    message:
+                                                        "Unable to send your prescriptions",
+                                                  ),
+                                                );
+                                              }
+                                            }
+                                          } else if (phoneNumber.length != 13) {
+                                            print("phone number length : " +
+                                                phoneNumber.length.toString());
+                                            showTopSnackBar(
+                                              context,
+                                              CustomSnackBar.error(
+                                                message:
+                                                    "please add correct phoneNumber",
+                                              ),
+                                            );
+                                          }
                                         }
                                       } else {
                                         showTopSnackBar(
