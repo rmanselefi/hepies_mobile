@@ -147,7 +147,7 @@ class PrescriptionProvider with ChangeNotifier {
   }
 
   Future<Map<String, dynamic>> writePrescription(
-      List precriptionData, List patientData) async {
+      List precriptionData, var patientData) async {
     _sentStatus = PrescriptionStatus.Sending;
     notifyListeners();
     SharedPreferences prefs = await SharedPreferences.getInstance();
