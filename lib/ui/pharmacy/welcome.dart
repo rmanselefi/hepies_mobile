@@ -100,21 +100,24 @@ class _WelcomePharmacyState extends State<WelcomePharmacy> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Flexible(child: SizedBox(width: width(context) * 0.225)),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => WelcomePharmacy(
-                                  currenIndex: 0,
-                                )));
-                  },
-                  child: GradientText(
-                    'Hepius',
-                    gradient: LinearGradient(colors: [
-                      Colors.blue,
-                      Colors.blue,
-                    ]),
+                Padding(
+                  padding: EdgeInsets.only(left: 15),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => WelcomePharmacy(
+                                    currenIndex: 0,
+                                  )));
+                    },
+                    child: GradientText(
+                      'Hepius',
+                      gradient: LinearGradient(colors: [
+                        Colors.blue,
+                        Colors.blue,
+                      ]),
+                    ),
                   ),
                 ),
                 Flexible(child: SizedBox(width: width(context) * 0.2)),

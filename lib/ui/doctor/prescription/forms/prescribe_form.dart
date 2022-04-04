@@ -1760,7 +1760,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                   child: pres['type'] == "general"
                       ? Text(
                           '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['drug_name'] != null ? pres['drug_name'] : ""} ${pres['strength'] != null ? pres['strength'] : ""} '
-                          '${pres['unit'] != null ? pres['unit'] : ""} ${pres['route'] != null ? pres['route'] : ""} Every ${pres['frequency'] != null ? pres['frequency'] : ""} For ${pres['takein'] != null ? pres['takein'] : ""}')
+                          '${pres['unit'] != null ? pres['unit'] : ""} ${ pres['route'] != null ? pres['route'] : ""},${isAmpule?'Ampule: ${pres['ampule']}': 'Every ${pres['frequency'] != null ? pres['frequency'] : ""} For ${pres['takein'] != null ? pres['takein'] : ""}'}',)
                       : Text(
                           '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['material_name'] != null ? pres['material_name'] : ""} ${pres['size'] != null ? pres['size'] : ""} ${pres['amount'] != null ? pres['amount'] : ""}'),
                 ),
@@ -1775,7 +1775,8 @@ class _PrescribeFormState extends State<PrescribeForm> {
                           //     .setPrescriptionForm(
                           //     pres, prescription.indexOf(pres));
                           setState(() {
-                            presIndex =  widget.initialPrescription.indexOf(pres);
+                            presIndex =
+                                widget.initialPrescription.indexOf(pres);
                             drugnameController.value =
                                 TextEditingValue(text: pres['drug_name']);
                             _selectedAnimal = pres['drug_name'];

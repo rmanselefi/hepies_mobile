@@ -121,7 +121,7 @@ class _PointsState extends State<Points> {
                                             style: TextStyle(color: Colors.black, fontSize: 40.0),
                                             children: [
                                               TextSpan(
-                                                  text: '.Ptds',
+                                                  text: '.Pts',
                                                   style:
                                                       TextStyle(fontSize: 14))
                                             ]))),
