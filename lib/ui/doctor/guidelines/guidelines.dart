@@ -5,6 +5,7 @@ import 'dart:math';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hepies/constants.dart';
 import 'package:hepies/providers/drug_provider.dart';
 import 'package:hepies/providers/guidelines.dart';
@@ -192,196 +193,219 @@ class _GuidelinesState extends State<Guidelines> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: ListView(
-        children: [
-          SizedBox(
-            height: 30.0,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              height: 50,
-              child: TextField(
-                onChanged: (val) {
-                  var drugs =
-                      Provider.of<GuidelinesProvider>(context, listen: false)
-                          .guidelines;
-                  var drug = setState(() {
-                    drugName = val.toUpperCase();
-                  });
-                },
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(50.0),
-                    ),
-                    prefixIcon: Icon(Icons.search),
-                    filled: true,
-                    hintStyle: TextStyle(color: Colors.grey[800]),
-                    hintText: "Search",
-                    fillColor: Colors.white70),
+    Future<bool> _onWillPop() async {
+      if (downloading) {
+        Fluttertoast.showToast(
+            msg: "please  don’t close  this  screen until download finish",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.TOP,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        return false;
+      } else {
+        return true;
+      }
+    }
+
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        body: ListView(
+          children: [
+            SizedBox(
+              height: 30.0,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                height: 50,
+                child: TextField(
+                  onChanged: (val) {
+                    var drugs =
+                        Provider.of<GuidelinesProvider>(context, listen: false)
+                            .guidelines;
+                    var drug = setState(() {
+                      drugName = val.toUpperCase();
+                    });
+                  },
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
+                      prefixIcon: Icon(Icons.search),
+                      filled: true,
+                      hintStyle: TextStyle(color: Colors.grey[800]),
+                      hintText: "Search",
+                      fillColor: Colors.white70),
+                ),
               ),
             ),
-          ),
-          SizedBox(
-            height: 20.0,
-          ),
-          downloading
-              ? Row(
-                  children: [
-                    LinearPercentIndicator(
-                      width: 250.0,
-                      lineHeight: 14.0,
-                      percent: progress,
-                      backgroundColor: Colors.grey,
-                      progressColor: Colors.blue,
-                    ),
-                    IconButton(
-                      onPressed: () {
-                        setState(() {
-                          token.cancel('Download canceled!');
-                          showTopSnackBar(
-                            context,
-                            CustomSnackBar.success(
-                              message: 'Download canceled successfully!',
-                            ),
-                          );
-                          downloading = false;
-                          changeStatus(downloadId.toString(), false);
-                        });
-                      },
-                      icon: Icon(Icons.cancel),
-                    ),
-                  ],
-                )
-              : Container(),
-          downloading
-              ? Text((progress * 100).toStringAsFixed(2) + "%")
-              : Container(),
-          SizedBox(
-            height: 5.0,
-          ),
-          FutureBuilder<List<dynamic>>(
-              future: Provider.of<GuidelinesProvider>(context).getGuidelines(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else {
-                  if (snapshot.data == null) {
-                    return Center(
-                      child: Text('No data to show'),
-                    );
-                  }
-
-                  List<dynamic> guidlines = snapshot
-                      .data // Milkessa: the list name 'drugs' changed to 'guidelines'
-                      .where((element) =>
-                          element['name'].toUpperCase().contains(drugName))
-                      .toList();
-                  // print(guidlines.toString());
-                  return Container(
-                    height: 3 * MediaQuery.of(context).size.height / 4,
-                    child: ListView(
-                      shrinkWrap: true,
-                      children: guidlines.map<Widget>((e) {
-                        return Padding(
-                          padding: EdgeInsets.all(10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              // Milkessa: Implemented download and delete functions
-                              Flexible(
-                                flex: 3,
-                                child: Container(
-                                    width: width(context) * 0.7,
-                                    padding:
-                                        EdgeInsets.only(left: 10.0, top: 10.0),
-                                    child: Text(
-                                      e['name'] != null ? e['name'] : '',
-                                      style: TextStyle(
-                                        fontSize: 16.0,
-                                        decoration: TextDecoration.underline,
-                                      ),
-                                    )),
+            SizedBox(
+              height: 20.0,
+            ),
+            downloading
+                ? Row(
+                    children: [
+                      LinearPercentIndicator(
+                        width: 250.0,
+                        lineHeight: 14.0,
+                        percent: progress,
+                        backgroundColor: Colors.grey,
+                        progressColor: Colors.blue,
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            token.cancel('Download canceled!');
+                            showTopSnackBar(
+                              context,
+                              CustomSnackBar.success(
+                                message: 'Download canceled successfully!',
                               ),
-                              Flexible(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    checkStatus(e['id'].toString())
-                                        ? ((progress * 100)
-                                                    .toStringAsFixed(2) ==
-                                                "100.00")
-                                            ? Flexible(
-                                                child: TextButton(
-                                                  onPressed: () async {
-                                                    print("object ${e['url']}");
-                                                    await viewFile(
-                                                        e['url'],
-                                                        e['id'].toString(),
-                                                        context);
-                                                  },
-                                                  child: Text(
-                                                    'Open',
-                                                    style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w900,
-                                                      color: Colors.blue,
-                                                      fontSize: 16,
+                            );
+                            downloading = false;
+                            changeStatus(downloadId.toString(), false);
+                          });
+                        },
+                        icon: Icon(Icons.cancel),
+                      ),
+                    ],
+                  )
+                : Container(),
+            downloading
+                ? Text((progress * 100).toStringAsFixed(2) + "%")
+                : Container(),
+            SizedBox(
+              height: 5.0,
+            ),
+            FutureBuilder<List<dynamic>>(
+                future:
+                    Provider.of<GuidelinesProvider>(context).getGuidelines(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    if (snapshot.data == null) {
+                      return Center(
+                        child: Text('No data to show'),
+                      );
+                    }
+
+                    List<dynamic> guidlines = snapshot
+                        .data // Milkessa: the list name 'drugs' changed to 'guidelines'
+                        .where((element) =>
+                            element['name'].toUpperCase().contains(drugName))
+                        .toList();
+                    // print(guidlines.toString());
+                    return Container(
+                      height: 3 * MediaQuery.of(context).size.height / 4,
+                      child: ListView(
+                        shrinkWrap: true,
+                        children: guidlines.map<Widget>((e) {
+                          return Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                // Milkessa: Implemented download and delete functions
+                                Flexible(
+                                  flex: 3,
+                                  child: Container(
+                                      width: width(context) * 0.7,
+                                      padding: EdgeInsets.only(
+                                          left: 10.0, top: 10.0),
+                                      child: Text(
+                                        e['name'] != null ? e['name'] : '',
+                                        style: TextStyle(
+                                          fontSize: 16.0,
+                                          decoration: TextDecoration.underline,
+                                        ),
+                                      )),
+                                ),
+                                Flexible(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      checkStatus(e['id'].toString())
+                                          ? ((progress * 100)
+                                                      .toStringAsFixed(2) ==
+                                                  "100.00")
+                                              ? Flexible(
+                                                  child: TextButton(
+                                                    onPressed: () async {
+                                                      print(
+                                                          "object ${e['url']}");
+                                                      await viewFile(
+                                                          e['url'],
+                                                          e['id'].toString(),
+                                                          context);
+                                                    },
+                                                    child: Text(
+                                                      'Open',
+                                                      style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w900,
+                                                        color: Colors.blue,
+                                                        fontSize: 16,
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                              )
-                                            : Container()
-                                        : Container(),
-                                    SizedBox(width: 6),
-                                    IconButton(
-                                      padding: EdgeInsets.zero,
-                                      constraints: BoxConstraints(),
-                                      onPressed: () {
-                                        if (token.isCancelled) {
-                                          token = new CancelToken();
-                                        }
-                                        print(checkStatus(e['id'].toString()));
-                                        if (!checkStatus(e['id'].toString())) {
-                                          setState(() {
-                                            downloadFile(e['url'], e['id']);
-                                            changeStatus(
-                                                e['id'].toString(), true);
-                                          });
-                                        } else
-                                          setState(() {
-                                            deleteFile(
-                                                e['url'], e['id'].toString());
-                                            changeStatus(
-                                                e['id'].toString(), false);
-                                          });
-                                      },
-                                      icon: Icon(
-                                        checkStatus(e['id'].toString())
-                                            ? Icons.delete_outline
-                                            : Icons.download_outlined,
-                                        color: checkStatus(e['id'].toString())
-                                            ? Colors.redAccent
-                                            : Colors.greenAccent[400],
+                                                )
+                                              : Container()
+                                          : Container(),
+                                      SizedBox(width: 6),
+                                      IconButton(
+                                        padding: EdgeInsets.zero,
+                                        constraints: BoxConstraints(),
+                                        onPressed: () {
+                                          if (token.isCancelled) {
+                                            token = new CancelToken();
+                                          }
+                                          print(
+                                              checkStatus(e['id'].toString()));
+                                          if (!checkStatus(
+                                              e['id'].toString())) {
+                                            setState(() {
+                                              downloadFile(e['url'], e['id']);
+                                              changeStatus(
+                                                  e['id'].toString(), true);
+                                            });
+                                          } else
+                                            setState(() {
+                                              deleteFile(
+                                                  e['url'], e['id'].toString());
+                                              changeStatus(
+                                                  e['id'].toString(), false);
+                                            });
+                                        },
+                                        icon: Icon(
+                                          checkStatus(e['id'].toString())
+                                              ? Icons.delete_outline
+                                              : Icons.download_outlined,
+                                          color: checkStatus(e['id'].toString())
+                                              ? Colors.redAccent
+                                              : Colors.greenAccent[400],
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                  );
-                }
-              }),
-          Footer(),
-        ],
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    );
+                  }
+                }),
+            Footer(),
+          ],
+        ),
       ),
     );
   }
