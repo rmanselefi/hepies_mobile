@@ -198,17 +198,15 @@ class _WritePrescriptionState extends State<WritePrescription> {
     });
   }
 
-  void _setPsycoPrescription(List<dynamic> pres, List<dynamic> pat) {
+  void _setPsycoPrescription(List<dynamic> pres) {
     setState(() {
       psycoPrescription = pres;
-      patient = pat;
     });
   }
 
-  void _setNarcoPrescription(List<dynamic> pres, List<dynamic> pat) {
+  void _setNarcoPrescription(List<dynamic> pres) {
     setState(() {
       narcoPrescription = pres;
-      patient = pat;
     });
   }
 
@@ -521,7 +519,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                       } else if (pretype == "instrument") {
                         return PrescribeForm(
                             setPrescription: _setPrescription,
-                            setPatient: _setPatient,
+                            setPatient: setPatientInfo,
                             initialPrescription: prescription,
                             type: 'instrument',
                             color: Color(0xff0BE9E2),
@@ -529,7 +527,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                       } else if (pretype == "narcotic") {
                         return PrescribeNarcoForm(
                             setPrescription: _setNarcoPrescription,
-                            setPatient: _setPatient,
+                            setPatient: setPatientInfo,
                             setFav: setFavorite,
                             initialPrescription: narcoPrescription,
                             type: 'narcotic',
@@ -538,7 +536,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                       } else if (pretype == "psychotropic") {
                         return PrescribePsychoForm(
                             setPrescription: _setPsycoPrescription,
-                            setPatient: _setPatient,
+                            setPatient: setPatientInfo,
                             setFav: setFavorite,
                             initialPrescription: psycoPrescription,
                             type: 'psychotropic',
@@ -694,7 +692,8 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                   try {
                                     if (pretype == "general" ||
                                         pretype == "instrument") {
-                                      print("patientpatient ${phoneNumber.length}");
+                                      print(
+                                          "patientpatient ${phoneNumber.length}");
                                       if (prescription.length != 0) {
                                         if (phoneNumber == "" ||
                                             sex == "" ||
@@ -796,9 +795,24 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                       }
                                     } else {
                                       if (psycoPrescription.length != 0) {
+                                        User user =
+                                            await UserPreferences().getUser();
+                                        final Map<String, dynamic> patientData =
+                                            {
+                                          "name": name,
+                                          "age": age,
+                                          "age_label": ageLabel,
+                                          "fathername": fatherName,
+                                          "grandfathername": "kebede",
+                                          "phone": phoneNumber,
+                                          "sex": sex,
+                                          "weight": weight,
+                                          "mrn": address,
+                                          "professionid": user.professionid
+                                        };
                                         var res = await prescProvider
                                             .writePrescription(
-                                                psycoPrescription, patient);
+                                                psycoPrescription, patientData);
                                         if (res['status']) {
                                           Provider.of<PrescriptionProvider>(
                                                   context,
@@ -820,20 +834,26 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                             ),
                                           );
                                         }
-                                      } else {
-                                        showTopSnackBar(
-                                          context,
-                                          CustomSnackBar.error(
-                                            message:
-                                                'Please fill at least one prescription.',
-                                          ),
-                                        );
-                                      }
-
-                                      if (narcoPrescription.length != 0) {
+                                      } else if (narcoPrescription.length !=
+                                          0) {
+                                        User user =
+                                            await UserPreferences().getUser();
+                                        final Map<String, dynamic> patientData =
+                                            {
+                                          "name": name,
+                                          "age": age,
+                                          "age_label": ageLabel,
+                                          "fathername": fatherName,
+                                          "grandfathername": "kebede",
+                                          "phone": phoneNumber,
+                                          "sex": sex,
+                                          "weight": weight,
+                                          "mrn": address,
+                                          "professionid": user.professionid
+                                        };
                                         var res = await prescProvider
                                             .writePrescription(
-                                                narcoPrescription, patient);
+                                                narcoPrescription, patientData);
                                         if (res['status']) {
                                           Provider.of<PrescriptionProvider>(
                                                   context,

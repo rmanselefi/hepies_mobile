@@ -816,7 +816,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                         });
                                       }
                                       print("is valide" + isValid.toString());
-
+                                      widget.setPatient('phone', phone);
                                       var res = await patientProvider
                                           .getPatient(phone);
                                       if (res != null) {
