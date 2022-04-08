@@ -106,7 +106,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
     from = widget.from;
     if (from == "favorites") {
       setState(() {
-        showPatient = true;
         isPatient = true;
       });
     }
@@ -123,7 +122,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
           Provider.of<PrescriptionProvider>(context).prescription;
       setFromFavorites(favorites);
       Future.delayed(Duration.zero, () async {
-        widget.setPrescription(finaPrescription, finaPatient);
+        widget.setPrescription(finaPrescription);
       });
       setState(() {
         from = "null";
@@ -253,9 +252,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                           EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                       border: OutlineInputBorder(),
                       hintText: 'Route',
-                      hintStyle: TextStyle(
-                          color: isPatient ? Colors.grey : Colors.redAccent,
-                          fontSize: 15.0),
+                      hintStyle: TextStyle(fontSize: 15.0),
                       suffixIcon: Container(
                         width: 10.0,
                         margin: const EdgeInsets.only(left: 5.0),
@@ -352,11 +349,9 @@ class _PrescribeFormState extends State<PrescribeForm> {
                           EdgeInsets.symmetric(horizontal: 5, vertical: 8),
                       border: OutlineInputBorder(),
                       hintText: 'Every',
-                      enabled: isEvery && !isPatient,
+                      enabled: isEvery,
                       hintStyle: TextStyle(
-                          color: isEvery && !isPatient
-                              ? Colors.redAccent
-                              : Colors.grey,
+                          color: isEvery ? Colors.redAccent : Colors.grey,
                           fontSize: 15.0),
                       suffixIcon: Container(
                         width: 8.0,
@@ -410,9 +405,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                           EdgeInsets.symmetric(horizontal: 5, vertical: 5),
                       border: OutlineInputBorder(),
                       hintText: 'Unit',
-                      hintStyle: TextStyle(
-                          color: isPatient ? Colors.grey : Colors.redAccent,
-                          fontSize: 15.0),
+                      hintStyle: TextStyle(fontSize: 15.0),
                       suffixIcon: Container(
                         width: 10.0,
                         margin: const EdgeInsets.only(left: 5.0),
@@ -454,6 +447,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
           .toList(),
       hint: Text(''),
       onChanged: (value) {
+        widget.setPatient('ageLabel', value);
         setState(() {
           _labelController = value;
         });
@@ -515,28 +509,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                 contentPadding: EdgeInsets.all(0.0),
                               ),
                             ),
-                            showPatient
-                                ? Container(
-                                    width: width(context) * 0.3,
-                                    child: CheckboxListTile(
-                                      title: Text(
-                                        "Patient",
-                                        style: TextStyle(fontSize: 12),
-                                      ),
-                                      value: isPatient,
-                                      onChanged: (newValue) {
-                                        setState(() {
-                                          isPatient = newValue;
-                                        });
-                                        pres.changePatientStatus(newValue);
-                                      },
-                                      controlAffinity:
-                                          ListTileControlAffinity.leading,
-                                      //  <-- leading Checkbox
-                                      contentPadding: EdgeInsets.all(0.0),
-                                    ),
-                                  )
-                                : Container(),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -696,10 +668,12 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                                           addressController,
                                                       enabled: !rememberMe,
                                                       onChanged: (val) {
-                                                        setState(() {
-                                                          prescription.ampule =
-                                                              val;
-                                                        });
+                                                        widget.setPatient(
+                                                            'address', val);
+                                                        // setState(() {
+                                                        //   prescription.ampule =
+                                                        //       val;
+                                                        // });
                                                       },
                                                       decoration:
                                                           InputDecoration(
@@ -842,21 +816,28 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                         });
                                       }
                                       print("is valide" + isValid.toString());
-
+                                      widget.setPatient('phone', phone);
                                       var res = await patientProvider
                                           .getPatient(phone);
                                       if (res != null) {
                                         setState(() {
                                           ageController.text = res['age'];
+                                          widget.setPatient('age', res['age']);
+                                          widget.setPatient('sex', res['sex']);
                                           _chosenValue = res['sex'];
                                           nameController.text = res['name'];
+                                          widget.setPatient(
+                                              'name', res['name']);
                                           fnameController.text =
                                               res['fathername'];
+                                          widget.setPatient(
+                                              'fatherName', res['fathername']);
                                           phoneController.text =
                                               phone.substring(4);
                                         });
                                       }
                                     }
+                                    widget.setPatient('phone', phone);
                                     setState(() {
                                       patient.phone = phone;
                                     });
@@ -898,15 +879,12 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                         decoration: InputDecoration(
                                             contentPadding: EdgeInsets.all(0.0),
                                             // border: OutlineInputBorder(),
-                                            hintText: rememberMe
-                                                ? 'Age'
-                                                : 'Age (Required)',
+                                            hintText: 'Age',
                                             hintStyle: TextStyle(
-                                                color: !rememberMe
-                                                    ? Colors.redAccent
-                                                    : Colors.black26)),
+                                                color: Colors.black26)),
                                         onChanged: (String newValue) {
                                           patient.age = newValue;
+                                          widget.setPatient('age', newValue);
                                         },
                                       )),
                                   Flexible(
@@ -947,13 +925,12 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                 hint: Text(
                                   "Sex",
                                   style: TextStyle(
-                                      color: !rememberMe
-                                          ? Colors.redAccent
-                                          : Colors.black26,
+                                      color: Colors.black26,
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500),
                                 ),
                                 onChanged: (String value) {
+                                  widget.setPatient('sex', value);
                                   setState(() {
                                     _chosenValue = value;
                                   });
@@ -980,6 +957,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                 onSaved: (value) => patient.name = value,
                                 maxLines: 1,
                                 onChanged: (val) {
+                                  widget.setPatient('name', val);
                                   setState(() {
                                     patient.name = val;
                                   });
@@ -988,10 +966,8 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                     border: OutlineInputBorder(),
                                     isDense: true,
                                     hintText: 'Name',
-                                    hintStyle: TextStyle(
-                                        color: !rememberMe
-                                            ? Colors.redAccent
-                                            : Colors.black26)),
+                                    hintStyle:
+                                        TextStyle(color: Colors.black26)),
                               ),
                             ),
                             Container(
@@ -1002,19 +978,16 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                 enabled: !rememberMe || status == "edit",
                                 onSaved: (value) => patient.fathername = value,
                                 onChanged: (val) {
+                                  widget.setPatient('fatherName', val);
                                   setState(() {
                                     patient.fathername = val;
                                   });
                                 },
                                 decoration: InputDecoration(
                                     border: OutlineInputBorder(),
-                                    hintText: rememberMe
-                                        ? 'Father Name'
-                                        : 'Father Name (Required)',
-                                    hintStyle: TextStyle(
-                                        color: !rememberMe
-                                            ? Colors.redAccent
-                                            : Colors.black26)),
+                                    hintText: 'Father Name',
+                                    hintStyle:
+                                        TextStyle(color: Colors.black26)),
                               ),
                             ),
                             Container(
@@ -1030,6 +1003,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                 enabled: !rememberMe || status == "edit",
                                 onSaved: (value) => patient.weight = value,
                                 onChanged: (val) {
+                                  widget.setPatient('weight', val);
                                   setState(() {
                                     patient.weight = val;
                                   });
@@ -1176,12 +1150,8 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                                               isDense: true,
                                                               hintText:
                                                                   'Name of Drug',
-                                                              hintStyle: TextStyle(
-                                                                  color: isPatient
-                                                                      ? Colors
-                                                                          .grey
-                                                                      : Colors
-                                                                          .redAccent)),
+                                                              hintStyle:
+                                                                  TextStyle()),
                                                         ),
                                                       );
                                                     },
@@ -1208,7 +1178,8 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                                   border: OutlineInputBorder(),
                                                   hintText: 'Strength',
                                                   hintStyle: TextStyle(
-                                                      color: isPatient
+                                                      color: drug.strength !=
+                                                              null
                                                           ? Colors.grey
                                                           : Colors.redAccent)),
                                             ),
@@ -1254,13 +1225,11 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                                         });
                                                       }
                                                     },
-                                                    enabled:
-                                                        isEvery && !isPatient,
+                                                    enabled: isEvery,
                                                     decoration: InputDecoration(
                                                         hintText: 'For',
                                                         hintStyle: TextStyle(
-                                                            color: isEvery &&
-                                                                    !isPatient
+                                                            color: isEvery
                                                                 ? Colors
                                                                     .redAccent
                                                                 : Colors.grey)),
@@ -1303,11 +1272,9 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                                     border:
                                                         OutlineInputBorder(),
                                                     hintText: 'Ampule',
-                                                    enabled:
-                                                        isAmpule && !isPatient,
+                                                    enabled: isAmpule,
                                                     hintStyle: TextStyle(
-                                                        color: isAmpule &&
-                                                                !isPatient
+                                                        color: isAmpule
                                                             ? Colors.redAccent
                                                             : Colors.grey)),
                                               ),
@@ -1342,78 +1309,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                     child: MaterialButton(
                       onPressed: () async {
                         _formKey.currentState.save();
-                        if (!isValidPhoneNumber &&
-                            !rememberMe &&
-                            status != "edit") {
-                          showTopSnackBar(
-                            context,
-                            CustomSnackBar.error(
-                              message: "Phone number is not valid",
-                            ),
-                          );
-                        }
-                        if (phoneController.text == "" &&
-                            !rememberMe &&
-                            status != "edit") {
-                          showTopSnackBar(
-                            context,
-                            CustomSnackBar.error(
-                              message: "Phone number is required",
-                            ),
-                          );
-                        } else if (phoneController.text.length != 9 &&
-                            !rememberMe &&
-                            status != "edit") {
-                          print("phone number length : " +
-                              phoneController.text
-                                  .substring(4)
-                                  .length
-                                  .toString());
-                          showTopSnackBar(
-                            context,
-                            CustomSnackBar.error(
-                              message: "please add correct phoneNumber",
-                            ),
-                          );
-                        } else if (ageController.text == "" &&
-                            !rememberMe &&
-                            status != "edit" &&
-                            widget.type == "general") {
-                          showTopSnackBar(
-                            context,
-                            CustomSnackBar.error(
-                              message: "Age is required",
-                            ),
-                          );
-                        } else if (nameController.text == "" &&
-                            !rememberMe &&
-                            status != "edit") {
-                          showTopSnackBar(
-                            context,
-                            CustomSnackBar.error(
-                              message: "Name is required",
-                            ),
-                          );
-                        } else if (fnameController.text == "" &&
-                            !rememberMe &&
-                            status != "edit") {
-                          showTopSnackBar(
-                            context,
-                            CustomSnackBar.error(
-                              message: "Father Name is required",
-                            ),
-                          );
-                        } else if (_chosenValue == "" &&
-                            !rememberMe &&
-                            status != "edit") {
-                          showTopSnackBar(
-                            context,
-                            CustomSnackBar.error(
-                              message: "Sex is required",
-                            ),
-                          );
-                        } else if (strengthController.text == "" &&
-                            !isPatient &&
+                        if (strengthController.text == "" &&
                             widget.type != 'instrument') {
                           showTopSnackBar(
                             context,
@@ -1422,7 +1318,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
                             ),
                           );
                         } else if (unitController.text == "" &&
-                            !isPatient &&
                             widget.type != 'instrument') {
                           showTopSnackBar(
                             context,
@@ -1431,7 +1326,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
                             ),
                           );
                         } else if (routeController.text == "" &&
-                            !isPatient &&
                             widget.type != "instrument") {
                           showTopSnackBar(
                             context,
@@ -1440,7 +1334,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
                             ),
                           );
                         } else if (forController.text == "" &&
-                            !isPatient &&
                             everyController.text == "" &&
                             ampuleController.text == "" &&
                             widget.type != "instrument") {
@@ -1466,9 +1359,8 @@ class _PrescribeFormState extends State<PrescribeForm> {
                           User user = await UserPreferences().getUser();
                           var profession =
                               "${user.profession} ${user.name} ${user.fathername}";
-                          if (status == 'add' && !isPatient) {
-                            print(
-                                "statusstatusstatus ===> ${user.professionid}");
+                          if (status == 'add') {
+
                             final Map<String, dynamic> patientData = {
                               "name": patient.name,
                               "age": ageController.text,
@@ -1517,7 +1409,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                             setState(() {
                               finaPrescription.add(precriptionData);
                             });
-                          } else if (status == 'edit' && !isPatient) {
+                          } else if (status == 'edit') {
                             Provider.of<PrescriptionProvider>(context,
                                     listen: false)
                                 .resetStatus();
@@ -1579,9 +1471,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                               }
                             });
                           }
-                          if (status == 'add' &&
-                              isPatient &&
-                              widget.from == "favorites") {
+                          if (status == 'add' && widget.from == "favorites") {
                             final Map<String, dynamic> patientData = {
                               "name": patient.name,
                               "age": ageController.text,
@@ -1599,7 +1489,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                 finaPatient.add(patientData);
                               });
                             }
-                            widget.setPatient(finaPatient);
+
                             showTopSnackBar(
                               context,
                               CustomSnackBar.success(
@@ -1607,8 +1497,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                               ),
                             );
                           } else {
-                            widget.setPrescription(
-                                finaPrescription, finaPatient);
+                            widget.setPrescription(finaPrescription);
                             _formKey.currentState.reset();
                             drugnameController.text = "";
                             strengthController.text = '';
@@ -1695,7 +1584,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
                     setState(() {
                       sizes = value['size'].split(',');
                     });
-                    print("sizessizessizessizes $sizes");
                   },
                   displayStringForOption: (option) => option['material_name'],
                   fieldViewBuilder: (BuildContext context,
@@ -1769,11 +1657,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
                     children: [
                       IconButton(
                         onPressed: () {
-                          print("object $pres");
-                          // Provider.of<PrescriptionProvider>(context,
-                          //     listen: false)
-                          //     .setPrescriptionForm(
-                          //     pres, prescription.indexOf(pres));
                           setState(() {
                             presIndex =
                                 widget.initialPrescription.indexOf(pres);
