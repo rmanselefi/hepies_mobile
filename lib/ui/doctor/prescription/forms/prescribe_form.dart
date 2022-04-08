@@ -1360,7 +1360,6 @@ class _PrescribeFormState extends State<PrescribeForm> {
                           var profession =
                               "${user.profession} ${user.name} ${user.fathername}";
                           if (status == 'add') {
-
                             final Map<String, dynamic> patientData = {
                               "name": patient.name,
                               "age": ageController.text,
@@ -1646,11 +1645,15 @@ class _PrescribeFormState extends State<PrescribeForm> {
               children: [
                 Expanded(
                   child: pres['type'] == "general"
-                      ? Text(
-                          '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['drug_name'] != null ? pres['drug_name'] : ""} ${pres['strength'] != null ? pres['strength'] : ""} '
-                          '${pres['unit'] != null ? pres['unit'] : ""} ${pres['route'] != null ? pres['route'] : ""} Every ${pres['frequency'] != null ? pres['frequency'] : ""} For ${pres['takein'] != null ? pres['takein'] : ""}')
+                      ? isEvery
+                          ? Text(
+                              '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['drug_name'] != null ? pres['drug_name'] : ""} ${pres['strength'] != null ? pres['strength'] : ""} '
+                              ' ${pres['route'] != null ? pres['route'] : ""} Every ${pres['frequency'] != null ? pres['frequency'] : ""} For ${pres['takein'] != null ? pres['takein'] : ""}')
+                          : Text(
+                              '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['drug_name'] != null ? pres['drug_name'] : ""} ${pres['strength'] != null ? pres['strength'] : ""} '
+                              ' ${pres['route'] != null ? pres['route'] : ""} #${ampuleController.text} Amp')
                       : Text(
-                          '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['material_name'] != null ? pres['material_name'] : ""} ${pres['size'] != null ? pres['size'] : ""} ${pres['amount'] != null ? pres['amount'] : ""}'),
+                          '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['material_name'] != null ? pres['material_name'] : ""} ${pres['size'] != null ? pres['size'] : ""} ${pres['amount'] != null ? '#${pres['amount']}' : ""}'),
                 ),
                 Expanded(
                   child: Row(
