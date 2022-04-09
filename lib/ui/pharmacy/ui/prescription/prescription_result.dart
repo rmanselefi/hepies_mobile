@@ -55,7 +55,7 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
             MaterialPageRoute(builder: (context) => WelcomePharmacy()));
       },
       child: Column(children: [
-        Padding(
+        Container(
           padding: const EdgeInsets.all(8.0),
           child: PersonalInfoCode(patient: prescription, diagnosis: diagnosis),
         ),

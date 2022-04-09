@@ -46,11 +46,9 @@ class _PersonalInfoState extends State<PersonalInfo> {
             Container(
               margin: EdgeInsets.only(left: 5),
               padding: EdgeInsets.only(top: 6),
-              child: Expanded(
-                child: Text(
-                  "${patient['name']} ${patient['fathername'] ?? 'empty'}",
-                  style: TextStyle(color: Colors.black87),
-                ),
+              child: Text(
+                "${patient['name']} ${patient['fathername'] ?? 'empty'}",
+                style: TextStyle(color: Colors.black87),
               ),
             ),
             Container(
@@ -82,11 +80,9 @@ class _PersonalInfoState extends State<PersonalInfo> {
             Container(
               margin: EdgeInsets.only(left: 5),
               padding: EdgeInsets.only(top: 6),
-              child: Expanded(
-                child: Text(
-                  "${patient['age'] ?? ''}",
-                  style: TextStyle(color: Colors.black87),
-                ),
+              child: Text(
+                "${patient['age'] ?? ''}",
+                style: TextStyle(color: Colors.black87),
               ),
             ),
             Container(
@@ -107,24 +103,20 @@ class _PersonalInfoState extends State<PersonalInfo> {
           TableRow(children: [
             Container(
               padding: EdgeInsets.only(top: 6),
-              child: Expanded(
-                child: Text(
-                  "Remark",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15),
-                ),
+              child: Text(
+                "Remark",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15),
               ),
             ),
             Container(
               margin: EdgeInsets.only(left: 5),
               padding: EdgeInsets.only(top: 6),
-              child: Expanded(
-                child: Text(
-                  "${remark == "" || remark == null ? 'empty' : remark}",
-                  style: TextStyle(color: Colors.black87),
-                ),
+              child: Text(
+                "${remark == "" || remark == null ? 'empty' : remark}",
+                style: TextStyle(color: Colors.black87),
               ),
             ),
             Container(
@@ -156,11 +148,9 @@ class _PersonalInfoState extends State<PersonalInfo> {
             Container(
               margin: EdgeInsets.only(left: 5),
               padding: EdgeInsets.only(top: 6),
-              child: Expanded(
-                child: Text(
-                  "${formattedDate ?? ''}",
-                  style: TextStyle(color: Colors.black87),
-                ),
+              child: Text(
+                "${formattedDate ?? ''}",
+                style: TextStyle(color: Colors.black87),
               ),
             ),
             Container(
