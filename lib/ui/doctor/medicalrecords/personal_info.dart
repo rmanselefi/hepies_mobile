@@ -17,104 +17,169 @@ class _PersonalInfoState extends State<PersonalInfo> {
     var date = patient['prescription_item'][0]['createdAt'];
     var formattedDate =
         new DateFormat("mm-dd-yyyy hh:mm a").format(DateTime.parse(date));
-    return Column(
-      children: [
-        Row(
-          children: [
-            Text(
-              'Name -- ',
-              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+
+    return Container(
+      margin: EdgeInsets.all(5),
+      padding: EdgeInsets.all(5),
+      child: Table(
+        border: TableBorder(
+            horizontalInside: BorderSide(
+                width: 0, color: Colors.blue, style: BorderStyle.solid)),
+        columnWidths: {
+          0: FixedColumnWidth(MediaQuery.of(context).size.width / 7),
+          1: FixedColumnWidth(MediaQuery.of(context).size.width / 2.2),
+          3: FixedColumnWidth(MediaQuery.of(context).size.width / 8),
+          4: FixedColumnWidth(MediaQuery.of(context).size.width / 8)
+        },
+        children: [
+          TableRow(children: [
+            Container(
+              padding: EdgeInsets.only(top: 6),
+              child: Text(
+                "Name",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15),
+              ),
             ),
-            Text(
-              '${patient['name']} ${patient['fathername'] ?? 'empty'}',
-              style: TextStyle(fontSize: 18.0),
+            Container(
+              margin: EdgeInsets.only(left: 5),
+              padding: EdgeInsets.only(top: 6),
+              child: Expanded(
+                child: Text(
+                  "${patient['name']} ${patient['fathername'] ?? 'empty'}",
+                  style: TextStyle(color: Colors.black87),
+                ),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(top: 6),
+              child: Text("Weight",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15)),
+            ),
+            Container(
+              padding: EdgeInsets.only(top: 6),
+              child: Text(
+                "${patient['weight'] ?? ''}Kg",
+              ),
             )
-          ],
-        ),
-        Row(
-          children: [
-            Text(
-              'Age -- ',
-              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+          ]),
+          TableRow(children: [
+            Container(
+              padding: EdgeInsets.only(top: 6),
+              child: Text(
+                "Age",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15),
+              ),
             ),
-            Text(
-              '${patient['age'] ?? 'empty'}',
-              style: TextStyle(fontSize: 18.0),
+            Container(
+              margin: EdgeInsets.only(left: 5),
+              padding: EdgeInsets.only(top: 6),
+              child: Expanded(
+                child: Text(
+                  "${patient['age'] ?? ''}",
+                  style: TextStyle(color: Colors.black87),
+                ),
+              ),
             ),
-            SizedBox(
-              width: 10.0,
+            Container(
+              padding: EdgeInsets.only(top: 6),
+              child: Text("Sex",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15)),
             ),
-            Text(
-              'Sex -- ',
-              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              '${patient['sex'] ?? 'empty'}',
-              style: TextStyle(fontSize: 18.0),
-            ),
-            SizedBox(
-              width: 10.0,
-            ),
-            Text(
-              'Weight -- ' ?? 'empty',
-              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              '${patient['weight'] ?? 'empty'}Kg',
-              style: TextStyle(fontSize: 18.0),
+            Container(
+              padding: EdgeInsets.only(top: 6),
+              child: Text(
+                "${patient['sex'] ?? ''}",
+              ),
             )
-          ],
-        ),
-        Row(
-          children: [
-            Text(
-              'MRN -- ',
-              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+          ]),
+          TableRow(children: [
+            Container(
+              padding: EdgeInsets.only(top: 6),
+              child: Expanded(
+                child: Text(
+                  "Remark",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15),
+                ),
+              ),
             ),
-            Text(
-              '${patient['address'] ?? 'empty'}',
-              style: TextStyle(fontSize: 18.0),
+            Container(
+              margin: EdgeInsets.only(left: 5),
+              padding: EdgeInsets.only(top: 6),
+              child: Expanded(
+                child: Text(
+                  "${remark == "" || remark == null ? 'empty' : remark}",
+                  style: TextStyle(color: Colors.black87),
+                ),
+              ),
             ),
-            SizedBox(
-              width: 10.0,
+            Container(
+              padding: EdgeInsets.only(top: 6),
+              child: Text("DX",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15)),
             ),
-            Text(
-              'Dx -- ',
-              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              '${widget.diagnosis ?? 'empty'}',
-              style: TextStyle(fontSize: 18.0),
+            Container(
+              padding: EdgeInsets.only(top: 6),
+              child: Text(
+                "${widget.diagnosis ?? ''}",
+              ),
             )
-          ],
-        ),
-        Row(
-          children: [
-            Text(
-              'Remark -- ',
-              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+          ]),
+          TableRow(children: [
+            Container(
+              padding: EdgeInsets.only(top: 6),
+              child: Text(
+                "Date",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15),
+              ),
             ),
-            Text(
-              '${remark == "" || remark == null ? 'empty' : remark}',
-              style: TextStyle(fontSize: 18.0),
+            Container(
+              margin: EdgeInsets.only(left: 5),
+              padding: EdgeInsets.only(top: 6),
+              child: Expanded(
+                child: Text(
+                  "${formattedDate ?? ''}",
+                  style: TextStyle(color: Colors.black87),
+                ),
+              ),
             ),
-            SizedBox(
-              width: 10.0,
+            Container(
+              padding: EdgeInsets.only(top: 6),
+              child: Text("MRN",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15)),
             ),
-            Text(
-              'Date -- ',
-              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-            ),
-            Text(
-              '${formattedDate ?? 'empty'}',
-              style: TextStyle(fontSize: 18.0),
+            Container(
+              padding: EdgeInsets.only(top: 6),
+              child: Text(
+                "${patient['mrn'] ?? ''}",
+              ),
             )
-          ],
-        ),
-        SizedBox(
-          height: 20.0,
-        ),
-      ],
+          ]),
+        ],
+      ),
     );
   }
 }

@@ -76,7 +76,7 @@ class UserProvider with ChangeNotifier {
         Uri.parse(AppUrl.profile + '/${user.professionid}'),
         body: json.encode(registrationData),
         headers: {'Content-Type': 'application/json'});
-
+    print("response result " + response.toString());
     if (response.statusCode == 200 || response.statusCode == 201) {
       var responseData = json.encode(response.body);
 

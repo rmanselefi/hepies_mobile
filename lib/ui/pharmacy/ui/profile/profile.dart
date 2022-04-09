@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hepies/models/dx.dart';
 import 'package:hepies/providers/prescription_provider.dart';
 import 'package:hepies/ui/doctor/medicalrecords/personal_info.dart';
 import 'package:hepies/ui/doctor/medicalrecords/personal_info_code.dart';
@@ -7,7 +8,8 @@ class PrescriberProfile extends StatefulWidget {
   final patient;
   final id;
   final from;
-  PrescriberProfile({this.patient, this.id, this.from});
+  final diagnosis;
+  PrescriberProfile({this.patient, this.id, this.from, this.diagnosis});
   @override
   _PrescriberProfileState createState() => _PrescriberProfileState();
 }
@@ -21,8 +23,8 @@ class _PrescriberProfileState extends State<PrescriberProfile> {
     getProfessional(widget.id);
   }
 
-  getProfessional(var id) {
-    PrescriptionProvider().getProfessionalByID(id).then((value) {
+  getProfessional(var id) async {
+    await PrescriptionProvider().getProfessionalByID(id).then((value) {
       setState(() {
         professional = value;
       });
@@ -44,9 +46,11 @@ class _PrescriberProfileState extends State<PrescriberProfile> {
               child: widget.from == 'phone'
                   ? PersonalInfo(
                       patient: patient,
+                      diagnosis: widget.diagnosis,
                     )
                   : PersonalInfoCode(
                       patient: patient,
+                      diagnosis: widget.diagnosis,
                     ),
             ),
           ),
@@ -66,74 +70,72 @@ class _PrescriberProfileState extends State<PrescriberProfile> {
                       child: CircleAvatar(
                         radius: 60,
                         backgroundColor: Colors.grey,
-                        backgroundImage: professional['profile'] != null &&
-                                professional['profile'] != ""
-                            ? NetworkImage(professional['profile'])
+                        backgroundImage: professional != null
+                            ? professional['profile'] != null &&
+                                    professional['profile'] != ""
+                                ? NetworkImage(professional['profile'])
+                                : null
                             : null,
                       ),
                     ),
                     professional != null
-                        ? Column(children: [
-                            Row(
-                              children: [
-                                SizedBox(
-                                  width: 20,
+                        ? Table(
+                            border: TableBorder(
+                                horizontalInside: BorderSide(
+                                    width: 0,
+                                    color: Colors.blue,
+                                    style: BorderStyle.solid)),
+                            children: [
+                              TableRow(children: [
+                                Container(
+                                  padding: EdgeInsets.all(8),
+                                  child: Text(
+                                    "${professional['proffesion'] ?? ''} ${professional['name'] ?? ''} ${professional['fathername'] ?? ''}",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15),
+                                  ),
                                 ),
-                                professional != null
-                                    ? Text(
-                                        '${professional['proffesion']} ${professional['name']} ${professional['fathername']}',
-                                        style: TextStyle(fontSize: 20))
-                                    : Text("")
-                              ],
-                            ),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            Row(
-                              children: [
-                                SizedBox(
-                                  width: 20,
+                              ]),
+                              TableRow(children: [
+                                Container(
+                                  padding: EdgeInsets.all(8),
+                                  child: Text(
+                                    "Place of Work - ${professional['workplace'] ?? ''} ",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15),
+                                  ),
                                 ),
-                                professional != null
-                                    ? Text(
-                                        'Place of Work - ${professional['workplace']} ',
-                                        style: TextStyle(fontSize: 20))
-                                    : Text("")
-                              ],
-                            ),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            Row(
-                              children: [
-                                SizedBox(
-                                  width: 20,
+                              ]),
+                              TableRow(children: [
+                                Container(
+                                  padding: EdgeInsets.all(8),
+                                  child: Text(
+                                    "Email - ${professional['email'] ?? ''} ",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15),
+                                  ),
                                 ),
-                                professional != null
-                                    ? Expanded(
-                                        child: Text(
-                                          'Email - ${professional['email']} ',
-                                          style: TextStyle(fontSize: 20),
-                                        ),
-                                      )
-                                    : Text("")
-                              ],
-                            ),
-                            SizedBox(
-                              height: 15,
-                            ),
-                            Row(
-                              children: [
-                                SizedBox(
-                                  width: 20,
+                              ]),
+                              TableRow(children: [
+                                Container(
+                                  padding: EdgeInsets.all(8),
+                                  child: Text(
+                                    "Phone - ${professional['phone'] ?? ''} ",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15),
+                                  ),
                                 ),
-                                professional != null
-                                    ? Text('Phone - ${professional['phone']} ',
-                                        style: TextStyle(fontSize: 20))
-                                    : Text("")
-                              ],
-                            )
-                          ])
+                              ]),
+                            ],
+                          )
                         : Container(
                             child: Center(
                               child: CircularProgressIndicator(),

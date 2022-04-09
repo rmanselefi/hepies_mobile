@@ -80,6 +80,7 @@ class _ReadPrescriptionState extends State<ReadPrescription> {
                   // print("objectobjectobjectobject $res");
                   if (res['status']) {
                     if (res['isPhone']) {
+                      // print("d" + res.toString());
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -87,6 +88,7 @@ class _ReadPrescriptionState extends State<ReadPrescription> {
                                 PrescriptionResultPhone(res['data'])),
                       );
                     } else {
+                      // print("value" + res.toString());
                       Navigator.push(
                         context,
                         MaterialPageRoute(
