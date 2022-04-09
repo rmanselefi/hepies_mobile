@@ -104,7 +104,7 @@ class _DrawerCustomState extends State<DrawerCustom> {
                     final mailtoLink = Mailto(
                       to: ['contact@hepius.co'],
                       cc: ['contact@hepius.co', 'contact@hepius.co'],
-                      subject: 'mailto example subject',
+                      subject: '',
                       body: 'mailto example body',
                     );
                     await launch('$mailtoLink');
@@ -132,7 +132,8 @@ class _DrawerCustomState extends State<DrawerCustom> {
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.privacy_tip_rounded,color: Color(0xff0FF6A0)),
+                  leading:
+                      Icon(Icons.privacy_tip_rounded, color: Color(0xff0FF6A0)),
                   title: Text(
                     'Terms and Conditions',
                     style: TextStyle(color: Colors.black),

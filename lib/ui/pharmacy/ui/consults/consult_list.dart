@@ -27,6 +27,7 @@ import 'package:rich_text_view/rich_text_view.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:recase/recase.dart';
 
 class RowButton extends StatefulWidget {
   RowButton(
@@ -567,6 +568,9 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
     return listofConsults;
   }
 
+  bool isEditing = false;
+  bool isDeleting = false;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -655,11 +659,13 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
     }
 
     showEdit(BuildContext context, var post) {
+      print("working");
       var i = [];
-      for (var item in post['interests'].split(' ')) {
-        i.add(item.substring(1));
+      if (post['interests']!= null && post['interests'] != '') {
+        for (var item in post['interests'].split(' ')) {
+          i.add(item.substring(1));
+        }
       }
-      print(i.toString());
       setState(() {
         _myInterests = i;
       });
@@ -687,10 +693,53 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                               Container(
                                 margin: EdgeInsets.only(right: 10),
                                 child: IconButton(
-                                  onPressed: () {
-                                    showAlertDialog(context, post['id']);
+                                  onPressed: () async {
+                                    setState(() {
+                                      isDeleting = true;
+                                    });
+                                    print("working");
+                                    var res = await ConsultProvider()
+                                        .deleteConsult(post['id']);
+                                    if (res['status']) {
+                                      setState(() async {
+                                        listofConsults =
+                                            await Provider.of<ConsultProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .getConsultsbyPagination(
+                                                    5, skip);
+                                        Navigator.of(context).pop();
+                                        var currentUser =
+                                            await UserPreferences().getUser();
+
+                                        print("role : ${currentUser.role}");
+                                        Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => currentUser
+                                                                .role ==
+                                                            'doctor' ||
+                                                        currentUser.role ==
+                                                            'healthofficer' ||
+                                                        currentUser.role ==
+                                                            'nurse'
+                                                    ? Welcome()
+                                                    : WelcomePharmacy()),
+                                            ModalRoute.withName('/'));
+
+                                        showTopSnackBar(
+                                          context,
+                                          CustomSnackBar.success(
+                                            message:
+                                                "Your consult is successfully deleted",
+                                          ),
+                                        );
+                                      });
+                                    }
                                   },
-                                  icon: Icon(Icons.delete_outline_rounded),
+                                  icon: isDeleting
+                                      ? CircularProgressIndicator()
+                                      : Icon(Icons.delete_outline_rounded),
                                 ),
                               )
                             ],
@@ -816,6 +865,9 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                                 alignment: Alignment.topRight,
                                                 child: OutlinedButton(
                                                   onPressed: () async {
+                                                    setState(() {
+                                                      isEditing = true;
+                                                    });
                                                     try {
                                                       var photo = file != null
                                                           ? File(file.path)
@@ -889,7 +941,9 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                                       );
                                                     }
                                                   },
-                                                  child: Text('Edit'),
+                                                  child: isEditing
+                                                      ? loading
+                                                      : Text('Edit'),
                                                 )),
                                         SizedBox(
                                           width: 20,
@@ -999,7 +1053,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        e['user'],
+                                        e['user'].toString().titleCase,
                                         style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold),

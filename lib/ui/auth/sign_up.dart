@@ -25,6 +25,8 @@ import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:email_validator/email_validator.dart';
 
+import '../../widgets/Privacy.dart';
+
 class Register extends StatefulWidget {
   @override
   _RegisterState createState() => _RegisterState();
@@ -34,6 +36,7 @@ class _RegisterState extends State<Register> {
   final formKey = new GlobalKey<FormState>();
   bool rememberMe = false;
   TapGestureRecognizer _tapRecognizer;
+  TapGestureRecognizer _tabRecognize2;
   String _selectedDate = '';
   String _range = '';
 
@@ -46,8 +49,8 @@ class _RegisterState extends State<Register> {
   @override
   void initState() {
     super.initState();
-    _tapRecognizer = TapGestureRecognizer()..onTap = _handlePress;
-    getInterests();
+    _tapRecognizer = TapGestureRecognizer()..onTap = _handlePressPrivacyPlicy;
+    _tabRecognize2 = TapGestureRecognizer()..onTap = _handlePressTermsCondition;
   }
 
   @override
@@ -56,82 +59,101 @@ class _RegisterState extends State<Register> {
     super.dispose();
   }
 
-  void _handlePress() {
-    showDialog(
-      context: context,
-      builder: (context) => Dialog(
-        shape: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        elevation: 5,
-        child: Container(
-          width: width(context) * 0.8,
-          height: height(context) * 0.4,
-          padding: EdgeInsets.all(10),
-          child: Column(
-            children: [
-              SizedBox(height: 10),
-              Text(
-                'Terms & Conditions',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
-              ),
-              SizedBox(height: 10),
-              Expanded(
-                child: Text(
-                  'The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. ',
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(4.0),
-                    child: Center(
-                      child: Container(
-                        width: width(context) * 0.2375,
-                        height: 35,
-                        decoration: BoxDecoration(
-                          color: Color(0xff07febb),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(4.0),
-                          ),
-                        ),
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                rememberMe = true;
-                              });
-                              Navigator.pop(context);
-                            },
-                            child: Center(
-                              child: Padding(
-                                padding: EdgeInsets.all(4.0),
-                                child: Text(
-                                  'Agree',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
+  void _handlePressTermsCondition() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => PrivacyPolicy(
+                url: "https://hepius.co/terms-and-conditions/",
+                title: "Terms and Conditions",
+              )),
     );
+  }
+
+  void _handlePressPrivacyPlicy() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => PrivacyPolicy(
+                url: "https://hepius.co/privacy-policy/",
+                title: "Privacy Policy",
+              )),
+    );
+    // showDialog(
+    //   context: context,
+    //   builder: (context) => Dialog(
+    //     shape: OutlineInputBorder(
+    //       borderRadius: BorderRadius.circular(10),
+    //     ),
+    //     elevation: 5,
+    //     child: Container(
+    //       width: width(context) * 0.8,
+    //       height: height(context) * 0.4,
+    //       padding: EdgeInsets.all(10),
+    //       child: Column(
+    //         children: [
+    //           SizedBox(height: 10),
+    //           Text(
+    //             'Terms & Conditions',
+    //             textAlign: TextAlign.center,
+    //             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
+    //           ),
+    //           SizedBox(height: 10),
+    //           Expanded(
+    //             child: Text(
+    //               'The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. The quick brown fox jumps over the lazy dog. ',
+    //               textAlign: TextAlign.center,
+    //             ),
+    //           ),
+    //           SizedBox(height: 20),
+    //           Row(
+    //             mainAxisAlignment: MainAxisAlignment.end,
+    //             children: [
+    //               Padding(
+    //                 padding: EdgeInsets.all(4.0),
+    //                 child: Center(
+    //                   child: Container(
+    //                     width: width(context) * 0.2375,
+    //                     height: 35,
+    //                     decoration: BoxDecoration(
+    //                       color: Color(0xff07febb),
+    //                       borderRadius: BorderRadius.all(
+    //                         Radius.circular(4.0),
+    //                       ),
+    //                     ),
+    //                     child: Material(
+    //                       color: Colors.transparent,
+    //                       child: InkWell(
+    //                         onTap: () {
+    //                           setState(() {
+    //                             rememberMe = true;
+    //                           });
+    //                           Navigator.pop(context);
+    //                         },
+    //                         child: Center(
+    //                           child: Padding(
+    //                             padding: EdgeInsets.all(4.0),
+    //                             child: Text(
+    //                               'Agree',
+    //                               style: TextStyle(
+    //                                 fontSize: 15,
+    //                                 color: Colors.black,
+    //                               ),
+    //                             ),
+    //                           ),
+    //                         ),
+    //                       ),
+    //                     ),
+    //                   ),
+    //                 ),
+    //               ),
+    //             ],
+    //           ),
+    //         ],
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 
   getInterests() async {
@@ -423,7 +445,7 @@ class _RegisterState extends State<Register> {
           child: ListView(
             children: [
               Text(
-                'Hepies',
+                'Hepius',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
               ),
@@ -484,16 +506,24 @@ class _RegisterState extends State<Register> {
                     CheckboxListTile(
                       title: RichText(
                         textAlign: TextAlign.start,
-                        maxLines: 2,
+                        maxLines: 3,
                         text: TextSpan(
                           text: 'By signing up, you agree to our ',
                           style: TextStyle(fontSize: 14, color: Colors.black),
                           children: <TextSpan>[
                             TextSpan(
-                              text: 'Terms Conditions and Privacy Policy',
+                              text: 'Privacy Policy',
                               style:
                                   TextStyle(fontSize: 16, color: Colors.blue),
                               recognizer: _tapRecognizer,
+                              mouseCursor: SystemMouseCursors.precise,
+                            ),
+                            TextSpan(text: " and "),
+                            TextSpan(
+                              text: 'Terms Conditions',
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.blue),
+                              recognizer: _tabRecognize2,
                               mouseCursor: SystemMouseCursors.precise,
                             ),
                           ],

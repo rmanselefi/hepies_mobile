@@ -1652,6 +1652,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                           : Text(
                               '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['drug_name'] != null ? pres['drug_name'] : ""} ${pres['strength'] != null ? pres['strength'] : ""} '
                               ' ${pres['route'] != null ? pres['route'] : ""} #${ampuleController.text} Amp')
+
                       : Text(
                           '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['material_name'] != null ? pres['material_name'] : ""} ${pres['size'] != null ? pres['size'] : ""} ${pres['amount'] != null ? '#${pres['amount']}' : ""}'),
                 ),

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:hepies/providers/consult.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:rich_text_view/rich_text_view.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:url_launcher/url_launcher.dart';
 
 class PharmacyCommentList extends StatefulWidget {
   final user_id;
@@ -83,19 +85,37 @@ class _PharmacyConsultListState extends State<PharmacyCommentList> {
                           Padding(
                             padding:
                                 const EdgeInsets.only(left: 10.0, right: 10.0),
-                            child: Text(
-                              e['comment'],
-                              style: TextStyle(
-                                fontSize: 15.0,
-                              ),
+                            child: RichTextView(
+                              text: "${e['comment'] ?? ' '}",
+                              maxLines: 3,
+                              align: TextAlign.center,
+                              onHashTagClicked: (hashtag) =>
+                                  print('is $hashtag trending?'),
+                              onMentionClicked: (mention) =>
+                                  print('$mention clicked'),
+                              onUrlClicked: (url) => launch(url),
+                              linkStyle: TextStyle(color: Colors.blue),
                             ),
                           ),
                           e['image'] != null
-                              ? Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  child: Image.network(
-                                    e['image'],
-                                    fit: BoxFit.contain,
+                              ? GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => Image.network(
+                                          e['image'],
+                                          fit: BoxFit.contain,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    child: Image.network(
+                                      e['image'],
+                                      fit: BoxFit.contain,
+                                    ),
                                   ),
                                 )
                               : Container(

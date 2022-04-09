@@ -73,6 +73,8 @@ dependencies:
   webview_flutter: ^3.0.1
   flutter_linkify: ^5.0.2
   email_validator: ^2.0.1
+  recase: ^4.0.0
+  fluttertoast: ^8.0.9
 
 dev_dependencies:
   flutter_test:
