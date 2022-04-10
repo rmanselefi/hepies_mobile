@@ -72,6 +72,7 @@ class AuthProvider with ChangeNotifier {
         notifyListeners();
         result = {
           'status': false,
+          'invalidcredentials': true,
           // 'message': json.decode(response.body)['error']
         };
       }
@@ -79,7 +80,7 @@ class AuthProvider with ChangeNotifier {
       _loggedInStatus = Status.NotLoggedIn;
       notifyListeners();
       result = {
-        'status':false,
+        'status': false,
         'error': true,
         'message': 'Internet Connection error',
       };

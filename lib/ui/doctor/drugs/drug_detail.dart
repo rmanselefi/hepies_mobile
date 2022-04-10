@@ -24,7 +24,6 @@ class _DrugDetailState extends State<DrugDetail> {
       body: SafeArea(
         child: Column(
           children: [
-            Header(),
             SizedBox(
               height: 30.0,
             ),
@@ -89,7 +88,7 @@ class _DrugDetailState extends State<DrugDetail> {
                       //   ),
                       // ),
                       Container(
-                        width: 250,
+                        width: MediaQuery.of(context).size.width/1.6,
                         child: Wrap(
                           alignment: WrapAlignment.start,
                           direction: Axis.horizontal,

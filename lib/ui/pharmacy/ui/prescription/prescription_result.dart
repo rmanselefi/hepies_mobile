@@ -38,13 +38,14 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
             DateTime.now().difference(DateTime.parse(i['createdAt'])).inDays <=
                 15)
         .toList();
-    var diagnosis = result[0]['diagnosis'];
+    var diagnosis = result[0]['prescription']['diagnosis'];
     var prescription = result[0];
     var patient = prescription['patient'];
     List<dynamic> list_id = [];
     notReadPrescription.forEach((element) {
       list_id.add(element['id']);
     });
+    // print(prescription);
     // print("readreadread $prescription");
     return SafeArea(
         child: Scaffold(
@@ -54,7 +55,7 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
             MaterialPageRoute(builder: (context) => WelcomePharmacy()));
       },
       child: Column(children: [
-        Padding(
+        Container(
           padding: const EdgeInsets.all(8.0),
           child: PersonalInfoCode(patient: prescription, diagnosis: diagnosis),
         ),
@@ -64,7 +65,7 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  height: 500.0,
+                  height: 480.0,
                   decoration: BoxDecoration(
                       border: Border.all(width: 2.0, color: Color(0xff707070))),
                   child: ListView(
@@ -220,6 +221,7 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
                                             patient: prescription,
                                             id: prescription['professionalid'],
                                             from: 'code',
+                                            diagnosis: diagnosis,
                                           )));
                             },
                             child: Container(

@@ -48,7 +48,7 @@ class _MyPharmacyState extends State<MyPharmacy> {
                             validator: (val) =>
                                 val.isEmpty ? 'Price is required' : null,
                             decoration: InputDecoration(
-                              hintText: 'Price',
+                              hintText: 'Price in Birr',
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(5.0)),
                             ),
@@ -230,7 +230,7 @@ class _MyPharmacyState extends State<MyPharmacy> {
                             validator: (val) =>
                                 val.isEmpty ? 'Price is required' : null,
                             decoration: InputDecoration(
-                              hintText: 'Price',
+                              hintText: 'Price in Birr',
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(5.0)),
                             ),

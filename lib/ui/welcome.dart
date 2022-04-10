@@ -19,6 +19,7 @@ import 'package:hepies/util/shared_preference.dart';
 import 'package:hepies/widgets/drawer.dart';
 import 'package:hepies/widgets/footer.dart';
 import 'package:hive/hive.dart';
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -61,6 +62,7 @@ class _WelcomeState extends State<Welcome> {
         .putLocalInstruments();
   }
 
+  var f;
   @override
   void initState() {
     // TODO: implement initState
@@ -76,6 +78,8 @@ class _WelcomeState extends State<Welcome> {
         overallPoints = user['profession'][0]['overall_points'];
       });
     });
+
+    f = NumberFormat.decimalPattern("en_US");
   }
 
   @override
@@ -128,21 +132,24 @@ class _WelcomeState extends State<Welcome> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Flexible(child: SizedBox(width: width(context) * 0.225)),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Welcome(
-                                    currenIndex: 0,
-                                  )));
-                    },
-                    child: GradientText(
-                      'Hepius',
-                      gradient: LinearGradient(colors: [
-                        Colors.blue,
-                        Colors.blue,
-                      ]),
+                  Padding(
+                    padding: EdgeInsets.only(left: 15),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Welcome(
+                                      currenIndex: 0,
+                                    )));
+                      },
+                      child: GradientText(
+                        'Hepius',
+                        gradient: LinearGradient(colors: [
+                          Colors.blue,
+                          Colors.blue,
+                        ]),
+                      ),
                     ),
                   ),
                   Flexible(child: SizedBox(width: width(context) * 0.2)),
@@ -164,7 +171,7 @@ class _WelcomeState extends State<Welcome> {
                               border: Border.all(color: Colors.green, width: 2),
                               borderRadius: BorderRadius.circular(35.0)),
                           child: Text(
-                            '${points ?? 0} Pts',
+                            '${f.format(double.parse(points != null ? points : '0')) ?? 0} Pts',
                             style:
                                 TextStyle(color: Colors.green, fontSize: 18.0),
                           ),
@@ -173,7 +180,8 @@ class _WelcomeState extends State<Welcome> {
                           height: 10.0,
                         ),
                         Flexible(
-                          child: Text('Overall ${overallPoints ?? ' - '}pts',
+                          child: Text(
+                              'Overall ${f.format(double.parse(overallPoints != null ? overallPoints : '0')) ?? ' - '}pts',
                               style: TextStyle(
                                   color: Colors.green, fontSize: 12.0)),
                         )
