@@ -661,7 +661,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
     showEdit(BuildContext context, var post) {
       print("working");
       var i = [];
-      if (post['interests']!= null && post['interests'] != '') {
+      if (post['interests'] != null && post['interests'] != '') {
         for (var item in post['interests'].split(' ')) {
           i.add(item.substring(1));
         }
@@ -993,6 +993,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                       return Padding(
                           padding: EdgeInsets.all(8), child: ShimmerEffect());
                     }
+
                     return Container(
                       padding:
                           EdgeInsets.symmetric(vertical: 8, horizontal: 15),
@@ -1060,7 +1061,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                       ),
                                       Container(
                                         child: Text(
-                                          "Doctor",
+                                          "${e['author']['profession'][0]['proffesion'] ?? ''}",
                                           style: TextStyle(
                                               fontSize: 12,
                                               color: Colors.black54),

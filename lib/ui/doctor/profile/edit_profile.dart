@@ -464,8 +464,8 @@ class _EditProfileState extends State<EditProfile>
                 textColor: Colors.white,
                 color: Colors.green,
                 onPressed: () async {
-                  var interests = _interests.join(",");
-                  print("interestsinterestsinterests $interests");
+                  var finalInterest = _interests.join(",");
+                  print("interestsinterestsinterests $finalInterest");
                   User user = new User(
                       userId: userId,
                       username: username,
@@ -479,7 +479,7 @@ class _EditProfileState extends State<EditProfile>
                       email: _emailController.text,
                       phone: '+251' + _phoneController.text,
                       points: points,
-                      interests: interests,
+                      interests: finalInterest,
                       license: license,
                       sex: _sexController,
                       dob: _selectedDate);

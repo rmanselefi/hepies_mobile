@@ -32,7 +32,7 @@ class _PrescriptionResultState extends State<PrescriptionResultPhone> {
 
     List<dynamic> result = widget.result;
     var patient = result[0];
-    // var diagnosis=result[0]['prescription']['diagnosis'];
+    var diagnosis = result[0]['prescription'][0]['diagnosis'];
     var prescription = result[0]['prescription_item'];
     List<dynamic> notReadPrescription = prescription
         .where((i) =>
@@ -40,12 +40,14 @@ class _PrescriptionResultState extends State<PrescriptionResultPhone> {
             DateTime.now().difference(DateTime.parse(i['createdAt'])).inDays <=
                 15)
         .toList();
-    print(
-        "notReadPrescriptionnotReadPrescriptionnotReadPrescription ===>  $notReadPrescription");
+    // print(
+    //     "notReadPrescriptionnotReadPrescriptionnotReadPrescription ===>  $notReadPrescription");
     List<dynamic> list_id = [];
     notReadPrescription.forEach((element) {
       list_id.add(element['id']);
     });
+    // print("In Phone5r ");
+    print(result.toString());
     return SafeArea(
       child: Scaffold(
         body: WillPopScope(
@@ -56,9 +58,10 @@ class _PrescriptionResultState extends State<PrescriptionResultPhone> {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.all(4.0),
                 child: PersonalInfo(
                   patient: patient,
+                  diagnosis: diagnosis,
                 ),
               ),
               Expanded(
@@ -67,7 +70,7 @@ class _PrescriptionResultState extends State<PrescriptionResultPhone> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
-                      height: 650.0,
+                      height: 480.0,
                       decoration: BoxDecoration(
                           border:
                               Border.all(width: 2.0, color: Color(0xff707070))),
@@ -220,21 +223,21 @@ class _PrescriptionResultState extends State<PrescriptionResultPhone> {
                                 ),
                               ),
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => PrescriberProfile(
-                                            from: 'code',
-                                            patient: patient,
-                                            id: prescription[0]
-                                                ['professionalid'])));
-                              },
-                              child: Container(
-                                width: 150,
-                                child: FittedBox(
-                                  fit: BoxFit.contain,
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              PrescriberProfile(
+                                                  diagnosis: diagnosis,
+                                                  from: 'phone',
+                                                  patient: patient,
+                                                  id: prescription[0]
+                                                      ['professionalid'])));
+                                },
+                                child: Container(
                                   child: Text(
                                     '${prescription[0]['professional']}',
                                     style: TextStyle(
