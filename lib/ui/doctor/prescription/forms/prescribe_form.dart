@@ -1670,7 +1670,9 @@ class _PrescribeFormState extends State<PrescribeForm> {
                             unitController.text = pres['unit'];
                             routeController.text = pres['route'];
                             everyController.text = pres['frequency'];
-                            forController.text = pres['takein'];
+                            forController.text = pres['takein'] != ""
+                                ? pres['takein'].split(" ")[0]
+                                : "";
                             ampuleController.text = pres['ampule'];
                             diagnosisController.text = pres['dx']['diagnosis'];
                             status = 'edit';

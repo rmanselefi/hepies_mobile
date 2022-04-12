@@ -570,7 +570,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                               showDialog<String>(
                                 context: context,
                                 builder: (BuildContext context) => AlertDialog(
-                                  title: const Text('AlertDialog Title'),
+                                  title: const Text('Save to Favorites'),
                                   content: TextFormField(
                                     controller: favoriteController,
                                     decoration:
