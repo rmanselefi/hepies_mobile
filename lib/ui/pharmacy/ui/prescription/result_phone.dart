@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hepies/providers/prescription_provider.dart';
 import 'package:hepies/ui/doctor/medicalrecords/personal_info.dart';
@@ -231,11 +232,15 @@ class _PrescriptionResultState extends State<PrescriptionResultPhone> {
                                                 ['professionalid'])));
                               },
                               child: Container(
-                                child: Text(
-                                  '${prescription[0]['professional']}',
-                                  style: TextStyle(
-                                      decoration: TextDecoration.underline,
-                                      color: Colors.grey),
+                                width: 150,
+                                child: FittedBox(
+                                  fit: BoxFit.contain,
+                                  child: Text(
+                                    '${prescription[0]['professional']}',
+                                    style: TextStyle(
+                                        decoration: TextDecoration.underline,
+                                        color: Colors.grey),
+                                  ),
                                 ),
                               ),
                             )
