@@ -74,7 +74,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
   List<dynamic> finaPatient = [];
   List<dynamic> drugs;
 
-  String _selectedAnimal;
+  String _selectedDrug = "";
 
   final TextEditingController _controller = new TextEditingController();
   int presIndex = 0;
@@ -1117,7 +1117,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                                         prescription.drug =
                                                             value['id']
                                                                 .toString();
-                                                        _selectedAnimal =
+                                                        _selectedDrug =
                                                             value['name'];
                                                       });
                                                     },
@@ -1150,8 +1150,13 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                                               isDense: true,
                                                               hintText:
                                                                   'Name of Drug',
-                                                              hintStyle:
-                                                                  TextStyle()),
+                                                              hintStyle: TextStyle(
+                                                                  color: _selectedDrug ==
+                                                                          ""
+                                                                      ? Colors
+                                                                          .red
+                                                                      : Colors
+                                                                          .grey)),
                                                         ),
                                                       );
                                                     },
@@ -1309,7 +1314,15 @@ class _PrescribeFormState extends State<PrescribeForm> {
                     child: MaterialButton(
                       onPressed: () async {
                         _formKey.currentState.save();
-                        if (strengthController.text == "" &&
+                        if (_selectedDrug == "" &&
+                            widget.type != 'instrument') {
+                          showTopSnackBar(
+                            context,
+                            CustomSnackBar.error(
+                              message: "Drug is required",
+                            ),
+                          );
+                        } else if (strengthController.text == "" &&
                             widget.type != 'instrument') {
                           showTopSnackBar(
                             context,
@@ -1373,8 +1386,8 @@ class _PrescribeFormState extends State<PrescribeForm> {
                               "professionid": user.professionid
                             };
                             final Map<String, dynamic> precriptionData = {
-                              'drug_name': _selectedAnimal != null
-                                  ? _selectedAnimal
+                              'drug_name': _selectedDrug != null
+                                  ? _selectedDrug
                                   : drug.name,
                               "strength": strengthController.text,
                               "unit": unitController.text,
@@ -1416,7 +1429,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                             setState(() {
                               status = 'add';
                               finaPrescription[presIndex]['drug_name'] =
-                                  _selectedAnimal;
+                                  _selectedDrug;
                               finaPrescription[presIndex]["strength"] =
                                   strengthController.text;
                               finaPrescription[presIndex]["unit"] =
@@ -1506,6 +1519,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                             forController.text = '';
                             diagnosisController.text = "";
                             addressController.text = "";
+                            _selectedDrug="";
                           }
                         }
                       },
@@ -1647,10 +1661,10 @@ class _PrescribeFormState extends State<PrescribeForm> {
                   child: pres['type'] == "general"
                       ? isEvery
                           ? Text(
-                              '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['drug_name'] != null ? pres['drug_name'] : ""} ${pres['strength'] != null ? pres['strength'] : ""} '
+                              '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['drug_name'] != null ? pres['drug_name'] : ""} ${pres['strength'] != null ? pres['strength'] : ""}${pres['unit'] != null ? pres['unit'] : ""} '
                               ' ${pres['route'] != null ? pres['route'] : ""} Every ${pres['frequency'] != null ? pres['frequency'] : ""} For ${pres['takein'] != null ? pres['takein'] : ""}')
                           : Text(
-                              '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['drug_name'] != null ? pres['drug_name'] : ""} ${pres['strength'] != null ? pres['strength'] : ""} '
+                              '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['drug_name'] != null ? pres['drug_name'] : ""} ${pres['strength'] != null ? pres['strength'] : ""}${pres['unit'] != null ? pres['unit'] : ""} '
                               ' ${pres['route'] != null ? pres['route'] : ""} #${ampuleController.text} Amp')
                       : Text(
                           '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['material_name'] != null ? pres['material_name'] : ""} ${pres['size'] != null ? pres['size'] : ""} ${pres['amount'] != null ? '#${pres['amount']}' : ""}'),
@@ -1665,7 +1679,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                 widget.initialPrescription.indexOf(pres);
                             drugnameController.value =
                                 TextEditingValue(text: pres['drug_name']);
-                            _selectedAnimal = pres['drug_name'];
+                            _selectedDrug = pres['drug_name'];
                             strengthController.text = pres['strength'];
                             unitController.text = pres['unit'];
                             routeController.text = pres['route'];
