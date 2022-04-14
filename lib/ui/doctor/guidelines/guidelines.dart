@@ -332,31 +332,41 @@ class _GuidelinesState extends State<Guidelines> {
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       checkStatus(e['id'].toString())
-                                          ? ((progress * 100)
-                                                      .toStringAsFixed(2) ==
-                                                  "100.00")
-                                              ? Flexible(
-                                                  child: TextButton(
-                                                    onPressed: () async {
-                                                      print(
-                                                          "object ${e['url']}");
-                                                      await viewFile(
-                                                          e['url'],
-                                                          e['id'].toString(),
-                                                          context);
-                                                    },
-                                                    child: Text(
-                                                      'Open',
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w900,
-                                                        color: Colors.blue,
-                                                        fontSize: 16,
-                                                      ),
-                                                    ),
+                                          ? Flexible(
+                                              child: TextButton(
+                                                onPressed: () async {
+                                                  if ((progress * 100)
+                                                          .toStringAsFixed(2) !=
+                                                      "100.00") {
+                                                    Fluttertoast.showToast(
+                                                        msg:
+                                                            "please wait unitl download finish",
+                                                        toastLength:
+                                                            Toast.LENGTH_SHORT,
+                                                        gravity:
+                                                            ToastGravity.TOP,
+                                                        timeInSecForIosWeb: 1,
+                                                        backgroundColor:
+                                                            Colors.red,
+                                                        textColor: Colors.white,
+                                                        fontSize: 16.0);
+                                                  } else {
+                                                    await viewFile(
+                                                        e['url'],
+                                                        e['id'].toString(),
+                                                        context);
+                                                  }
+                                                },
+                                                child: Text(
+                                                  'Open',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w900,
+                                                    color: Colors.blue,
+                                                    fontSize: 16,
                                                   ),
-                                                )
-                                              : Container()
+                                                ),
+                                              ),
+                                            )
                                           : Container(),
                                       SizedBox(width: 6),
                                       IconButton(

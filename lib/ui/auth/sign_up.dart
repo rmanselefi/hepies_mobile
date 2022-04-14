@@ -383,7 +383,7 @@ class _RegisterState extends State<Register> {
           auth
               .register(
                   _name,
-                  _email,
+                  _email.trim(),
                   _fathername,
                   _username,
                   _phone,
