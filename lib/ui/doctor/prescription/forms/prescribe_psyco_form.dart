@@ -73,7 +73,7 @@ class _PrescribeFormState extends State<PrescribePsychoForm> {
   List<dynamic> finaPatient = [];
   List<dynamic> drugs;
 
-  String _selectedAnimal;
+  String _selectedDrug;
 
   final TextEditingController _controller = new TextEditingController();
   int presIndex = 0;
@@ -1124,7 +1124,7 @@ class _PrescribeFormState extends State<PrescribePsychoForm> {
                                                         prescription.drug =
                                                             value['id']
                                                                 .toString();
-                                                        _selectedAnimal =
+                                                        _selectedDrug =
                                                             value['name'];
                                                       });
                                                     },
@@ -1157,8 +1157,13 @@ class _PrescribeFormState extends State<PrescribePsychoForm> {
                                                               isDense: true,
                                                               hintText:
                                                                   'Name of Drug',
-                                                              hintStyle:
-                                                                  TextStyle()),
+                                                              hintStyle: TextStyle(
+                                                                  color: _selectedDrug ==
+                                                                          ""
+                                                                      ? Colors
+                                                                          .red
+                                                                      : Colors
+                                                                          .grey)),
                                                         ),
                                                       );
                                                     },
@@ -1380,8 +1385,8 @@ class _PrescribeFormState extends State<PrescribePsychoForm> {
                               "professionid": user.professionid
                             };
                             final Map<String, dynamic> precriptionData = {
-                              'drug_name': _selectedAnimal != null
-                                  ? _selectedAnimal
+                              'drug_name': _selectedDrug != null
+                                  ? _selectedDrug
                                   : drug.name,
                               "strength": strengthController.text,
                               "unit": unitController.text,
@@ -1423,7 +1428,7 @@ class _PrescribeFormState extends State<PrescribePsychoForm> {
                             setState(() {
                               status = 'add';
                               finaPrescription[presIndex]['drug_name'] =
-                                  _selectedAnimal;
+                                  _selectedDrug;
                               finaPrescription[presIndex]["strength"] =
                                   strengthController.text;
                               finaPrescription[presIndex]["unit"] =
@@ -1513,6 +1518,7 @@ class _PrescribeFormState extends State<PrescribePsychoForm> {
                             forController.text = '';
                             diagnosisController.text = "";
                             addressController.text = "";
+                            _selectedDrug = "";
                           }
                         }
                       },
@@ -1652,12 +1658,16 @@ class _PrescribeFormState extends State<PrescribePsychoForm> {
             return Row(
               children: [
                 Expanded(
-                  child: pres['type'] == "psychotropic"
-                      ? Text(
-                          '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['drug_name']} ${pres['strength']} '
-                          '${pres['unit']} ${pres['route']} Every ${pres['frequency']} For ${pres['takein']}')
+                  child: pres['type'] == "general"
+                      ? isEvery
+                          ? Text(
+                              '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['drug_name'] != null ? pres['drug_name'] : ""} ${pres['strength'] != null ? pres['strength'] : ""}${pres['unit'] != null ? pres['unit'] : ""} '
+                              ' ${pres['route'] != null ? pres['route'] : ""} Every ${pres['frequency'] != null ? pres['frequency'] : ""} For ${pres['takein'] != null ? pres['takein'] : ""}')
+                          : Text(
+                              '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['drug_name'] != null ? pres['drug_name'] : ""} ${pres['strength'] != null ? pres['strength'] : ""}${pres['unit'] != null ? pres['unit'] : ""} '
+                              ' ${pres['route'] != null ? pres['route'] : ""} #${ampuleController.text} Amp')
                       : Text(
-                          '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['material_name']} ${pres['size']} ${pres['amount']}'),
+                          '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['material_name'] != null ? pres['material_name'] : ""} ${pres['size'] != null ? pres['size'] : ""} ${pres['amount'] != null ? '#${pres['amount']}' : ""}'),
                 ),
                 Expanded(
                   child: Row(
@@ -1672,7 +1682,7 @@ class _PrescribeFormState extends State<PrescribePsychoForm> {
                           setState(() {
                             drugnameController.value =
                                 TextEditingValue(text: pres['drug_name']);
-                            _selectedAnimal = pres['drug_name'];
+                            _selectedDrug = pres['drug_name'];
                             strengthController.text = pres['strength'];
                             unitController.text = pres['unit'];
                             routeController.text = pres['route'];
