@@ -331,31 +331,15 @@ class _GuidelinesState extends State<Guidelines> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                      checkStatus(e['id'].toString())
+                                      (checkStatus(e['id'].toString()) &&
+                                              !downloading)
                                           ? Flexible(
                                               child: TextButton(
                                                 onPressed: () async {
-                                                  if ((progress * 100)
-                                                          .toStringAsFixed(2) !=
-                                                      "100.00") {
-                                                    Fluttertoast.showToast(
-                                                        msg:
-                                                            "please wait unitl download finish",
-                                                        toastLength:
-                                                            Toast.LENGTH_SHORT,
-                                                        gravity:
-                                                            ToastGravity.TOP,
-                                                        timeInSecForIosWeb: 1,
-                                                        backgroundColor:
-                                                            Colors.red,
-                                                        textColor: Colors.white,
-                                                        fontSize: 16.0);
-                                                  } else {
-                                                    await viewFile(
-                                                        e['url'],
-                                                        e['id'].toString(),
-                                                        context);
-                                                  }
+                                                  await viewFile(
+                                                      e['url'],
+                                                      e['id'].toString(),
+                                                      context);
                                                 },
                                                 child: Text(
                                                   'Open',

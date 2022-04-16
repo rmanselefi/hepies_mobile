@@ -21,93 +21,90 @@ class _FooterState extends State<Footer> {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      child: Padding(
-        padding: const EdgeInsets.all(2.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  icon: Icon(
-                    home_circled,
-                    color: Colors.black38,
-                    size: width(context) * 0.075,
-                  ),
-                  onPressed: () async {
-                    // await Provider.of<ConsultProvider>(context).switchSearch();
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IconButton(
+                icon: Icon(
+                  home_circled,
+                  color: Colors.black38,
+                  size: width(context) * 0.065,
+                ),
+                onPressed: () async {
+                  // await Provider.of<ConsultProvider>(context).switchSearch();
 
-                    Navigator.pushReplacement<Void, void>(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => Welcome(
-                                  currenIndex: 0,
-                                )));
-                  },
+                  Navigator.pushReplacement<Void, void>(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Welcome(
+                                currenIndex: 0,
+                              )));
+                },
+              ),
+              AutoSizeText(
+                '  Home',
+                maxLines: 1,
+                presetFontSizes: [13, 11, 9],
+                style: TextStyle(fontSize: 11),
+                textAlign: TextAlign.end,
+              ),
+            ],
+          ),
+          SizedBox(width: 3),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              IconButton(
+                icon: Icon(
+                  file_signature,
+                  color: Colors.black38,
+                  size: width(context) * 0.065,
                 ),
-                AutoSizeText(
-                  '  Home',
-                  maxLines: 1,
-                  presetFontSizes: [13, 11, 9],
-                  style: TextStyle(fontSize: 13),
-                  textAlign: TextAlign.end,
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => WritePrescription()));
+                },
+              ),
+              AutoSizeText(
+                'prescription',
+                maxLines: 1,
+                presetFontSizes: [13, 11, 9],
+                style: TextStyle(fontSize: 11),
+              ),
+            ],
+          ),
+          SizedBox(width: 3),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              IconButton(
+                icon: Icon(
+                  pills,
+                  color: Colors.black38,
+                  size: width(context) * 0.065,
                 ),
-              ],
-            ),
-            SizedBox(width: 10),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                IconButton(
-                  icon: Icon(
-                    file_signature,
-                    color: Colors.black38,
-                    size: width(context) * 0.075,
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => WritePrescription()));
-                  },
-                ),
-                AutoSizeText(
-                  'prescription',
-                  maxLines: 1,
-                  presetFontSizes: [13, 11, 9],
-                  style: TextStyle(fontSize: 13),
-                ),
-              ],
-            ),
-            SizedBox(width: 10),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                IconButton(
-                  icon: Icon(
-                    pills,
-                    color: Colors.black38,
-                    size: width(context) * 0.075,
-                  ),
-                  onPressed: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Drugs()));
-                  },
-                ),
-                AutoSizeText(
-                  'Drugs',
-                  maxLines: 1,
-                  presetFontSizes: [13, 11, 9],
-                  style: TextStyle(fontSize: 13),
-                ),
-              ],
-            ),
-          ],
-        ),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Drugs()));
+                },
+              ),
+              AutoSizeText(
+                'Drugs',
+                maxLines: 1,
+                presetFontSizes: [13, 11, 9],
+                style: TextStyle(fontSize: 11),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

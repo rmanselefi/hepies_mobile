@@ -99,69 +99,86 @@ class AuthProvider with ChangeNotifier {
       String profession,
       String sex,
       String dob,
-      interests,
       File file) async {
     _loggedInStatus = Status.Authenticating;
     notifyListeners();
     var license;
-    if (file != null) {
-      await uploadImage(file).then((res) {
-        print('imageuriimageuriimageuri$res');
-        if (res != null) {
-          license = res;
-        }
-      });
-    }
     var result;
-    var role = 2;
-    if (profession == 'Pharmacist') {
-      role = 3;
-    }
-    if (profession == 'Nurse') {
-      role = 5;
-    }
-    if (profession == 'Health Officer') {
-      role = 4;
-    }
-    final Map<String, dynamic> registrationData = {
-      'name': name,
-      'email': email,
-      'fathername': fathername,
-      'phone': phone,
-      'license': license,
-      'interests': interests,
-      'proffesion': profession,
-      'dob': dob,
-      'sex': sex,
-      'user': {'username': username, 'password': password, 'role': role},
-    };
-    Response response = await post(Uri.parse(AppUrl.register),
-        body: json.encode(registrationData),
-        headers: {'Content-Type': 'application/json'});
-    // print("responseresponseresponse ${json.decode(response.body)}");
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      final Map<String, dynamic> responseData = json.decode(response.body);
-      // print("ResponseResponseResponse ${responseData}");
+    try {
+      final googleLookup = await InternetAddress.lookup('google.com');
+      if (googleLookup.isNotEmpty && googleLookup[0].rawAddress.isNotEmpty) {
+        if (file != null) {
+          await uploadImage(file).then((res) {
+            print('imageuriimageuriimageuri$res');
+            if (res != null) {
+              license = res;
+            }
+          });
+        }
+      }
+      var role = 2;
+      if (profession == 'Pharmacist') {
+        role = 3;
+      }
+      if (profession == 'Nurse') {
+        role = 5;
+      }
+      if (profession == 'Health Officer') {
+        role = 4;
+      }
+      final Map<String, dynamic> registrationData = {
+        'name': name,
+        'email': email,
+        'fathername': fathername,
+        'phone': phone,
+        'license': license,
+        'proffesion': profession,
+        'dob': dob,
+        'sex': sex,
+        'user': {'username': username, 'password': password, 'role': role},
+      };
 
-      _loggedInStatus = Status.LoggedIn;
-      notifyListeners();
+      Response response = await post(Uri.parse(AppUrl.register),
+          body: json.encode(registrationData),
+          headers: {'Content-Type': 'application/json'});
+      // print("responseresponseresponse ${json.decode(response.body)}");
+      print(response.body.toString() + response.statusCode.toString());
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        // print("ResponseResponseResponse ${responseData}");
 
-      result = {'status': true, 'message': 'Successful', 'user': responseData};
-    } else {
+        _loggedInStatus = Status.LoggedIn;
+        notifyListeners();
+
+        result = {
+          'status': true,
+          'message': 'Successful',
+          'user': responseData
+        };
+      } else {
+        _loggedInStatus = Status.NotLoggedIn;
+        notifyListeners();
+        var res = json.decode(response.body);
+        var message = '';
+        if (res['message'] == 'username') {
+          message = 'Username already exists';
+        }
+        if (res['message'] == 'email') {
+          message = 'Email already exists';
+        }
+        if (res['message'] == 'phone') {
+          message = 'Phone already exists';
+        }
+        result = {'status': false, 'message': message};
+      }
+    } catch (e) {
       _loggedInStatus = Status.NotLoggedIn;
       notifyListeners();
-      var res = json.decode(response.body);
-      var message = '';
-      if (res['message'] == 'username') {
-        message = 'Username already exists';
-      }
-      if (res['message'] == 'email') {
-        message = 'Email already exists';
-      }
-      if (res['message'] == 'phone') {
-        message = 'Phone already exists';
-      }
-      result = {'status': false, 'message': message};
+      result = {
+        'status': false,
+        'error': true,
+        'message': 'Internet Connection error',
+      };
     }
     return result;
   }
