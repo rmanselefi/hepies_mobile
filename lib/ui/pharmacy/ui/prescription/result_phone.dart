@@ -87,6 +87,7 @@ class _PrescriptionResultState extends State<PrescriptionResultPhone> {
                           ),
                           Column(
                               children: notReadPrescription.map<Widget>((e) {
+                            print("eeeeeee $e");
                             return Row(
                               children: [
                                 Text(
@@ -99,13 +100,20 @@ class _PrescriptionResultState extends State<PrescriptionResultPhone> {
                                   width: 5.0,
                                 ),
                                 Expanded(
-                                  child: Text(
-                                    ' ${e['drug_name']} ${e['strength']} '
-                                    '${e['unit']} ${e['route']} Every ${e['frequency']} For ${e['takein']}',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20.0),
-                                  ),
+                                  child: e['type'] == "instrument"
+                                      ? Text(
+                                          ' ${e['material_name']} ${e['size']} ',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20.0),
+                                        )
+                                      : Text(
+                                          ' ${e['drug_name']} ${e['strength']} '
+                                          '${e['unit']} ${e['route']} Every ${e['frequency']} For ${e['takein']}',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20.0),
+                                        ),
                                 ),
                                 InkWell(
                                   child: Container(

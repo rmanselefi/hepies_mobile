@@ -10,20 +10,21 @@ class Favorites {
   final String takein;
   final String frequency;
   final int drug;
+  final String ampule;
 
   Favorites(
       {this.id,
       this.profession_id,
       this.drug_name,
-        this.drug,
+      this.drug,
       this.name,
       this.route,
       this.strength,
       this.unit,
       this.type,
       this.frequency,
-      this.takein});
-
+      this.takein,
+      this.ampule});
 
   // columns in the database.
   Map<String, dynamic> toMap() {
@@ -32,13 +33,14 @@ class Favorites {
       'name': name,
       'profession_id': profession_id,
       'drug_name': drug_name,
-      'drug':drug,
+      'drug': drug,
       'route': route,
       'strength': strength,
       'unit': unit,
       'type': type,
       'frequency': frequency,
-      'takein': takein
+      'takein': takein,
+      'ampule': ampule
     };
   }
 
@@ -47,13 +49,14 @@ class Favorites {
       'name': name,
       'profession_id': profession_id,
       'drug_name': drug_name,
-      'drug':drug,
+      'drug': drug,
       'route': route,
       'strength': strength,
       'unit': unit,
       'type': type,
       'frequency': frequency,
-      'takein': takein
+      'takein': takein,
+      'ampule': ampule
     };
   }
 }

@@ -123,9 +123,7 @@ class _FavoritesState extends State<FavoritesPage> {
                                                 await DatabaseHelper()
                                                     .getFavoritesByName(
                                                         data[index].name);
-                                            // for (var i = 0;
-                                            //     i < combinations.length;
-                                            //     i++) {}
+                                            print("combinationscombinationscombinations $combinations");
                                             Provider.of<PrescriptionProvider>(
                                                     context,
                                                     listen: false)

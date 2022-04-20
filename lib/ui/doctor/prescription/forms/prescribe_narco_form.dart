@@ -1774,7 +1774,7 @@ class _PrescribeFormState extends State<PrescribeNarcoForm> {
             return Row(
               children: [
                 Expanded(
-                  child: pres['type'] == "general"
+                  child: pres['type'] == "narcotic"
                       ? isEvery
                           ? Text(
                               '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['drug_name'] != null ? pres['drug_name'] : ""} ${pres['strength'] != null ? pres['strength'] : ""}${pres['unit'] != null ? pres['unit'] : ""} '

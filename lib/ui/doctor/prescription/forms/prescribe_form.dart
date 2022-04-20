@@ -1346,15 +1346,24 @@ class _PrescribeFormState extends State<PrescribeForm> {
                               message: "Route is required",
                             ),
                           );
-                        } else if (forController.text == "" &&
-                            everyController.text == "" &&
-                            ampuleController.text == "" &&
+                        } else if (isEvery &&
+                            (forController.text == "" ||
+                                everyController.text == "") &&
                             widget.type != "instrument") {
                           showTopSnackBar(
                             context,
                             CustomSnackBar.error(
                               message:
-                                  "You got provide at least ampule or frequency(take in)",
+                                  "You got provide at least Frequency(Every) and For ",
+                            ),
+                          );
+                        } else if (!isEvery &&
+                            ampuleController.text == "" &&
+                            widget.type != "instrument") {
+                          showTopSnackBar(
+                            context,
+                            CustomSnackBar.error(
+                              message: "You got provide at least Ampule",
                             ),
                           );
                         } else if (weightController.text != "" &&
@@ -1420,6 +1429,8 @@ class _PrescribeFormState extends State<PrescribeForm> {
                             }
                             setState(() {
                               finaPrescription.add(precriptionData);
+                              isAmpule = true;
+                              isEvery = true;
                             });
                           } else if (status == 'edit') {
                             Provider.of<PrescriptionProvider>(context,
@@ -1519,7 +1530,8 @@ class _PrescribeFormState extends State<PrescribeForm> {
                             forController.text = '';
                             diagnosisController.text = "";
                             addressController.text = "";
-                            _selectedDrug="";
+                            _selectedDrug = "";
+                            ampuleController.text = "";
                           }
                         }
                       },

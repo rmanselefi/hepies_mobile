@@ -12,6 +12,7 @@ import 'package:hepies/ui/doctor/guidelines/guidelines.dart';
 import 'package:hepies/ui/doctor/prescription/forms/prescribe_form.dart';
 import 'package:hepies/ui/doctor/prescription/forms/prescribe_narco_form.dart';
 import 'package:hepies/ui/doctor/prescription/forms/prescribe_psyco_form.dart';
+import 'package:hepies/ui/pharmacy/widgets/shimmer.dart';
 import 'package:hepies/ui/welcome.dart';
 import 'package:hepies/util/database_helper.dart';
 import 'package:hepies/util/shared_preference.dart';
@@ -324,228 +325,245 @@ class _WritePrescriptionState extends State<WritePrescription> {
                         )
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Container(
-                          width: width(context) * 0.225,
-                          margin: EdgeInsets.all(3),
-                          child: MaterialButton(
-                            padding: EdgeInsets.all(2),
-                            color: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide(color: Colors.black45, width: 2),
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                pretype = 'general';
-                              });
-                            },
-                            child: Text(
-                              'Normal',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: width(context) * 0.225,
-                          margin: EdgeInsets.all(3),
-                          child: MaterialButton(
-                            padding: EdgeInsets.all(2),
-                            color: Colors.blue,
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide(color: Colors.black45, width: 2),
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                pretype = 'instrument';
-                              });
-                            },
-                            child: Text(
-                              'Instruments',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ),
-                        ),
-                        isFit == "true"
-                            ? Builder(builder: (context) {
-                                return SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    children: [
-                                      Container(
-                                        width: width(context) * 0.225,
-                                        margin: EdgeInsets.all(3),
-                                        child: MaterialButton(
-                                          padding: EdgeInsets.all(2),
-                                          color: Colors.redAccent[400],
-                                          shape: RoundedRectangleBorder(
-                                            side: BorderSide(
-                                                color: Colors.black45,
-                                                width: 2),
-                                          ),
-                                          onPressed: () {
-                                            setState(() {
-                                              pretype = 'psychotropic';
-                                            });
-                                          },
-                                          child: Text(
-                                            'Psychotropic',
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 12,
-                                            ),
-                                          ),
+                    isFit != ""
+                        ? Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Container(
+                                    width: width(context) * 0.225,
+                                    margin: EdgeInsets.all(3),
+                                    child: MaterialButton(
+                                      padding: EdgeInsets.all(2),
+                                      color: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                        side: BorderSide(
+                                            color: Colors.black45, width: 2),
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          pretype = 'general';
+                                        });
+                                      },
+                                      child: Text(
+                                        'Normal',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 14,
                                         ),
                                       ),
-                                      Container(
-                                        width: width(context) * 0.225,
-                                        margin: EdgeInsets.all(3),
-                                        child: MaterialButton(
-                                          padding: EdgeInsets.all(2),
-                                          color: Colors.purple,
-                                          shape: RoundedRectangleBorder(
-                                            side: BorderSide(
-                                                color: Colors.black45,
-                                                width: 2),
-                                          ),
-                                          onPressed: () {
-                                            setState(() {
-                                              pretype = 'narcotic';
-                                            });
-                                          },
-                                          child: Text(
-                                            'Narcotic',
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                    ),
                                   ),
-                                );
-                              })
-                            : Builder(builder: (context) {
-                                return SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Container(
-                                        width: width(context) * 0.225,
-                                        margin: EdgeInsets.all(3),
-                                        child: MaterialButton(
-                                          padding: EdgeInsets.all(2),
-                                          color: Colors.redAccent[400],
-                                          shape: RoundedRectangleBorder(
-                                            side: BorderSide(
-                                                color: Colors.black45,
-                                                width: 2),
-                                          ),
-                                          onPressed: () {
-                                            showTopSnackBar(
-                                              context,
-                                              CustomSnackBar.error(
-                                                message:
-                                                    "Please contact your workplace to be authorized for writing psychotropic/narcotic medications",
-                                              ),
-                                            );
-                                          },
-                                          child: Text(
-                                            'Psychotropic',
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 12,
-                                            ),
-                                          ),
+                                  Container(
+                                    width: width(context) * 0.225,
+                                    margin: EdgeInsets.all(3),
+                                    child: MaterialButton(
+                                      padding: EdgeInsets.all(2),
+                                      color: Colors.blue,
+                                      shape: RoundedRectangleBorder(
+                                        side: BorderSide(
+                                            color: Colors.black45, width: 2),
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          pretype = 'instrument';
+                                        });
+                                      },
+                                      child: Text(
+                                        'Instruments',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 12,
                                         ),
                                       ),
-                                      Container(
-                                        width: width(context) * 0.225,
-                                        margin: EdgeInsets.all(3),
-                                        child: MaterialButton(
-                                          padding: EdgeInsets.all(2),
-                                          color: Colors.purple,
-                                          shape: RoundedRectangleBorder(
-                                            side: BorderSide(
-                                                color: Colors.black45,
-                                                width: 2),
-                                          ),
-                                          onPressed: () {
-                                            showTopSnackBar(
-                                              context,
-                                              CustomSnackBar.error(
-                                                message:
-                                                    "Please contact your workplace to be authorized for writing psychotropic/narcotic medications",
-                                              ),
-                                            );
-                                          },
-                                          child: Text(
-                                            'Narcotic',
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
+                                    ),
                                   ),
-                                );
-                              })
-                      ],
-                    ),
-                    Builder(builder: (context) {
-                      // print("prescriptionprescription $prescription");
-                      if (pretype == "general") {
-                        return PrescribeForm(
-                            setPrescription: _setPrescription,
-                            setPatient: setPatientInfo,
-                            setFav: setFavorite,
-                            initialPrescription: prescription,
-                            type: 'general',
-                            color: Colors.white,
-                            from: widget.from);
-                      } else if (pretype == "instrument") {
-                        return PrescribeForm(
-                            setPrescription: _setPrescription,
-                            setPatient: setPatientInfo,
-                            initialPrescription: prescription,
-                            type: 'instrument',
-                            color: Color(0xff0BE9E2),
-                            from: widget.from);
-                      } else if (pretype == "narcotic") {
-                        return PrescribeNarcoForm(
-                            setPrescription: _setNarcoPrescription,
-                            setPatient: setPatientInfo,
-                            setFav: setFavorite,
-                            initialPrescription: narcoPrescription,
-                            type: 'narcotic',
-                            color: Color(0xffF211C5),
-                            from: widget.from);
-                      } else if (pretype == "psychotropic") {
-                        return PrescribePsychoForm(
-                            setPrescription: _setPsycoPrescription,
-                            setPatient: setPatientInfo,
-                            setFav: setFavorite,
-                            initialPrescription: psycoPrescription,
-                            type: 'psychotropic',
-                            color: Color(0xffD24F95),
-                            from: widget.from);
-                      } else {
-                        return Container();
-                      }
-                    }),
+                                  isFit == "true"
+                                      ? Builder(builder: (context) {
+                                          return SingleChildScrollView(
+                                            scrollDirection: Axis.horizontal,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              children: [
+                                                Container(
+                                                  width: width(context) * 0.225,
+                                                  margin: EdgeInsets.all(3),
+                                                  child: MaterialButton(
+                                                    padding: EdgeInsets.all(2),
+                                                    color:
+                                                        Colors.redAccent[400],
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      side: BorderSide(
+                                                          color: Colors.black45,
+                                                          width: 2),
+                                                    ),
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        pretype =
+                                                            'psychotropic';
+                                                      });
+                                                    },
+                                                    child: Text(
+                                                      'Psychotropic',
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 12,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  width: width(context) * 0.225,
+                                                  margin: EdgeInsets.all(3),
+                                                  child: MaterialButton(
+                                                    padding: EdgeInsets.all(2),
+                                                    color: Colors.purple,
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      side: BorderSide(
+                                                          color: Colors.black45,
+                                                          width: 2),
+                                                    ),
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        pretype = 'narcotic';
+                                                      });
+                                                    },
+                                                    child: Text(
+                                                      'Narcotic',
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        })
+                                      : Builder(builder: (context) {
+                                          return SingleChildScrollView(
+                                            scrollDirection: Axis.horizontal,
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Container(
+                                                  width: width(context) * 0.225,
+                                                  margin: EdgeInsets.all(3),
+                                                  child: MaterialButton(
+                                                    padding: EdgeInsets.all(2),
+                                                    color:
+                                                        Colors.redAccent[400],
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      side: BorderSide(
+                                                          color: Colors.black45,
+                                                          width: 2),
+                                                    ),
+                                                    onPressed: () {
+                                                      showTopSnackBar(
+                                                        context,
+                                                        CustomSnackBar.error(
+                                                          message:
+                                                              "Please contact your workplace to be authorized for writing psychotropic/narcotic medications",
+                                                        ),
+                                                      );
+                                                    },
+                                                    child: Text(
+                                                      'Psychotropic',
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 12,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  width: width(context) * 0.225,
+                                                  margin: EdgeInsets.all(3),
+                                                  child: MaterialButton(
+                                                    padding: EdgeInsets.all(2),
+                                                    color: Colors.purple,
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      side: BorderSide(
+                                                          color: Colors.black45,
+                                                          width: 2),
+                                                    ),
+                                                    onPressed: () {
+                                                      showTopSnackBar(
+                                                        context,
+                                                        CustomSnackBar.error(
+                                                          message:
+                                                              "Please contact your workplace to be authorized for writing psychotropic/narcotic medications",
+                                                        ),
+                                                      );
+                                                    },
+                                                    child: Text(
+                                                      'Narcotic',
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        })
+                                ],
+                              ),
+                              Builder(builder: (context) {
+                                // print("prescriptionprescription $prescription");
+                                if (pretype == "general") {
+                                  return PrescribeForm(
+                                      setPrescription: _setPrescription,
+                                      setPatient: setPatientInfo,
+                                      setFav: setFavorite,
+                                      initialPrescription: prescription,
+                                      type: 'general',
+                                      color: Colors.white,
+                                      from: widget.from);
+                                } else if (pretype == "instrument") {
+                                  return PrescribeForm(
+                                      setPrescription: _setPrescription,
+                                      setPatient: setPatientInfo,
+                                      initialPrescription: prescription,
+                                      type: 'instrument',
+                                      color: Color(0xff0BE9E2),
+                                      from: widget.from);
+                                } else if (pretype == "narcotic") {
+                                  return PrescribeNarcoForm(
+                                      setPrescription: _setNarcoPrescription,
+                                      setPatient: setPatientInfo,
+                                      setFav: setFavorite,
+                                      initialPrescription: narcoPrescription,
+                                      type: 'narcotic',
+                                      color: Color(0xffF211C5),
+                                      from: widget.from);
+                                } else if (pretype == "psychotropic") {
+                                  return PrescribePsychoForm(
+                                      setPrescription: _setPsycoPrescription,
+                                      setPatient: setPatientInfo,
+                                      setFav: setFavorite,
+                                      initialPrescription: psycoPrescription,
+                                      type: 'psychotropic',
+                                      color: Color(0xffD24F95),
+                                      from: widget.from);
+                                } else {
+                                  return Container();
+                                }
+                              }),
+                            ],
+                          )
+                        : ShimmerEffect(),
+
                     // pretype == "general" || pretype == "instrument"
                     //     ? PrescriptionPaper(prescription, pretype)
                     //     : pretype == 'narcotics'
@@ -600,7 +618,8 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                                 unit: element['unit'],
                                                 type: element['type'],
                                                 frequency: element['frequency'],
-                                                takein: element['takein']);
+                                                takein: element['takein'],
+                                                ampule: element['ampule']);
 
                                             var db = new DatabaseHelper();
                                             var res = await db
