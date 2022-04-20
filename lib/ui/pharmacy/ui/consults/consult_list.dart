@@ -993,6 +993,7 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                       return Padding(
                           padding: EdgeInsets.all(8), child: ShimmerEffect());
                     }
+                    print("post" + e.toString());
 
                     return Container(
                       padding:
@@ -1060,12 +1061,36 @@ class _PharmacyConsultListState extends State<PharmacyConsultList> {
                                             fontWeight: FontWeight.bold),
                                       ),
                                       Container(
-                                        child: Text(
-                                          "${e['author']['profession'][0]['proffesion'] ?? ''}",
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.black54),
-                                          overflow: TextOverflow.ellipsis,
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              "Verified",
+                                              style: TextStyle(
+                                                  fontSize: 13,
+                                                  color: Colors.green,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              "${e['author']['profession'][0]['proffesion'] ?? ''}",
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.black54),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              "${e['author']['profession'][0]['speciality'] ?? ''}",
+                                              style: TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.black54),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ],
                                         ),
                                       ),
                                       Text('$duration',
