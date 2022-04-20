@@ -31,7 +31,7 @@ class DatabaseHelper {
 
   void _onCreate(Database db, int version) async {
     await db.execute(
-        'CREATE TABLE favorites(id INTEGER PRIMARY KEY, name TEXT, route TEXT,strength TEXT,profession_id INTEGER,drug_name TEXT, drug INTEGER, unit TEXT,type TEXT,frequency TEXT,takein TEXT )');
+        'CREATE TABLE favorites(id INTEGER PRIMARY KEY, name TEXT, route TEXT,strength TEXT,profession_id INTEGER,drug_name TEXT, drug INTEGER, unit TEXT,type TEXT,frequency TEXT,takein TEXT,ampule TEXT )');
   }
 
   Future<int> saveFavorites(Favorites favorites) async {
@@ -47,7 +47,7 @@ class DatabaseHelper {
     var dbClient = await db;
     var ress = await dbClient.query("favorites",
         columns: [
-          "id,name,route,strength,profession_id,drug_name,unit,type,frequency,takein"
+          "id,name,route,strength,profession_id,drug_name,unit,type,frequency,takein,ampule"
         ],
         where: "profession_id = ?",
         whereArgs: [id]);
@@ -64,6 +64,7 @@ class DatabaseHelper {
             unit: element['unit'],
             takein: element['takein'],
             frequency: element['frequency'],
+            ampule: element['ampule'],
             type: element['type']);
         fav.add(favorites);
       });
