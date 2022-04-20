@@ -69,14 +69,16 @@ class _WelcomeState extends State<Welcome> {
     super.initState();
     if (!mounted) return;
     UserProvider().getProfile().then((user) {
-      setState(() {
-        user_id = user['id'];
-        name = user['profession'][0]['name'];
-        profession = user['profession'][0]['proffesion'];
-        points = user['profession'][0]['points'];
-        profile = user['profession'][0]['profile'];
-        overallPoints = user['profession'][0]['overall_points'];
-      });
+      if (this.mounted) {
+        setState(() {
+          user_id = user['id'];
+          name = user['profession'][0]['name'];
+          profession = user['profession'][0]['proffesion'];
+          points = user['profession'][0]['points'];
+          profile = user['profession'][0]['profile'];
+          overallPoints = user['profession'][0]['overall_points'];
+        });
+      }
     });
 
     f = NumberFormat.decimalPattern("en_US");

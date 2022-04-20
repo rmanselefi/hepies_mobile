@@ -640,7 +640,7 @@ class _CalculatorState extends State<Calculator> {
                                               prefixIcon: Icon(Icons.input,
                                                   color: Color.fromRGBO(
                                                       50, 62, 72, 1.0)),
-                                              hintText: "sRc (mg/dl)",
+                                              hintText: "sCr (mg/dl)",
                                               contentPadding:
                                                   EdgeInsets.fromLTRB(
                                                       20.0, 15.0, 20.0, 15.0),
