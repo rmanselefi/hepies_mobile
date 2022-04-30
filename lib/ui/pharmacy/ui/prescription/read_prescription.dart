@@ -89,6 +89,7 @@ class _ReadPrescriptionState extends State<ReadPrescription> {
                       );
                     } else {
                       // print("value" + res.toString());
+                      
                       Navigator.push(
                         context,
                         MaterialPageRoute(

@@ -9,6 +9,9 @@ import 'package:hepies/ui/pharmacy/welcome.dart';
 import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:hepies/ui/pharmacy/widgets/footer.dart';
+
+import '../../../../providers/user_provider.dart';
 
 class PrescriptionResult extends StatefulWidget {
   final result;
@@ -47,6 +50,8 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
     });
     // print(prescription);
     // print("readreadread $prescription");
+    UserProvider nav = Provider.of<UserProvider>(context);
+
     return SafeArea(
         child: Scaffold(
             body: WillPopScope(
@@ -183,6 +188,8 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
                                       'Your prescriptions are sent succesfully',
                                 ),
                               );
+                              nav.changeNavSelection(NavSelection.home);
+
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
