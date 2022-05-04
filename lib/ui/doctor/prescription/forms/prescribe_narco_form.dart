@@ -501,23 +501,6 @@ class _PrescribeFormState extends State<PrescribeNarcoForm> {
                           children: [
                             Container(
                               width: width(context) * 0.3,
-                              child: CheckboxListTile(
-                                title: Text(
-                                  "Favourite",
-                                  style: TextStyle(fontSize: 12),
-                                ),
-                                value: rememberMe,
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    rememberMe = newValue;
-                                  });
-                                  widget.setFav(newValue);
-                                },
-                                controlAffinity:
-                                    ListTileControlAffinity.leading,
-                                //  <-- leading Checkbox
-                                contentPadding: EdgeInsets.all(0.0),
-                              ),
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,

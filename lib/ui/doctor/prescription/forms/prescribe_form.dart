@@ -80,6 +80,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
   int presIndex = 0;
   bool isAmpule = true;
   bool isEvery = true;
+  bool ampule = true;
   var _currentSelectedValue;
   bool rememberMe = false;
   bool isPatient = false;
@@ -1265,11 +1266,13 @@ class _PrescribeFormState extends State<PrescribeForm> {
                                                   if (val.isNotEmpty) {
                                                     setState(() {
                                                       isEvery = false;
+                                                      ampule = true;
                                                     });
                                                   }
                                                   if (val.isEmpty) {
                                                     setState(() {
                                                       isEvery = true;
+                                                      ampule = false;
                                                     });
                                                   }
                                                 },
@@ -1494,45 +1497,18 @@ class _PrescribeFormState extends State<PrescribeForm> {
                               }
                             });
                           }
-                          if (status == 'add' && widget.from == "favorites") {
-                            final Map<String, dynamic> patientData = {
-                              "name": patient.name,
-                              "age": ageController.text,
-                              "age_label": _labelController,
-                              "fathername": patient.fathername,
-                              "grandfathername": "kebede",
-                              "phone": patient.phone,
-                              "sex": _chosenValue,
-                              "weight": patient.weight,
-                              "mrn": addressController.text,
-                              "professionid": user.professionid
-                            };
-                            if (finaPatient.length == 0) {
-                              setState(() {
-                                finaPatient.add(patientData);
-                              });
-                            }
-
-                            showTopSnackBar(
-                              context,
-                              CustomSnackBar.success(
-                                message: "Patient is succesfully added!",
-                              ),
-                            );
-                          } else {
-                            widget.setPrescription(finaPrescription);
-                            _formKey.currentState.reset();
-                            drugnameController.text = "";
-                            strengthController.text = '';
-                            unitController.text = '';
-                            routeController.text = '';
-                            everyController.text = '';
-                            forController.text = '';
-                            diagnosisController.text = "";
-                            addressController.text = "";
-                            _selectedDrug = "";
-                            ampuleController.text = "";
-                          }
+                          widget.setPrescription(finaPrescription);
+                          _formKey.currentState.reset();
+                          drugnameController.text = "";
+                          strengthController.text = '';
+                          unitController.text = '';
+                          routeController.text = '';
+                          everyController.text = '';
+                          forController.text = '';
+                          diagnosisController.text = "";
+                          addressController.text = "";
+                          _selectedDrug = "";
+                          ampuleController.text = "";
                         }
                       },
                       child: Container(
@@ -1657,6 +1633,8 @@ class _PrescribeFormState extends State<PrescribeForm> {
   }
 
   Widget prescriptionPaper(prescription, pretype) {
+    print(
+        "ampuleController.textampuleController.text ${ampuleController.text}");
     return Expanded(
       flex: 5,
       child: Container(
@@ -1671,13 +1649,13 @@ class _PrescribeFormState extends State<PrescribeForm> {
               children: [
                 Expanded(
                   child: pres['type'] == "general"
-                      ? isEvery
+                      ? ampule
                           ? Text(
                               '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['drug_name'] != null ? pres['drug_name'] : ""} ${pres['strength'] != null ? pres['strength'] : ""}${pres['unit'] != null ? pres['unit'] : ""} '
-                              ' ${pres['route'] != null ? pres['route'] : ""} Every ${pres['frequency'] != null ? pres['frequency'] : ""} For ${pres['takein'] != null ? pres['takein'] : ""}')
+                              ' ${pres['route'] != null ? pres['route'] : ""} #${pres['ampule']} Amp')
                           : Text(
                               '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['drug_name'] != null ? pres['drug_name'] : ""} ${pres['strength'] != null ? pres['strength'] : ""}${pres['unit'] != null ? pres['unit'] : ""} '
-                              ' ${pres['route'] != null ? pres['route'] : ""} #${ampuleController.text} Amp')
+                              ' ${pres['route'] != null ? pres['route'] : ""} Every ${pres['frequency'] != null ? pres['frequency'] : ""} For ${pres['takein'] != null ? pres['takein'] : ""}')
                       : Text(
                           '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['material_name'] != null ? pres['material_name'] : ""} ${pres['size'] != null ? pres['size'] : ""} ${pres['amount'] != null ? '#${pres['amount']}' : ""}'),
                 ),
@@ -1686,6 +1664,11 @@ class _PrescribeFormState extends State<PrescribeForm> {
                     children: [
                       IconButton(
                         onPressed: () {
+                          if (pres['ampule'] != "") {
+                            setState(() {
+                              isEvery = false;
+                            });
+                          }
                           setState(() {
                             presIndex =
                                 widget.initialPrescription.indexOf(pres);
