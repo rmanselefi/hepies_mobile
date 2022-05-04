@@ -76,79 +76,90 @@ class _ShareConsultState extends State<ShareConsult> {
       child: SafeArea(
         child: Column(
           children: [
-            
             Expanded(
                 child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               physics: AlwaysScrollableScrollPhysics(),
               controller: _parentScrollController,
-              child: Column(
-                children: [
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-                    height: MediaQuery.of(context).size.height / 18,
-                    child: TextField(
-                      onChanged: (text) {
-                        setState(() {
-                          isOnSearch = false;
-                        });
-                      },
-                      controller: _search,
-                      decoration: InputDecoration(
-                        suffixIcon: GestureDetector(
-                            onTap: () {
-                              // await consult.notifySearch();
-                              setState(() {
-                                isOnSearch = true;
-                              });
-                              print("current search state" +
-                                  isOnSearch.toString());
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: Column(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                      height: MediaQuery.of(context).size.height / 18,
+                      child: TextField(
+                        onChanged: (text) {
+                          setState(() {
+                            isOnSearch = false;
+                          });
+                        },
+                        controller: _search,
+                        decoration: InputDecoration(
+                          suffixIcon: GestureDetector(
+                              onTap: () {
+                                // await consult.notifySearch();
+                                setState(() {
+                                  isOnSearch = true;
+                                });
+                                print("current search state" +
+                                    isOnSearch.toString());
 
-                              print("Working , searching ${_search.text}");
-                            },
-                            child: Icon(Icons.search)),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(30)),
-                            borderSide:
-                                BorderSide(color: Colors.black38, width: 1)),
-                        hintText: "Search consults  ...",
-                        labelStyle: TextStyle(color: Colors.black45),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(30)),
-                            borderSide:
-                                BorderSide(color: Colors.black, width: 1)),
-                        hintStyle: TextStyle(
-                          fontWeight: FontWeight.w400,
+                                print("Working , searching ${_search.text}");
+                              },
+                              child: Icon(Icons.search)),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(30)),
+                              borderSide:
+                                  BorderSide(color: Colors.black38, width: 1)),
+                          hintText: "Search consults  ...",
+                          labelStyle: TextStyle(color: Colors.black45),
+                          border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(30)),
+                              borderSide:
+                                  BorderSide(color: Colors.black, width: 1)),
+                          hintStyle: TextStyle(
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Container(
-                      margin: EdgeInsets.symmetric(horizontal: 5, vertical: 3),
-                      height: MediaQuery.of(context).size.height / 16,
-                      child: TextField(
-                        readOnly: true,
-                        onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (_) => PostConsult()));
-                        },
-                        decoration: InputDecoration(
-                          hintText: "Share your consults....",
-                          border: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.black, width: 1)),
-                        ),
-                      )),
-                  Divider(),
-                  isOnSearch
-                      ? SearchList(
-                          widget.user_id,
-                          interest,
-                          capitalize(_search.text.toString()),
-                          _parentScrollController)
-                      : PharmacyConsultList(
-                          widget.user_id, interest, _parentScrollController)
-                ],
+                    Container(
+                        margin:
+                            EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+                        height: MediaQuery.of(context).size.height / 16,
+                        child: TextField(
+                          readOnly: true,
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => PostConsult()));
+                          },
+                          decoration: InputDecoration(
+                            hintText: "Share your consults....",
+                            border: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.black, width: 1)),
+                          ),
+                        )),
+                    Divider(),
+                    isOnSearch
+                        ? Expanded(
+                            child: SearchList(
+                                widget.user_id,
+                                interest,
+                                capitalize(_search.text.toString()),
+                                _parentScrollController),
+                          )
+                        : Expanded(
+                            child: PharmacyConsultList(widget.user_id, interest,
+                                _parentScrollController),
+                          )
+                  ],
+                ),
               ),
             )),
             Footer(),

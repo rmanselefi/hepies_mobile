@@ -132,13 +132,21 @@ class _PointsState extends State<Points> {
                         SizedBox(
                           height: 20.0,
                         ),
+                      ],
+                    ),
+                  ),
+                  Card(
+                    shadowColor: Colors.green.shade600,
+                    elevation: 5,
+                    child: Column(
+                      children: [
                         Center(
                           child: Text(
-                            "Buy Air Time",
+                            "Buy Airtime",
                             style: TextStyle(
                                 fontWeight: FontWeight.w300,
-                                fontSize: 18,
-                                color: Colors.grey.shade800),
+                                fontSize: 18.0,
+                                color: Colors.grey),
                           ),
                         ),
                         Divider(),
@@ -228,149 +236,186 @@ class _PointsState extends State<Points> {
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 15),
-                    child: Text(
-                      'Donate points to other professional', //Milkessa: added to word 'points'
-                      style: TextStyle(
-                          fontWeight: FontWeight.w300,
-                          fontSize: 18.0,
-                          color: Colors.grey),
-                    ),
-                  ),
-                  Divider(),
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.45,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 40, vertical: 20),
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            child: IntlPhoneField(
-                                countries: ["ET"],
-                                onTap: () {},
-                                initialCountryCode: 'ET',
-                                showDropdownIcon: false,
-                                // Milkessa: Fixed phone input field formatting
-                                textAlign: TextAlign.start,
-                                controller: phoneController,
-                                keyboardType: TextInputType.phone,
-                                onSaved: (value) {},
-                                onChanged: (value) async {
-                                  PhoneNumberUtil plugin = PhoneNumberUtil();
-                                  RegionInfo region =
-                                      RegionInfo(code: 'ET', prefix: 251);
-                                  var phoneValue = '+251${value.number}';
-                                  if (value.number.length == 9) {
-                                    bool isValid = await plugin.validate(
-                                        phoneValue, region.code);
-                                    if (isValid) {
-                                      setState(() {
-                                        isValidPhoneN = true;
-                                        FinalPhoneNumber = phoneValue;
-                                      });
-                                    }
-                                  }
-                                },
-                                decoration: InputDecoration(
-                                  labelText: 'Phone Number',
-                                  border: OutlineInputBorder(
-                                    borderSide: BorderSide(),
-                                  ),
-                                )),
+                  Card(
+                    shadowColor: Colors.green.shade600,
+                    elevation: 5,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 15),
+                          child: Text(
+                            'Donate points to other professional', //Milkessa: added to word 'points'
+                            style: TextStyle(
+                                fontWeight: FontWeight.w300,
+                                fontSize: 18.0,
+                                color: Colors.grey),
                           ),
-                          SizedBox(
-                            height: 50,
-                            child: TextFormField(
-                              controller: pointsController,
-                              decoration: InputDecoration(
-                                  fillColor: Colors.white,
-                                  filled: true,
-                                  hintText: "Amount",
-                                  border: OutlineInputBorder(
-                                      borderSide: BorderSide.none)
-                                  //border: InputBorder.none
+                        ),
+                        Divider(),
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.45,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 40, vertical: 20),
+                          child: Form(
+                            key: _formKey,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 15),
+                                  child: Text(
+                                    'Insert phone number you want to transfer points to', //Milkessa: added to word 'points'
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: 12.0,
+                                        color: Colors.grey),
                                   ),
-                            ),
-                          ),
-                          Divider(),
-                          userProvider.pointStatus == ChangeStatus.Changing
-                              ? CircularProgressIndicator()
-                              : Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 30),
-                                  width: MediaQuery.of(context).size.width,
-                                  child: ElevatedButton(
-                                      onPressed: () async {
-                                        _formKey.currentState.save();
-                                        if (_formKey.currentState.validate() &&
-                                            double.parse(points) >
-                                                double.parse(
-                                                    pointsController.text)) {
-                                          if (isValidPhoneN) {
-                                            print("phone Number value" +
-                                                FinalPhoneNumber);
-                                            var res = await userProvider
-                                                .transferPoint(
-                                                    pointsController.text,
-                                                    FinalPhoneNumber);
-                                            if (res['status']) {
-                                              showTopSnackBar(
-                                                context,
-                                                CustomSnackBar.success(
-                                                  message:
-                                                      "Successfully transferred points to ${pointsController.text}",
-                                                ),
-                                              );
-                                            } else {
-                                              if (res['statusCode'] == 404) {
-                                                phoneController.text = "";
-                                                pointsController.text = "";
+                                ),
+                                Container(
+                                  child: IntlPhoneField(
+                                      countries: ["ET"],
+                                      onTap: () {},
+                                      initialCountryCode: 'ET',
+                                      showDropdownIcon: false,
+                                      // Milkessa: Fixed phone input field formatting
+                                      textAlign: TextAlign.start,
+                                      controller: phoneController,
+                                      keyboardType: TextInputType.phone,
+                                      onSaved: (value) {},
+                                      onChanged: (value) async {
+                                        PhoneNumberUtil plugin =
+                                            PhoneNumberUtil();
+                                        RegionInfo region =
+                                            RegionInfo(code: 'ET', prefix: 251);
+                                        var phoneValue = '+251${value.number}';
+                                        if (value.number.length == 9) {
+                                          bool isValid = await plugin.validate(
+                                              phoneValue, region.code);
+                                          if (isValid) {
+                                            setState(() {
+                                              isValidPhoneN = true;
+                                              FinalPhoneNumber = phoneValue;
+                                            });
+                                          }
+                                        }
+                                      },
+                                      decoration: InputDecoration(
+                                        labelText: 'Phone Number',
+                                        border: OutlineInputBorder(
+                                          borderSide: BorderSide(),
+                                        ),
+                                      )),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 15),
+                                  child: Text(
+                                    'Insert Amount of Points to transfer', //Milkessa: added to word 'points'
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: 12.0,
+                                        color: Colors.grey),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 50,
+                                  child: TextFormField(
+                                    controller: pointsController,
+                                    decoration: InputDecoration(
+                                        fillColor: Colors.white,
+                                        filled: true,
+                                        hintText: "Amount",
+                                        border: OutlineInputBorder(
+                                            borderSide: BorderSide.none)
+                                        //border: InputBorder.none
+                                        ),
+                                  ),
+                                ),
+                                Divider(),
+                                userProvider.pointStatus ==
+                                        ChangeStatus.Changing
+                                    ? CircularProgressIndicator()
+                                    : Container(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 30),
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        child: ElevatedButton(
+                                            onPressed: () async {
+                                              _formKey.currentState.save();
+                                              if (_formKey.currentState
+                                                      .validate() &&
+                                                  double.parse(points) >
+                                                      double.parse(
+                                                          pointsController
+                                                              .text)) {
+                                                if (isValidPhoneN) {
+                                                  print("phone Number value" +
+                                                      FinalPhoneNumber);
+                                                  var res = await userProvider
+                                                      .transferPoint(
+                                                          pointsController.text,
+                                                          FinalPhoneNumber);
+                                                  if (res['status']) {
+                                                    showTopSnackBar(
+                                                      context,
+                                                      CustomSnackBar.success(
+                                                        message:
+                                                            "Successfully transferred points to ${pointsController.text}",
+                                                      ),
+                                                    );
+                                                  } else {
+                                                    if (res['statusCode'] ==
+                                                        404) {
+                                                      phoneController.text = "";
+                                                      pointsController.text =
+                                                          "";
+                                                      showTopSnackBar(
+                                                        context,
+                                                        CustomSnackBar.error(
+                                                          message:
+                                                              "User not available",
+                                                        ),
+                                                      );
+                                                    }
+                                                  }
+                                                } else {
+                                                  showTopSnackBar(
+                                                    context,
+                                                    CustomSnackBar.error(
+                                                      message:
+                                                          "Invalide Phone Number ",
+                                                    ),
+                                                  );
+                                                }
+                                              } else if (double.parse(points) <
+                                                  double.parse(
+                                                      pointsController.text)) {
                                                 showTopSnackBar(
                                                   context,
                                                   CustomSnackBar.error(
                                                     message:
-                                                        "User not available",
+                                                        "Cant transfer the requested amount of points",
                                                   ),
                                                 );
                                               }
-                                            }
-                                          } else {
-                                            showTopSnackBar(
-                                              context,
-                                              CustomSnackBar.error(
-                                                message:
-                                                    "Invalide Phone Number ",
-                                              ),
-                                            );
-                                          }
-                                        } else if (double.parse(points) <
-                                            double.parse(
-                                                pointsController.text)) {
-                                          showTopSnackBar(
-                                            context,
-                                            CustomSnackBar.error(
-                                              message:
-                                                  "Cant transfer the requested amount of points",
-                                            ),
-                                          );
-                                        }
-                                      },
-                                      style: ButtonStyle(
-                                          backgroundColor:
-                                              MaterialStateProperty.all<Color>(
-                                                  Color(0xff07febb))),
-                                      child: Text(
-                                        "Send",
-                                      )),
-                                ),
-                        ],
-                      ),
+                                            },
+                                            style: ButtonStyle(
+                                                backgroundColor:
+                                                    MaterialStateProperty.all<
+                                                            Color>(
+                                                        Color(0xff07febb))),
+                                            child: Text(
+                                              "Send",
+                                            )),
+                                      ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
+                  )
                 ],
               ),
             ),

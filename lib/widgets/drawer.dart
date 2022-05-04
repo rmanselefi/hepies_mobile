@@ -105,7 +105,7 @@ class _DrawerCustomState extends State<DrawerCustom> {
                       to: ['contact@hepius.co'],
                       cc: ['contact@hepius.co', 'contact@hepius.co'],
                       subject: '',
-                      body: 'mailto example body',
+                      body: '',
                     );
                     await launch('$mailtoLink');
                     // Navigator.push(
