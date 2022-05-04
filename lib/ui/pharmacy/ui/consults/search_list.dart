@@ -131,14 +131,79 @@ class _RowButtonState extends State<RowButton> {
                                                 ),
                                               ),
                                               Container(
-                                                width: 100,
-                                                child: Text(
-                                                  "Doctor",
-                                                  style: TextStyle(
-                                                      fontSize: 12,
-                                                      color: Colors.black54),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
+                                                child: Row(
+                                                  children: [
+                                                    Text(
+                                                      "Verified",
+                                                      style: TextStyle(
+                                                          fontSize: 13,
+                                                          color: Colors.green,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 5,
+                                                    ),
+                                                    Text(
+                                                      "${widget.e['author']['profession'][0]['proffesion'] ?? ''}",
+                                                      style: TextStyle(
+                                                          fontSize: 12,
+                                                          color:
+                                                              Colors.black54),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                    SizedBox(
+                                                      width: 5,
+                                                    ),
+                                                    Text(
+                                                      "${widget.e['author']['profession'][0]['speciality'] ?? ''}",
+                                                      style: TextStyle(
+                                                          fontSize: 12,
+                                                          color:
+                                                              Colors.black54),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Container(
+                                                child: Row(
+                                                  children: [
+                                                    Text(
+                                                      "Verified",
+                                                      style: TextStyle(
+                                                          fontSize: 13,
+                                                          color: Colors.green,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 5,
+                                                    ),
+                                                    Text(
+                                                      "${widget.e['author']['profession'][0]['proffesion'] ?? ''}",
+                                                      style: TextStyle(
+                                                          fontSize: 12,
+                                                          color:
+                                                              Colors.black54),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                    SizedBox(
+                                                      width: 5,
+                                                    ),
+                                                    Text(
+                                                      "${widget.e['author']['profession'][0]['speciality'] ?? ''}",
+                                                      style: TextStyle(
+                                                          fontSize: 12,
+                                                          color:
+                                                              Colors.black54),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
                                               Text('${widget.duration}',
@@ -1021,12 +1086,36 @@ class _SearchListState extends State<SearchList> {
                                           fontWeight: FontWeight.bold),
                                     ),
                                     Container(
-                                      child: Text(
-                                        "Doctor",
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.black54),
-                                        overflow: TextOverflow.ellipsis,
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            "Verified",
+                                            style: TextStyle(
+                                                fontSize: 13,
+                                                color: Colors.green,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            "${e['author']['profession'][0]['proffesion'] ?? ''}",
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.black54),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            "${e['author']['profession'][0]['speciality'] ?? ''}",
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.black54),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ],
                                       ),
                                     ),
                                     Text('$duration',
@@ -1167,13 +1256,36 @@ class _SearchListState extends State<SearchList> {
                                       ),
                                     ),
                                     Container(
-                                      width: 100,
-                                      child: Text(
-                                        "Doctor",
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.black54),
-                                        overflow: TextOverflow.ellipsis,
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            "Verified",
+                                            style: TextStyle(
+                                                fontSize: 13,
+                                                color: Colors.green,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            "${e['author']['profession'][0]['proffesion'] ?? ''}",
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.black54),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Text(
+                                            "${e['author']['profession'][0]['speciality'] ?? ''}",
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.black54),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ],
                                       ),
                                     ),
                                     Text('$duration',

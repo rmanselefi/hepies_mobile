@@ -9,6 +9,9 @@ import 'package:hepies/ui/pharmacy/welcome.dart';
 import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:hepies/ui/pharmacy/widgets/footer.dart';
+
+import '../../../../providers/user_provider.dart';
 
 class PrescriptionResult extends StatefulWidget {
   final result;
@@ -47,6 +50,8 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
     });
     // print(prescription);
     // print("readreadread $prescription");
+    UserProvider nav = Provider.of<UserProvider>(context);
+
     return SafeArea(
         child: Scaffold(
             body: WillPopScope(
@@ -81,53 +86,58 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
                       ),
                       Column(
                           children: notReadPrescription.map<Widget>((e) {
-                        return Row(
-                          children: [
-                            Text(
-                              '${notReadPrescription.indexOf(e) + 1}',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 20.0),
-                            ),
-                            SizedBox(
-                              width: 5.0,
-                            ),
-                            Expanded(
-                              child: Text(
-                                ' ${e['drug_name']} ${e['strength']} '
-                                '${e['unit']} ${e['route']} Every ${e['frequency']} For ${e['takein']}',
+                        return Container(
+                          margin: EdgeInsets.all(5),
+                          child: Row(
+                            children: [
+                              Text(
+                                '${notReadPrescription.indexOf(e) + 1}',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20.0),
                               ),
-                            ),
-                            InkWell(
-                              child: Container(
-                                width: 20,
-                                height: 20,
-                                margin: EdgeInsets.only(right: 10.0),
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: Colors.black26, width: 1.5)),
-                                child: selectedList.contains(e['id'])
-                                    ? FittedBox(
-                                        child: Icon(
-                                        Icons.cancel,
-                                        size: 10,
-                                      ))
-                                    : Container(),
+                              SizedBox(
+                                width: 5.0,
                               ),
-                              onTap: () {
-                                setState(() {
-                                  var selected = selectedList.contains(e['id']);
-                                  if (!selected) {
-                                    selectedList.add(e['id']);
-                                  } else {
-                                    selectedList.remove(e['id']);
-                                  }
-                                });
-                              },
-                            ),
-                          ],
+                              Expanded(
+                                child: Text(
+                                  ' ${e['drug_name']} ${e['strength']} '
+                                  '${e['unit']} ${e['route']} Every ${e['frequency']} For ${e['takein']}',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15.0),
+                                ),
+                              ),
+                              InkWell(
+                                child: Container(
+                                  width: 20,
+                                  height: 20,
+                                  margin: EdgeInsets.only(right: 10.0),
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Colors.black26, width: 1.5)),
+                                  child: selectedList.contains(e['id'])
+                                      ? FittedBox(
+                                          child: Icon(
+                                          Icons.cancel,
+                                          size: 10,
+                                        ))
+                                      : Container(),
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    var selected =
+                                        selectedList.contains(e['id']);
+                                    if (!selected) {
+                                      selectedList.add(e['id']);
+                                    } else {
+                                      selectedList.remove(e['id']);
+                                    }
+                                  });
+                                },
+                              ),
+                            ],
+                          ),
                         );
                       }).toList())
                     ],
@@ -178,6 +188,8 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
                                       'Your prescriptions are sent succesfully',
                                 ),
                               );
+                              nav.changeNavSelection(NavSelection.home);
+
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(

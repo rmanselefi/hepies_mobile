@@ -176,8 +176,7 @@ class _RegisterState extends State<Register> {
       _confirmPassword,
       _name,
       _fathername,
-      _phone,
-      _interest;
+      _phone;
   XFile file;
   var _professionController;
   var _sexController;
@@ -383,7 +382,7 @@ class _RegisterState extends State<Register> {
           auth
               .register(
                   _name,
-                  _email,
+                  _email.trim(),
                   _fathername,
                   _username,
                   _phone,
@@ -391,9 +390,9 @@ class _RegisterState extends State<Register> {
                   _professionController,
                   _sexController,
                   _selectedDate,
-                  interests,
                   File(file.path))
               .then((response) {
+            print("signup response " + response.toString());
             if (response['status']) {
               showTopSnackBar(
                 context,
@@ -410,6 +409,15 @@ class _RegisterState extends State<Register> {
                           name: _name,
                         )),
                 ModalRoute.withName('/'),
+              );
+            } else if (response['error'] != null && response['error']) {
+              print("error");
+              showTopSnackBar(
+                context,
+                CustomSnackBar.error(
+                  message:
+                      'Unable to Register, please check your internet connection!',
+                ),
               );
             } else {
               showTopSnackBar(
@@ -482,10 +490,6 @@ class _RegisterState extends State<Register> {
                     label("Date of Birth"),
                     SizedBox(height: 5.0),
                     dateField,
-                    SizedBox(height: 15.0),
-                    label("Select your interests"),
-                    SizedBox(height: 5.0),
-                    interestField,
                     SizedBox(height: 15.0),
                     label("Upload your medical license"),
                     SizedBox(height: 5.0),

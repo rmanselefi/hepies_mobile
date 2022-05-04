@@ -331,32 +331,26 @@ class _GuidelinesState extends State<Guidelines> {
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                      checkStatus(e['id'].toString())
-                                          ? ((progress * 100)
-                                                      .toStringAsFixed(2) ==
-                                                  "100.00")
-                                              ? Flexible(
-                                                  child: TextButton(
-                                                    onPressed: () async {
-                                                      print(
-                                                          "object ${e['url']}");
-                                                      await viewFile(
-                                                          e['url'],
-                                                          e['id'].toString(),
-                                                          context);
-                                                    },
-                                                    child: Text(
-                                                      'Open',
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w900,
-                                                        color: Colors.blue,
-                                                        fontSize: 16,
-                                                      ),
-                                                    ),
+                                      (checkStatus(e['id'].toString()) &&
+                                              !downloading)
+                                          ? Flexible(
+                                              child: TextButton(
+                                                onPressed: () async {
+                                                  await viewFile(
+                                                      e['url'],
+                                                      e['id'].toString(),
+                                                      context);
+                                                },
+                                                child: Text(
+                                                  'Open',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w900,
+                                                    color: Colors.blue,
+                                                    fontSize: 16,
                                                   ),
-                                                )
-                                              : Container()
+                                                ),
+                                              ),
+                                            )
                                           : Container(),
                                       SizedBox(width: 6),
                                       IconButton(

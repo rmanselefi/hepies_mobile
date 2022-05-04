@@ -135,7 +135,7 @@ class _WelcomeState extends State<Welcome> {
                 children: [
                   Flexible(child: SizedBox(width: width(context) * 0.225)),
                   Padding(
-                    padding: EdgeInsets.only(left: 15),
+                    padding: EdgeInsets.only(left: 45),
                     child: GestureDetector(
                       onTap: () {
                         Navigator.pushReplacement(

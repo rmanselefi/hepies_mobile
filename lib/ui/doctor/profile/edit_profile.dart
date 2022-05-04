@@ -498,7 +498,7 @@ class _EditProfileState extends State<EditProfile>
                     showTopSnackBar(
                       context,
                       CustomSnackBar.error(
-                        message: "Unable to update your profile",
+                        message: "Email already in use by another account",
                       ),
                     );
                   }
