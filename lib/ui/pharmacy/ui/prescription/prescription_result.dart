@@ -100,9 +100,16 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
                                 width: 5.0,
                               ),
                               Expanded(
-                                child: Text(
+                                child: e['type'] == "instrument"
+                                    ? Text(
+                                  ' ${e['material_name']} ${e['size']} #${e['amount']} ',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20.0),
+                                )
+                                    : Text(
                                   ' ${e['drug_name']} ${e['strength']} '
-                                  '${e['unit']} ${e['route']} Every ${e['frequency']} For ${e['takein']}',
+                                      '${e['unit']} ${e['route']} Every ${e['frequency']} For ${e['takein']}',
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 15.0),

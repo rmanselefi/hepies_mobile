@@ -108,7 +108,7 @@ class _PrescriptionResultState extends State<PrescriptionResultPhone> {
                                   Expanded(
                                     child: e['type'] == "instrument"
                                         ? Text(
-                                            ' ${e['material_name']} ${e['size']} ',
+                                            ' ${e['material_name']} ${e['size']} #${e['amount']} ',
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 20.0),
