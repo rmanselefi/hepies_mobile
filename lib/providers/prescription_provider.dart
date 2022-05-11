@@ -223,10 +223,22 @@ class PrescriptionProvider with ChangeNotifier {
     bool isPhone = code.length > 8;
 
     // print("isPhoneisPhone $isPhone");
+    var phone = "";
     var url = isPhone ? AppUrl.readprescriptionPhone : AppUrl.readprescription;
+    if (isPhone) {
+      if (code.length == 10) {
+        var subs = code.substring(1);
+        phone = "+251" + subs;
+      }
+      if (code.length > 10) {
+        phone = code;
+      }
+    }
     var result;
     List<Consult> consults = [];
-    Response response = await get(Uri.parse("$url/$code"));
+    Response response = isPhone
+        ? await get(Uri.parse("$url/$phone"))
+        : await get(Uri.parse("$url/$code"));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       _fetchStatus = ReadStatus.Fetch;
