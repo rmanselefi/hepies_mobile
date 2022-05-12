@@ -107,6 +107,32 @@ class PharmacyProvider with ChangeNotifier {
     return json.decode(response.body);
   }
 
+  Future<Map<String, dynamic>> deleteMyPharmacy(var id) async {
+    // _shareStatus = ConsultStatus.Sharing;
+    var result;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String token = prefs.getString('token');
+    Response response =
+    await delete(Uri.parse("${AppUrl.pharmacy}/$id"), headers: {
+      'Content-Type': 'application/json',
+      HttpHeaders.authorizationHeader: "Bearer $token"
+    });
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      // _shareStatus = ConsultStatus.Shared;
+      notifyListeners();
+      result = {'status': true, 'message': 'success'};
+    } else {
+      // _shareStatus = ConsultStatus.NotShared;
+      notifyListeners();
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return result;
+  }
+
   Future<List<dynamic>> getMyPharmacyHistory() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
