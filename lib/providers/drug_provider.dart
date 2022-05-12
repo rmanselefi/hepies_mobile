@@ -12,6 +12,7 @@ class DrugProvider with ChangeNotifier {
   List<dynamic> drugs = [];
   List<dynamic> psychoDrugs = [];
   List<dynamic> narcoDrugs = [];
+  List<dynamic> allDrugs = [];
   List<dynamic> instruments = [];
   Future<List<dynamic>> getDrugs() async {
     var result;
@@ -153,8 +154,39 @@ class DrugProvider with ChangeNotifier {
 
   Future<void> putLocalInstruments() async {
     Box hive = Hive.box('instrumentList');
-    hive.put('instruments', await getDrugs());
+    hive.put('instruments', await getInstruments());
     // print('Local Database updated.');
+  }
+
+  Future<List<dynamic>> getAllDrugs() async {
+    var result;
+    List<Consult> consults = [];
+    Response response = await get(Uri.parse(AppUrl.drugs));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      allDrugs = json.decode(response.body);
+      // print("instrumentsinstrumentsinstrumentsinstruments ${instruments}");
+      // notifyListeners();
+      return allDrugs;
+    } else {
+      notifyListeners();
+      result = {
+        'status': false,
+        'message': json.decode(response.body)['error']
+      };
+    }
+    return allDrugs;
+  }
+
+  Future<void> putLocalAllDrugs() async {
+    Box hive = Hive.box('allDrugs');
+    hive.put('allDrugs', await getAllDrugs());
+    // print('Local Database updated.');
+  }
+
+  Future<List<dynamic>> getLocalAllDrugs() async {
+    Box hive = Hive.box('allDrugs');
+    return await hive.get('allDrugs');
   }
 
   get getDrug {

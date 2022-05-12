@@ -164,22 +164,52 @@ class _MyPharmacyState extends State<MyPharmacy> {
 
                                       // The logic to find out which ones should appear
                                       // Milkessa: implemented a search mechanism that is organized and alphabetical
-                                      List<dynamic> drugRes;
+                                      List<dynamic> drugRes = [];
                                       for (int i = 0; i < 2; i++) {
                                         if (i == 0)
-                                          drugRes = snapshot.data
-                                              .where((element) =>
-                                                  element['name']
-                                                      .startsWith(value.text))
-                                              .toList();
+                                          for (int i = 0;
+                                              i < snapshot.data.length;
+                                              i++) {
+                                            var element = snapshot.data[i];
+                                            if (element['type'] !=
+                                                'instrument') {
+                                              if (element['name']
+                                                  .startsWith(value.text)) {
+                                                drugRes.add(element);
+                                              }
+                                            } else {
+                                              if (element['material_name']
+                                                  .startsWith(value.text)) {
+                                                drugRes.add(element);
+                                              }
+                                            }
+                                          }
+                                        // drugRes = snapshot.data
+                                        //     .where((element) => element['name']
+                                        //         .startsWith(value.text))
+                                        //     .toList();
                                         else
-                                          drugRes.addAll(snapshot.data
-                                              .where((element) =>
-                                                  element['name']
+                                          for (int i = 0;
+                                              i < snapshot.data.length;
+                                              i++) {
+                                            var element = snapshot.data[i];
+                                            if (element['type'] !=
+                                                'instrument') {
+                                              if (element['name']
                                                       .contains(value.text) &
                                                   !element['name']
-                                                      .startsWith(value.text))
-                                              .toList());
+                                                      .startsWith(value.text)) {
+                                                drugRes.add(element);
+                                              }
+                                            } else {
+                                              if (element['material_name']
+                                                      .contains(value.text) &
+                                                  !element['material_name']
+                                                      .startsWith(value.text)) {
+                                                drugRes.add(element);
+                                              }
+                                            }
+                                          }
                                       }
                                       return drugRes;
                                     },
@@ -319,8 +349,7 @@ class _MyPharmacyState extends State<MyPharmacy> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     FutureBuilder<List<dynamic>>(
-                      future:
-                          Provider.of<DrugProvider>(context).getDrugsLocal(),
+                      future: Provider.of<DrugProvider>(context).getAllDrugs(),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) {
                           return Center(
@@ -346,21 +375,50 @@ class _MyPharmacyState extends State<MyPharmacy> {
 
                                   // The logic to find out which ones should appear
                                   // Milkessa: implemented a search mechanism that is organized and alphabetical
-                                  List<dynamic> drugRes;
+                                  List<dynamic> drugRes = [];
                                   for (int i = 0; i < 2; i++) {
                                     if (i == 0)
-                                      drugRes = snapshot.data
-                                          .where((element) => element['name']
-                                              .startsWith(value.text))
-                                          .toList();
+                                      for (int i = 0;
+                                          i < snapshot.data.length;
+                                          i++) {
+                                        var element = snapshot.data[i];
+                                        if (element['type'] != 'instrument') {
+                                          if (element['name']
+                                              .startsWith(value.text)) {
+                                            drugRes.add(element);
+                                          }
+                                        } else {
+                                          if (element['material_name']
+                                              .startsWith(value.text)) {
+                                            drugRes.add(element);
+                                          }
+                                        }
+                                      }
+                                    // drugRes = snapshot.data
+                                    //     .where((element) => element['name']
+                                    //         .startsWith(value.text))
+                                    //     .toList();
                                     else
-                                      drugRes.addAll(snapshot.data
-                                          .where((element) =>
-                                              element['name']
+                                      for (int i = 0;
+                                          i < snapshot.data.length;
+                                          i++) {
+                                        var element = snapshot.data[i];
+                                        if (element['type'] != 'instrument') {
+                                          if (element['name']
                                                   .contains(value.text) &
                                               !element['name']
-                                                  .startsWith(value.text))
-                                          .toList());
+                                                  .startsWith(value.text)) {
+                                            drugRes.add(element);
+                                          }
+                                        } else {
+                                          if (element['material_name']
+                                                  .contains(value.text) &
+                                              !element['material_name']
+                                                  .startsWith(value.text)) {
+                                            drugRes.add(element);
+                                          }
+                                        }
+                                      }
                                   }
                                   return drugRes;
                                 },
@@ -422,12 +480,12 @@ class _MyPharmacyState extends State<MyPharmacy> {
                 ),
                 ListTile(
                   title: Text(
-                    'Item',
+                    'Item/Price',
                     style:
                         TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
                   ),
                   trailing: Text(
-                    'Price',
+                    'Actions',
                     style:
                         TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
                   ),
@@ -446,41 +504,79 @@ class _MyPharmacyState extends State<MyPharmacy> {
                             child: Text('No data to show'),
                           );
                         }
-                        return ListView(
-                            shrinkWrap: true,
+                        return Column(
                             children: snapshot.data.map<Widget>((e) {
-                              return ListTile(
-                                title: Text(
-                                  e['drug_name'],
+                          return ListTile(
+                            title: Row(
+                              children: [
+                                Text(
+                                  '${e['drug_name']}  ',
                                   style: TextStyle(
                                     fontSize: 20.0,
                                   ),
                                 ),
-                                trailing: Column(
-                                  children: [
-                                    TextButton.icon(
-                                      onPressed: () {
-                                        setState(() {
-                                          priceController.text = e['price'];
-                                          drugEditController.text =
-                                              e['drug_name'];
-                                          pharmacy_id = e['id'];
-                                        });
-                                        _openEditForm(context, e['drug_name']);
-                                      },
-                                      label: Text(
-                                        '${e['price']} Br',
-                                        style: TextStyle(
-                                          fontSize: 20.0,
-                                        ),
-                                      ),
-                                      icon:
-                                          Icon(Icons.edit, color: Colors.blue),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }).toList());
+                                Text(
+                                  '${e['price']}Br',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                  ),
+                                )
+                              ],
+                            ),
+                            trailing: Container(
+                              width: MediaQuery.of(context).size.width / 3,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        priceController.text = e['price'];
+                                        drugEditController.text =
+                                            e['drug_name'];
+                                        pharmacy_id = e['id'];
+                                      });
+                                      _openEditForm(context, e['drug_name']);
+                                    },
+                                    icon: Icon(Icons.edit, color: Colors.blue),
+                                  ),
+                                  IconButton(
+                                    onPressed: () async {
+                                      var res = await pharmacyProvider
+                                          .deleteMyPharmacy(e['id']);
+                                      if(res['status']){
+                                        showTopSnackBar(
+                                          context,
+                                          CustomSnackBar.success(
+                                            message: "Successfully deleted item",
+                                          ),
+                                        );
+                                        Navigator.pushAndRemoveUntil<void>(
+                                          context,
+                                          MaterialPageRoute<void>(
+                                            builder: (BuildContext context) =>
+                                                MyPharmacy(),
+                                          ),
+                                          ModalRoute.withName('/'),
+                                        );
+                                      }
+                                      else{
+                                        showTopSnackBar(
+                                          context,
+                                          CustomSnackBar.error(
+                                            message: "Unable to delete item",
+                                          ),
+                                        );
+                                      }
+                                    },
+                                    icon:
+                                        Icon(Icons.cancel, color: Colors.blue),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }).toList());
                       }
                     }),
               ],

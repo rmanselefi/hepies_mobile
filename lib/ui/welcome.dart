@@ -44,6 +44,11 @@ class _WelcomeState extends State<Welcome> {
     await Provider.of<DrugProvider>(context, listen: false).putDrugsLocal();
   }
 
+  Future<void> initAllDrugList() async {
+    await Hive.openBox('allDrugs');
+    await Provider.of<DrugProvider>(context, listen: false).putLocalAllDrugs();
+  }
+
   Future<void> initPsychoDrugList() async {
     await Hive.openBox('psychoDrugList');
     await Provider.of<DrugProvider>(context, listen: false)
