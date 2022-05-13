@@ -562,7 +562,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                               }),
                             ],
                           )
-                        : ShimmerEffect(),
+                        : Container(),
 
                     // pretype == "general" || pretype == "instrument"
                     //     ? PrescriptionPaper(prescription, pretype)
