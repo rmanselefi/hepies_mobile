@@ -71,7 +71,7 @@ class _ImageInputState extends State<ImageInput> {
           },
           label: Text(
             'upload your practicing license here for successful registration',
-            style: TextStyle(color: Theme.of(context).accentColor),
+            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
           ),
           icon: Icon(Icons.add_a_photo_outlined),
         ),

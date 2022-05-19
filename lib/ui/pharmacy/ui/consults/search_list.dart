@@ -2,10 +2,7 @@ import 'dart:io';
 
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:hashtagable/widgets/hashtag_text.dart';
-import 'package:hashtagable/widgets/hashtag_text_field.dart';
 import 'package:hepies/constants.dart';
-import 'package:hepies/models/consult.dart';
 import 'package:hepies/providers/consult.dart';
 import 'package:hepies/providers/user_provider.dart';
 import 'package:hepies/ui/pharmacy/ui/consults/comment/share_comment.dart';
@@ -14,10 +11,8 @@ import 'package:hepies/ui/welcome.dart';
 import 'package:hepies/util/image_consult.dart';
 import 'package:hepies/util/shared_preference.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:linkify_text/linkify_text.dart';
 import 'package:provider/provider.dart';
-import 'package:readmore/readmore.dart';
 import 'package:recase/recase.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -27,8 +22,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:rich_text_view/rich_text_view.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
-import 'package:hepies/util/helpers.dart';
-import 'package:flutter_linkify/flutter_linkify.dart';
 
 class RowButton extends StatefulWidget {
   RowButton(

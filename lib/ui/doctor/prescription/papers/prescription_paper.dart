@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hepies/constants.dart';
-import 'package:hepies/models/favorites.dart';
 import 'package:hepies/providers/prescription_provider.dart';
-import 'package:hepies/util/database_helper.dart';
-import 'package:hepies/util/shared_preference.dart';
 import 'package:provider/provider.dart';
 
 class PrescriptionPaper extends StatefulWidget {

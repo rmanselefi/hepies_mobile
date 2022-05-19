@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hepies/ui/doctor/prescription/forms/prescribe_form.dart';
 
 class PsychotropicPrescription extends StatefulWidget {
   final Function setPrescription;

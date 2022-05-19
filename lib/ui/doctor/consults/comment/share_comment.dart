@@ -2,12 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:hepies/providers/consult.dart';
-import 'package:hepies/ui/doctor/consults/consult_list.dart';
 import 'package:hepies/ui/pharmacy/ui/consults/comment/comment_list.dart';
-import 'package:hepies/ui/pharmacy/ui/consults/consult_list.dart';
 import 'package:hepies/ui/pharmacy/widgets/footer.dart';
 import 'package:hepies/util/image_consult.dart';
-import 'package:hepies/widgets/footer.dart';
 import 'package:hepies/widgets/header.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';

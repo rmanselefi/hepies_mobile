@@ -1,16 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:hepies/providers/consult.dart';
 import 'package:hepies/providers/user_provider.dart';
-import 'package:hepies/ui/doctor/drugs/drugs.dart';
-import 'package:hepies/ui/doctor/medicalrecords/medical_records.dart';
-import 'package:hepies/ui/doctor/prescription/write_prescription.dart';
-import 'package:hepies/ui/pharmacy/ui/consults/share_consult.dart';
 import 'package:hepies/ui/pharmacy/ui/history/history.dart';
 import 'package:hepies/ui/pharmacy/ui/mypharmacy/mypharmacy.dart';
 import 'package:hepies/ui/pharmacy/ui/prescription/read_prescription.dart';
 import 'package:hepies/ui/pharmacy/welcome.dart';
-import 'package:hepies/ui/welcome.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
