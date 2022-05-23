@@ -113,13 +113,21 @@ class _PrescriptionResultState extends State<PrescriptionResultPhone> {
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 20.0),
                                           )
-                                        : Text(
-                                            ' ${e['drug_name']} ${e['strength']} '
-                                            '${e['unit']} ${e['route']} Every ${e['frequency']} For ${e['takein']}',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 15.0),
-                                          ),
+                                        : e['ampule'] != null
+                                            ? Text(
+                                                ' ${e['drug_name']} ${e['strength']} '
+                                                '${e['unit']} ${e['route']} #${e['ampule']} Amp}',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 15.0),
+                                              )
+                                            : Text(
+                                                ' ${e['drug_name']} ${e['strength']} '
+                                                '${e['unit']} ${e['route']} Every ${e['frequency']} For ${e['takein']}',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 15.0),
+                                              ),
                                   ),
                                   InkWell(
                                     child: Container(

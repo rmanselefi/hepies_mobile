@@ -16,7 +16,7 @@ class _PersonalInfoState extends State<PersonalInfo> {
     var remark = patient['prescription'][0]['remark'];
     var date = patient['prescription_item'][0]['createdAt'];
     var formattedDate =
-        new DateFormat.yMMMd().add_Hm().format(DateTime.parse(date));
+        new DateFormat.yMd().add_jm().format(DateTime.parse(date));
 
     return Container(
       margin: EdgeInsets.all(5),

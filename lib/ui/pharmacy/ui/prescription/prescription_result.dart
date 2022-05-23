@@ -102,18 +102,26 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
                               Expanded(
                                 child: e['type'] == "instrument"
                                     ? Text(
-                                  ' ${e['material_name']} ${e['size']} #${e['amount']} ',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20.0),
-                                )
-                                    : Text(
-                                  ' ${e['drug_name']} ${e['strength']} '
-                                      '${e['unit']} ${e['route']} Every ${e['frequency']} For ${e['takein']}',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15.0),
-                                ),
+                                        ' ${e['material_name']} ${e['size']} #${e['amount']} ',
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 20.0),
+                                      )
+                                    : e['ampule'] != null
+                                        ? Text(
+                                            ' ${e['drug_name']} ${e['strength']} '
+                                            '${e['unit']} ${e['route']} #${e['ampule']} Amp}',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 15.0),
+                                          )
+                                        : Text(
+                                            ' ${e['drug_name']} ${e['strength']} '
+                                            '${e['unit']} ${e['route']} Every ${e['frequency']} For ${e['takein']}',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 15.0),
+                                          ),
                               ),
                               InkWell(
                                 child: Container(

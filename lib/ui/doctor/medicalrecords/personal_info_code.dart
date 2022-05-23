@@ -18,8 +18,8 @@ class _PersonalInfoState extends State<PersonalInfoCode> {
     var remark = prescription['prescription']['remark'];
     var date = prescription['prescription']['createdAt'];
     var formattedDate =
-        new DateFormat("mm-dd-yyyy hh:mm a").format(DateTime.parse(date));
-    // print("p" + patient.toString());
+        new DateFormat.yMd().add_jm().format(DateTime.parse(date));
+    print("p" + patient.toString());
     print("all p" + prescription.toString());
     return Container(
       margin: EdgeInsets.all(5),
