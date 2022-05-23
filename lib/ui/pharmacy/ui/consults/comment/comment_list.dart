@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hepies/providers/consult.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:rich_text_view/rich_text_view.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -72,11 +71,13 @@ class _PharmacyConsultListState extends State<PharmacyCommentList> {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(10.0),
-                                child: Text(
-                                  "${e['author']} ",
-                                  style: TextStyle(
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.bold),
+                                child: Expanded(
+                                  child: Text(
+                                    "${e['author']} ",
+                                    style: TextStyle(
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ),
                               ),
                               Text(duration)

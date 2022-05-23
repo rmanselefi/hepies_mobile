@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hepies/constants.dart';
 import 'package:hepies/models/dx.dart';
@@ -12,7 +11,6 @@ import 'package:hepies/ui/doctor/guidelines/guidelines.dart';
 import 'package:hepies/ui/doctor/prescription/forms/prescribe_form.dart';
 import 'package:hepies/ui/doctor/prescription/forms/prescribe_narco_form.dart';
 import 'package:hepies/ui/doctor/prescription/forms/prescribe_psyco_form.dart';
-import 'package:hepies/ui/pharmacy/widgets/shimmer.dart';
 import 'package:hepies/ui/welcome.dart';
 import 'package:hepies/util/database_helper.dart';
 import 'package:hepies/util/shared_preference.dart';
@@ -20,7 +18,6 @@ import 'package:phone_number/phone_number.dart';
 import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
-import 'package:hepies/constants.dart';
 
 enum type { general, narcotic, psychotropic, instrument }
 

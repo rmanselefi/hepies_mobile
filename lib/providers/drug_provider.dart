@@ -1,10 +1,8 @@
 import 'dart:convert';
 
 import 'package:hepies/models/consult.dart';
-import 'package:hepies/models/drug.dart';
 import 'package:hepies/util/app_url.dart';
 import 'package:hive/hive.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 

@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hepies/models/favorites.dart';
 import 'package:hepies/providers/prescription_provider.dart';
-import 'package:hepies/util/database_helper.dart';
-import 'package:hepies/util/shared_preference.dart';
 import 'package:provider/provider.dart';
-import 'package:top_snackbar_flutter/custom_snack_bar.dart';
-import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class PsychoNarcoPaper extends StatefulWidget {
   final finaPrescription;

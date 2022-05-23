@@ -4,10 +4,8 @@ import 'package:hepies/providers/auth.dart';
 import 'package:hepies/providers/user_provider.dart';
 import 'package:hepies/ui/auth/forgot_password.dart';
 import 'package:hepies/ui/auth/sign_up.dart';
-import 'package:hepies/ui/pharmacy/ui/consults/share_consult.dart';
 import 'package:hepies/ui/pharmacy/welcome.dart';
 import 'package:hepies/ui/welcome.dart';
-import 'package:hepies/util/validators.dart';
 import 'package:hepies/util/widgets.dart';
 
 import 'package:provider/provider.dart';

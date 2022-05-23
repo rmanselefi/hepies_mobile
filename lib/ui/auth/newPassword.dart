@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hepies/providers/auth.dart';
 import 'package:hepies/providers/user_provider.dart';
 import 'package:hepies/ui/auth/login.dart';
 import 'package:provider/provider.dart';

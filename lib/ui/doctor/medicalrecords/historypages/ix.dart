@@ -1,5 +1,4 @@
 import 'package:expandable/expandable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hepies/models/chemistry.dart';
 import 'package:hepies/models/endocrinology.dart';
@@ -8,7 +7,6 @@ import 'package:hepies/models/investigation.dart';
 import 'package:hepies/models/serology.dart';
 import 'package:hepies/models/tumor.dart';
 import 'package:hepies/models/urine.dart';
-import 'package:hepies/ui/doctor/medicalrecords/historypages/collapse.dart';
 
 class IX extends StatefulWidget {
   final Function setChemistry;

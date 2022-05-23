@@ -1,15 +1,11 @@
 import 'dart:ffi';
 
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hepies/constants.dart';
-import 'package:hepies/providers/consult.dart';
 import 'package:hepies/ui/doctor/drugs/drugs.dart';
-import 'package:hepies/ui/doctor/medicalrecords/medical_records.dart';
 import 'package:hepies/ui/doctor/prescription/write_prescription.dart';
 import 'package:hepies/ui/welcome.dart';
-import 'package:provider/provider.dart';
 
 class Footer extends StatefulWidget {
   @override

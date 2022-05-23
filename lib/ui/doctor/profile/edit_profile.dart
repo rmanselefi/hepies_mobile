@@ -1,17 +1,12 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hepies/models/user.dart';
 import 'package:hepies/providers/auth.dart';
 import 'package:hepies/providers/consult.dart';
 import 'package:hepies/providers/user_provider.dart';
-import 'package:hepies/ui/auth/login.dart';
 import 'package:hepies/util/image_profile.dart';
-import 'package:hepies/util/shared_preference.dart';
-import 'package:hepies/widgets/header.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
 // import 'package:multiselect_formfield/multiselect_formfield.dart';
 import 'package:provider/provider.dart';

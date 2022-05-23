@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hepies/models/consult.dart';
-import 'package:hepies/providers/patient_provider.dart';
 import 'package:hepies/ui/doctor/medicalrecords/personal_info.dart';
 import 'package:hepies/widgets/header.dart';
 import 'package:intl/intl.dart';

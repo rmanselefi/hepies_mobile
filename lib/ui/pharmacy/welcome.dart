@@ -1,22 +1,15 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hepies/models/user.dart';
 import 'package:hepies/providers/drug_provider.dart';
 import 'package:hepies/providers/user_provider.dart';
-import 'package:hepies/ui/doctor/consults/consults.dart';
-import 'package:hepies/ui/doctor/consults/share_consult.dart';
-import 'package:hepies/ui/doctor/drugs/drugs.dart';
 import 'package:hepies/ui/doctor/points/points.dart';
-import 'package:hepies/ui/doctor/profile/edit_profile.dart';
 import 'package:hepies/ui/pharmacy/ui/consults/share_consult.dart';
 import 'package:hepies/util/gradient_text.dart';
-import 'package:hepies/util/shared_preference.dart';
 import 'package:hepies/widgets/drawer.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants.dart';
