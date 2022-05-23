@@ -48,7 +48,7 @@ dependencies:
   timeago: ^3.2.2
   bouncing_widget:
   dio:
-  percent_indicator:
+  percent_indicator: 4.0.1
   flutter_pdfview:
   flutter_linear_datepicker: ^2.0.4
   country_code_picker:

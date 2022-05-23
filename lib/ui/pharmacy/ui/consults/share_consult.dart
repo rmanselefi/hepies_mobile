@@ -1,24 +1,14 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:hashtagable/widgets/hashtag_text_field.dart';
 import 'package:hepies/providers/consult.dart';
-import 'package:hepies/ui/doctor/consults/consult_list.dart';
 import 'package:hepies/ui/doctor/consults/post_consult.dart';
 import 'package:hepies/ui/pharmacy/ui/consults/consult_list.dart';
 import 'package:hepies/ui/pharmacy/ui/consults/search_list.dart';
 import 'package:hepies/ui/pharmacy/widgets/footer.dart';
 import 'package:hepies/util/helpers.dart';
-import 'package:hepies/util/image_consult.dart';
-import 'package:hepies/widgets/footer.dart';
-import 'package:hepies/widgets/header.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:top_snackbar_flutter/custom_snack_bar.dart';
-import 'package:top_snackbar_flutter/top_snack_bar.dart';
-import 'package:shimmer/shimmer.dart';
 
-import '../../../../constants.dart';
 
 class PharmacyShareConsult extends StatefulWidget {
   final user_id;

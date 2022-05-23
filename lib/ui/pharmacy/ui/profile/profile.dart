@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hepies/models/dx.dart';
 import 'package:hepies/providers/prescription_provider.dart';
 import 'package:hepies/ui/doctor/medicalrecords/personal_info.dart';
 import 'package:hepies/ui/doctor/medicalrecords/personal_info_code.dart';

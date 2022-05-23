@@ -5,7 +5,6 @@ import 'package:hepies/providers/prescription_provider.dart';
 import 'package:hepies/ui/doctor/prescription/write_prescription.dart';
 import 'package:hepies/util/database_helper.dart';
 import 'package:hepies/widgets/footer.dart';
-import 'package:hepies/widgets/header.dart';
 import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';

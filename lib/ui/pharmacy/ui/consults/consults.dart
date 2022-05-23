@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hepies/models/consult.dart';
-import 'package:hepies/providers/consult.dart';
-import 'package:hepies/ui/doctor/consults/consult_list.dart';
 import 'package:hepies/ui/doctor/medicalrecords/medical_records.dart';
 import 'package:hepies/ui/doctor/prescription/write_prescription.dart';
 import 'package:hepies/ui/pharmacy/ui/consults/consult_list.dart';
-import 'package:hepies/util/gradient_text.dart';
 import 'package:hepies/widgets/header.dart';
-import 'package:provider/provider.dart';
 
 class PharmacyConsults extends StatefulWidget {
   @override

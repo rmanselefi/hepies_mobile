@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:hepies/constants.dart';
 import 'package:hepies/models/drug.dart';
@@ -11,7 +10,6 @@ import 'package:hepies/providers/drug_provider.dart';
 import 'package:hepies/providers/patient_provider.dart';
 import 'package:hepies/providers/prescription_provider.dart';
 import 'package:hepies/util/shared_preference.dart';
-import 'package:intl_phone_field/phone_number.dart';
 import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';

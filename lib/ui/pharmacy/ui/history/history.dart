@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hepies/providers/pharmacy_provider.dart';
 import 'package:hepies/providers/user_provider.dart';
-import 'package:hepies/ui/pharmacy/welcome.dart';
 import 'package:hepies/ui/pharmacy/widgets/footer.dart';
-import 'package:hepies/ui/pharmacy/widgets/header.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 

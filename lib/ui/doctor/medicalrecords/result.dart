@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:hepies/providers/patient_provider.dart';
@@ -9,7 +8,6 @@ import 'package:hepies/ui/doctor/medicalrecords/add_history.dart';
 import 'package:hepies/ui/doctor/medicalrecords/result_detail.dart';
 import 'package:hepies/widgets/header.dart';
 import 'package:provider/provider.dart';
-import 'package:supercharged/supercharged.dart';
 
 class MedicalResult extends StatefulWidget {
   final List<dynamic> res;

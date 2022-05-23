@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_decorated_text/flutter_decorated_text.dart';
 import 'package:hepies/widgets/footer.dart';
-import 'package:hepies/widgets/header.dart';
 
 class DrugDetail extends StatefulWidget {
   final drug;

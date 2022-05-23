@@ -2,12 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:hepies/models/consult.dart';
-import 'package:hepies/models/drug.dart';
-import 'package:hepies/models/favorites.dart';
-import 'package:hepies/models/patient.dart';
-import 'package:hepies/models/prescription.dart';
-import 'package:hepies/providers/patient_provider.dart';
-import 'package:hepies/providers/user_provider.dart';
 import 'package:hepies/util/app_url.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';

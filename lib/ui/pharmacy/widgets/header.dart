@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hepies/constants.dart';
 import 'package:hepies/providers/user_provider.dart';
 import 'package:hepies/ui/doctor/points/points.dart';
-import 'package:hepies/ui/doctor/profile/edit_profile.dart';
 import 'package:hepies/ui/welcome.dart';
 import 'package:hepies/util/gradient_text.dart';
-import 'package:hepies/util/shared_preference.dart';
-import 'package:provider/provider.dart';
 
 class Header extends StatefulWidget {
   @override
