@@ -71,14 +71,14 @@ class _PharmacyConsultListState extends State<PharmacyCommentList> {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(10.0),
-                                child: Expanded(
-                                  child: Text(
+                                child: 
+                                  Text(
                                     "${e['author']} ",
                                     style: TextStyle(
                                         fontSize: 12.0,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                ),
+                                
                               ),
                               Text(duration)
                             ],
