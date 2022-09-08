@@ -1,12 +1,12 @@
 
 import 'package:flutter/material.dart';
 
-import 'package:hepies/constants.dart';
-import 'package:hepies/providers/auth.dart';
-import 'package:hepies/ui/auth/change_password.dart';
-import 'package:hepies/ui/auth/login.dart';
-import 'package:hepies/ui/doctor/profile/edit_profile.dart';
-import 'package:hepies/widgets/Privacy.dart';
+import 'package:hepius/constants.dart';
+import 'package:hepius/providers/auth.dart';
+import 'package:hepius/ui/auth/change_password.dart';
+import 'package:hepius/ui/auth/login.dart';
+import 'package:hepius/ui/doctor/profile/edit_profile.dart';
+import 'package:hepius/widgets/Privacy.dart';
 import 'package:provider/provider.dart';
 import 'package:mailto/mailto.dart';
 import 'package:url_launcher/url_launcher.dart';

@@ -4,9 +4,9 @@ import 'dart:io';
 import 'package:path/path.dart';
 
 import 'package:flutter/material.dart';
-import 'package:hepies/models/user.dart';
-import 'package:hepies/util/app_url.dart';
-import 'package:hepies/util/shared_preference.dart';
+import 'package:hepius/models/user.dart';
+import 'package:hepius/util/app_url.dart';
+import 'package:hepius/util/shared_preference.dart';
 import 'package:http/http.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 

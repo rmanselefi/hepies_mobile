@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hepies/constants.dart';
+import 'package:hepius/constants.dart';
 import 'package:linkify_text/linkify_text.dart';
 import 'package:url_launcher/url_launcher.dart';
 

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hepies/providers/consult.dart';
-import 'package:hepies/ui/doctor/consults/consult_list.dart';
-import 'package:hepies/ui/doctor/medicalrecords/medical_records.dart';
-import 'package:hepies/ui/doctor/prescription/write_prescription.dart';
-import 'package:hepies/widgets/header.dart';
+import 'package:hepius/providers/consult.dart';
+import 'package:hepius/ui/doctor/consults/consult_list.dart';
+import 'package:hepius/ui/doctor/medicalrecords/medical_records.dart';
+import 'package:hepius/ui/doctor/prescription/write_prescription.dart';
+import 'package:hepius/widgets/header.dart';
 import 'package:provider/provider.dart';
 
 class Consults extends StatefulWidget {

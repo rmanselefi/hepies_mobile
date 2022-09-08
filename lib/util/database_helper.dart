@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
-import 'package:hepies/models/favorites.dart';
+import 'package:hepius/models/favorites.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -31,7 +31,7 @@ class DatabaseHelper {
 
   void _onCreate(Database db, int version) async {
     await db.execute(
-        'CREATE TABLE favorites(id INTEGER PRIMARY KEY, name TEXT, route TEXT,strength TEXT,profession_id INTEGER,drug_name TEXT, drug INTEGER, unit TEXT,type TEXT,frequency TEXT,takein TEXT,ampule TEXT )');
+        'CREATE TABLE favorites(id INTEGER PRIMARY KEY, name TEXT, route TEXT,strength TEXT,profession_id INTEGER,drug_name TEXT, drug INTEGER, unit TEXT,type TEXT,frequency TEXT,takein TEXT,ampule TEXT, material_name TEXT, size TEXT, amount TEXT )');
   }
 
   Future<int> saveFavorites(Favorites favorites) async {
@@ -47,7 +47,7 @@ class DatabaseHelper {
     var dbClient = await db;
     var ress = await dbClient.query("favorites",
         columns: [
-          "id,name,route,strength,profession_id,drug_name,unit,type,frequency,takein,ampule"
+          "id,name,route,strength,profession_id,drug_name,unit,type,frequency,takein,ampule,material_name, size, amount"
         ],
         where: "profession_id = ?",
         whereArgs: [id]);
@@ -65,7 +65,10 @@ class DatabaseHelper {
             takein: element['takein'],
             frequency: element['frequency'],
             ampule: element['ampule'],
-            type: element['type']);
+            type: element['type'],
+            material_name: element['material_name'],
+            amount: element['amount'],
+            size: element['size']);
         fav.add(favorites);
       });
     }
@@ -78,7 +81,7 @@ class DatabaseHelper {
     var dbClient = await db;
     var ress = await dbClient.query("favorites",
         columns: [
-          "id,name,route,strength,profession_id,drug_name,drug,unit,type,frequency,takein"
+          "id,name,route,strength,profession_id,drug_name,drug,unit,type,frequency,takein, material_name, size, amount"
         ],
         where: "name = ?",
         whereArgs: [name]);
@@ -105,16 +108,15 @@ class DatabaseHelper {
         .delete("favorites", where: 'name = ?', whereArgs: [name]);
   }
 
-  Future<int> updateFavorite(Favorites favorite) async {
+  Future<int> updateFavorite(Favorites favorite, var name) async {
     print("FavoritesFavoritesFavorites ${favorite.toMap()}");
     try {
       var dbClient = await db;
-      var name = favorite.name;
       int result = await dbClient.rawUpdate('''
       UPDATE favorites
       SET name = ?
-      WHERE id = ?
-      ''', [name, favorite.id]);
+      WHERE name = ?
+      ''', [name, favorite.name]);
 
       print("FavoritesFavoritesFavorites $result");
       return result;

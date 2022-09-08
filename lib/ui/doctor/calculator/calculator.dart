@@ -2,11 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hepies/constants.dart';
-import 'package:hepies/ui/doctor/calculator/calculator_button.dart';
-import 'package:hepies/ui/doctor/favorites/favorites.dart';
-import 'package:hepies/ui/doctor/guidelines/guidelines.dart';
-import 'package:hepies/util/shared_preference.dart';
+import 'package:hepius/constants.dart';
+import 'package:hepius/ui/doctor/calculator/calculator_button.dart';
+import 'package:hepius/ui/doctor/favorites/favorites.dart';
+import 'package:hepius/ui/doctor/guidelines/guidelines.dart';
+import 'package:hepius/util/shared_preference.dart';
 import 'package:math_expressions/math_expressions.dart';
 
 class Calculator extends StatefulWidget {

@@ -1,4 +1,4 @@
-import 'package:hepies/models/user.dart';
+import 'package:hepius/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 

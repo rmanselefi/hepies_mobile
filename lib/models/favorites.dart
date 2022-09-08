@@ -11,6 +11,9 @@ class Favorites {
   final String frequency;
   final int drug;
   final String ampule;
+  final String material_name;
+  final String size;
+  final String amount;
 
   Favorites(
       {this.id,
@@ -24,7 +27,10 @@ class Favorites {
       this.type,
       this.frequency,
       this.takein,
-      this.ampule});
+      this.ampule,
+      this.material_name,
+      this.amount,
+      this.size});
 
   // columns in the database.
   Map<String, dynamic> toMap() {
@@ -40,7 +46,10 @@ class Favorites {
       'type': type,
       'frequency': frequency,
       'takein': takein,
-      'ampule': ampule
+      'ampule': ampule,
+      'material_name': material_name,
+      'amount': amount,
+      'size': size
     };
   }
 
@@ -56,7 +65,10 @@ class Favorites {
       'type': type,
       'frequency': frequency,
       'takein': takein,
-      'ampule': ampule
+      'ampule': ampule,
+      'material_name': material_name,
+      'amount': amount,
+      'size': size
     };
   }
 }

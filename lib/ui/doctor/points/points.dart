@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hepies/constants.dart';
-import 'package:hepies/providers/user_provider.dart';
+import 'package:hepius/constants.dart';
+import 'package:hepius/providers/user_provider.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:phone_number/phone_number.dart';
 import 'package:provider/provider.dart';

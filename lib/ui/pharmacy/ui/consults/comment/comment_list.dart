@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hepies/providers/consult.dart';
+import 'package:hepius/providers/consult.dart';
 import 'package:provider/provider.dart';
 import 'package:rich_text_view/rich_text_view.dart';
 import 'package:timeago/timeago.dart' as timeago;

@@ -1,4 +1,4 @@
-import 'package:hepies/models/patient.dart';
+import 'package:hepius/models/patient.dart';
 
 class Prescription {
   int id;

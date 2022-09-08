@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:hepies/models/favorites.dart';
-import 'package:hepies/providers/prescription_provider.dart';
-import 'package:hepies/ui/doctor/prescription/write_prescription.dart';
-import 'package:hepies/util/database_helper.dart';
-import 'package:hepies/widgets/footer.dart';
+import 'package:hepius/models/favorites.dart';
+import 'package:hepius/providers/prescription_provider.dart';
+import 'package:hepius/ui/doctor/prescription/write_prescription.dart';
+import 'package:hepius/util/database_helper.dart';
+import 'package:hepius/widgets/footer.dart';
 import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
@@ -18,6 +18,7 @@ class FavoritesPage extends StatefulWidget {
 
 class _FavoritesState extends State<FavoritesPage> {
   var favoriteController = new TextEditingController();
+  var name = '';
   void _openRenameForm(BuildContext context, Favorites favorite) {
     showDialog(
         context: context,
@@ -33,7 +34,7 @@ class _FavoritesState extends State<FavoritesPage> {
                     decoration: new InputDecoration(labelText: 'Rename'),
                     onChanged: (val) {
                       setState(() {
-                        favorite.name = val;
+                        name = val;
                       });
                     },
                   ),
@@ -49,7 +50,8 @@ class _FavoritesState extends State<FavoritesPage> {
               new TextButton(
                   child: const Text('Rename'),
                   onPressed: () async {
-                    int res = await DatabaseHelper().updateFavorite(favorite);
+                    print("RenameRenameRename ${favorite.toMap()}");
+                    int res = await DatabaseHelper().updateFavorite(favorite,name);
                     if (res >= 1) {
                       setState(() {
                         DatabaseHelper().getFavoritesById(widget.profession_id);
@@ -122,7 +124,8 @@ class _FavoritesState extends State<FavoritesPage> {
                                                 await DatabaseHelper()
                                                     .getFavoritesByName(
                                                         data[index].name);
-                                            print("combinationscombinationscombinations $combinations");
+                                            print(
+                                                "combinationscombinationscombinations $combinations");
                                             Provider.of<PrescriptionProvider>(
                                                     context,
                                                     listen: false)

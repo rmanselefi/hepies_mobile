@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hepies/ui/doctor/medicalrecords/personal_info.dart';
-import 'package:hepies/widgets/header.dart';
+import 'package:hepius/ui/doctor/medicalrecords/personal_info.dart';
+import 'package:hepius/widgets/header.dart';
 import 'package:intl/intl.dart';
 
 class ResultDetail extends StatefulWidget {

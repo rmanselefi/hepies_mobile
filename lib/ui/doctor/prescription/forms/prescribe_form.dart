@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hepies/constants.dart';
-import 'package:hepies/models/drug.dart';
-import 'package:hepies/models/hx.dart';
-import 'package:hepies/models/patient.dart';
-import 'package:hepies/models/prescription.dart';
-import 'package:hepies/models/user.dart';
-import 'package:hepies/providers/drug_provider.dart';
-import 'package:hepies/providers/patient_provider.dart';
-import 'package:hepies/providers/prescription_provider.dart';
-import 'package:hepies/util/shared_preference.dart';
+import 'package:hepius/constants.dart';
+import 'package:hepius/models/drug.dart';
+import 'package:hepius/models/hx.dart';
+import 'package:hepius/models/patient.dart';
+import 'package:hepius/models/prescription.dart';
+import 'package:hepius/models/user.dart';
+import 'package:hepius/providers/drug_provider.dart';
+import 'package:hepius/providers/patient_provider.dart';
+import 'package:hepius/providers/prescription_provider.dart';
+import 'package:hepius/util/shared_preference.dart';
 import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
@@ -207,8 +207,9 @@ class _PrescribeFormState extends State<PrescribeForm> {
         "frequency": fav[i]['frequency'],
         "drug": fav[i]['drug'],
         "professional": profession,
-        "material_name": "",
-        "size": "",
+        "material_name": fav[i]['material_name'],
+        "size": fav[i]['material_name'],
+        "amount": fav[i]['amount'],
         "type": fav[i]['type'],
         "ampule": "",
         "dx": {
@@ -1432,6 +1433,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
                               finaPrescription.add(precriptionData);
                               isAmpule = true;
                               isEvery = true;
+                              // ampule = false;
                             });
                           } else if (status == 'edit') {
                             Provider.of<PrescriptionProvider>(context,
@@ -1647,7 +1649,7 @@ class _PrescribeFormState extends State<PrescribeForm> {
               children: [
                 Expanded(
                   child: pres['type'] == "general"
-                      ? ampule
+                      ? pres['ampule'] != "" && pres['ampule'] != null
                           ? Text(
                               '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['drug_name'] != null ? pres['drug_name'] : ""} ${pres['strength'] != null ? pres['strength'] : ""}${pres['unit'] != null ? pres['unit'] : ""} '
                               ' ${pres['route'] != null ? pres['route'] : ""} #${pres['ampule']} Amp')

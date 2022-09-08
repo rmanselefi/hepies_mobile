@@ -1,13 +1,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hepies/models/user.dart';
-import 'package:hepies/providers/drug_provider.dart';
-import 'package:hepies/providers/user_provider.dart';
-import 'package:hepies/ui/doctor/points/points.dart';
-import 'package:hepies/ui/pharmacy/ui/consults/share_consult.dart';
-import 'package:hepies/util/gradient_text.dart';
-import 'package:hepies/widgets/drawer.dart';
+import 'package:hepius/models/user.dart';
+import 'package:hepius/providers/drug_provider.dart';
+import 'package:hepius/providers/user_provider.dart';
+import 'package:hepius/ui/doctor/points/points.dart';
+import 'package:hepius/ui/pharmacy/ui/consults/share_consult.dart';
+import 'package:hepius/util/gradient_text.dart';
+import 'package:hepius/widgets/drawer.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';

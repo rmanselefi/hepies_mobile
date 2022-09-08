@@ -1,12 +1,12 @@
 
 import 'package:flutter/material.dart';
-import 'package:hepies/providers/patient_provider.dart';
-import 'package:hepies/providers/prescription_provider.dart';
-import 'package:hepies/ui/doctor/medicalrecords/personal_info.dart';
+import 'package:hepius/providers/patient_provider.dart';
+import 'package:hepius/providers/prescription_provider.dart';
+import 'package:hepius/ui/doctor/medicalrecords/personal_info.dart';
 import 'package:intl/intl.dart';
-import 'package:hepies/ui/doctor/medicalrecords/add_history.dart';
-import 'package:hepies/ui/doctor/medicalrecords/result_detail.dart';
-import 'package:hepies/widgets/header.dart';
+import 'package:hepius/ui/doctor/medicalrecords/add_history.dart';
+import 'package:hepius/ui/doctor/medicalrecords/result_detail.dart';
+import 'package:hepius/widgets/header.dart';
 import 'package:provider/provider.dart';
 
 class MedicalResult extends StatefulWidget {

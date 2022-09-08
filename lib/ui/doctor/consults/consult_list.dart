@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hepies/providers/consult.dart';
-import 'package:hepies/ui/doctor/consults/comment/share_comment.dart';
+import 'package:hepius/providers/consult.dart';
+import 'package:hepius/ui/doctor/consults/comment/share_comment.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 

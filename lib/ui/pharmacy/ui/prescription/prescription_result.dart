@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:hepies/providers/prescription_provider.dart';
-import 'package:hepies/ui/doctor/medicalrecords/personal_info_code.dart';
-import 'package:hepies/ui/pharmacy/ui/profile/profile.dart';
-import 'package:hepies/ui/pharmacy/welcome.dart';
+import 'package:hepius/providers/prescription_provider.dart';
+import 'package:hepius/ui/doctor/medicalrecords/personal_info_code.dart';
+import 'package:hepius/ui/pharmacy/ui/profile/profile.dart';
+import 'package:hepius/ui/pharmacy/welcome.dart';
 import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
-import 'package:hepies/ui/pharmacy/widgets/footer.dart';
+import 'package:hepius/ui/pharmacy/widgets/footer.dart';
 
 import '../../../../providers/user_provider.dart';
 
@@ -32,17 +32,13 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
     var prescProvider = Provider.of<PrescriptionProvider>(context);
 
     List<dynamic> result = widget.result['data'];
-    List<dynamic> notReadPrescription = result
-        .where((i) =>
-            i['status'] == "NotRead" &&
-            DateTime.now().difference(DateTime.parse(i['createdAt'])).inDays <=
-                15)
-        .toList();
+
     var diagnosis = result[0]['prescription']['diagnosis'];
     var prescription = result[0];
     var patient = prescription['patient'];
     List<dynamic> list_id = [];
-    notReadPrescription.forEach((element) {
+
+    result.forEach((element) {
       list_id.add(element['id']);
     });
     // print(prescription);
@@ -82,13 +78,13 @@ class _PrescriptionResultState extends State<PrescriptionResult> {
                         ),
                       ),
                       Column(
-                          children: notReadPrescription.map<Widget>((e) {
+                          children: result.map<Widget>((e) {
                         return Container(
                           margin: EdgeInsets.all(5),
                           child: Row(
                             children: [
                               Text(
-                                '${notReadPrescription.indexOf(e) + 1}',
+                                '${result.indexOf(e) + 1}',
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20.0),

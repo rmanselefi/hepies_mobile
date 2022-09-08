@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:hepies/constants.dart';
-import 'package:hepies/models/dx.dart';
-import 'package:hepies/models/favorites.dart';
-import 'package:hepies/models/user.dart';
-import 'package:hepies/providers/prescription_provider.dart';
-import 'package:hepies/providers/user_provider.dart';
-import 'package:hepies/ui/doctor/calculator/calculator.dart';
-import 'package:hepies/ui/doctor/favorites/favorites.dart';
-import 'package:hepies/ui/doctor/guidelines/guidelines.dart';
-import 'package:hepies/ui/doctor/prescription/forms/prescribe_form.dart';
-import 'package:hepies/ui/doctor/prescription/forms/prescribe_narco_form.dart';
-import 'package:hepies/ui/doctor/prescription/forms/prescribe_psyco_form.dart';
-import 'package:hepies/ui/welcome.dart';
-import 'package:hepies/util/database_helper.dart';
-import 'package:hepies/util/shared_preference.dart';
+import 'package:hepius/constants.dart';
+import 'package:hepius/models/dx.dart';
+import 'package:hepius/models/favorites.dart';
+import 'package:hepius/models/user.dart';
+import 'package:hepius/providers/prescription_provider.dart';
+import 'package:hepius/providers/user_provider.dart';
+import 'package:hepius/ui/doctor/calculator/calculator.dart';
+import 'package:hepius/ui/doctor/favorites/favorites.dart';
+import 'package:hepius/ui/doctor/guidelines/guidelines.dart';
+import 'package:hepius/ui/doctor/prescription/forms/prescribe_form.dart';
+import 'package:hepius/ui/doctor/prescription/forms/prescribe_narco_form.dart';
+import 'package:hepius/ui/doctor/prescription/forms/prescribe_psyco_form.dart';
+import 'package:hepius/ui/welcome.dart';
+import 'package:hepius/util/database_helper.dart';
+import 'package:hepius/util/shared_preference.dart';
 import 'package:phone_number/phone_number.dart';
 import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
@@ -165,8 +165,9 @@ class _WritePrescriptionState extends State<WritePrescription> {
         "frequency": fav[i]['frequency'],
         "drug": fav[i]['drug'],
         "professional": profession,
-        "material_name": "",
-        "size": "",
+        "material_name": fav[i]['material_name'],
+        "size": fav[i]['size'],
+        "amount": fav[i]['amount'],
         "type": fav[i]['type'],
         "ampule": "",
         "dx": {
@@ -616,7 +617,11 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                                 type: element['type'],
                                                 frequency: element['frequency'],
                                                 takein: element['takein'],
-                                                ampule: element['ampule']);
+                                                ampule: element['ampule'],
+                                                size: element['size'],
+                                                amount: element['amount'],
+                                                material_name:
+                                                    element['material_name']);
 
                                             var db = new DatabaseHelper();
                                             var res = await db

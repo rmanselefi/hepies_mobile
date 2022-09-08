@@ -1,4 +1,4 @@
-package com.example.hepies;
+package com.qemer.hepius;
 
 import io.flutter.embedding.android.FlutterActivity;
 

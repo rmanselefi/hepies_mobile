@@ -2,11 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:hepies/models/user.dart';
-import 'package:hepies/providers/auth.dart';
-import 'package:hepies/ui/pharmacy/widgets/footer.dart';
-import 'package:hepies/util/app_url.dart';
-import 'package:hepies/util/shared_preference.dart';
+import 'package:hepius/models/user.dart';
+import 'package:hepius/providers/auth.dart';
+import 'package:hepius/ui/pharmacy/widgets/footer.dart';
+import 'package:hepius/util/app_url.dart';
+import 'package:hepius/util/shared_preference.dart';
 import 'package:http/http.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:shared_preferences/shared_preferences.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hepies/providers/drug_provider.dart';
-import 'package:hepies/ui/doctor/drugs/drug_detail.dart';
-import 'package:hepies/widgets/footer.dart';
+import 'package:hepius/providers/drug_provider.dart';
+import 'package:hepius/ui/doctor/drugs/drug_detail.dart';
+import 'package:hepius/widgets/footer.dart';
 import 'package:provider/provider.dart';
 
 class Drugs extends StatefulWidget {

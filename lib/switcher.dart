@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hepies/providers/user_provider.dart';
-import 'package:hepies/ui/pharmacy/welcome.dart';
-import 'package:hepies/ui/welcome.dart';
+import 'package:hepius/providers/user_provider.dart';
+import 'package:hepius/ui/pharmacy/welcome.dart';
+import 'package:hepius/ui/welcome.dart';
 import 'package:provider/provider.dart';
 
 class Switcher extends StatefulWidget {

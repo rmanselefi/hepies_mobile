@@ -1,12 +1,12 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
-import 'package:hepies/models/chemistry.dart';
-import 'package:hepies/models/endocrinology.dart';
-import 'package:hepies/models/hematology.dart';
-import 'package:hepies/models/investigation.dart';
-import 'package:hepies/models/serology.dart';
-import 'package:hepies/models/tumor.dart';
-import 'package:hepies/models/urine.dart';
+import 'package:hepius/models/chemistry.dart';
+import 'package:hepius/models/endocrinology.dart';
+import 'package:hepius/models/hematology.dart';
+import 'package:hepius/models/investigation.dart';
+import 'package:hepius/models/serology.dart';
+import 'package:hepius/models/tumor.dart';
+import 'package:hepius/models/urine.dart';
 
 class IX extends StatefulWidget {
   final Function setChemistry;

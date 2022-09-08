@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:hepies/models/consult.dart';
-import 'package:hepies/util/app_url.dart';
+import 'package:hepius/models/consult.dart';
+import 'package:hepius/util/app_url.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -253,13 +253,18 @@ class PrescriptionProvider with ChangeNotifier {
     // return json.decode(response.body);
   }
 
-  Future<Map<String, dynamic>> acceptPrescription(List id, List pres_id) async {
+  Future<Map<String, dynamic>> acceptPrescription(
+      List selected_list, List full_list) async {
     _sentStatus = PrescriptionStatus.Sending;
     notifyListeners();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
-    List<dynamic> output =
-        pres_id.where((element) => !id.contains(element)).toList();
+    List<dynamic> output = selected_list.length == 0
+        ? full_list
+        : full_list
+            .where((element) => !selected_list.contains(element))
+            .toList();
+    print("outputoutputoutput $output");
     var result;
     // print("registrationData $output");
 

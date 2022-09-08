@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hepies/providers/prescription_provider.dart';
-import 'package:hepies/ui/doctor/medicalrecords/personal_info.dart';
-import 'package:hepies/ui/doctor/medicalrecords/personal_info_code.dart';
+import 'package:hepius/providers/prescription_provider.dart';
+import 'package:hepius/ui/doctor/medicalrecords/personal_info.dart';
+import 'package:hepius/ui/doctor/medicalrecords/personal_info_code.dart';
 
 class PrescriberProfile extends StatefulWidget {
   final patient;

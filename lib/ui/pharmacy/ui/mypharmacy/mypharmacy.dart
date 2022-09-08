@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hepies/constants.dart';
-import 'package:hepies/providers/drug_provider.dart';
-import 'package:hepies/providers/pharmacy_provider.dart';
-import 'package:hepies/providers/user_provider.dart';
-import 'package:hepies/ui/pharmacy/widgets/footer.dart';
+import 'package:hepius/constants.dart';
+import 'package:hepius/providers/drug_provider.dart';
+import 'package:hepius/providers/pharmacy_provider.dart';
+import 'package:hepius/providers/user_provider.dart';
+import 'package:hepius/ui/pharmacy/widgets/footer.dart';
 import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';

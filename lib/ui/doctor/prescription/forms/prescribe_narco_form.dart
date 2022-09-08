@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hepies/constants.dart';
-import 'package:hepies/models/drug.dart';
-import 'package:hepies/models/hx.dart';
-import 'package:hepies/models/patient.dart';
-import 'package:hepies/models/prescription.dart';
-import 'package:hepies/models/user.dart';
-import 'package:hepies/providers/drug_provider.dart';
-import 'package:hepies/providers/patient_provider.dart';
-import 'package:hepies/providers/prescription_provider.dart';
-import 'package:hepies/util/shared_preference.dart';
+import 'package:hepius/constants.dart';
+import 'package:hepius/models/drug.dart';
+import 'package:hepius/models/hx.dart';
+import 'package:hepius/models/patient.dart';
+import 'package:hepius/models/prescription.dart';
+import 'package:hepius/models/user.dart';
+import 'package:hepius/providers/drug_provider.dart';
+import 'package:hepius/providers/patient_provider.dart';
+import 'package:hepius/providers/prescription_provider.dart';
+import 'package:hepius/util/shared_preference.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:phone_number/phone_number.dart';
 import 'package:provider/provider.dart';
@@ -212,8 +212,9 @@ class _PrescribeFormState extends State<PrescribeNarcoForm> {
         "frequency": fav[i]['frequency'],
         "drug": fav[i]['drug'],
         "professional": profession,
-        "material_name": "",
-        "size": "",
+        "material_name": fav[i]['material_name'],
+        "size": fav[i]['material_name'],
+        "amount": fav[i]['amount'],
         "type": fav[i]['type'],
         "ampule": "",
         "dx": {
@@ -1330,15 +1331,24 @@ class _PrescribeFormState extends State<PrescribeNarcoForm> {
                               message: "Route is required",
                             ),
                           );
-                        } else if (forController.text == "" &&
-                            everyController.text == "" &&
-                            ampuleController.text == "" &&
+                        } else if (isEvery &&
+                            (forController.text == "" ||
+                                everyController.text == "") &&
                             widget.type != "instrument") {
                           showTopSnackBar(
                             context,
                             CustomSnackBar.error(
                               message:
-                                  "You got provide at least ampule or frequency(take in)",
+                                  "You got provide at least Frequency(Every) and For ",
+                            ),
+                          );
+                        } else if (!isEvery &&
+                            ampuleController.text == "" &&
+                            widget.type != "instrument") {
+                          showTopSnackBar(
+                            context,
+                            CustomSnackBar.error(
+                              message: "You got provide at least Ampule",
                             ),
                           );
                         } else if (weightController.text != "" &&

@@ -3,12 +3,12 @@ import 'dart:io';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_linear_datepicker/flutter_datepicker.dart';
-import 'package:hepies/constants.dart';
-import 'package:hepies/providers/auth.dart';
-import 'package:hepies/providers/consult.dart';
-import 'package:hepies/ui/auth/autorization.dart';
-import 'package:hepies/util/image.dart';
-import 'package:hepies/util/widgets.dart';
+import 'package:hepius/constants.dart';
+import 'package:hepius/providers/auth.dart';
+import 'package:hepius/providers/consult.dart';
+import 'package:hepius/ui/auth/autorization.dart';
+import 'package:hepius/util/image.dart';
+import 'package:hepius/util/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:multiselect_formfield/multiselect_formfield.dart';
@@ -430,12 +430,21 @@ class _RegisterState extends State<Register> {
           );
         }
       } else {
-        showTopSnackBar(
-          context,
-          CustomSnackBar.error(
-            message: "Please Complete the form properly",
-          ),
-        );
+        if (file == null) {
+          showTopSnackBar(
+            context,
+            CustomSnackBar.error(
+              message: "Please Upload Medical License",
+            ),
+          );
+        } else {
+          showTopSnackBar(
+            context,
+            CustomSnackBar.error(
+              message: "Please Complete the form properly",
+            ),
+          );
+        }
       }
     };
 

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:hepies/providers/prescription_provider.dart';
-import 'package:hepies/ui/doctor/medicalrecords/personal_info.dart';
-import 'package:hepies/ui/pharmacy/ui/profile/profile.dart';
-import 'package:hepies/ui/pharmacy/welcome.dart';
+import 'package:hepius/providers/prescription_provider.dart';
+import 'package:hepius/ui/doctor/medicalrecords/personal_info.dart';
+import 'package:hepius/ui/pharmacy/ui/profile/profile.dart';
+import 'package:hepius/ui/pharmacy/welcome.dart';
 import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
-import 'package:hepies/ui/pharmacy/widgets/footer.dart';
+import 'package:hepius/ui/pharmacy/widgets/footer.dart';
 import '../../../../providers/user_provider.dart';
 
 class PrescriptionResultPhone extends StatefulWidget {
@@ -107,7 +107,7 @@ class _PrescriptionResultState extends State<PrescriptionResultPhone> {
                                   Expanded(
                                     child: e['type'] == "instrument"
                                         ? Text(
-                                            ' ${e['material_name']} ${e['size']} #${e['amount']} ',
+                                            ' ${e['material_name']} ${e['size']} #${e['amount'] == null ? '' : e['amount']} ',
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 20.0),
@@ -115,7 +115,7 @@ class _PrescriptionResultState extends State<PrescriptionResultPhone> {
                                         : e['ampule'] != null
                                             ? Text(
                                                 ' ${e['drug_name']} ${e['strength']} '
-                                                '${e['unit']} ${e['route']} #${e['ampule']} Amp}',
+                                                '${e['unit']} ${e['route']} #${e['ampule']} Amp',
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
                                                     fontSize: 15.0),

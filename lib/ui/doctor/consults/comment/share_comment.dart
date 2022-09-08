@@ -1,11 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:hepies/providers/consult.dart';
-import 'package:hepies/ui/pharmacy/ui/consults/comment/comment_list.dart';
-import 'package:hepies/ui/pharmacy/widgets/footer.dart';
-import 'package:hepies/util/image_consult.dart';
-import 'package:hepies/widgets/header.dart';
+import 'package:hepius/providers/consult.dart';
+import 'package:hepius/ui/pharmacy/ui/consults/comment/comment_list.dart';
+import 'package:hepius/ui/pharmacy/widgets/footer.dart';
+import 'package:hepius/util/image_consult.dart';
+import 'package:hepius/widgets/header.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';

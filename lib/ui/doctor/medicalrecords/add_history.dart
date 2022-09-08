@@ -1,13 +1,13 @@
 
 import 'package:flutter/material.dart';
-import 'package:hepies/models/dx.dart';
-import 'package:hepies/models/hx.dart';
-import 'package:hepies/models/investigation.dart';
-import 'package:hepies/models/px.dart';
-import 'package:hepies/ui/doctor/medicalrecords/historypages/dx.dart';
-import 'package:hepies/ui/doctor/medicalrecords/historypages/hx.dart';
-import 'package:hepies/ui/doctor/medicalrecords/historypages/ix.dart';
-import 'package:hepies/ui/doctor/medicalrecords/historypages/px.dart';
+import 'package:hepius/models/dx.dart';
+import 'package:hepius/models/hx.dart';
+import 'package:hepius/models/investigation.dart';
+import 'package:hepius/models/px.dart';
+import 'package:hepius/ui/doctor/medicalrecords/historypages/dx.dart';
+import 'package:hepius/ui/doctor/medicalrecords/historypages/hx.dart';
+import 'package:hepius/ui/doctor/medicalrecords/historypages/ix.dart';
+import 'package:hepius/ui/doctor/medicalrecords/historypages/px.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AddHistory extends StatefulWidget {

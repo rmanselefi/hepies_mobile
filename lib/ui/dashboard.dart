@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hepies/ui/doctor/consults/consults.dart';
+import 'package:hepius/ui/doctor/consults/consults.dart';
 
 class DashBoard extends StatefulWidget {
   @override

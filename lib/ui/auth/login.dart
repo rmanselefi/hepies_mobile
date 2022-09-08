@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:hepies/models/user.dart';
-import 'package:hepies/providers/auth.dart';
-import 'package:hepies/providers/user_provider.dart';
-import 'package:hepies/ui/auth/forgot_password.dart';
-import 'package:hepies/ui/auth/sign_up.dart';
-import 'package:hepies/ui/pharmacy/welcome.dart';
-import 'package:hepies/ui/welcome.dart';
-import 'package:hepies/util/widgets.dart';
+import 'package:hepius/models/user.dart';
+import 'package:hepius/providers/auth.dart';
+import 'package:hepius/providers/user_provider.dart';
+import 'package:hepius/ui/auth/forgot_password.dart';
+import 'package:hepius/ui/auth/sign_up.dart';
+import 'package:hepius/ui/pharmacy/welcome.dart';
+import 'package:hepius/ui/welcome.dart';
+import 'package:hepius/util/widgets.dart';
 
 import 'package:provider/provider.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';

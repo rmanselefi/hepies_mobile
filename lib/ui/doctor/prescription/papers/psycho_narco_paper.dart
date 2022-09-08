@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hepies/providers/prescription_provider.dart';
+import 'package:hepius/providers/prescription_provider.dart';
 import 'package:provider/provider.dart';
 
 class PsychoNarcoPaper extends StatefulWidget {

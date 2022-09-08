@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hepies/models/dx.dart';
+import 'package:hepius/models/dx.dart';
 
 class DX extends StatefulWidget {
   final Function setDx;
