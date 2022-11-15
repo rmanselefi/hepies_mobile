@@ -20,6 +20,7 @@ import 'package:hepius/util/shared_preference.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:status_bar_control/status_bar_control.dart';
 import 'providers/user_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -29,7 +30,18 @@ void main() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   Directory dir = await getApplicationDocumentsDirectory();
   Hive.init(dir.path);
+  updateStatusBar();
   runApp(MyApp());
+}
+
+
+void updateStatusBar() {
+  double _statusBarOpacity = 1.0;
+  Color _statusBarColor = Colors.white;
+  bool _statusBarColorAnimated = false;
+  StatusBarControl.setColor(
+      _statusBarColor.withOpacity(_statusBarOpacity),
+      animated: _statusBarColorAnimated);
 }
 
 class MyApp extends StatelessWidget {
@@ -58,8 +70,7 @@ class MyApp extends StatelessWidget {
           ),
           home: FutureBuilder(
               future: getUserData(),
-              builder: (context, snapshot) {
-                // print("object ${snapshot.data}");
+              builder: (context, snapshot) {                
                 switch (snapshot.connectionState) {
                   case ConnectionState.none:
                   case ConnectionState.waiting:

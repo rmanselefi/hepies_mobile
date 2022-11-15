@@ -118,7 +118,7 @@ class _LoginState extends State<Login> {
             auth.login(_username.trim(), _password);
 
         successfulMessage.then((response) {
-          print("object haile $response");
+          
           if (response['status']) {
             User user = response['user'];
             var role = response['role'];
@@ -144,7 +144,7 @@ class _LoginState extends State<Login> {
                           )));
             }
           } else if (response['error'] != null && response['error']) {
-            print("error");
+            
             showTopSnackBar(
               context,
               CustomSnackBar.error(
@@ -153,7 +153,7 @@ class _LoginState extends State<Login> {
               ),
             );
           } else if (response['invalidcredentials']) {
-            print("excuted");
+            
             showTopSnackBar(
               context,
               CustomSnackBar.error(

@@ -250,7 +250,7 @@ class _ChangePasswordState extends State<NewPassword> {
                 color: Colors.green,
                 onPressed: () async {
                   _formKey.currentState.save();
-                  print("object ${_formKey.currentState.validate()}");
+                  
                   if (_formKey.currentState.validate()) {
                     var res = await auth.changePassword(_codeController.text,
                         _emailController.text, _passwordController.text);

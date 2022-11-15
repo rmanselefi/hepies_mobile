@@ -38,9 +38,7 @@ class _PostConsultState extends State<PostConsult> {
     setState(() {
       file = image;
     });
-
-    print("_formData_formData_formData${file}");
-  }
+    }
 
   void setInterests() {
     ConsultProvider().getInterests().then((value) {
@@ -109,8 +107,6 @@ class _PostConsultState extends State<PostConsult> {
       initialValue: _myInterests,
       onSaved: (value) {
         if (value == null) return;
-        print(value);
-        // print("_interests_interests_interests ${value.join(",")}");
         var hashtaglists = [];
         for (var item in value) {
           hashtaglists.add("#${item.toString()}");
@@ -221,9 +217,7 @@ class _PostConsultState extends State<PostConsult> {
                                     );
                                     var currentUser =
                                         await UserPreferences().getUser();
-
-                                    print("role : ${currentUser.role}");
-                                    Navigator.pushAndRemoveUntil(
+                                        Navigator.pushAndRemoveUntil(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
@@ -247,7 +241,7 @@ class _PostConsultState extends State<PostConsult> {
                                   Navigator.pop(context);
                                 }
                               } catch (e) {
-                                print("eeeee ${e}");
+                                
                                 showTopSnackBar(
                                   context,
                                   CustomSnackBar.error(

@@ -159,7 +159,7 @@ class _DrugDetailState extends State<DrugDetail> {
     List<Text> textWidgets = [];
     for (int i = 0; i < name.length; i++) {
       var spe = name[i].replaceAll(RegExp(",|!|'"), "");
-      // print(spe);
+      
       if (bold_words.contains(spe)) {
         Text bold = Text(
           name[i] + ' ',

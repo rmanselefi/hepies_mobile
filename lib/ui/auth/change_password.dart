@@ -233,7 +233,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                 color: Colors.green,
                 onPressed: () async {
                   _formKey.currentState.save();
-                  print("object ${_formKey.currentState.validate()}");
+                  
                   if (_formKey.currentState.validate()) {
                     if (_newPasswordController.text !=
                         _confirmPasswordController.text) {
@@ -247,7 +247,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       var res = await auth.updatePassword(
                           _newPasswordController.text,
                           _oldPasswordController.text);
-                      print("res $res");
+                     
                       if (res['status']) {
                         showTopSnackBar(
                           context,

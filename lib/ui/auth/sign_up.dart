@@ -179,7 +179,7 @@ class _RegisterState extends State<Register> {
     setState(() {
       file = image;
     });
-    print("_formData_formData_formData${file}");
+    
   }
 
   @override
@@ -262,7 +262,7 @@ class _RegisterState extends State<Register> {
         initialDate: "1980/01/01",
         dateChangeListener: (String selectedDate) {
           _selectedDate = selectedDate;
-          print(_selectedDate);
+         
         },
         showDay: true, //false -> only select year & month
         labelStyle: TextStyle(
@@ -323,8 +323,7 @@ class _RegisterState extends State<Register> {
       hintWidget: Text('Please choose one or more'),
       initialValue: _myInterests,
       onSaved: (value) {
-        if (value == null) return;
-        // print("_interests_interests_interests ${value.join(",")}");
+        if (value == null) return;       
 
         setState(() {
           _myInterests = value;
@@ -371,7 +370,7 @@ class _RegisterState extends State<Register> {
       if (form.validate() && file != null) {
         if (isValidPhoneNumber) {
           form.save();
-          print(_phone);
+          
           auth
               .register(
                   _name,
@@ -385,7 +384,7 @@ class _RegisterState extends State<Register> {
                   _selectedDate,
                   File(file.path))
               .then((response) {
-            print("signup response " + response.toString());
+           
             if (response['status']) {
               showTopSnackBar(
                 context,
@@ -404,7 +403,7 @@ class _RegisterState extends State<Register> {
                 ModalRoute.withName('/'),
               );
             } else if (response['error'] != null && response['error']) {
-              print("error");
+             
               showTopSnackBar(
                 context,
                 CustomSnackBar.error(
@@ -434,7 +433,7 @@ class _RegisterState extends State<Register> {
           showTopSnackBar(
             context,
             CustomSnackBar.error(
-              message: "Please Upload Medical License",
+              message: "Please Upload Medical License,work ID or Internship ID",
             ),
           );
         } else {

@@ -28,7 +28,7 @@ class PharmacyProvider with ChangeNotifier {
       _fetchStatus = Status.Fetch;
       notifyListeners();
       medical = json.decode(response.body);
-      // print("consultconsultconsultconsultconsult ${medical.length}");
+    
       // notifyListeners();
       return medical;
     } else {
@@ -46,9 +46,9 @@ class PharmacyProvider with ChangeNotifier {
       String drug_name, String drug_id, String price) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String professionid = prefs.getInt('professionid').toString();
-    // print("professionidprofessionid $professionid");
+   
     String token = prefs.getString('token');
-    print("post p" + professionid);
+    
     var result;
 
     final Map<String, dynamic> registrationData = {
@@ -57,7 +57,7 @@ class PharmacyProvider with ChangeNotifier {
       'drug': drug_id,
       'profession': professionid
     };
-    print("registrationData ==> My Pharmacy ======> $registrationData");
+    
     Response response = await post(Uri.parse(AppUrl.pharmacy),
         body: json.encode(registrationData),
         headers: {
@@ -65,7 +65,7 @@ class PharmacyProvider with ChangeNotifier {
           HttpHeaders.authorizationHeader: "Bearer $token"
         });
 
-    print("drung" + response.body + response.statusCode.toString());
+    
     if (response.statusCode == 200 || response.statusCode == 201) {
       result = {
         'status': true,
@@ -84,18 +84,15 @@ class PharmacyProvider with ChangeNotifier {
   Future<List<dynamic>> getMyPharmacy() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String professionid = prefs.getInt('professionid').toString();
-    // print("professionidprofessionid $professionid");
-    print(professionid);
+   
     var result;
     List<Consult> consults = [];
     Response response =
         await get(Uri.parse("${AppUrl.mypharmacy}/$professionid"));
-    print("response pharmaacy" + response.body);
+    
     if (response.statusCode == 200 || response.statusCode == 201) {
       medical = json.decode(response.body);
-      // print("consultconsultconsultconsultconsult ${medical.length}");
-      // notifyListeners();
-      print("m" + medical.toString());
+      
       return medical;
     } else {
       result = {
@@ -135,19 +132,17 @@ class PharmacyProvider with ChangeNotifier {
   Future<List<dynamic>> getMyPharmacyHistory() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
-    // print("object i got hereeeee");
-    // print("professionidprofessionid $token");
+   
     var result;
 
     Response response = await post(Uri.parse(AppUrl.history), headers: {
       'Content-Type': 'application/json',
       HttpHeaders.authorizationHeader: "Bearer $token"
     });
-    // print("responseresponseresponse ${response.body}");
+    
     if (response.statusCode == 200 || response.statusCode == 201) {
       medical = json.decode(response.body);
-      // print("consultconsultconsultconsultconsult ${medical.length}");
-      // notifyListeners();
+      
       return medical;
     } else {
       result = {
@@ -162,7 +157,7 @@ class PharmacyProvider with ChangeNotifier {
       pharmacy_id, String drug_name, String drug_id, String price) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String professionid = prefs.getInt('professionid').toString();
-    // print("professionidprofessionid $professionid");
+    
     String token = prefs.getString('token');
 
     var result;
@@ -173,7 +168,7 @@ class PharmacyProvider with ChangeNotifier {
       'drug': drug_id,
       'profession': professionid
     };
-    // print("registrationData $registrationData");
+    
     Response response = await put(Uri.parse('${AppUrl.pharmacy}/$pharmacy_id'),
         body: json.encode(registrationData),
         headers: {

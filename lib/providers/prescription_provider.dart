@@ -146,34 +146,43 @@ class PrescriptionProvider with ChangeNotifier {
     notifyListeners();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String token = prefs.getString('token');
-    var sendData = {'patient': patientData, 'prescription': precriptionData};
+    var sendData = {
+      'patient': patientData,
+      'prescription': precriptionData,
+      'created_at': new DateTime.now().toIso8601String()
+    };
     var result;
-    // print("registrationData $sendData");
-    Response response = await post(Uri.parse(AppUrl.write),
-        body: json.encode(sendData),
-        headers: {
-          'Content-Type': 'application/json',
-          HttpHeaders.authorizationHeader: "Bearer $token"
-        });
+    try {
+      Response response = await post(Uri.parse(AppUrl.write),
+          body: json.encode(sendData),
+          headers: {
+            'Content-Type': 'application/json',
+            HttpHeaders.authorizationHeader: "Bearer $token"
+          });
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      final bool responseData = json.decode(response.body);
-      _sentStatus = PrescriptionStatus.Sent;
-      notifyListeners();
-      result = {
-        'status': true,
-        'message': 'Successful',
-        'consult': responseData
-      };
-    } else {
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final bool responseData = json.decode(response.body);
+        _sentStatus = PrescriptionStatus.Sent;
+        notifyListeners();
+        result = {
+          'status': true,
+          'message': 'Successful',
+          'consult': responseData
+        };
+      } else {
+        _sentStatus = PrescriptionStatus.NotSent;
+        notifyListeners();
+        result = {
+          'status': false,
+          'message': json.decode(response.body)['error']
+        };
+      }
+      return result;
+    } catch (e) {
       _sentStatus = PrescriptionStatus.NotSent;
       notifyListeners();
-      result = {
-        'status': false,
-        'message': json.decode(response.body)['error']
-      };
+      print("erororororor ==== > $e");
     }
-    return result;
   }
 
   void setPrescriptionForm(Map<String, dynamic> prescription, int index) {
@@ -188,6 +197,7 @@ class PrescriptionProvider with ChangeNotifier {
     _actionStatus = "populate";
     _status = 'add';
     isFavourite = false;
+    _sentStatus = PrescriptionStatus.NotSent;
     notifyListeners();
   }
 
@@ -216,7 +226,6 @@ class PrescriptionProvider with ChangeNotifier {
     RegExp regExp = new RegExp(pattern);
     bool isPhone = code.length > 8;
 
-    // print("isPhoneisPhone $isPhone");
     var phone = "";
     var url = isPhone ? AppUrl.readprescriptionPhone : AppUrl.readprescription;
     if (isPhone) {
@@ -238,8 +247,6 @@ class PrescriptionProvider with ChangeNotifier {
       _fetchStatus = ReadStatus.Fetch;
       notifyListeners();
       medical = json.decode(response.body);
-      // print("consultconsultconsultconsultconsult ${medical.length}");
-      // notifyListeners();
       result = {'status': true, 'isPhone': isPhone, 'data': medical};
     } else {
       _fetchStatus = ReadStatus.NotFetch;
@@ -264,16 +271,17 @@ class PrescriptionProvider with ChangeNotifier {
         : full_list
             .where((element) => !selected_list.contains(element))
             .toList();
-    print("outputoutputoutput $output");
+    var body = {
+      'output': output,
+      'readDate': new DateTime.now().toIso8601String(),
+    };
     var result;
-    // print("registrationData $output");
 
-    Response response = await post(Uri.parse(AppUrl.accept),
-        body: json.encode(output),
-        headers: {
-          'Content-Type': 'application/json',
-          HttpHeaders.authorizationHeader: "Bearer $token"
-        });
+    Response response =
+        await post(Uri.parse(AppUrl.accept), body: json.encode(body), headers: {
+      'Content-Type': 'application/json',
+      HttpHeaders.authorizationHeader: "Bearer $token"
+    });
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       final bool responseData = json.decode(response.body);

@@ -41,7 +41,7 @@ class _PrescribeFormState extends State<PrescribePsychoForm> {
   String status = 'add';
   var action_status = 'populate';
   bool isValidPhoneNumber = false;
-  String _chosenValue;
+  String _chosenValue = "Male";
   var textHeight = 40.0;
   final _formKey = new GlobalKey<FormState>();
   var prescription = new Prescription();
@@ -78,6 +78,7 @@ class _PrescribeFormState extends State<PrescribePsychoForm> {
   int presIndex = 0;
   bool isAmpule = true;
   bool isEvery = true;
+  bool ampule = true;
   var _currentSelectedValue;
   bool rememberMe = false;
   bool isPatient = false;
@@ -133,38 +134,6 @@ class _PrescribeFormState extends State<PrescribePsychoForm> {
   void didUpdateWidget(covariant PrescribePsychoForm oldWidget) {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
-
-    // var selectedPrescription =
-    //     Provider.of<PrescriptionProvider>(context).singlePrescription;
-    // var statuse = Provider.of<PrescriptionProvider>(context).status;
-    // var actionstatus = Provider.of<PrescriptionProvider>(context).actionStatus;
-    // var index = Provider.of<PrescriptionProvider>(context).prescriptionIndex;
-    //
-    // setState(() {
-    //   status = statuse;
-    //   action_status = actionstatus;
-    //   presIndex = index;
-    // });
-    // print("i got here =======> $action_status");
-    // if (status == 'edit' && action_status == 'populate') {
-    //   print(
-    //       "selectedPrescriptionselectedPrescription ${selectedPrescription['dx']}");
-    //   drugnameController.value =
-    //       TextEditingValue(text: selectedPrescription['drug_name']);
-    //   _selectedAnimal = selectedPrescription['drug_name'];
-    //   strengthController.text = selectedPrescription['strength'];
-    //   unitController.text = selectedPrescription['unit'];
-    //   routeController.text = selectedPrescription['route'];
-    //   everyController.text = selectedPrescription['frequency'];
-    //   forController.text = selectedPrescription['takein'];
-    //   ampuleController.text = selectedPrescription['ampule'];
-    //   diagnosisController.text = selectedPrescription['dx']['diagnosis'];
-    //   setState(() {
-    //     status = "editing";
-    //     action_status = "editing";
-    //     presIndex = index;
-    //   });
-    // }
   }
 
   void getGeneralDrugs() {
@@ -182,18 +151,6 @@ class _PrescribeFormState extends State<PrescribePsychoForm> {
       });
     });
   }
-
-  // void setFormFromFav(var fav) {
-  //   setState(() {
-  //     drugnameController.text = fav['drug_name'];
-  //     print("drug_namedrug_name ===> ${drugnameController.text}");
-  //     strengthController.text = fav['strength'];
-  //     unitController.text = fav['unit'];
-  //     routeController.text = fav['route'];
-  //     forController.text = fav['takein'];
-  //     everyController.text = fav['frequency'];
-  //   });
-  // }
 
   void setFromFavorites(List<dynamic> fav) async {
     User user = await UserPreferences().getUser();
@@ -218,7 +175,7 @@ class _PrescribeFormState extends State<PrescribePsychoForm> {
           "diagnosis": "",
         },
       };
-      // print("favorites  $precriptionData");
+
       finaPrescription.add(precriptionData);
     }
   }
@@ -530,6 +487,8 @@ class _PrescribeFormState extends State<PrescribePsychoForm> {
                                                           prescription
                                                               .diagnosis = val;
                                                         });
+                                                        widget.setPatient(
+                                                            "diagnosis", val);
                                                       },
                                                       decoration:
                                                           InputDecoration(
@@ -805,7 +764,7 @@ class _PrescribeFormState extends State<PrescribePsychoForm> {
                                           isValidPhoneNumber = true;
                                         });
                                       }
-                                      print("is valide" + isValid.toString());
+
                                       widget.setPatient('phone', phone);
                                       var res = await patientProvider
                                           .getPatient(phone);
@@ -1062,8 +1021,7 @@ class _PrescribeFormState extends State<PrescribePsychoForm> {
                                                       if (value.text.isEmpty) {
                                                         return [];
                                                       }
-                                                      // print(
-                                                      //     "generalDrugsgeneralDrugs $generalDrugs");
+
                                                       // The logic to find out which ones should appear
                                                       // Milkessa: implemented a search mechanism that is organized and alphabetical
                                                       List<dynamic> drugRes;
@@ -1255,11 +1213,13 @@ class _PrescribeFormState extends State<PrescribePsychoForm> {
                                                   if (val.isNotEmpty) {
                                                     setState(() {
                                                       isEvery = false;
+                                                      ampule = true;
                                                     });
                                                   }
                                                   if (val.isEmpty) {
                                                     setState(() {
                                                       isEvery = true;
+                                                      ampule = false;
                                                     });
                                                   }
                                                 },
@@ -1290,6 +1250,9 @@ class _PrescribeFormState extends State<PrescribePsychoForm> {
                             child: TextFormField(
                               controller: remarkController,
                               enabled: !rememberMe ? true : false,
+                              onChanged: (val) {
+                                widget.setPatient('remark', val);
+                              },
                               decoration: InputDecoration(
                                   border: OutlineInputBorder(),
                                   labelText: 'Remark',
@@ -1393,6 +1356,7 @@ class _PrescribeFormState extends State<PrescribePsychoForm> {
                                                   : ' Months')
                                       : ""
                                   : '',
+                              "createdAt": new DateTime.now().toIso8601String(),
                               "frequency": prescription.frequency,
                               "drug": prescription.drug,
                               "professional": profession,
@@ -1402,7 +1366,6 @@ class _PrescribeFormState extends State<PrescribePsychoForm> {
                               "type": widget.type,
                               "ampule": ampuleController.text,
                               "remark": remarkController.text,
-                              "dx": {"diagnosis": diagnosisController.text},
                             };
                             if (finaPatient.length == 0) {
                               setState(() {
@@ -1411,6 +1374,8 @@ class _PrescribeFormState extends State<PrescribePsychoForm> {
                             }
                             setState(() {
                               finaPrescription.add(precriptionData);
+                              isAmpule = true;
+                              isEvery = true;
                             });
                           } else if (status == 'edit') {
                             Provider.of<PrescriptionProvider>(context,
@@ -1440,9 +1405,16 @@ class _PrescribeFormState extends State<PrescribePsychoForm> {
                                   ampuleController.text;
                               finaPrescription[presIndex]["drug"] =
                                   prescription.drug;
+                              finaPrescription[presIndex]['remark'] =
+                                  remarkController.text;
                               finaPrescription[presIndex]["type"] = widget.type;
-                              finaPrescription[presIndex]['dx']['diagnosis'] =
-                                  diagnosisController.text;
+
+                              finaPrescription[presIndex]['material_name'] =
+                                  materialController.text;
+                              finaPrescription[presIndex]['size'] =
+                                  sizeController.text;
+                              finaPrescription[presIndex]['amount'] =
+                                  amountController.text;
                               //update the patient info
 
                               if (finaPatient.length == 0) {
@@ -1471,6 +1443,8 @@ class _PrescribeFormState extends State<PrescribePsychoForm> {
                                 finaPatient[0]['mrn'] = addressController.text;
                                 finaPatient[0]['professionid'] =
                                     user.professionid;
+                                finaPatient[0]['dx']['diagnosis'] =
+                                    diagnosisController.text;
                               }
                             });
                           }
@@ -1502,14 +1476,17 @@ class _PrescribeFormState extends State<PrescribePsychoForm> {
                           } else {
                             widget.setPrescription(finaPrescription);
                             _formKey.currentState.reset();
+
                             drugnameController.text = "";
                             strengthController.text = '';
                             unitController.text = '';
                             routeController.text = '';
                             everyController.text = '';
                             forController.text = '';
-                            diagnosisController.text = "";
-                            addressController.text = "";
+                            // diagnosisController.text = "";
+                            // addressController.text = "";
+                            // remarkController.text = "";
+                            ampuleController.text = "";
                             _selectedDrug = "";
                           }
                         }
@@ -1564,7 +1541,7 @@ class _PrescribeFormState extends State<PrescribePsychoForm> {
                     if (value.text.isEmpty) {
                       return [];
                     }
-                    // print("instrument=========> $instruments");
+
                     // The logic to find out which ones should appear
                     // Milkessa: implemented a search mechanism that is organized and alphabetical
                     List<dynamic> instrumentRes;
@@ -1588,7 +1565,6 @@ class _PrescribeFormState extends State<PrescribePsychoForm> {
                     setState(() {
                       sizes = value['size'].split(',');
                     });
-                    print("sizessizessizessizes $sizes");
                   },
                   displayStringForOption: (option) => option['material_name'],
                   fieldViewBuilder: (BuildContext context,
@@ -1647,17 +1623,18 @@ class _PrescribeFormState extends State<PrescribePsychoForm> {
             color: Colors.grey[100]),
         child: ListView(
           children: widget.initialPrescription.map<Widget>((pres) {
+            print("psycho ===> $pres");
             return Row(
               children: [
                 Expanded(
                   child: pres['type'] == "psychotropic"
-                      ? isEvery
+                      ? pres['ampule'] != "" && pres['ampule'] != null
                           ? Text(
                               '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['drug_name'] != null ? pres['drug_name'] : ""} ${pres['strength'] != null ? pres['strength'] : ""}${pres['unit'] != null ? pres['unit'] : ""} '
-                              ' ${pres['route'] != null ? pres['route'] : ""} Every ${pres['frequency'] != null ? pres['frequency'] : ""} For ${pres['takein'] != null ? pres['takein'] : ""}')
+                              ' ${pres['route'] != null ? pres['route'] : ""} #${pres['ampule']} Amp')
                           : Text(
                               '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['drug_name'] != null ? pres['drug_name'] : ""} ${pres['strength'] != null ? pres['strength'] : ""}${pres['unit'] != null ? pres['unit'] : ""} '
-                              ' ${pres['route'] != null ? pres['route'] : ""} #${ampuleController.text} Amp')
+                              ' ${pres['route'] != null ? pres['route'] : ""} Every ${pres['frequency'] != null ? pres['frequency'] : ""} For ${pres['takein'] != null ? pres['takein'] : ""}')
                       : Text(
                           '${widget.initialPrescription.indexOf(pres) + 1}. ${pres['material_name'] != null ? pres['material_name'] : ""} ${pres['size'] != null ? pres['size'] : ""} ${pres['amount'] != null ? '#${pres['amount']}' : ""}'),
                 ),
@@ -1666,22 +1643,36 @@ class _PrescribeFormState extends State<PrescribePsychoForm> {
                     children: [
                       IconButton(
                         onPressed: () {
-                          print("object $pres");
-                          // Provider.of<PrescriptionProvider>(context,
-                          //     listen: false)
-                          //     .setPrescriptionForm(
-                          //     pres, prescription.indexOf(pres));
+                          if (pres['ampule'] != "") {
+                            setState(() {
+                              isEvery = false;
+                            });
+                          }
                           setState(() {
+                            presIndex =
+                                widget.initialPrescription.indexOf(pres);
                             drugnameController.value =
                                 TextEditingValue(text: pres['drug_name']);
                             _selectedDrug = pres['drug_name'];
                             strengthController.text = pres['strength'];
                             unitController.text = pres['unit'];
                             routeController.text = pres['route'];
-                            everyController.text = pres['frequency'];
-                            forController.text = pres['takein'];
-                            ampuleController.text = pres['ampule'];
-                            diagnosisController.text = pres['dx']['diagnosis'];
+                            if (pres['ampule'] != "") {
+                              isEvery = false;
+                              isAmpule = true;
+                              everyController.text = "";
+                              forController.text = "";
+                              ampuleController.text = pres['ampule'];
+                            } else if (pres["ampule"] == "") {
+                              isEvery = true;
+                              isAmpule = false;
+                              everyController.text = pres['frequency'];
+                              forController.text = pres['takein'] != ""
+                                  ? pres['takein'].split(" ")[0]
+                                  : "";
+                              ampuleController.text = "";
+                            }
+
                             status = 'edit';
                             action_status = 'populate';
                           });

@@ -79,8 +79,6 @@ class _ConsultsState extends State<Consults> {
                     child: Text('No data to show'),
                   );
                 }
-
-                print("objectobjectobject ${snapshot.data}");
                 return ConsultList(snapshot.data);
               }
             })

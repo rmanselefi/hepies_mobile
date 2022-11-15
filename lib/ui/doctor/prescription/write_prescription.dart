@@ -16,6 +16,7 @@ import 'package:hepius/util/database_helper.dart';
 import 'package:hepius/util/shared_preference.dart';
 import 'package:phone_number/phone_number.dart';
 import 'package:provider/provider.dart';
+import 'package:status_bar_control/status_bar_control.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 
@@ -42,18 +43,22 @@ class _WritePrescriptionState extends State<WritePrescription> {
   String age = "";
   String name = "";
   String fatherName = "";
-  String sex = "";
+  String sex = "Male";
   String weight = "";
   String isFit = "";
   String ageLabel = "";
   String address = "";
+  String remark = "";
+  String diagnosis = "";
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    PrescriptionProvider().resetStatus();
+    updateStatusBar();
     String from = widget.from;
-    print("widget.from ===== > ${widget.from}");
+
     if (from == "sent") {
       showTopSnackBar(
         context,
@@ -66,7 +71,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
       });
     }
     var fav = widget.data;
-    print("i am here from fav $fav");
+
     if (fav != null) {
       setFromFavorites(fav);
     }
@@ -86,6 +91,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
   void didUpdateWidget(covariant WritePrescription oldWidget) {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
+    PrescriptionProvider().resetStatus();
   }
 
   @override
@@ -100,9 +106,17 @@ class _WritePrescriptionState extends State<WritePrescription> {
     });
   }
 
+  void updateStatusBar() {
+    double _statusBarOpacity = 1.0;
+    Color _statusBarColor = Colors.white;
+    bool _statusBarColorAnimated = false;
+    StatusBarControl.setColor(_statusBarColor.withOpacity(_statusBarOpacity),
+        animated: _statusBarColorAnimated);
+  }
+
   void setIsFit() async {
     var user = await UserProvider().getProfile();
-    print("isFitisFitisFit ${user['isFit']}");
+
     setState(() {
       isFit = user['isFit'];
     });
@@ -112,6 +126,11 @@ class _WritePrescriptionState extends State<WritePrescription> {
     if (type == "name") {
       setState(() {
         name = value;
+      });
+    }
+    if (type == "remark") {
+      setState(() {
+        remark = value;
       });
     }
     if (type == "phone") {
@@ -147,6 +166,11 @@ class _WritePrescriptionState extends State<WritePrescription> {
     if (type == "address") {
       setState(() {
         address = value;
+      });
+    }
+    if (type == "diagnosis") {
+      setState(() {
+        diagnosis = value;
       });
     }
   }
@@ -245,6 +269,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                           child: IconButton(
                               icon: Icon(Icons.arrow_back),
                               onPressed: () {
+                                PrescriptionProvider().resetStatus();
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
@@ -518,7 +543,6 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                 ],
                               ),
                               Builder(builder: (context) {
-                                // print("prescriptionprescription $prescription");
                                 if (pretype == "general") {
                                   return PrescribeForm(
                                       setPrescription: _setPrescription,
@@ -533,6 +557,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                       setPrescription: _setPrescription,
                                       setPatient: setPatientInfo,
                                       initialPrescription: prescription,
+                                      setFav: setFavorite,
                                       type: 'instrument',
                                       color: Color(0xff0BE9E2),
                                       from: widget.from);
@@ -677,6 +702,7 @@ class _WritePrescriptionState extends State<WritePrescription> {
                         : SizedBox(width: width(context) * 0.15),
                     GestureDetector(
                       onTap: () {
+                        PrescriptionProvider().resetStatus();
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(builder: (context) => Welcome()),
@@ -704,52 +730,135 @@ class _WritePrescriptionState extends State<WritePrescription> {
                     favorite
                         ? SizedBox(width: 0)
                         : SizedBox(width: width(context) * 0.15),
-                    prescProvider.sentStatus == PrescriptionStatus.Sending
-                        ? loading
-                        : favorite
-                            ? SizedBox(width: 0)
-                            : GestureDetector(
-                                onTap: () async {
-                                  try {
-                                    if (pretype == "general" ||
-                                        pretype == "instrument") {
-                                      print(
-                                          "patientpatient ${phoneNumber.length}");
-                                      if (prescription.length != 0) {
-                                        if (phoneNumber == "" ||
-                                            sex == "" ||
-                                            name == "" ||
-                                            age == "") {
-                                          showTopSnackBar(
-                                            context,
-                                            CustomSnackBar.error(
-                                              message:
-                                                  "Please make sure all patient information is provided before sending prescription",
-                                            ),
-                                          );
+                    Consumer<PrescriptionProvider>(
+                      builder: (context, pres, child) {
 
-                                          return;
-                                        } else {
-                                          var phone = "+251$phoneNumber";
-                                          PhoneNumberUtil plugin =
-                                              PhoneNumberUtil();
-                                          RegionInfo region = RegionInfo(
-                                              code: 'ET', prefix: 251);
-                                          if (phoneNumber.length == 13) {
-                                            bool isValid =
-                                                await plugin.validate(
-                                                    phoneNumber, region.code);
-
-                                            if (!isValid) {
+                        return pres.sentStatus ==
+                                PrescriptionStatus.Sending
+                            ? loading
+                            : favorite
+                                ? SizedBox(width: 0)
+                                : GestureDetector(
+                                    onTap: () async {
+                                      try {
+                                        if (pretype == "general" ||
+                                            pretype == "instrument") {
+                                          if (prescription.length != 0) {
+                                            if (phoneNumber == "" ||
+                                                sex == "" ||
+                                                name == "" ||
+                                                age == "") {
                                               showTopSnackBar(
                                                 context,
                                                 CustomSnackBar.error(
                                                   message:
-                                                      "Phone number is not valid",
+                                                      "Please make sure all patient information is provided before sending prescription",
                                                 ),
                                               );
+
+                                              return;
                                             } else {
-                                              print("got hereeeeeeeeeee====>>");
+                                              var phone = "+251$phoneNumber";
+                                              PhoneNumberUtil plugin =
+                                                  PhoneNumberUtil();
+                                              RegionInfo region = RegionInfo(
+                                                  code: 'ET', prefix: 251);
+                                              if (phoneNumber.length == 13) {
+                                                bool isValid =
+                                                    await plugin.validate(
+                                                        phoneNumber,
+                                                        region.code);
+
+                                                if (!isValid) {
+                                                  showTopSnackBar(
+                                                    context,
+                                                    CustomSnackBar.error(
+                                                      message:
+                                                          "Phone number is not valid",
+                                                    ),
+                                                  );
+                                                } else {
+                                                  User user =
+                                                      await UserPreferences()
+                                                          .getUser();
+                                                  final Map<String, dynamic>
+                                                      patientData = {
+                                                    "name": name,
+                                                    "age": age,
+                                                    "age_label": ageLabel,
+                                                    "fathername": fatherName,
+                                                    "grandfathername": "kebede",
+                                                    "phone": phoneNumber,
+                                                    "sex": sex,
+                                                    "weight": weight,
+                                                    "mrn": address,
+                                                    "remark":remark,
+                                                    "professionid":
+                                                        user.professionid,
+                                                    "dx": {"diagnosis": diagnosis},
+                                                  };
+                                                  var res = await prescProvider
+                                                      .writePrescription(
+                                                          prescription,
+                                                          patientData);
+                                                  if (res['status']) {
+                                                    Provider.of<PrescriptionProvider>(
+                                                            context,
+                                                            listen: false)
+                                                        .resetStatus();
+                                                    Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                WritePrescription(
+                                                                  from: 'sent',
+                                                                )));
+                                                  } else {
+                                                    showTopSnackBar(
+                                                      context,
+                                                      CustomSnackBar.error(
+                                                        message:
+                                                            "Unable to send your prescriptions",
+                                                      ),
+                                                    );
+                                                  }
+                                                }
+                                              } else if (phoneNumber.length !=
+                                                  13) {
+                                                showTopSnackBar(
+                                                  context,
+                                                  CustomSnackBar.error(
+                                                    message:
+                                                        "please add correct phoneNumber",
+                                                  ),
+                                                );
+                                              }
+                                            }
+                                          } else {
+                                            showTopSnackBar(
+                                              context,
+                                              CustomSnackBar.error(
+                                                message:
+                                                    'Please fill at least one prescription.',
+                                              ),
+                                            );
+                                          }
+                                        } else {
+                                          if (psycoPrescription.length != 0) {
+                                            if (phoneNumber == "" ||
+                                                sex == "" ||
+                                                name == "" ||
+                                                age == "") {
+                                              showTopSnackBar(
+                                                context,
+                                                CustomSnackBar.error(
+                                                  message:
+                                                      "Please make sure all patient information is provided before sending prescription",
+                                                ),
+                                              );
+
+                                              return;
+                                            } else {
                                               User user =
                                                   await UserPreferences()
                                                       .getUser();
@@ -765,11 +874,12 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                                 "weight": weight,
                                                 "mrn": address,
                                                 "professionid":
-                                                    user.professionid
+                                                    user.professionid,
+                                                "dx": {"diagnosis": diagnosis},
                                               };
                                               var res = await prescProvider
                                                   .writePrescription(
-                                                      prescription,
+                                                      psycoPrescription,
                                                       patientData);
                                               if (res['status']) {
                                                 Provider.of<PrescriptionProvider>(
@@ -788,151 +898,110 @@ class _WritePrescriptionState extends State<WritePrescription> {
                                                   context,
                                                   CustomSnackBar.error(
                                                     message:
-                                                        "Unable to send your prescriptions",
+                                                        'Unable to send your prescriptions',
                                                   ),
                                                 );
                                               }
                                             }
-                                          } else if (phoneNumber.length != 13) {
-                                            print("phone number length : " +
-                                                phoneNumber.length.toString());
+                                          } else if (narcoPrescription.length !=
+                                              0) {
+                                            if (phoneNumber == "" ||
+                                                sex == "" ||
+                                                name == "" ||
+                                                age == "") {
+                                              showTopSnackBar(
+                                                context,
+                                                CustomSnackBar.error(
+                                                  message:
+                                                      "Please make sure all patient information is provided before sending prescription",
+                                                ),
+                                              );
+
+                                              return;
+                                            } else {
+                                              User user =
+                                                  await UserPreferences()
+                                                      .getUser();
+                                              final Map<String, dynamic>
+                                                  patientData = {
+                                                "name": name,
+                                                "age": age,
+                                                "age_label": ageLabel,
+                                                "fathername": fatherName,
+                                                "grandfathername": "kebede",
+                                                "phone": phoneNumber,
+                                                "sex": sex,
+                                                "weight": weight,
+                                                "mrn": address,
+                                                "professionid":
+                                                    user.professionid,
+                                                "dx": {"diagnosis": diagnosis},
+                                              };
+                                              var res = await prescProvider
+                                                  .writePrescription(
+                                                      narcoPrescription,
+                                                      patientData);
+                                              if (res['status']) {
+                                                Provider.of<PrescriptionProvider>(
+                                                        context,
+                                                        listen: false)
+                                                    .resetStatus();
+                                                Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            WritePrescription(
+                                                              from: 'sent',
+                                                            )));
+                                              } else {
+                                                showTopSnackBar(
+                                                  context,
+                                                  CustomSnackBar.error(
+                                                    message:
+                                                        'Unable to send your prescriptions',
+                                                  ),
+                                                );
+                                              }
+                                            }
+                                          } else {
                                             showTopSnackBar(
                                               context,
                                               CustomSnackBar.error(
                                                 message:
-                                                    "please add correct phoneNumber",
+                                                    'Please fill at least one prescription.',
                                               ),
                                             );
                                           }
                                         }
-                                      } else {
-                                        showTopSnackBar(
-                                          context,
-                                          CustomSnackBar.error(
-                                            message:
-                                                'Please fill at least one prescription.',
-                                          ),
-                                        );
+                                      } catch (e) {
+                                        print("object $e");
                                       }
-                                    } else {
-                                      if (psycoPrescription.length != 0) {
-                                        User user =
-                                            await UserPreferences().getUser();
-                                        final Map<String, dynamic> patientData =
-                                            {
-                                          "name": name,
-                                          "age": age,
-                                          "age_label": ageLabel,
-                                          "fathername": fatherName,
-                                          "grandfathername": "kebede",
-                                          "phone": phoneNumber,
-                                          "sex": sex,
-                                          "weight": weight,
-                                          "mrn": address,
-                                          "professionid": user.professionid
-                                        };
-                                        var res = await prescProvider
-                                            .writePrescription(
-                                                psycoPrescription, patientData);
-                                        if (res['status']) {
-                                          Provider.of<PrescriptionProvider>(
-                                                  context,
-                                                  listen: false)
-                                              .resetStatus();
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      WritePrescription(
-                                                        from: 'sent',
-                                                      )));
-                                        } else {
-                                          showTopSnackBar(
-                                            context,
-                                            CustomSnackBar.error(
-                                              message:
-                                                  'Unable to send your prescriptions',
-                                            ),
-                                          );
-                                        }
-                                      } else if (narcoPrescription.length !=
-                                          0) {
-                                        User user =
-                                            await UserPreferences().getUser();
-                                        final Map<String, dynamic> patientData =
-                                            {
-                                          "name": name,
-                                          "age": age,
-                                          "age_label": ageLabel,
-                                          "fathername": fatherName,
-                                          "grandfathername": "kebede",
-                                          "phone": phoneNumber,
-                                          "sex": sex,
-                                          "weight": weight,
-                                          "mrn": address,
-                                          "professionid": user.professionid
-                                        };
-                                        var res = await prescProvider
-                                            .writePrescription(
-                                                narcoPrescription, patientData);
-                                        if (res['status']) {
-                                          Provider.of<PrescriptionProvider>(
-                                                  context,
-                                                  listen: false)
-                                              .resetStatus();
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      WritePrescription(
-                                                        from: 'sent',
-                                                      )));
-                                        } else {
-                                          showTopSnackBar(
-                                            context,
-                                            CustomSnackBar.error(
-                                              message:
-                                                  'Unable to send your prescriptions',
-                                            ),
-                                          );
-                                        }
-                                      } else {
-                                        showTopSnackBar(
-                                          context,
-                                          CustomSnackBar.error(
-                                            message:
-                                                'Please fill at least one prescription.',
-                                          ),
-                                        );
-                                      }
-                                    }
-                                  } catch (e) {
-                                    print("object $e");
-                                  }
-                                },
-                                child: Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Container(
-                                    width: 100,
-                                    height: 40,
-                                    margin:
-                                        EdgeInsets.only(right: 10.0, top: 0.0),
-                                    decoration: BoxDecoration(
-                                        color: Color(0xff07febb),
-                                        border:
-                                            Border.all(color: Colors.black45),
-                                        borderRadius:
-                                            BorderRadius.circular(10.0)),
-                                    child: Center(
-                                        child: Text(
-                                      'Send',
-                                      style: TextStyle(
-                                          fontSize: 15.0,
-                                          fontWeight: FontWeight.bold),
-                                    )),
-                                  ),
-                                ),
-                              ),
+                                    },
+                                    child: Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Container(
+                                        width: 100,
+                                        height: 40,
+                                        margin: EdgeInsets.only(
+                                            right: 10.0, top: 0.0),
+                                        decoration: BoxDecoration(
+                                            color: Color(0xff07febb),
+                                            border: Border.all(
+                                                color: Colors.black45),
+                                            borderRadius:
+                                                BorderRadius.circular(10.0)),
+                                        child: Center(
+                                            child: Text(
+                                          'Send',
+                                          style: TextStyle(
+                                              fontSize: 15.0,
+                                              fontWeight: FontWeight.bold),
+                                        )),
+                                      ),
+                                    ),
+                                  );
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -969,7 +1038,6 @@ class _WritePrescriptionState extends State<WritePrescription> {
                     children: [
                       IconButton(
                         onPressed: () {
-                          print("object $pres");
                           Provider.of<PrescriptionProvider>(context,
                                   listen: false)
                               .setPrescriptionForm(

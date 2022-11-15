@@ -28,7 +28,7 @@ class _EditProfileState extends State<EditProfile>
 
   void _setImage(XFile image) {
     file = image;
-    print("_formData_formData_formData${file}");
+    
   }
 
   TextEditingController _nameController = new TextEditingController();
@@ -66,7 +66,7 @@ class _EditProfileState extends State<EditProfile>
   }
 
   getUserInterest() async {
-    print("working");
+    
     var user = await UserProvider().getProfile();
     var interestss = user['profession'][0]['interests'] != null
         ? user['profession'][0]['interests'].split(",")
@@ -74,17 +74,17 @@ class _EditProfileState extends State<EditProfile>
     setState(() {
       _interests = interestss;
     });
-    print("interset" + _interests.toString());
+   
   }
 
   getUser() async {
-    print("working user");
+    
     Future.delayed(Duration(seconds: 5));
     setState(() {
       loadingProfile = true;
     });
     var user = await UserProvider().getProfile();
-    // print("object ${user}");
+    
     var inters = user['profession'][0]['interests'] != null
         ? user['profession'][0]['interests'].split(",")
         : [];
@@ -112,7 +112,7 @@ class _EditProfileState extends State<EditProfile>
   }
 
   getInterests() async {
-    print("i working");
+    
     Future.delayed(Duration(seconds: 5));
     List interests = await ConsultProvider().getInterests();
 
@@ -126,8 +126,7 @@ class _EditProfileState extends State<EditProfile>
       });
     });
 
-    // print(interestList);
-    // print("somethig");
+   
   }
 
   String _selectedDate = '';
@@ -343,7 +342,7 @@ class _EditProfileState extends State<EditProfile>
                                                       : [],
                                               onSaved: (value) {
                                                 if (value == null) return;
-                                                // print("_interests_interests_interests ${value.join(",")}");
+                                                
 
                                                 setState(() {
                                                   _interests = value;
@@ -460,7 +459,7 @@ class _EditProfileState extends State<EditProfile>
                 color: Colors.green,
                 onPressed: () async {
                   var finalInterest = _interests.join(",");
-                  print("interestsinterestsinterests $finalInterest");
+                 
                   User user = new User(
                       userId: userId,
                       username: username,

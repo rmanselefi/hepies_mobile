@@ -42,7 +42,7 @@ class _PrescriptionPaperState extends State<PsychoNarcoPaper> {
                         children: [
                           IconButton(
                             onPressed: () {
-                              print("object $pres");
+                             
                               setState(() {
                                 status = 'edit';
                                 pesIndex = finaPrescription.indexOf(pres);

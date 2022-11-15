@@ -50,7 +50,7 @@ class _FavoritesState extends State<FavoritesPage> {
               new TextButton(
                   child: const Text('Rename'),
                   onPressed: () async {
-                    print("RenameRenameRename ${favorite.toMap()}");
+                    
                     int res = await DatabaseHelper().updateFavorite(favorite,name);
                     if (res >= 1) {
                       setState(() {
@@ -124,8 +124,6 @@ class _FavoritesState extends State<FavoritesPage> {
                                                 await DatabaseHelper()
                                                     .getFavoritesByName(
                                                         data[index].name);
-                                            print(
-                                                "combinationscombinationscombinations $combinations");
                                             Provider.of<PrescriptionProvider>(
                                                     context,
                                                     listen: false)
@@ -145,20 +143,23 @@ class _FavoritesState extends State<FavoritesPage> {
                                                           )));
                                             });
                                           },
-                                          child: Text(
-                                            '${index + 1} ${data[index].name}',
-                                            style: TextStyle(
-                                                decoration:
-                                                    TextDecoration.underline,
-                                                fontSize: 23.0,
-                                                fontWeight: FontWeight.bold),
+                                          child: Container(
+                                            width: 300.0,
+                                            child: Text(
+                                              '${index + 1} ${data[index].name}',
+                                              style: TextStyle(
+                                                  decoration:
+                                                      TextDecoration.underline,
+                                                  fontSize: 23.0,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
                                           ),
                                         ),
                                         trailing: Container(
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width /
-                                              1.5,
+                                              3,
                                           child: Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.end,

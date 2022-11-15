@@ -33,6 +33,7 @@ class _PrescriptionResultState extends State<PrescriptionResultPhone> {
 
     List<dynamic> result = widget.result;
     var patient = result[0];
+    print("resultresultresultresultresult=====>0 $result");
     var diagnosis = result[0]['prescription'][0]['diagnosis'];
     var prescription = result[0]['prescription_item'];
     List<dynamic> notReadPrescription = prescription
@@ -112,7 +113,7 @@ class _PrescriptionResultState extends State<PrescriptionResultPhone> {
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 20.0),
                                           )
-                                        : e['ampule'] != null
+                                        : e['ampule'].toString().isNotEmpty
                                             ? Text(
                                                 ' ${e['drug_name']} ${e['strength']} '
                                                 '${e['unit']} ${e['route']} #${e['ampule']} Amp',

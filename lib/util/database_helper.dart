@@ -81,7 +81,7 @@ class DatabaseHelper {
     var dbClient = await db;
     var ress = await dbClient.query("favorites",
         columns: [
-          "id,name,route,strength,profession_id,drug_name,drug,unit,type,frequency,takein, material_name, size, amount"
+          "id,name,route,strength,profession_id,drug_name,drug,unit,type,frequency,takein, material_name, size, amount,ampule"
         ],
         where: "name = ?",
         whereArgs: [name]);

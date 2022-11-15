@@ -89,10 +89,7 @@ class _ShareConsultState extends State<ShareConsult> {
                                 setState(() {
                                   isOnSearch = true;
                                 });
-                                print("current search state" +
-                                    isOnSearch.toString());
-
-                                print("Working , searching ${_search.text}");
+                               
                               },
                               child: Icon(Icons.search)),
                           focusedBorder: OutlineInputBorder(

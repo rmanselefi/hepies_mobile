@@ -78,8 +78,13 @@ class _PharmacyHistoryState extends State<PharmacyHistory> {
                             return ListView(
                                 shrinkWrap: true,
                                 physics: NeverScrollableScrollPhysics(),
-                                children: snapshot.data.reversed.map<Widget>((e) {
-                                  var date = new DateFormat.yMMMd().add_Hm()
+                                children:
+                                    snapshot.data.reversed.map<Widget>((e) {
+                                  // var date = new DateFormat.yMMMd().add_Hm()
+                                  //     .format(DateTime.parse(e['readDate']));
+
+                                  var date = new DateFormat.yMd()
+                                      .add_jm()
                                       .format(DateTime.parse(e['readDate']));
                                   var name = e['patient']['name'] +
                                       " " +
@@ -103,7 +108,6 @@ class _PharmacyHistoryState extends State<PharmacyHistory> {
                                       Expanded(
                                         child: Container(
                                           margin: EdgeInsets.only(left: 20),
-
                                           height: 30,
                                           child: Text(
                                             name,
@@ -117,7 +121,6 @@ class _PharmacyHistoryState extends State<PharmacyHistory> {
                                         child: Container(
                                           height: 40,
                                           margin: EdgeInsets.only(left: 20),
-
                                           child: Text(
                                             '$date',
                                             style: TextStyle(

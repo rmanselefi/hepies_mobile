@@ -24,7 +24,7 @@ class _PharmacyShareConsultState extends State<ShareComment> {
   XFile file;
   void _setImage(XFile image) {
     file = image;
-    print("_formData_formData_formData${file}");
+    
   }
 
   var loading = Row(
@@ -99,7 +99,7 @@ class _PharmacyShareConsultState extends State<ShareComment> {
                                         );
                                       }
                                     } catch (e) {
-                                      print("eeeee ${e}");
+                                      
                                       showTopSnackBar(
                                         context,
                                         CustomSnackBar.error(
@@ -139,8 +139,6 @@ class _PharmacyShareConsultState extends State<ShareComment> {
                               child: Text('No data to show'),
                             );
                           }
-
-                          print("objectobjectobject ${snapshot.data}");
                           return PharmacyCommentList(snapshot.data, 0);
                         }
                       }),

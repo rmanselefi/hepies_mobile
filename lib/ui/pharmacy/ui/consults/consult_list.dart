@@ -52,7 +52,7 @@ class _RowButtonState extends State<RowButton> {
         : [];
     res.length > 0 ? isLiked = true : isLiked = false;
     totalLikes = widget.e['like'].length;
-    // print("res ${res}");
+    
   }
 
   @override

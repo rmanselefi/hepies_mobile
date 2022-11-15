@@ -17,6 +17,7 @@ class _PersonalInfoState extends State<PersonalInfoCode> {
     var patient = prescription['patient'];
     var remark = prescription['prescription']['remark'];
     var date = prescription['prescription']['createdAt'];
+    print("object=====> $date");
     var formattedDate =
         new DateFormat.yMd().add_jm().format(DateTime.parse(date));
     print("p" + patient.toString());

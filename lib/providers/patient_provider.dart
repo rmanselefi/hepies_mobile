@@ -27,7 +27,7 @@ class PatientProvider with ChangeNotifier {
       _fetchStatus = Status.Fetch;
       notifyListeners();
       medical = json.decode(response.body);
-      // print("recordrecord ${medical.length}");
+      
       // notifyListeners();
       return medical;
     } else {
@@ -52,7 +52,7 @@ class PatientProvider with ChangeNotifier {
       _fetchStatus = Status.Fetch;
       notifyListeners();
       patient = json.decode(response.body);
-      // print("recordrecord ${patient}");
+      
       // notifyListeners();
       return patient;
     } else {
@@ -77,7 +77,7 @@ class PatientProvider with ChangeNotifier {
       _fetchStatus = Status.Fetch;
       notifyListeners();
       patient = json.decode(response.body);
-      // print("recordrecord ${patient}");
+      
       // notifyListeners();
       return patient;
     } else {

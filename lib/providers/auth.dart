@@ -49,10 +49,10 @@ class AuthProvider with ChangeNotifier {
         body: json.encode(loginData),
         headers: {'Content-Type': 'application/json'},
       );
-      print("response + ${response.statusCode}");
+      
       if (response.statusCode == 200 || response.statusCode == 201) {
         final Map<String, dynamic> responseData = json.decode(response.body);
-        // print("responseDataresponseDataresponseDataresponseData $responseData");
+        
         User authUser = User.fromJson(responseData);
         UserPreferences().saveUser(authUser);
         var role = responseData['role']['name'];
@@ -109,7 +109,7 @@ class AuthProvider with ChangeNotifier {
       if (googleLookup.isNotEmpty && googleLookup[0].rawAddress.isNotEmpty) {
         if (file != null) {
           await uploadImage(file).then((res) {
-            print('imageuriimageuriimageuri$res');
+           
             if (res != null) {
               license = res;
             }
@@ -141,11 +141,10 @@ class AuthProvider with ChangeNotifier {
       Response response = await post(Uri.parse(AppUrl.register),
           body: json.encode(registrationData),
           headers: {'Content-Type': 'application/json'});
-      // print("responseresponseresponse ${json.decode(response.body)}");
-      print(response.body.toString() + response.statusCode.toString());
+     
       if (response.statusCode == 200 || response.statusCode == 201) {
         final Map<String, dynamic> responseData = json.decode(response.body);
-        // print("ResponseResponseResponse ${responseData}");
+        
 
         _loggedInStatus = Status.LoggedIn;
         notifyListeners();
@@ -187,7 +186,7 @@ class AuthProvider with ChangeNotifier {
     var result;
     final Map<String, dynamic> responseData = json.decode(response.body);
 
-    // print(response.statusCode);
+    
     if (response.statusCode == 200) {
       var userData = responseData['data'];
 
@@ -235,7 +234,7 @@ class AuthProvider with ChangeNotifier {
     try {
       if (file != null) {
         await uploadImage(file).then((res) {
-          // print('imageuriimageuriimageuri$res');
+          
           if (res != null) {
             backImage = res;
           }
@@ -245,7 +244,7 @@ class AuthProvider with ChangeNotifier {
       }
       return false;
     } catch (err) {
-      // print("errorerrorerrorerrorerrorerror $err");
+     
       return false;
     }
   }
@@ -265,7 +264,7 @@ class AuthProvider with ChangeNotifier {
     if (response.statusCode == 200 || response.statusCode == 201) {
       final Map<String, dynamic> responseData = json.decode(response.body);
 
-      // print("responseDataresponseDataresponseDataresponseData $responseData");
+    
 
       _sendEmailStatus = Status.Sent;
       notifyListeners();
@@ -286,7 +285,7 @@ class AuthProvider with ChangeNotifier {
   }
 
   static onError(error) {
-    // print("the error is $error.detail");
+    
     return {'status': false, 'message': 'Unsuccessful Request', 'data': error};
   }
 }
